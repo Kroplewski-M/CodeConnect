@@ -1,7 +1,27 @@
-﻿@page "/"
+﻿@inject HttpClient Http
+@page "/"
 
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+
+@hello
+
+@code{
+    public string hello = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            hello = await Http.GetStringAsync("https://localhost:7124/api/HelloWorld");
+        }
+        catch (Exception err)
+        {
+            Console.Write(err);
+        }
+    }
+
+}
