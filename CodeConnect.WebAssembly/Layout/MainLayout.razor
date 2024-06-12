@@ -1,13 +1,18 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager NavManager
-<div class="page">
+<div class="">
     @if (!IsHomePage())
     {
         <div class="bg-primary">
             <NavMenu/>
         </div>
     }
-
+    else
+    {
+        <div class="ps-3 pt-2">
+            <a href="/" class="logo text-primary text-decoration-none">&lt;Code Connect/&gt;</a>
+        </div>
+    }
     <main>
         <article class="content px-4">
             @Body
