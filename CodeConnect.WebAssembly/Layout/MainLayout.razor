@@ -19,8 +19,7 @@
     private bool IsHomePage()
     {
         var uri = new Uri(NavManager.Uri);
-        //return uri.AbsolutePath == "/";
-        return false;
+        return uri.AbsolutePath is "/" or "/Account/Login" or "/Account/Register";
     }
 
 }

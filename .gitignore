@@ -1,5 +1,27 @@
+/CodeConnect.sln
 bin/
 obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+appsettings.json
+appsettings.Development.json
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# IDE files #
+#############
+.idea/
+
+# Build files #
+###############
+# Exclude all bin/ directories
+**/bin/
+# Exclude all obj/ directories
+**/obj/
