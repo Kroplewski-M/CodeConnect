@@ -37,10 +37,10 @@ jobs:
         cd ApplicationLayer
         dotnet build --no-restore
 
-        cd DomainLayer
+        cd ./DomainLayer
         dotnet build --no-restore
 
-        cd InfrastructureLayer
+        cd ./InfrastructureLayer
         dotnet build --no-restore
 
     - name: Build and Test Test Project
