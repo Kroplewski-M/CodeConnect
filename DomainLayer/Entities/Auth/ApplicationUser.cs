@@ -11,5 +11,6 @@ public class ApplicationUser : IdentityUser
     public string? BackgroundImageUrl { get; set; }
     public string? GithubLink { get; set; }
     public string? WebsiteLink { get; set; }
+    public DateTime DOB { get; set; }
     public DateTime CreatedAt { get; set; }
 }
