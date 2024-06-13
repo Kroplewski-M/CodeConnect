@@ -32,14 +32,18 @@ jobs:
         cd CodeConnect.WebAPI
         dotnet build --no-restore
         
-    - name: Build Class Libraries
+    - name: Build ApplicationLayer
       run: |
         cd ApplicationLayer
         dotnet build --no-restore
-
+        
+    - name: Build DomainLayer
+      run: |
         cd ./DomainLayer
         dotnet build --no-restore
-
+    
+    - name: Build InfrastructureLayer
+      run: |
         cd ./InfrastructureLayer
         dotnet build --no-restore
 
