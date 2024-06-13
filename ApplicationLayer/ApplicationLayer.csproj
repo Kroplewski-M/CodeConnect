@@ -7,9 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="APIServices\" />
-      <Folder Include="Interfaces\" />
       <Folder Include="ClientServices\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DomainLayer\DomainLayer.csproj" />
     </ItemGroup>
 
 </Project>
