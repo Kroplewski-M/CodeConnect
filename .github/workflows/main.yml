@@ -22,17 +22,17 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
 
-    - name: Build and Test WebAssembly
+    - name: Build WebAssembly
       run: |
         cd CodeConnect.WebAssembly
         dotnet build --no-restore
 
-    - name: Build and Test Web API
+    - name: Build Web API
       run: |
         cd CodeConnect.WebAPI
         dotnet build --no-restore
         
-    - name: Build and Test Class Libraries
+    - name: Build Class Libraries
       run: |
         cd ApplicationLayer
         dotnet build --no-restore
