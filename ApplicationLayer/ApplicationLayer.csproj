@@ -8,10 +8,15 @@
 
     <ItemGroup>
       <Folder Include="ClientServices\" />
+      <Folder Include="Shared\" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\DomainLayer\DomainLayer.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.35.0" />
     </ItemGroup>
 
 </Project>

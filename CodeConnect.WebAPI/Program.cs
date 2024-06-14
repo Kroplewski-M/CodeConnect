@@ -1,5 +1,8 @@
+using ApplicationLayer.APIServices;
+using ApplicationLayer.Interfaces;
 using DomainLayer.Entities.Auth;
 using InfrastructureLayer;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,12 +20,8 @@ builder.Services.AddIdentity<ApplicationUser,IdentityRole>(options =>
     options.User.RequireUniqueEmail = true;
     options.SignIn.RequireConfirmedAccount = true;
 }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    options.LoginPath = "Account/Login";
-    options.AccessDeniedPath = "Account/AccessDenied";
-});
 
+builder.Services.AddScoped<IAuthenticateService, AuthenticateService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
