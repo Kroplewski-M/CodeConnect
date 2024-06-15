@@ -8,7 +8,7 @@ namespace CodeConnect.WebAPI.Endpoints.AuthenticationEndpoint;
 [ApiController]
 public class AuthenticationController(IAuthenticateService authenticateService) : ControllerBase
 {
-    [HttpPost]
+    [HttpPost("CreateUser")]
     public async Task<IActionResult> CreateUser([FromBody]RegisterFormViewModel registerForm)
     {
         var result = await authenticateService.CreateUser(registerForm);
