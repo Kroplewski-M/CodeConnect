@@ -7,11 +7,16 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\DomainLayer\DomainLayer.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Folder Include="ClientServices\" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DomainLayer\DomainLayer.csproj" />
+      <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.6.0" />
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.1.2" />
     </ItemGroup>
 
 </Project>
