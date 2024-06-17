@@ -12,7 +12,7 @@ public class AuthenticationController(IAuthenticateService authenticateService) 
     public async Task<IActionResult> CreateUser([FromBody]RegisterFormViewModel registerForm)
     {
         var result = await authenticateService.CreateUser(registerForm);
-        if (result.Flag)
+        if (result.flag)
         {
             return Ok(result);
         }
