@@ -43,7 +43,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
-builder.Services.AddTransient<TokenGenerationService>();
+builder.Services.AddTransient<TokenService>();
 builder.Services.AddScoped<IAuthenticateService,AuthenticateService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
