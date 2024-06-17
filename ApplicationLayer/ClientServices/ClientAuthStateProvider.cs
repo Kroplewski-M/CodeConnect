@@ -11,11 +11,11 @@ public class ClientAuthStateProvider(HttpClient httpClient,
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         var token = await localStorageService.GetItemAsync<string>("AuthToken");
-        var refreshToken = await localStorageService.GetItemAsync<string>("RefreshToken");
         var user = tokenService.ValidateToken(token ?? "");
         
         if (user == null)
         {
+            var refreshToken = await localStorageService.GetItemAsync<string>("RefreshToken");
             var verifyRefresh = tokenService.ValidateToken(refreshToken ?? "");
             if (verifyRefresh == null)
             {
@@ -31,14 +31,28 @@ public class ClientAuthStateProvider(HttpClient httpClient,
         }
         return new AuthenticationState(new ClaimsPrincipal());
     }
-    public async void SetToken(string token)
+    public async Task SetToken(string token)
     {
         await localStorageService.SetItemAsync<string>("AuthToken", token);
+        var authState = await GetAuthenticationStateAsync();
+        NotifyAuthenticationStateChanged(Task.FromResult(authState));
     }
 
-    public async void RemoveAllAuth()
+    public async Task RemoveAllAuth()
     {
         await localStorageService.RemoveItemAsync("RefreshToken");
         await localStorageService.RemoveItemAsync("AuthToken");
+        var authState = await GetAuthenticationStateAsync();
+        NotifyAuthenticationStateChanged(Task.FromResult(authState));
+    }
+
+    public async Task LogIn()
+    {
+        
+    }
+
+    public async Task Register()
+    {
+        
     }
 }
