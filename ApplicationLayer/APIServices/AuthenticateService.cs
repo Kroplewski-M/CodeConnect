@@ -44,12 +44,7 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         }
     }
 
-    public async Task<ServiceResponse> LoginUser()
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<ServiceResponse> LogoutUser()
+    public async Task<AuthResponse> LoginUser()
     {
         throw new NotImplementedException();
     }

@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using ApplicationLayer.DTO_s;
 using DomainLayer.Entities.APIClasses;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -19,34 +20,38 @@ public class TokenService(IOptions<JwtSettings>jwtSettings)
             signingCredentials: creds);
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
-    public IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
-    {
-        return null;
-    }
-
-    public ClaimsPrincipal? ValidateToken(string token)
+    public IEnumerable<Claim>? ValidateToken(string token)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(jwtSettings.Value.Key);
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Value.Key));
         try
         {
             var tokenValidation = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
+                IssuerSigningKey = key,
                 ValidateIssuer = true,
                 ValidIssuer = jwtSettings.Value.Issuer,
                 ValidateAudience = true,
                 ValidAudience = jwtSettings.Value.Audience,
-                ValidateLifetime = true
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.FromMinutes(5)
             };
             SecurityToken validateToken;
             var principal = tokenHandler.ValidateToken(token, tokenValidation, out validateToken);
-            return principal;
+            return principal.Claims;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            Console.WriteLine(DateTime.Now);
+            Console.WriteLine($"Token validation failed: {ex.Message}");
             return null;
         }
+    }
+
+    public TokenResponse RefreshToken(string token)
+    {
+       var result =  ValidateToken(token);
+       return result == null? new TokenResponse("") : new TokenResponse(GenerateJwtToken(result, DateTime.Now.AddMinutes(60)));
     }
 }
