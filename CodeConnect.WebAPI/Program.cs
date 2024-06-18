@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using ApplicationLayer.APIServices;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Entities.APIClasses;
@@ -47,7 +48,8 @@ builder.Services.AddTransient<TokenService>();
 builder.Services.AddScoped<IAuthenticateService,AuthenticateService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(x =>
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);;
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CodeConnect", policy =>
