@@ -15,12 +15,12 @@ public class TokenService(IOptions<JwtSettings>jwtSettings)
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var token = new JwtSecurityToken(issuer: jwtSettings.Value.Issuer,
             audience: jwtSettings.Value.Audience,
-            claims: claims, 
+            claims: claims.Where(x=>x.Type != "aud"), 
             expires: expireAt, 
             signingCredentials: creds);
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
-    public IEnumerable<Claim>? ValidateToken(string token)
+    public List<Claim>? ValidateToken(string token)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Value.Key));
@@ -39,7 +39,7 @@ public class TokenService(IOptions<JwtSettings>jwtSettings)
             };
             SecurityToken validateToken;
             var principal = tokenHandler.ValidateToken(token, tokenValidation, out validateToken);
-            return principal.Claims;
+            return principal.Claims.ToList();
         }
         catch (Exception ex)
         {
