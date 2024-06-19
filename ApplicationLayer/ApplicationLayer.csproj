@@ -16,8 +16,4 @@
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.6.1" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="SharedServices\" />
-    </ItemGroup>
-
 </Project>
