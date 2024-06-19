@@ -23,9 +23,9 @@ public class AuthenticationController(IAuthenticateService authenticateService,
         return BadRequest("Account creation Failed");
     }
     [HttpPost("ValidateToken")]
-    public List<Claim> ValidateToken([FromBody]string token)
+    public ClaimsPrincipal? ValidateToken([FromBody]string token)
     {
-        return tokenService.ValidateToken(token) ?? new List<Claim>();
+        return tokenService.ValidateToken(token);
     }
     [HttpPost("RefreshToken")]
     public TokenResponse RefreshToken([FromBody]string token)

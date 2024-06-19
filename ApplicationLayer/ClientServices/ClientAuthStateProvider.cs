@@ -11,12 +11,15 @@ public class ClientAuthStateProvider(HttpClient httpClient,
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         var token = await localStorageService.GetItemAsync<string>("AuthToken");
-        var user = tokenService.ValidateToken(token ?? "");
-        
+        //Send api request to verify token
+        var user = "";
+        //update to check if claims are empty
         if (user == null)
         {
             var refreshToken = await localStorageService.GetItemAsync<string>("RefreshToken");
-            var verifyRefresh = tokenService.ValidateToken(refreshToken ?? "");
+            //Send api request to verify token
+            var verifyRefresh = "";
+            //update to check if claims are empty
             if (verifyRefresh == null)
             {
                 navigationManager.NavigateTo("/Account/Login");
@@ -25,7 +28,7 @@ public class ClientAuthStateProvider(HttpClient httpClient,
             else
             {
                 //refresh token
-                //return user
+                //return claimsPrincipal
                 return new AuthenticationState(new ClaimsPrincipal());
             }
         }

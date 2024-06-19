@@ -20,7 +20,7 @@ public class TokenService(IOptions<JwtSettings>jwtSettings)
             signingCredentials: creds);
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
-    public List<Claim>? ValidateToken(string token)
+    public ClaimsPrincipal ValidateToken(string token)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Value.Key));
@@ -39,19 +39,17 @@ public class TokenService(IOptions<JwtSettings>jwtSettings)
             };
             SecurityToken validateToken;
             var principal = tokenHandler.ValidateToken(token, tokenValidation, out validateToken);
-            return principal.Claims.ToList();
+            return principal;
         }
         catch (Exception ex)
         {
-            Console.WriteLine(DateTime.Now);
-            Console.WriteLine($"Token validation failed: {ex.Message}");
-            return null;
+            return new ClaimsPrincipal();
         }
     }
 
     public TokenResponse RefreshToken(string token)
     {
-       var result =  ValidateToken(token);
-       return result == null? new TokenResponse("") : new TokenResponse(GenerateJwtToken(result, DateTime.Now.AddMinutes(60)));
+       var principal =  ValidateToken(token);
+       return principal.Claims.ToList().Any()? new TokenResponse(GenerateJwtToken(principal.Claims, DateTime.Now.AddMinutes(60))) :  new TokenResponse("") ;
     }
 }
