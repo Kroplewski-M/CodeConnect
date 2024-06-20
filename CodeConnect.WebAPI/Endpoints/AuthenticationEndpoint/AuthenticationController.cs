@@ -16,20 +16,23 @@ public class AuthenticationController(IAuthenticateService authenticateService,
     public async Task<IActionResult> CreateUser([FromBody]RegisterFormViewModel registerForm)
     {
         var result = await authenticateService.CreateUser(registerForm);
-        if (result.flag)
+        if (result.Flag)
         {
             return Ok(result);
         }
         return BadRequest("Account creation Failed");
     }
     [HttpPost("ValidateToken")]
-    public ClaimsPrincipal? ValidateToken([FromBody]string token)
+    public IActionResult ValidateToken([FromBody]string token)
     {
-        return tokenService.ValidateToken(token);
+        var result = tokenService.ValidateToken(token);
+        if (result.Flag)
+            return Ok(result);
+        return Unauthorized();
     }
     [HttpPost("RefreshToken")]
-    public TokenResponse RefreshToken([FromBody]string token)
+    public IActionResult RefreshToken([FromBody]string token)
     {
-        return tokenService.RefreshToken(token);
+        return Ok(tokenService.RefreshToken(token));
     }
 }
