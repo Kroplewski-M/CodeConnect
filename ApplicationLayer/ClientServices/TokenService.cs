@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace ApplicationLayer.ClientServices;
 
-public class ClientAuthStateProvider(HttpClient httpClient,
+public class TokenService(HttpClient httpClient,
     ILocalStorageService localStorageService,NavigationManager navigationManager) : AuthenticationStateProvider
 {
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
