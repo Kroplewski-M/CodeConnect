@@ -7,7 +7,7 @@ using Moq;
 
 namespace TestLayer;
 
-public class ClientAuthStateProviderTests
+public class TokenServiceTests
 {
     private readonly Mock<IOptions<JwtSettings>> mockJwtSettings = new Mock<IOptions<JwtSettings>>();
     [Fact]
