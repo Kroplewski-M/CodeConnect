@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace ApplicationLayer.ClientServices;
 
-public class TokenService(HttpClient httpClient,
+public class ClientAuthStateProvider(HttpClient httpClient,
     ILocalStorageService localStorageService,NavigationManager navigationManager) : AuthenticationStateProvider
 {
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -52,27 +52,22 @@ public class TokenService(HttpClient httpClient,
     }
     private AuthenticationState CreateAuthenticationStateFromToken(string token)
     {
-        return new AuthenticationState(new ClaimsPrincipal(DecodeToken(token)));
+        var authState = new AuthenticationState(new ClaimsPrincipal(DecodeToken(token)));
+        NotifyAuthenticationStateChanged(Task.FromResult(authState));
+        return authState;
     }
     private async Task<AuthenticationState>  RedirectToLoginPage()
     {
         await RemoveAllAuth();
         navigationManager.NavigateTo("/Account/Login");
-        return new AuthenticationState(new ClaimsPrincipal());
-    }
-    private async Task SetToken(string name,string token)
-    {
-        await localStorageService.SetItemAsync<string>(name, token);
-        var authState = await GetAuthenticationStateAsync();
+        var authState = new AuthenticationState(new ClaimsPrincipal());
         NotifyAuthenticationStateChanged(Task.FromResult(authState));
+        return authState;
     }
-    
-    public async Task RemoveAllAuth()
+    private async Task RemoveAllAuth()
     {
         await localStorageService.RemoveItemAsync("RefreshToken");
         await localStorageService.RemoveItemAsync("AuthToken");
-        var authState = await GetAuthenticationStateAsync();
-        NotifyAuthenticationStateChanged(Task.FromResult(authState));
     }
 
     private async Task<string?> RefreshToken(string refreshToken)
