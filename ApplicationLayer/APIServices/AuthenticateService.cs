@@ -10,7 +10,7 @@ namespace ApplicationLayer.APIServices;
 public class AuthenticateService(UserManager<ApplicationUser>userManager,
     TokenService tokenGenerationService) : IAuthenticateService
 {
-    public async Task<AuthResponse> CreateUser(RegisterFormViewModel registerForm)
+    public async Task<RegisterResponse> CreateUser(RegisterFormViewModel registerForm)
     {
         var user = new ApplicationUser
         {
@@ -36,15 +36,15 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
             var token = tokenGenerationService.GenerateJwtToken(claims,expiresAt);
             var refreshExpiresAt = DateTime.UtcNow.AddDays(30);
             var refreshToken = tokenGenerationService.GenerateJwtToken(claims,refreshExpiresAt);
-            return new AuthResponse(true,token,refreshToken);
+            return new RegisterResponse(true,token,refreshToken);
         }
         else
         {
-            return new AuthResponse(false,"", "");
+            return new RegisterResponse(false,"", "");
         }
     }
 
-    public async Task<AuthResponse> LoginUser()
+    public async Task<RegisterResponse> LoginUser()
     {
         throw new NotImplementedException();
     }
