@@ -17,10 +17,17 @@ public class AuthenticationController(IAuthenticateService authenticateService,
     {
         var result = await authenticateService.CreateUser(registerForm);
         if (result.Flag)
-        {
             return Ok(result);
-        }
         return BadRequest("Account creation Failed");
+    }
+
+    [HttpPost("LoginUser")]
+    public async Task<IActionResult> LoginUser([FromBody] LoginFormViewModel loginForm)
+    {
+        var result = await authenticateService.LoginUser(loginForm);
+        if (result.Flag)
+            return Ok(result);
+        return BadRequest("Account Not Found");
     }
     [HttpPost("ValidateToken")]
     public IActionResult ValidateToken([FromBody]string token)
