@@ -54,7 +54,7 @@ public class TokenServiceTests
         var result = tokenService.GenerateJwtToken(claims, expiresAt);
         //Act
         var tokenResponse = tokenService.ValidateToken(result ?? "");
-        
+        //Assert
         Assert.True(tokenResponse.ClaimsPrincipal.Claims.Any());
     }
     [Fact]
@@ -77,7 +77,32 @@ public class TokenServiceTests
         var result = tokenService.GenerateJwtToken(claims, expiresAt);
         //Act
         var tokenResponse = tokenService.ValidateToken(result ?? "");
-        
+        //Assert
         Assert.False(tokenResponse.Flag);
+    }
+
+    [Fact]
+    public void CreateNewTokenFromRefreshToken_ShouldReturnNewToken()
+    {
+        //Arrange
+        _mockJwtSettings.Setup(m => m.Value).Returns(new JwtSettings
+        {
+            Key = "abcdefghijklmnopqrstuvwx01234567",
+            Issuer = "issuer",
+            Audience = "audience"
+        });
+        var tokenService = new TokenService(_mockJwtSettings.Object);
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, "John"),
+            new Claim(ClaimTypes.Email, "John@gmail.com"),
+            new Claim("DOB", DateTime.Now.ToString(CultureInfo.InvariantCulture))
+        };
+        var expiresAt = DateTime.Now.AddHours(1);
+        var result = tokenService.GenerateJwtToken(claims, expiresAt);
+        //Act
+        var tokenResponse = tokenService.RefreshToken(result ?? "");
+        //Assert
+        Assert.NotEmpty(tokenResponse.Key);
     }
 }
