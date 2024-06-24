@@ -10,7 +10,7 @@ namespace ApplicationLayer.APIServices;
 public class AuthenticateService(UserManager<ApplicationUser>userManager,
     TokenService tokenGenerationService) : IAuthenticateService
 {
-    public async Task<AuthResponse> CreateUser(RegisterFormViewModel registerForm)
+    public async Task<AuthResponse> CreateUser(RegisterForm registerForm)
     {
         var user = new ApplicationUser
         {
@@ -31,7 +31,7 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         return new AuthResponse(false,"", "",errors);
     }
 
-    public async Task<AuthResponse> LoginUser(LoginFormViewModel loginForm)
+    public async Task<AuthResponse> LoginUser(LoginForm loginForm)
     {
         List<string> errors = new List<string>();
         var user = await userManager.FindByEmailAsync(loginForm.Email);
