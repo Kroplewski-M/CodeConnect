@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 using ApplicationLayer.APIServices;
 using ApplicationLayer.DTO_s;
 using Blazored.LocalStorage;
+using DomainLayer.Entities.Auth;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Newtonsoft.Json;
@@ -96,13 +97,30 @@ public class ClientAuthStateProvider(HttpClient httpClient,
         var identity = new ClaimsIdentity(claims, "Jwt");
         return new ClaimsPrincipal(identity);
     }
-    public async Task LogIn()
+    public async Task<ServiceResponse> LogIn(LoginFormViewModel loginForm)
+    {
+        var response = await httpClient.PostAsJsonAsync("/api/LoginUser", loginForm);
+        var authResponse = response.Content.ReadFromJsonAsync<AuthResponse>().Result;
+        if (response.IsSuccessStatusCode)
+        {
+            if (authResponse != null && authResponse.Flag)
+            {
+                await localStorageService.SetItemAsync("AuthToken", authResponse.Token);
+                await localStorageService.SetItemAsync("RefreshToken", authResponse.RefreshToken);
+                NotifyAuthenticationStateChanged(Task.FromResult(CreateAuthenticationStateFromToken(authResponse.Token ?? "")));
+                return new ServiceResponse(true, authResponse?.Message.FirstOrDefault() ?? "success");
+            }
+        }
+        return new ServiceResponse(false, authResponse?.Message.FirstOrDefault() ?? "Error occured");
+    }
+
+    public async Task Register(RegisterFormViewModel registerForm)
     {
         
     }
 
-    public async Task Register()
+    public async Task<AuthenticationState> LogOut()
     {
-        
+        return await RedirectToLoginPage();
     }
 }
