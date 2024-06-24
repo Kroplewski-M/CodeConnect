@@ -97,7 +97,7 @@ public class ClientAuthStateProvider(HttpClient httpClient,
         var identity = new ClaimsIdentity(claims, "Jwt");
         return new ClaimsPrincipal(identity);
     }
-    public async Task<ServiceResponse> LogIn(LoginFormViewModel loginForm)
+    public async Task<ServiceResponse> LogIn(LoginForm loginForm)
     {
         var response = await httpClient.PostAsJsonAsync("/api/LoginUser", loginForm);
         var authResponse = response.Content.ReadFromJsonAsync<AuthResponse>().Result;
@@ -114,9 +114,9 @@ public class ClientAuthStateProvider(HttpClient httpClient,
         return new ServiceResponse(false, authResponse?.Message.FirstOrDefault() ?? "Error occured");
     }
 
-    public async Task Register(RegisterFormViewModel registerForm)
+    public async Task Register(RegisterForm registerForm)
     {
-        
+        var response = await httpClient.PostAsJsonAsync("/api/RegiserUser", registerForm);
     }
 
     public async Task<AuthenticationState> LogOut()
