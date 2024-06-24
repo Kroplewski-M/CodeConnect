@@ -12,8 +12,8 @@ namespace CodeConnect.WebAPI.Endpoints.AuthenticationEndpoint;
 public class AuthenticationController(IAuthenticateService authenticateService, 
     TokenService tokenService) : ControllerBase
 {
-    [HttpPost("CreateUser")]
-    public async Task<IActionResult> CreateUser([FromBody]RegisterFormViewModel registerForm)
+    [HttpPost("RegisterUser")]
+    public async Task<IActionResult> RegisterUser([FromBody]RegisterForm registerForm)
     {
         var result = await authenticateService.CreateUser(registerForm);
         if (result.Flag)
@@ -22,7 +22,7 @@ public class AuthenticationController(IAuthenticateService authenticateService,
     }
 
     [HttpPost("LoginUser")]
-    public async Task<IActionResult> LoginUser([FromBody] LoginFormViewModel loginForm)
+    public async Task<IActionResult> LoginUser([FromBody] LoginForm loginForm)
     {
         var result = await authenticateService.LoginUser(loginForm);
         if (result.Flag)
