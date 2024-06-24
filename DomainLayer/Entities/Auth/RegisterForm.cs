@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DomainLayer.Entities.Auth;
 
-public class RegisterFormViewModel
+public class RegisterForm
 {
     [Required] 
     public string FirstName { get; set; } = string.Empty;

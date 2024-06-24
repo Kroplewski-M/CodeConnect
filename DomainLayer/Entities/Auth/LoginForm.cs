@@ -3,7 +3,7 @@ using System.Data;
 
 namespace DomainLayer.Entities.Auth;
 
-public class LoginFormViewModel
+public class LoginForm
 {
     [Required]
     [EmailAddress]
