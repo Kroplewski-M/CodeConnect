@@ -1,14 +1,23 @@
-﻿@inherits HomeBase
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inherits HomeBase
 @page "/"
 
 <PageTitle>Welcome to Code Connect!</PageTitle>
+<AuthorizeView>
+    <Authorized>
+        <p>Welcome, @context.User.Identity.Name!</p>
+    </Authorized>
+    <NotAuthorized>
+        <p>You are not authorized</p>
+    </NotAuthorized>
+</AuthorizeView>
 <div class="mt-5 fade-in mx-auto">
     <div class="row">
         <div class=" mt-5 text-center">
             <h1 class="logo text-primary" style="font-size: 60px">&lt;Code Connect/&gt;</h1>
             <p class="text-light fs-3">Building bridges through code</p>
             <div class="mt-5">
-                <a href="Account/Register" class="btn btn-outline-light btn-lg me-3"><i class="bi bi-input-cursor-text"></i> Create An Account</a>
+                <button class="btn btn-outline-light btn-lg me-3"><i class="bi bi-input-cursor-text"></i> Create An Account</button>
                 <a href="/Account/Login" class="btn btn-outline-primary btn-lg"><i class="bi bi-code-square"></i> Login</a>
             </div>
         </div>

@@ -1,10 +1,8 @@
-﻿@using System.Diagnostics
-@using Microsoft.AspNetCore.Components.Authorization
-@inject NavigationManager NavManager
+﻿@using Microsoft.AspNetCore.Components.Authorization
 
 <Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
-        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
         <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
     </Found>
     <NotFound>
