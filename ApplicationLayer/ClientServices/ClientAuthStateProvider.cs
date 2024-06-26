@@ -29,7 +29,7 @@ public class ClientAuthStateProvider(HttpClient httpClient,
             var refreshToken = await localStorageService.GetItemAsync<string>("RefreshToken");
             if (!await IsTokenValid(refreshToken ?? ""))
             {
-                return await RedirectToLoginPage();
+                return new AuthenticationState(new ClaimsPrincipal());
             }
 
             var newToken = await RefreshToken(refreshToken ?? "");
@@ -43,7 +43,7 @@ public class ClientAuthStateProvider(HttpClient httpClient,
         {
             Console.WriteLine(ex);
         }
-        return await RedirectToLoginPage();
+        return new AuthenticationState(new ClaimsPrincipal());
     }
 
     private async Task<bool> IsTokenValid(string token)
