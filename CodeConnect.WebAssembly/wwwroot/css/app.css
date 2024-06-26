@@ -27,10 +27,6 @@ a, .btn-link {
     padding-top: 1.1rem;
 }
 
-.valid.modified:not([type=checkbox]) {
-    outline: 1px solid #26b050;
-}
-
 .invalid {
     outline: 1px solid red;
 }
@@ -110,4 +106,29 @@ code {
  }
 .fade-in{
     animation: fadeIn 2s ease-in;
+}
+.blob{
+    z-index: 1;
+}
+.blob::before,
+.blob::after {
+    content: "";
+    background: darkgray;
+    position: absolute;
+    overflow: hidden;
+}
+
+.blob::before {
+    border-radius: 50%;
+    width: 60%;
+    height: 80%;
+    top: -10%;
+    left: -20%;
+}
+.blob::after {
+    border-radius: 50%;
+    width: 70%;
+    height: 60%;
+    bottom: -5%;
+    right: -20%;
 }

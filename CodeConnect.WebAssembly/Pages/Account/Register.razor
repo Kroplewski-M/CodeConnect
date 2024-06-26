@@ -1,6 +1,41 @@
 @page "/Account/Register"
-<h3>Register</h3>
+@inherits RegisterBase
 
-@code {
-    
-}
+<div class="blob"></div>
+<div class="row mt-5 position-relative" style="z-index: 2">
+    <div class="col-md-6 col-12 text-center rounded">
+        <h1 class="fw-bold text-primary">Welcome to Code Connect!</h1>
+        <div class="text-secondary">
+            <p>Bridging Bytes and Brilliant Minds - Your Coding Community!</p>
+            <p>Register now to start sharing your ideas and projects!</p>
+        </div>
+        <h3 class="text-primary mt-5 mb-5">Already have an account?</h3>
+        <a class="btn btn-secondary" href="Account/Login">Login now!</a>
+    </div>
+    <div class="col-md-5 col-12 bg-dark rounded py-3 ps-5"> 
+        <h1 class="text-light fw-bold">Register</h1>
+        <EditForm FormName="Register" class="mt-5" Model="RegisterForm" OnSubmit="SubmitRegister">
+            <div class="mb-3 col-md-7 col-12">
+                <InputText @bind-Value="RegisterForm.FirstName" class="text-light fw-bold form-control border-0 border-primary border-bottom bg-transparent" id="firstName" placeholder="First Name">
+                </InputText>
+            </div>
+            <div class="mb-3 col-md-7 col-12">
+                <InputText @bind-Value="RegisterForm.LastName" class="text-light fw-bold form-control border-0 border-primary border-bottom bg-transparent" id="lastName" placeholder="Last Name">
+                </InputText>
+            </div>
+            <div class="mb-3 col-md-7 col-12">
+                <InputText @bind-Value="RegisterForm.Email" class="text-light fw-bold form-control border-0 border-primary border-bottom bg-transparent" id="email" placeholder="Email">
+                </InputText>
+            </div>
+            <div class="mb-3 col-md-7 col-12">
+                <InputDate @bind-Value="RegisterForm.DOB" class="text-light fw-bold form-control border-0 border-primary border-bottom bg-transparent" id="Dob" placeholder="">
+                </InputDate>
+            </div>
+            <div class="mb-3 col-md-7 col-12">
+                <InputText type="password" @bind-Value="RegisterForm.Password" class="text-light fw-bold form-control border-0 border-primary border-bottom bg-transparent" id="password" placeholder="Password">
+                </InputText>
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Register</button>
+        </EditForm>
+    </div>
+</div>
