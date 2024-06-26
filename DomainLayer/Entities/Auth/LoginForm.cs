@@ -5,11 +5,7 @@ namespace DomainLayer.Entities.Auth;
 
 public class LoginForm
 {
-    [Required]
-    [EmailAddress]
     public string Email { get; set; } = "";
-    [DataType(DataType.Password)]
-    [Required]
     public string Password { get; set; } = "";
 
 }
