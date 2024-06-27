@@ -1,5 +1,32 @@
 @page "/Account/Login"
 @using Microsoft.AspNetCore.Authorization
+@inherits LoginBase
 
-<h3>Login</h3>
+
+<div class="blob"></div>
+<div class="row mt-5 position-relative" style="z-index: 2">
+    <div class="col-md-5 col-12 bg-dark rounded py-3 ps-5">
+        <h1 class="text-light fw-bold">Login</h1>
+        <EditForm FormName="Login" class="mt-5" Model="LoginForm" OnSubmit="SubmitLogin">
+            <div class="mb-3 col-md-7 col-12">
+                <InputText @bind-Value="LoginForm.Email" class="text-light fw-bold form-control border-0 border-primary border-bottom bg-transparent" id="email" placeholder="Email">
+                </InputText>
+            </div>
+            <div class="mb-3 col-md-7 col-12">
+                <InputText type="password" @bind-Value="LoginForm.Password" class="text-light fw-bold form-control border-0 border-primary border-bottom bg-transparent" id="password" placeholder="Password">
+                </InputText>
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Login</button>
+        </EditForm>
+    </div>
+    <div class="col-md-6 col-12 text-center rounded">
+        <h1 class="fw-bold text-primary">Welcome back to Code Connect!</h1>
+        <div class="text-light">
+            <p>Log back in to carry on sharing projects and ideas</p>
+            <p>in you're coding community</p>
+        </div>
+        <h3 class="text-primary mt-5 mb-3">Don't have an account?</h3>
+        <a class="btn btn-light" href="Account/Register">Register now!</a>
+    </div>
+</div>
 

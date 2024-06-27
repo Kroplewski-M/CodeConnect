@@ -113,7 +113,7 @@ code {
 .blob::before,
 .blob::after {
     content: "";
-    background: darkgray;
+    background: #727272;
     position: absolute;
     overflow: hidden;
 }
@@ -128,7 +128,7 @@ code {
 .blob::after {
     border-radius: 50%;
     width: 70%;
-    height: 60%;
+    height: 70%;
     bottom: -5%;
     right: -20%;
 }
