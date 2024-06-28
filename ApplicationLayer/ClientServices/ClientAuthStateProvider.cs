@@ -114,9 +114,22 @@ public class ClientAuthStateProvider(HttpClient httpClient,
         return new ServiceResponse(false, authResponse?.Message.FirstOrDefault() ?? "Error occured");
     }
 
-    public async Task Register(RegisterForm registerForm)
+    public async Task<ServiceResponse> Register(RegisterForm registerForm)
     {
         var response = await httpClient.PostAsJsonAsync("/api/RegiserUser", registerForm);
+        var authResponse = response.Content.ReadFromJsonAsync<AuthResponse>().Result;
+        if (response.IsSuccessStatusCode)
+        {
+            if (authResponse != null && authResponse.Flag)
+            {
+                await localStorageService.SetItemAsync("AuthToken", authResponse.Token);
+                await localStorageService.SetItemAsync("RefreshToken", authResponse.RefreshToken);
+                NotifyAuthenticationStateChanged(
+                    Task.FromResult(CreateAuthenticationStateFromToken(authResponse.Token ?? "")));
+                return new ServiceResponse(true, "Registered successfully");
+            }
+        }
+        return new ServiceResponse(false, "Error while registering");
     }
 
     public async Task<AuthenticationState> LogOut()
