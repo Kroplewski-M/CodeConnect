@@ -103,6 +103,6 @@ public class TokenServiceTests
         //Act
         var tokenResponse = tokenService.RefreshToken(result ?? "");
         //Assert
-        Assert.NotEmpty(tokenResponse.Key);
+        Assert.NotEmpty(tokenResponse.Key ?? "");
     }
 }
