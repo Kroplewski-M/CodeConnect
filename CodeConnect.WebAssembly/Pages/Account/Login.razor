@@ -11,10 +11,28 @@
             <div class="mb-3 col-md-7 col-12">
                 <InputText @bind-Value="LoginForm.Email" class="text-light fw-bold form-control border-0 border-primary border-bottom bg-transparent" id="email" placeholder="Email">
                 </InputText>
+                <div class="mt-2 ms-2">
+                    @if (LoginErrors.Any(x => x.PropertyName == "Email"))
+                    {
+                        foreach (var error in LoginErrors.Where(x=> x.PropertyName == "Email"))
+                        {
+                            <p class="text-danger fw-bold">@error.ErrorMessage</p>
+                        }
+                    }
+                </div>
             </div>
             <div class="mb-3 col-md-7 col-12">
                 <InputText type="password" @bind-Value="LoginForm.Password" class="text-light fw-bold form-control border-0 border-primary border-bottom bg-transparent" id="password" placeholder="Password">
                 </InputText>
+                <div class="mt-2 ms-2">
+                    @if (LoginErrors.Any(x => x.PropertyName == "Password"))
+                    {
+                        foreach (var error in LoginErrors.Where(x=> x.PropertyName == "Password"))
+                        {
+                            <p class="text-danger fw-bold">@error.ErrorMessage</p>
+                        }
+                    }
+                </div>
             </div>
             <button type="submit" class="btn btn-primary mt-2">Login</button>
         </EditForm>

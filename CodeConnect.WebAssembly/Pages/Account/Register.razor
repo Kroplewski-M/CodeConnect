@@ -16,24 +16,69 @@
         <h1 class="text-light fw-bold">Register</h1>
         <EditForm FormName="Register" class="mt-5" Model="RegisterForm" OnSubmit="SubmitRegister">
             <div class="mb-3 col-md-7 col-12">
-                <InputText @bind-Value="RegisterForm.FirstName" class="text-light fw-bold form-control border-0 border-primary border-bottom bg-transparent" id="firstName" placeholder="First Name">
+                <InputText @bind-Value="RegisterForm.FirstName" class="text-light fw-bold form-control border-0 border-bottom bg-transparent" id="firstName" placeholder="First Name">
                 </InputText>
+                <div class="mt-2 ms-2">
+                    @if (RegisterErrors.Any(x => x.PropertyName == "FirstName"))
+                    {
+                        foreach (var error in RegisterErrors.Where(x=> x.PropertyName == "FirstName"))
+                        {
+                            <p class="text-danger fw-bold">@error.ErrorMessage</p>
+                        }
+                    }
+                </div>
             </div>
             <div class="mb-3 col-md-7 col-12">
                 <InputText @bind-Value="RegisterForm.LastName" class="text-light fw-bold form-control border-0 border-primary border-bottom bg-transparent" id="lastName" placeholder="Last Name">
                 </InputText>
+                <div class="mt-2 ms-2">
+                    @if (RegisterErrors.Any(x => x.PropertyName == "LastName"))
+                    {
+                    foreach (var error in RegisterErrors.Where(x=> x.PropertyName == "LastName"))
+                    {
+                    <p class="text-danger fw-bold">@error.ErrorMessage</p>
+                    }
+                    }
+                </div>
             </div>
             <div class="mb-3 col-md-7 col-12">
                 <InputText @bind-Value="RegisterForm.Email" class="text-light fw-bold form-control border-0 border-primary border-bottom bg-transparent" id="email" placeholder="Email">
                 </InputText>
+                <div class="mt-2 ms-2">
+                    @if (RegisterErrors.Any(x => x.PropertyName == "Email"))
+                    {
+                        foreach (var error in RegisterErrors.Where(x=> x.PropertyName == "Email"))
+                        {
+                            <p class="text-danger fw-bold">@error.ErrorMessage</p>
+                        }
+                    }
+                </div>
             </div>
             <div class="mb-3 col-md-7 col-12">
                 <InputDate @bind-Value="RegisterForm.DOB" class="text-light fw-bold form-control border-0 border-primary border-bottom bg-transparent" id="Dob" placeholder="">
                 </InputDate>
+                <div class="mt-2 ms-2">
+                    @if (RegisterErrors.Any(x => x.PropertyName == "DOB"))
+                    {
+                        foreach (var error in RegisterErrors.Where(x=> x.PropertyName == "DOB"))
+                        {
+                            <p class="text-danger fw-bold">@error.ErrorMessage</p>
+                        }
+                    }
+                </div>
             </div>
             <div class="mb-3 col-md-7 col-12">
                 <InputText type="password" @bind-Value="RegisterForm.Password" class="text-light fw-bold form-control border-0 border-primary border-bottom bg-transparent" id="password" placeholder="Password">
                 </InputText>
+                <div class="mt-2 ms-2">
+                    @if (RegisterErrors.Any(x => x.PropertyName == "Password"))
+                    {
+                        foreach (var error in RegisterErrors.Where(x=> x.PropertyName == "Password"))
+                        {
+                        <p class="text-danger fw-bold">@error.ErrorMessage</p>
+                        }
+                    }
+                </div>
             </div>
             <button type="submit" class="btn btn-primary mt-2">Register</button>
         </EditForm>
