@@ -1,4 +1,5 @@
 using System.Net.Http;
+using DomainLayer.Entities;
 using DomainLayer.Entities.Auth;
 using DomainLayer.Entities.Validators;
 using FluentValidation.Results;
@@ -8,6 +9,9 @@ namespace CodeConnect.WebAssembly.Pages.Account;
 
 public class RegisterBase : ComponentBase
 {
+    [Inject]
+    public NotificationsService NotificationsService { get; set; }
+    
     public RegisterForm RegisterForm = new RegisterForm();
     public List<ValidationFailure> RegisterErrors = new List<ValidationFailure>();
     public async Task SubmitRegister()
@@ -21,6 +25,7 @@ public class RegisterBase : ComponentBase
         }
         else
         {
+            NotificationsService.PushNotification(new Notification("Creating Account",NotificationType.Info));
             RegisterErrors = [];
         }
     }
