@@ -132,3 +132,10 @@ code {
     bottom: -5%;
     right: -20%;
 }
+.NotificationsContainer{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    display: flex;
+    flex-direction: column;
+}
