@@ -1,5 +1,8 @@
-﻿@inherits LayoutComponentBase
+﻿@using DomainLayer.Entities
+@inherits LayoutComponentBase
 @inject NavigationManager NavManager
+@inject NotificationsService NotificationsService
+
 <div>
     @if (!IsHomePage())
     {
@@ -13,6 +16,14 @@
             <a href="/" class="logo text-primary text-decoration-none">&lt;Code Connect/&gt;</a>
         </div>
     }
+    <div class="NotificationsContainer" style="z-index: 11">
+        @foreach (var notification in Notifications)
+        {
+            <div class="rounded px-2 pt-2 @GetNotificationType(notification.NotificationType) mt-2" style="width:200px">
+                <p class="fw-bold text-center">@notification.Message</p>
+            </div>
+        }
+    </div>
     <main class="container-fluid px-4">
         @Body
     </main>
@@ -25,4 +36,38 @@
         return uri.AbsolutePath is "/" or "/Account/Login" or "/Account/Register";
     }
 
+    public List<Notification> Notifications = [];
+
+    protected override void OnInitialized()
+    {
+        NotificationsService.OnChange += UpdateNotifications;
+        Notifications = NotificationsService.GetNotification();
+    }
+
+    private string GetNotificationType(NotificationType type)
+    {
+        switch (type)
+        {
+            case NotificationType.Success:
+                return "bg-success";
+            case NotificationType.Error:   
+                return "bg-danger";
+            case NotificationType.Warning:   
+                return "bg-warning";
+            case NotificationType.Info:   
+                return "bg-info";
+            default:
+                return "";
+        }
+    }
+    private void UpdateNotifications()
+    {
+        Notifications = NotificationsService.GetNotification();
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NotificationsService.OnChange -= UpdateNotifications;
+    }
 }
