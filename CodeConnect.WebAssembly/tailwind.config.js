@@ -1,17 +1,19 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./**/*.{razor,html,cshtml}"],
+  content: ['./**/*.{razor,html}'],
   darkMode: 'class',
   theme: {
     extend: {
       colors:{
         light: {
-          primaryBg: "#b5b5b5"
-          
+          primaryColor: "#F8F9FA",
+          secondaryColor: "#5C42A7",
+          supportColor: "#333333",
         },
         dark: {
-          primaryBg: "#333333",
-          primaryText: "#FFFFFF",
+          primaryColor: "#444444",
+          secondaryColor: "#957BDE",
+          supportColor: "#E8E7E7",
         }
       }
     },
