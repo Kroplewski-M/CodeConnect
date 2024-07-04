@@ -25,3 +25,4 @@ appsettings.Development.json
 **/bin/
 # Exclude all obj/ directories
 **/obj/
+/node_modules

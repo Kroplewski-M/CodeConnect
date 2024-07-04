@@ -2,40 +2,27 @@
 @inherits LayoutComponentBase
 @inject NavigationManager NavManager
 @inject NotificationsService NotificationsService
+@inject IJSRuntime JS
 
-<div>
-    @if (!IsHomePage())
-    {
-        <div class="bg-primary">
-            <NavMenu/>
-        </div>
-    }
-    else
-    {
-        <div class="ps-3 pt-4 position-relative bg-dark" style="z-index: 10; width: 100vw; height: 70px;">
-            <a href="/" class="logo text-primary text-decoration-none">&lt;Code Connect/&gt;</a>
-        </div>
-    }
-    <div class="NotificationsContainer" style="z-index: 11">
-        @foreach (var notification in Notifications)
-        {
-            <div class="rounded px-2 pt-2 @GetNotificationType(notification.NotificationType) mt-2" style="width:200px">
-                <p class="fw-bold text-center">@notification.Message</p>
-            </div>
-        }
+<div class="bg-light-primaryColor dark:bg-dark-primaryColor min-h-screen flex flex-row">
+    <div class="w-[250px]">
+        <NavMenu/>
     </div>
-    <main class="container-fluid px-4">
+    <main class="border border-red-600 px-4 z-[200] flex-grow">
+        <button @onclick="ToggleDarkMode">toggle</button>
+        <div class="">
+            @foreach (var notification in Notifications)
+            {
+                <div class="@GetNotificationType(notification.NotificationType) ">
+                    <p>@notification.Message</p>
+                </div>
+            }
+        </div>
         @Body
     </main>
 </div>
 
 @code{
-    private bool IsHomePage()
-    {
-        var uri = new Uri(NavManager.Uri);
-        return uri.AbsolutePath is "/" or "/Account/Login" or "/Account/Register";
-    }
-
     public List<Notification> Notifications = [];
 
     protected override void OnInitialized()
@@ -50,16 +37,17 @@
         {
             case NotificationType.Success:
                 return "bg-success";
-            case NotificationType.Error:   
+            case NotificationType.Error:
                 return "bg-danger";
-            case NotificationType.Warning:   
+            case NotificationType.Warning:
                 return "bg-warning";
-            case NotificationType.Info:   
+            case NotificationType.Info:
                 return "bg-info";
             default:
                 return "";
         }
     }
+
     private void UpdateNotifications()
     {
         Notifications = NotificationsService.GetNotification();
@@ -70,4 +58,10 @@
     {
         NotificationsService.OnChange -= UpdateNotifications;
     }
+
+    private void ToggleDarkMode()
+    {
+        JS.InvokeVoidAsync("toggleDarkMode");
+    }
+
 }
