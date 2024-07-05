@@ -8,8 +8,8 @@
     <div class="w-[250px]">
         <NavMenu/>
     </div>
-    <main class="border border-red-600 px-4 z-[200] flex-grow">
-        <button @onclick="ToggleDarkMode">toggle</button>
+    <main class="px-4 z-[200] flex-grow">
+        <span @onclick="ToggleDarkMode" class="fa-solid @(lightmode? "fa-sun text-light-primaryColor":"fa-moon text-dark-primaryColor") absolute top-5 right-5 cursor-pointer fa-lg"></span>
         <div class="">
             @foreach (var notification in Notifications)
             {
@@ -24,7 +24,7 @@
 
 @code{
     public List<Notification> Notifications = [];
-
+    public bool lightmode = false;
     protected override void OnInitialized()
     {
         NotificationsService.OnChange += UpdateNotifications;
@@ -62,6 +62,7 @@
     private void ToggleDarkMode()
     {
         JS.InvokeVoidAsync("toggleDarkMode");
+        lightmode = !lightmode;
     }
 
 }
