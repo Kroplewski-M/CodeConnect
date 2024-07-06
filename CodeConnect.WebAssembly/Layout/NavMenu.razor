@@ -1,10 +1,11 @@
 ﻿
 
-<aside class="fixed top-0 left-0 w-[250px] z-40 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+<aside class="sm:w-[250px] w-[80%] sm:relative fixed top-0 left-0 z-[200] h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
     <div class="h-full px-3 py-4 overflow-y-auto bg-light-secondaryColor dark:bg-dark-secondaryColor">
         <a href="/" class="flex items-center p-2 rounded-lg hover:bg-gray-100/10 group mb-5">
-            <span class="ms-3 text-light-primaryColor dark:bg-text-supportColor font-bold">&lt;Code Connect/&gt;</span>
+            <span class="ms-3 text-light-primaryColor dark:bg-text-supportColor font-bold text-[20px]">&lt;Code Connect/&gt;</span>
         </a>
+        <hr class="mb-5" />
         <ul class="space-y-2 font-medium">
             <li>
                 <a href="#" class="flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100/10 group mb-5">
@@ -21,7 +22,7 @@
             <li>
                 <a href="#" class="flex items-center p-2  rounded-lg dark:text-white hover:bg-gray-100/10 group mb-5">
                     <i class="fa-solid fa-user-group fa-lg" style="color: #f8f9fa;"></i>
-                    <span class="ms-3 text-light-primaryColor dark:text-dark-supportColor">Friends</span>
+                    <span class="ms-3 text-light-primaryColor dark:text-dark-supportColor">Connect</span>
                 </a>
             </li>
             <li>
@@ -31,6 +32,16 @@
                 </a>
             </li>
         </ul>
+        
+        <div class="absolute bottom-[30px] left-[10px] hover:bg-gray-100/10 cursor-pointer rounded-md p-2 w-[90%]">
+            <img class="w-10 ms-3 h-10 rounded-full mb-3" src="https://picsum.photos/200/300" alt="Rounded avatar">
+            <p class="font-bold ms-3 mb-2 text-light-primaryColor dark:text-dark-supportColor">John Doe</p>
+            <p class="font-bold ms-3 mb-2 text-light-primaryColor dark:text-dark-supportColor">&commat;JohnDoe578</p>
+            
+            <p class="text-[13px] ms-3 text-light-primaryColor/90 dark:text-dark-supportColor/90 ">Followers: <span class=" text-light-primaryColor dark:text-dark-supportColor font-bold">3000</span></p>
+            <p class="text-[13px] ms-3 text-light-primaryColor/90 dark:text-dark-supportColor/90">Following: <span class=" text-light-primaryColor dark:text-dark-supportColor font-bold">1765</span></p>
+            
+        </div>
     </div>
 </aside>
 
