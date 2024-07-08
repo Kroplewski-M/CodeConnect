@@ -7,11 +7,14 @@
 @inject ILocalStorageService localStorageService
 
 <div class="bg-light-primaryColor dark:bg-dark-primaryColor min-h-screen flex flex-row">
-    <div class="z-[300] ">
-        <NavMenu/>
-    </div>
+    @if (!IsNonNavPage())
+    {
+        <div class="z-[300] ">
+            <NavMenu/>
+        </div>
+    }
     <main class="px-4 z-[200] flex-grow pt-6 mt-5 ">
-        <span @onclick="()=>SetDarkTheme(!_darkTheme)" class="fa-solid @(_darkTheme? "fa-sun text-light-primaryColor":"fa-moon text-dark-primaryColor") absolute top-5 right-5 cursor-pointer fa-lg"></span>
+        <span @onclick="() => SetDarkTheme(!_darkTheme)" class="fa-solid @(_darkTheme ? "fa-sun text-light-primaryColor" : "fa-moon text-dark-primaryColor") absolute top-5 right-5 cursor-pointer fa-lg"></span>
         <div class="">
             @foreach (var notification in Notifications)
             {
@@ -39,6 +42,11 @@
         }
     }
 
+    private bool IsNonNavPage()
+    {
+        string[] nonNavPages = ["/","/Account/Register", "/Account/Login"]; 
+        return nonNavPages.Any(page => NavManager.Uri.EndsWith(page));
+    }
     private string GetNotificationType(NotificationType type)
     {
         switch (type)
