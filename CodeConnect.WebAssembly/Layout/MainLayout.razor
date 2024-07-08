@@ -10,7 +10,7 @@
     <div class="z-[300] ">
         <NavMenu/>
     </div>
-    <main class="px-4 z-[200] flex-grow">
+    <main class="px-4 z-[200] flex-grow pt-6 mt-5 ">
         <span @onclick="()=>SetDarkTheme(!_darkTheme)" class="fa-solid @(_darkTheme? "fa-sun text-light-primaryColor":"fa-moon text-dark-primaryColor") absolute top-5 right-5 cursor-pointer fa-lg"></span>
         <div class="">
             @foreach (var notification in Notifications)
