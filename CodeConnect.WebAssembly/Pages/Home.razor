@@ -1,14 +1,20 @@
-﻿@inherits HomeBase
+﻿@using CodeConnect.WebAssembly.Components.SVGs
+@inherits HomeBase
 @page "/"
 
 <PageTitle>Welcome to Code Connect!</PageTitle>
 
-<div>
-    <h1 class="text-light-secondaryColor dark:text-dark-secondaryColor font-bold text-7xl text-center">&lt;Code Connect/&gt;</h1>
-    <p class="text-center text-light-supportColor/90 dark:text-dark-supportColor/90 mt-4 font-medium">Building bridges through code</p>
-    <div class="flex space-x-4 place-content-center mt-7">
-        <a class="rounded-md border-4 border-solid border-light-secondaryColor px-3 py-2 text-light-supportColor dark:text-dark-supportColor/90 hover:bg-dark-secondaryColor" href="Account/Register"><i class="bi bi-input-cursor-text"></i> Create An Account</a>
-        <a href="/Account/Login" class="rounded-md  border-4 border-solid hover:border-light-secondaryColor border-transparent px-3 py-2 text-light-supportColor/80 dark:text-dark-supportColor/90 bg-dark-secondaryColor hover:bg-transparent"><i class="bi bi-code-square"></i> Login</a>
+<div class="flex flex-col flex-col-reverse md:flex-row md:items-center md:place-content-center animate-fadeIn ">
+    <div class="-rotate-[17deg]">
+        <CodeSVG Width="400" Height="400" Color="7b62cc"/>
+    </div>
+    <div>
+        <h1 class="text-light-secondaryColor dark:text-dark-secondaryColor font-bold md:text-7xl text-5xl text-center">&lt;Code Connect/&gt;</h1>
+        <p class="text-center text-light-supportColor/90 dark:text-dark-supportColor/90 mt-4 font-medium">Building bridges through code</p>
+        <div class="flex space-x-4 place-content-center mt-7">
+            <a class="rounded-md border-4 border-solid border-light-secondaryColor px-3 py-2 text-light-supportColor dark:text-dark-supportColor/90 hover:bg-dark-secondaryColor" href="Account/Register"><i class="bi bi-input-cursor-text"></i> Create An Account</a>
+            <a href="/Account/Login" class="rounded-md  border-4 border-solid hover:border-light-secondaryColor border-transparent px-3 py-2 text-light-supportColor/80 dark:text-dark-supportColor/90 bg-dark-secondaryColor hover:bg-transparent"><i class="bi bi-code-square"></i> Login</a>
+        </div>
     </div>
 </div>
 
