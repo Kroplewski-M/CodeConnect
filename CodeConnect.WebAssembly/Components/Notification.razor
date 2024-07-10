@@ -1,0 +1,46 @@
+@using DomainLayer.Entities
+
+<div class="flex items-center p-4 text-sm rounded-lg rounded-md border-4 @(GetNotificationBorderAndBg(Notif.NotificationType))" role="alert">
+    <span class="@(GetNotificationIcon(Notif.NotificationType))"></span>
+    <div>
+        <p class="font-bold pl-3">@Notif.Message</p> 
+    </div>
+</div>
+
+
+@code {
+    [Parameter] public DomainLayer.Entities.Notification Notif { get; set; }
+    
+    public string GetNotificationBorderAndBg(NotificationType type)
+    {
+        switch (type)
+        {
+            case NotificationType.Success:
+                return "border-green-800 bg-green-400";
+            case NotificationType.Error:
+                return "border-red-800 bg-red-500";
+            case NotificationType.Warning:
+                return "border-amber-800 bg-amber-400";
+            case NotificationType.Info:
+                return "border-blue-800 bg-blue-400 ";
+            default:
+                return "bg-purple-600";
+        }
+    }
+    public string GetNotificationIcon(NotificationType type)
+    {
+        switch (type)
+        {
+            case NotificationType.Success:
+                return "fa-solid fa-circle-check text-green-800";
+            case NotificationType.Error:
+                return "fa-solid fa-circle-exclamation text-red-800";
+            case NotificationType.Warning:
+                return "fa-solid fa-triangle-exclamation text-amber-800";
+            case NotificationType.Info:
+                return "fa-solid fa-circle-exclamation text-blue-800";
+            default:
+                return "fa-solid fa-circle-exclamation text-amber-400";
+        }
+    }
+}

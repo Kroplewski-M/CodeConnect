@@ -1,5 +1,7 @@
 ﻿@using DomainLayer.Entities
 @using Blazored.LocalStorage;
+@using CodeConnect.WebAssembly.Components
+@using Notification = DomainLayer.Entities.Notification
 @inherits LayoutComponentBase
 @inject NavigationManager NavManager
 @inject NotificationsService NotificationsService
@@ -19,14 +21,12 @@
             &lt;Code Connect/&gt;
         </a>
     }
-    <main class="px-4 z-[200] flex-grow pt-6 mt-5 ">
+    <main class="px-4 z-[200] flex-grow pt-6 mt-5">
         <span @onclick="() => SetDarkTheme(!_darkTheme)" class="fa-solid @(_darkTheme ? "fa-sun text-light-primaryColor" : "fa-moon text-dark-primaryColor") absolute top-5 right-5 cursor-pointer fa-lg"></span>
-        <div class="">
+        <div class="absolute top-10 right-10 flex flex-col space-y-2 z-[500]">
             @foreach (var notification in Notifications)
             {
-                <div class="@GetNotificationType(notification.NotificationType) ">
-                    <p>@notification.Message</p>
-                </div>
+                <Notification Notif="notification" />
             }
         </div>
         @Body
@@ -52,22 +52,6 @@
     {
         string[] nonNavPages = ["/","/Account/Register", "/Account/Login"]; 
         return nonNavPages.Any(page => NavManager.Uri.EndsWith(page));
-    }
-    private string GetNotificationType(NotificationType type)
-    {
-        switch (type)
-        {
-            case NotificationType.Success:
-                return "bg-success";
-            case NotificationType.Error:
-                return "bg-danger";
-            case NotificationType.Warning:
-                return "bg-warning";
-            case NotificationType.Info:
-                return "bg-info";
-            default:
-                return "";
-        }
     }
 
     private void UpdateNotifications()
