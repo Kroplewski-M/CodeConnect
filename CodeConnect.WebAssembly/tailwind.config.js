@@ -18,12 +18,17 @@ module.exports = {
       },
       keyframes:{
         fadeIn:{
-          "0%": { opacity: "0", transform: "translateX(-10%)" },
-          "100%": { opacity: "1", transform: "translateX(0);" },
+          "0%": { opacity: "0", transform: "translateY(-10%)" },
+          "100%": { opacity: "1", transform: "translateY(0);" },
+        },
+        rotateLong:{
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(-17deg);" },
         }
       },
       animation: {
         fadeIn: "fadeIn 1s ease-in",
+        rotateLong: "rotateLong 1.1s ease-in forwards",
       },
     },
   },

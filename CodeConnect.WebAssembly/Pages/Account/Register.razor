@@ -1,81 +1,94 @@
 @page "/Account/Register"
 @inherits RegisterBase
 
-<div></div>
-<div>
-    <div>
-        <h1>Welcome to Code Connect!</h1>
-        <div>
-            <p>Bridging Bytes and Brilliant Minds - Your Coding Community!</p>
-            <p>Register now to start sharing your ideas and projects!</p>
+
+<div class="flex flex-col flex-col-reverse md:space-x-5  md:flex-row place-content-center">
+    <div class="">
+        <h1 class="text-5xl text-light-secondaryColor dark:text-dark-secondaryColor font-bold">Welcome to Code Connect!</h1>
+        <div class="dark:text-dark-supportColor text-light-supportColor mt-1">
+            <p class="mt-2">Bridging Bytes and Brilliant Minds - Your Coding Community!</p>
         </div>
-        <h3>Already have an account?</h3>
-        <a href="Account/Login">Login now!</a>
+        <h3 class="mt-5 text-light-secondaryColor dark:text-dark-secondaryColor font-bold font-medium">Already have an account?</h3>
+        <div class="mt-5">
+            <a href="/Account/Login" class="rounded-md  border-4 border-solid hover:border-light-secondaryColor border-transparent px-3 py-2 text-light-supportColor/80 dark:text-dark-supportColor/90 bg-dark-secondaryColor hover:bg-transparent"><i class="bi bi-code-square"></i>Login</a>
+        </div>
     </div>
-    <div>
-        <h1>Register</h1>
+    <div class="rounded-md dark:bg-dark-secondaryColor bg-light-secondaryColor mb-5 p-5 md:min-w-[400px] w-[300px] text-center">
+        <h1 class="text-4xl text-light-supportColor dark:text-dark-supportColor font-bold">Register</h1>
         <EditForm FormName="Register" Model="RegisterForm" OnSubmit="SubmitRegister">
-            <div>
-                <InputText @bind-Value="RegisterForm.FirstName" id="firstName"></InputText>
+            <div class="mt-5">
+                <InputText @bind-Value="RegisterForm.FirstName" id="firstName" placeholder="First Name"
+                           class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
+                </InputText>
                 <div>
                     @if (RegisterErrors.Any(x => x.PropertyName == "FirstName"))
                     {
-                    foreach (var error in RegisterErrors.Where(x=> x.PropertyName == "FirstName"))
-                    {
-                    <p>@error.ErrorMessage</p>
-                    }
+                        foreach (var error in RegisterErrors.Where(x=> x.PropertyName == "FirstName"))
+                        {
+                            <p class="text-red-800 font-bold"><span class="fa fa-circle-exclamation text-red-800"></span> @error.ErrorMessage</p>
+                        }
                     }
                 </div>
             </div>
-            <div>
-                <InputText @bind-Value="RegisterForm.LastName" id="lastName"></InputText>
+            <div class="mt-5">
+                <InputText @bind-Value="RegisterForm.LastName" id="lastName" placeholder="Last Name"
+                           class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
+                </InputText>
                 <div>
                     @if (RegisterErrors.Any(x => x.PropertyName == "LastName"))
                     {
-                    foreach (var error in RegisterErrors.Where(x=> x.PropertyName == "LastName"))
-                    {
-                    <p>@error.ErrorMessage</p>
-                    }
+                        foreach (var error in RegisterErrors.Where(x=> x.PropertyName == "LastName"))
+                        {   
+                            <p class="text-red-800 font-bold"><span class="fa fa-circle-exclamation text-red-800"></span> @error.ErrorMessage</p>
+                        }
                     }
                 </div>
             </div>
-            <div>
-                <InputText @bind-Value="RegisterForm.Email" id="email"></InputText>
+            <div class="mt-5">
+                <InputText @bind-Value="RegisterForm.Email" id="email" placeholder="Email"
+                           class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
+                </InputText>
                 <div>
                     @if (RegisterErrors.Any(x => x.PropertyName == "Email"))
                     {
-                    foreach (var error in RegisterErrors.Where(x=> x.PropertyName == "Email"))
-                    {
-                    <p>@error.ErrorMessage</p>
-                    }
+                        foreach (var error in RegisterErrors.Where(x=> x.PropertyName == "Email"))
+                        {
+                            <p class="text-red-800 font-bold"><span class="fa fa-circle-exclamation text-red-800"></span> @error.ErrorMessage</p>
+                        }
                     }
                 </div>
             </div>
-            <div>
-                <InputDate @bind-Value="RegisterForm.DOB" id="Dob"></InputDate>
+            <div class="mt-5">
+                <InputDate @bind-Value="RegisterForm.DOB" id="Dob"
+                           class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
+                </InputDate>
                 <div>
                     @if (RegisterErrors.Any(x => x.PropertyName == "DOB"))
                     {
-                    foreach (var error in RegisterErrors.Where(x=> x.PropertyName == "DOB"))
-                    {
-                    <p>@error.ErrorMessage</p>
-                    }
+                        foreach (var error in RegisterErrors.Where(x=> x.PropertyName == "DOB"))
+                        {
+                            <p class="text-red-800 font-bold"><span class="fa fa-circle-exclamation text-red-800"></span> @error.ErrorMessage</p>
+                        }
                     }
                 </div>
             </div>
-            <div>
-                <InputText type="password" @bind-Value="RegisterForm.Password" id="password"></InputText>
+            <div class="mt-5">
+                <InputText type="password" @bind-Value="RegisterForm.Password" id="password" placeholder="Password"
+                           class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
+                </InputText>
                 <div>
                     @if (RegisterErrors.Any(x => x.PropertyName == "Password"))
                     {
-                    foreach (var error in RegisterErrors.Where(x=> x.PropertyName == "Password"))
-                    {
-                    <p>@error.ErrorMessage</p>
-                    }
+                        foreach (var error in RegisterErrors.Where(x=> x.PropertyName == "Password"))
+                        {
+                            <p class="text-red-800 font-bold"><span class="fa fa-circle-exclamation text-red-800"></span> @error.ErrorMessage</p>
+                        }
                     }
                 </div>
             </div>
-            <button type="submit">Register</button>
+            <div class="mt-5">
+                <button type="submit" class="rounded-md border-4 border-solid border-light-supportColor dark:border-dark-supportColor px-3 py-2 text-light-primaryColor hover:bg-dark-supportColor hover:text-light-secondaryColor font-bold">Register</button>
+            </div>
         </EditForm>
     </div>
 </div>
