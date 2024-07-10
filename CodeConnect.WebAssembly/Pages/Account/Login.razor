@@ -2,45 +2,53 @@
 @using Microsoft.AspNetCore.Authorization
 @inherits LoginBase
 
-<div></div>
-<div>
-    <div>
-        <h1>Login</h1>
+<div class="flex flex-col md:space-x-5  md:flex-row place-content-center">
+    <div class="rounded-md dark:bg-dark-secondaryColor bg-light-secondaryColor mb-5 p-5 md:min-w-[400px] w-[300px] text-center">
+        <h1 class="text-4xl text-light-supportColor dark:text-dark-supportColor font-bold">Login</h1>
         <EditForm FormName="Login" Model="LoginForm" OnSubmit="SubmitLogin">
-            <div>
-                <InputText @bind-Value="LoginForm.Email" id="email"></InputText>
+            
+            <div class="mt-5">
+                <InputText @bind-Value="LoginForm.Email" id="email" placeholder="Email"
+                           class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
+                </InputText>
                 <div>
                     @if (LoginErrors.Any(x => x.PropertyName == "Email"))
                     {
                         foreach (var error in LoginErrors.Where(x=> x.PropertyName == "Email"))
                         {
-                            <p>@error.ErrorMessage</p>
+                            <p class="text-red-800 font-bold"><span class="fa fa-circle-exclamation text-red-800"></span> @error.ErrorMessage</p>
                         }
                     }
                 </div>
             </div>
-            <div>
-                <InputText type="password" @bind-Value="LoginForm.Password" id="password"></InputText>
+            <div class="mt-5">
+                <InputText type="password" @bind-Value="LoginForm.Password" id="password" placeholder="Password"
+                           class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
+                </InputText>
                 <div>
                     @if (LoginErrors.Any(x => x.PropertyName == "Password"))
                     {
                         foreach (var error in LoginErrors.Where(x=> x.PropertyName == "Password"))
                         {
-                            <p>@error.ErrorMessage</p>
+                            <p class="text-red-800 font-bold"><span class="fa fa-circle-exclamation text-red-800"></span> @error.ErrorMessage</p>
                         }
                     }
                 </div>
             </div>
-            <button type="submit">Login</button>
+            <div class="mt-5">
+                <button type="submit" class="rounded-md border-4 border-solid border-light-supportColor dark:border-dark-supportColor px-3 py-2 text-light-primaryColor hover:bg-dark-supportColor hover:text-light-secondaryColor font-bold">Login</button>
+            </div>
         </EditForm>
     </div>
-    <div>
-        <h1>Welcome back to Code Connect!</h1>
-        <div>
-            <p>Log back in to carry on sharing projects and ideas</p>
-            <p>in you're coding community</p>
+    <div class="">
+        <h1 class="text-5xl text-light-secondaryColor dark:text-dark-secondaryColor font-bold">Welcome back!</h1>
+        <div class="dark:text-dark-supportColor text-light-supportColor mt-1">
+            <p class="mt-2">Login now to get back to sharing and connecting with nerds!</p>
         </div>
-        <h3>Don't have an account?</h3>
-        <a href="Account/Register">Register now!</a>
+        <h3 class="mt-5 text-light-secondaryColor dark:text-dark-secondaryColor font-bold font-medium">Don't have an account?</h3>
+        <div class="mt-5">
+            <a href="/Account/Register" class="rounded-md  border-4 border-solid hover:border-light-secondaryColor border-transparent px-3 py-2 text-light-supportColor/80 dark:text-dark-supportColor/90 bg-dark-secondaryColor hover:bg-transparent"><i class="bi bi-code-square"></i>Create an account</a>
+        </div>
     </div>
 </div>
+
