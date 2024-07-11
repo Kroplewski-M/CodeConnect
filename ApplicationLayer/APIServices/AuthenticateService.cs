@@ -27,13 +27,12 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
             var userClaims = GetClaimsForUser(user);
             return GenerateAuthResponse(userClaims);
         }
-        List<string> errors = result.Errors.Select(x => x.Description).ToList();
-        return new AuthResponse(false,"", "",errors);
+        string error = result.Errors.Select(x => x.Description).FirstOrDefault() ?? "";
+        return new AuthResponse(false,"", "",error);
     }
 
     public async Task<AuthResponse> LoginUser(LoginForm loginForm)
     {
-        List<string> errors = new List<string>();
         var user = await userManager.FindByEmailAsync(loginForm.Email);
         if (user != null)
         {
@@ -43,12 +42,9 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
                 var userClaims = GetClaimsForUser(user);
                 return GenerateAuthResponse(userClaims);
             }
-            errors.Add("Incorrect Email or Password");
-            return new AuthResponse(false, "", "",errors);
+            return new AuthResponse(false, "", "","Incorrect Email or Password");
         }
-
-        errors.Add("User not found");
-        return new AuthResponse(false, "", "",errors);
+        return new AuthResponse(false, "", "","User not found");
     }
 
     private List<Claim> GetClaimsForUser(ApplicationUser user)
@@ -71,6 +67,6 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         var token = tokenGenerationService.GenerateJwtToken(userClaims,expiresAt);
         var refreshExpiresAt = DateTime.UtcNow.AddDays(30);
         var refreshToken = tokenGenerationService.GenerateJwtToken(userClaims,refreshExpiresAt);
-        return new AuthResponse(true, token, refreshToken, ["Auth successful"]);
+        return new AuthResponse(true, token, refreshToken, "Auth successful");
     }
 }

@@ -45,35 +45,25 @@ public class ClientAuthStateProvider(HttpClient httpClient,
         }
         return new AuthenticationState(new ClaimsPrincipal());
     }
-
+    public void NotifyStateChanged()
+    {
+        NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+    }
     private async Task<bool> IsTokenValid(string token)
     {
-        var response = await httpClient.PostAsJsonAsync("/api/ValidateToken", token);
+        var response = await httpClient.PostAsJsonAsync("/api/Authentication/ValidateToken", token);
         return response.IsSuccessStatusCode;
     }
     private AuthenticationState CreateAuthenticationStateFromToken(string token)
     {
         var authState = new AuthenticationState(new ClaimsPrincipal(DecodeToken(token)));
+        var test = Task.FromResult(authState);
         NotifyAuthenticationStateChanged(Task.FromResult(authState));
         return authState;
     }
-    private async Task<AuthenticationState>  RedirectToLoginPage()
-    {
-        await RemoveAllAuth();
-        navigationManager.NavigateTo("/Account/Login");
-        var authState = new AuthenticationState(new ClaimsPrincipal());
-        NotifyAuthenticationStateChanged(Task.FromResult(authState));
-        return authState;
-    }
-    private async Task RemoveAllAuth()
-    {
-        await localStorageService.RemoveItemAsync("RefreshToken");
-        await localStorageService.RemoveItemAsync("AuthToken");
-    }
-
     private async Task<string?> RefreshToken(string refreshToken)
     {
-        var responseMessage = await httpClient.PostAsJsonAsync("/api/RefreshToken", refreshToken);
+        var responseMessage = await httpClient.PostAsJsonAsync("/api/Authentication/RefreshToken", refreshToken);
         if (responseMessage.IsSuccessStatusCode)
         {
             var responseContent = await responseMessage.Content.ReadAsStringAsync();
@@ -96,44 +86,5 @@ public class ClientAuthStateProvider(HttpClient httpClient,
     
         var identity = new ClaimsIdentity(claims, "Jwt");
         return new ClaimsPrincipal(identity);
-    }
-    public async Task<ServiceResponse> LogIn(LoginForm loginForm)
-    {
-        var response = await httpClient.PostAsJsonAsync("/api/LoginUser", loginForm);
-        var authResponse = response.Content.ReadFromJsonAsync<AuthResponse>().Result;
-        if (response.IsSuccessStatusCode)
-        {
-            if (authResponse != null && authResponse.Flag)
-            {
-                await localStorageService.SetItemAsync("AuthToken", authResponse.Token);
-                await localStorageService.SetItemAsync("RefreshToken", authResponse.RefreshToken);
-                NotifyAuthenticationStateChanged(Task.FromResult(CreateAuthenticationStateFromToken(authResponse.Token ?? "")));
-                return new ServiceResponse(true, authResponse?.Message.FirstOrDefault() ?? "success");
-            }
-        }
-        return new ServiceResponse(false, authResponse?.Message.FirstOrDefault() ?? "Error occured");
-    }
-
-    public async Task<ServiceResponse> Register(RegisterForm registerForm)
-    {
-        var response = await httpClient.PostAsJsonAsync("/api/RegiserUser", registerForm);
-        var authResponse = response.Content.ReadFromJsonAsync<AuthResponse>().Result;
-        if (response.IsSuccessStatusCode)
-        {
-            if (authResponse != null && authResponse.Flag)
-            {
-                await localStorageService.SetItemAsync("AuthToken", authResponse.Token);
-                await localStorageService.SetItemAsync("RefreshToken", authResponse.RefreshToken);
-                NotifyAuthenticationStateChanged(
-                    Task.FromResult(CreateAuthenticationStateFromToken(authResponse.Token ?? "")));
-                return new ServiceResponse(true, "Registered successfully");
-            }
-        }
-        return new ServiceResponse(false, "Error while registering");
-    }
-
-    public async Task<AuthenticationState> LogOut()
-    {
-        return await RedirectToLoginPage();
     }
 }
