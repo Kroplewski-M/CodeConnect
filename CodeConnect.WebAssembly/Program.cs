@@ -1,5 +1,6 @@
 using ApplicationLayer.APIServices;
 using ApplicationLayer.ClientServices;
+using ApplicationLayer.Interfaces;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -16,5 +17,6 @@ builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7124") });
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<AuthenticationStateProvider,ClientAuthStateProvider>();
+builder.Services.AddScoped<IAuthenticateService, AuthenticateServiceClient>();
 builder.Services.AddSingleton<NotificationsService>();
 await builder.Build().RunAsync();
