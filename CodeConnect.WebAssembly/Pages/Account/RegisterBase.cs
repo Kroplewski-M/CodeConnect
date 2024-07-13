@@ -23,12 +23,12 @@ public class RegisterBase
     public IAuthenticateService AuthenticateService { get; set; } 
 
     public RegisterForm RegisterForm = new RegisterForm();
-    public List<ValidationFailure> RegisterErrors = new List<ValidationFailure>();
+    protected List<ValidationFailure> RegisterErrors = [];
     
     public async Task SubmitRegister()
     {
-        RegisterFormValidator RegisterFormValidator = new RegisterFormValidator();
-        var validate = await RegisterFormValidator.ValidateAsync(RegisterForm);
+        RegisterFormValidator registerFormValidator = new RegisterFormValidator();
+        var validate = await registerFormValidator.ValidateAsync(RegisterForm);
         if (!validate.IsValid)
         {
             RegisterErrors = validate.Errors;
