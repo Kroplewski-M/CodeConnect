@@ -25,7 +25,7 @@ public class AuthenticateServiceClient(HttpClient httpClient,
                 return new AuthResponse(true, authResponse.Token ,authResponse.RefreshToken,"Registered successfully");
             }
         }
-        return new AuthResponse(false,"","" ,"Error while registering");
+        return new AuthResponse(false,"","" ,authResponse?.Message ?? "An error occured please try again later");
     }
 
     public async Task<AuthResponse> LoginUser(LoginForm loginForm)

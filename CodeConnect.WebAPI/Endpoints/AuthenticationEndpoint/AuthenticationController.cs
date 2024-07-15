@@ -18,7 +18,7 @@ public class AuthenticationController(IAuthenticateService authenticateService,
         var result = await authenticateService.CreateUser(registerForm);
         if (result.Flag)
             return Ok(result);
-        return BadRequest("Account creation Failed");
+        return BadRequest(result);
     }
 
     [HttpPost("LoginUser")]
@@ -27,7 +27,7 @@ public class AuthenticationController(IAuthenticateService authenticateService,
         var result = await authenticateService.LoginUser(loginForm);
         if (result.Flag)
             return Ok(result);
-        return BadRequest("Account Not Found");
+        return BadRequest(result);
     }
     [HttpPost("ValidateToken")]
     public IActionResult ValidateToken([FromBody]string token)
@@ -35,7 +35,7 @@ public class AuthenticationController(IAuthenticateService authenticateService,
         var result = tokenService.ValidateToken(token);
         if (result.Flag)
             return Ok(result);
-        return Unauthorized();
+        return Unauthorized(result);
     }
     [HttpPost("RefreshToken")]
     public IActionResult RefreshToken([FromBody]string token)

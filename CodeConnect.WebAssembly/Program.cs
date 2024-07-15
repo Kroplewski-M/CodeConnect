@@ -20,3 +20,4 @@ builder.Services.AddScoped<AuthenticationStateProvider,ClientAuthStateProvider>(
 builder.Services.AddScoped<IAuthenticateService, AuthenticateServiceClient>();
 builder.Services.AddSingleton<NotificationsService>();
 await builder.Build().RunAsync();
+

@@ -87,8 +87,15 @@
                 </div>
             </div>
             <div class="mt-5">
-                <button type="submit" class="rounded-md border-4 border-solid border-light-supportColor dark:border-dark-supportColor px-3 py-2 text-light-primaryColor hover:bg-dark-supportColor hover:text-light-secondaryColor font-bold">Register</button>
+                <button disabled="@DisalbleRegister" type="submit" class="rounded-md border-4 border-solid border-light-supportColor dark:border-dark-supportColor px-3 py-2 text-light-primaryColor hover:bg-dark-supportColor hover:text-light-secondaryColor font-bold">Register</button>
             </div>
+            @if (RegisterErrors.Any(x => x.PropertyName == "ResponseError"))
+            {
+                foreach (var error in RegisterErrors.Where(x=> x.PropertyName == "ResponseError"))
+                {
+                    <p class="text-red-800 font-bold"><span class="fa fa-circle-exclamation text-red-800"></span> @error.ErrorMessage</p>
+                }
+            }
         </EditForm>
     </div>
 </div>
