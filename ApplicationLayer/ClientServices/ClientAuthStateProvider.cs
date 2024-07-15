@@ -21,18 +21,20 @@ public class ClientAuthStateProvider(HttpClient httpClient,
         try
         {
             var token = await localStorageService.GetItemAsync<string>("AuthToken");
-            if (await IsTokenValid(token ?? ""))
+            var isAuthedFromToken = !string.IsNullOrEmpty(token) && await IsTokenValid(token);
+            if (isAuthedFromToken)
             {
                 return CreateAuthenticationStateFromToken(token ?? "");
             }
 
             var refreshToken = await localStorageService.GetItemAsync<string>("RefreshToken");
-            if (!await IsTokenValid(refreshToken ?? ""))
+            isAuthedFromToken = !string.IsNullOrEmpty(refreshToken) && await IsTokenValid(refreshToken);
+            if (!isAuthedFromToken)
             {
                 return new AuthenticationState(new ClaimsPrincipal());
             }
 
-            var newToken = await RefreshToken(refreshToken ?? "");
+            var newToken = !string.IsNullOrEmpty(refreshToken) ? await RefreshToken(refreshToken) : null;
             if (newToken != null)
             {
                 await localStorageService.SetItemAsync("AuthToken", newToken);
