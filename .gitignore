@@ -28,3 +28,4 @@ CodeConnect.WebAPI/appsettings.Development.json
 # Exclude all obj/ directories
 **/obj/
 /node_modules
+.config/
