@@ -6,6 +6,8 @@ riderModule.iml
 /_ReSharper.Caches/
 appsettings.json
 appsettings.Development.json
+CodeConnect.WebAPI/appsettings.json
+CodeConnect.WebAPI/appsettings.Development.json
 
 # OS generated files #
 ######################
