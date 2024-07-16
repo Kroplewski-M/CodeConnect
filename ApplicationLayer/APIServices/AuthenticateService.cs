@@ -42,9 +42,8 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
                 var userClaims = GetClaimsForUser(user);
                 return GenerateAuthResponse(userClaims);
             }
-            return new AuthResponse(false, "", "","Incorrect Email or Password");
         }
-        return new AuthResponse(false, "", "","User not found");
+        return new AuthResponse(false, "", "","Incorrect Email or Password");
     }
 
     private List<Claim> GetClaimsForUser(ApplicationUser user)

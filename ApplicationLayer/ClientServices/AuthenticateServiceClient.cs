@@ -30,7 +30,7 @@ public class AuthenticateServiceClient(HttpClient httpClient,
 
     public async Task<AuthResponse> LoginUser(LoginForm loginForm)
     {
-        var response = await httpClient.PostAsJsonAsync("/api/LoginUser", loginForm);
+        var response = await httpClient.PostAsJsonAsync("/api/Authentication/LoginUser", loginForm);
         var authResponse = await response.Content.ReadFromJsonAsync<AuthResponse>();
         if (response.IsSuccessStatusCode)
         {
@@ -43,6 +43,6 @@ public class AuthenticateServiceClient(HttpClient httpClient,
                 return new AuthResponse(true, authResponse.Token ,authResponse.RefreshToken, authResponse.Message);
             }
         }
-        return new AuthResponse(false,"","", authResponse?.Message);
+        return new AuthResponse(false,"","", authResponse?.Message ?? "Error occured during login please try again later");
     }
 }

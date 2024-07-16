@@ -24,7 +24,7 @@ public class RegisterBase
 
     public RegisterForm RegisterForm = new RegisterForm();
     protected List<ValidationFailure> RegisterErrors = [];
-    public bool DisalbleRegister { get; set; } = false;
+    public bool DisableRegister { get; set; } = false;
     public async Task SubmitRegister()
     {
         RegisterFormValidator registerFormValidator = new RegisterFormValidator();
@@ -40,7 +40,7 @@ public class RegisterBase
             NotificationsService.PushNotification(new Notification("Creating Account",NotificationType.Info));
             try
             {
-                DisalbleRegister = true;
+                DisableRegister = true;
                 var result = await AuthenticateService.CreateUser(RegisterForm);
                 if (!result.Flag)
                 {
@@ -52,16 +52,17 @@ public class RegisterBase
                 {
                     NotificationsService.PushNotification(new Notification("Account Created, Welcome to Code Connect!",
                         NotificationType.Success));
-                    NavigationManager.NavigateTo("/");
+                    NavigationManager.NavigateTo("/MyFeed");
                 }
             }
-            catch (Exception error)
+            catch
             {
-                Console.WriteLine(error);
+                NotificationsService.PushNotification(new Notification("Error Occured During Registering Please Try Again Later.",
+                    NotificationType.Error));
             }
             finally
             {
-                DisalbleRegister = false;
+                DisableRegister = false;
             }
             
         }

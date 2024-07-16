@@ -2,7 +2,7 @@
 @inherits RegisterBase
 
 
-<div class="flex flex-col flex-col-reverse md:space-x-5  md:flex-row place-content-center">
+<div class="flex flex-col flex-col-reverse md:space-x-8  md:flex-row place-content-center">
     <div class="">
         <h1 class="text-5xl text-light-secondaryColor dark:text-dark-secondaryColor font-bold">Welcome to Code Connect!</h1>
         <div class="dark:text-dark-supportColor text-light-supportColor mt-1">
@@ -13,7 +13,7 @@
             <a href="/Account/Login" class="rounded-md  border-4 border-solid hover:border-light-secondaryColor border-transparent px-3 py-2 text-light-supportColor/80 dark:text-dark-supportColor/90 bg-dark-secondaryColor hover:bg-transparent"><i class="bi bi-code-square"></i>Login</a>
         </div>
     </div>
-    <div class="rounded-md dark:bg-dark-secondaryColor bg-light-secondaryColor mb-5 p-5 md:min-w-[400px] w-[300px] text-center">
+    <div class="rounded-md dark:bg-dark-secondaryColor bg-light-secondaryColor mb-5 p-5 md:min-w-[500px] w-[300px] text-center">
         <h1 class="text-4xl text-light-supportColor dark:text-dark-supportColor font-bold">Register</h1>
         <EditForm FormName="Register" Model="RegisterForm" OnSubmit="SubmitRegister">
             <div class="mt-5">
@@ -87,7 +87,7 @@
                 </div>
             </div>
             <div class="mt-5">
-                <button disabled="@DisalbleRegister" type="submit" class="rounded-md border-4 border-solid border-light-supportColor dark:border-dark-supportColor px-3 py-2 text-light-primaryColor hover:bg-dark-supportColor hover:text-light-secondaryColor font-bold">Register</button>
+                <button disabled="@DisableRegister" type="submit" class="rounded-md border-4 border-solid border-light-supportColor dark:border-dark-supportColor px-3 py-2 text-light-primaryColor hover:bg-dark-supportColor hover:text-light-secondaryColor font-bold">Register</button>
             </div>
             @if (RegisterErrors.Any(x => x.PropertyName == "ResponseError"))
             {

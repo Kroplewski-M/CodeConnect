@@ -2,8 +2,8 @@
 @using Microsoft.AspNetCore.Authorization
 @inherits LoginBase
 
-<div class="flex flex-col md:space-x-5  md:flex-row place-content-center">
-    <div class="rounded-md dark:bg-dark-secondaryColor bg-light-secondaryColor mb-5 p-5 md:min-w-[400px] w-[300px] text-center">
+<div class="flex flex-col md:space-x-8  md:flex-row place-content-center">
+    <div class="rounded-md dark:bg-dark-secondaryColor bg-light-secondaryColor mb-5 p-5 md:min-w-[500px] w-[300px] text-center">
         <h1 class="text-4xl text-light-supportColor dark:text-dark-supportColor font-bold">Login</h1>
         <EditForm FormName="Login" Model="LoginForm" OnSubmit="SubmitLogin">
             
@@ -37,6 +37,15 @@
             </div>
             <div class="mt-5">
                 <button type="submit" class="rounded-md border-4 border-solid border-light-supportColor dark:border-dark-supportColor px-3 py-2 text-light-primaryColor hover:bg-dark-supportColor hover:text-light-secondaryColor font-bold">Login</button>
+            </div>
+            <div class="mt-5">
+                @if (LoginErrors.Any(x => x.PropertyName == "ResponseError"))
+                {
+                    foreach (var error in LoginErrors.Where(x=> x.PropertyName == "ResponseError"))
+                    {
+                        <p class="text-red-800 font-bold"><span class="fa fa-circle-exclamation text-red-800"></span> @error.ErrorMessage</p>
+                    }
+                }
             </div>
         </EditForm>
     </div>
