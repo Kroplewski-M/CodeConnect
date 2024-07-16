@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 namespace ApplicationLayer.ClientServices;
 
 public class ClientAuthStateProvider(HttpClient httpClient,
-    ILocalStorageService localStorageService,NavigationManager navigationManager) : AuthenticationStateProvider
+    ILocalStorageService localStorageService) : AuthenticationStateProvider
 {
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
@@ -85,7 +85,7 @@ public class ClientAuthStateProvider(HttpClient httpClient,
         {
             claims.Add(new Claim(claim.Type, claim.Value));
         }
-    
+
         var identity = new ClaimsIdentity(claims, "Jwt");
         return new ClaimsPrincipal(identity);
     }

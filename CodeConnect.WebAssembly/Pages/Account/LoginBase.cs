@@ -11,14 +11,14 @@ namespace CodeConnect.WebAssembly.Pages.Account;
 public class LoginBase : ComponentBase
 {
     [Inject]
-    public NotificationsService NotificationsService { get; set; }
+    public required NotificationsService NotificationsService { get; set; }
 
     [Inject]
-    public NavigationManager NavigationManager { get; set; }
+    public required NavigationManager NavigationManager { get; set; }
 
     [Inject]
-    public IAuthenticateService AuthenticateService { get; set; } 
-    
+    public required IAuthenticateService AuthenticateService { get; set; }
+
     public LoginForm LoginForm = new LoginForm();
     public List<ValidationFailure> LoginErrors = new List<ValidationFailure>();
     public bool DisableLogin { get; set; } = false;
@@ -26,7 +26,7 @@ public class LoginBase : ComponentBase
     {
         LoginFormValidator loginFormValidator = new LoginFormValidator();
         var validate = await loginFormValidator.ValidateAsync(LoginForm);
-        
+
         if (!validate.IsValid)
         {
             LoginErrors = validate.Errors;
@@ -44,7 +44,7 @@ public class LoginBase : ComponentBase
                 if (!result.Flag)
                 {
                     LoginErrors.Add(new ValidationFailure
-                        { PropertyName = "ResponseError", ErrorMessage = result.Message });
+                    { PropertyName = "ResponseError", ErrorMessage = result.Message });
                     StateHasChanged();
                 }
                 else
@@ -65,5 +65,5 @@ public class LoginBase : ComponentBase
             }
         }
     }
-    
+
 }

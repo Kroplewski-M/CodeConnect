@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 namespace ApplicationLayer.APIServices;
 
-public class TokenService(IOptions<JwtSettings>jwtSettings)
+public class TokenService(IOptions<JwtSettings> jwtSettings)
 {
     public string? GenerateJwtToken(IEnumerable<Claim> claims, DateTime expireAt)
     {
@@ -15,8 +15,8 @@ public class TokenService(IOptions<JwtSettings>jwtSettings)
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var token = new JwtSecurityToken(issuer: jwtSettings.Value.Issuer,
             audience: jwtSettings.Value.Audience,
-            claims: claims.Where(x=>x.Type != "aud"), 
-            expires: expireAt, 
+            claims: claims.Where(x => x.Type != "aud"),
+            expires: expireAt,
             signingCredentials: creds);
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
@@ -39,17 +39,17 @@ public class TokenService(IOptions<JwtSettings>jwtSettings)
             };
             SecurityToken validateToken;
             var principal = tokenHandler.ValidateToken(token, tokenValidation, out validateToken);
-            return new ClaimsPrincipalResponse(true,principal);
+            return new ClaimsPrincipalResponse(true, principal);
         }
-        catch (Exception ex)
+        catch
         {
-            return new ClaimsPrincipalResponse(false,new ClaimsPrincipal());
+            return new ClaimsPrincipalResponse(false, new ClaimsPrincipal());
         }
     }
 
     public TokenResponse RefreshToken(string token)
     {
-       var principal =  ValidateToken(token);
-       return principal.ClaimsPrincipal.Claims.ToList().Any()? new TokenResponse(GenerateJwtToken(principal.ClaimsPrincipal.Claims, DateTime.Now.AddMinutes(60))) :  new TokenResponse("") ;
+        var principal = ValidateToken(token);
+        return principal.ClaimsPrincipal.Claims.ToList().Any() ? new TokenResponse(GenerateJwtToken(principal.ClaimsPrincipal.Claims, DateTime.Now.AddMinutes(60))) : new TokenResponse("");
     }
 }

@@ -1,6 +1,7 @@
 namespace DomainLayer.Entities;
 
-public enum NotificationType{
+public enum NotificationType
+{
     Success,
     Error,
     Warning,
@@ -17,17 +18,17 @@ public class NotificationsService
     }
     public List<Notification> Notifications = [];
     public Timer timer;
-    
+
     public event Action? OnChange;
     private void NotifyStateChanged() => OnChange?.Invoke();
-    
+
     public void PushNotification(Notification notification)
     {
         Notifications.Add(notification);
         NotifyStateChanged();
     }
 
-    public void RemoveOldestNotification(object state)
+    public void RemoveOldestNotification(object? state)
     {
         if (Notifications.Any())
         {

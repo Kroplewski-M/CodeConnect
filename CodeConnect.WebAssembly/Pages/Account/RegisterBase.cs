@@ -14,13 +14,13 @@ public class RegisterBase
     : ComponentBase
 {
     [Inject]
-    public NotificationsService NotificationsService { get; set; }
+    public required NotificationsService NotificationsService { get; set; }
 
     [Inject]
-    public NavigationManager NavigationManager { get; set; }
+    public required NavigationManager NavigationManager { get; set; }
 
     [Inject]
-    public IAuthenticateService AuthenticateService { get; set; } 
+    public required IAuthenticateService AuthenticateService { get; set; }
 
     public RegisterForm RegisterForm = new RegisterForm();
     protected List<ValidationFailure> RegisterErrors = [];
@@ -37,7 +37,7 @@ public class RegisterBase
         else
         {
             RegisterErrors = [];
-            NotificationsService.PushNotification(new Notification("Creating Account",NotificationType.Info));
+            NotificationsService.PushNotification(new Notification("Creating Account", NotificationType.Info));
             try
             {
                 DisableRegister = true;
@@ -45,7 +45,7 @@ public class RegisterBase
                 if (!result.Flag)
                 {
                     RegisterErrors.Add(new ValidationFailure
-                        { PropertyName = "ResponseError", ErrorMessage = result.Message });
+                    { PropertyName = "ResponseError", ErrorMessage = result.Message });
                     StateHasChanged();
                 }
                 else
@@ -64,8 +64,8 @@ public class RegisterBase
             {
                 DisableRegister = false;
             }
-            
+
         }
     }
-    
+
 }
