@@ -3,15 +3,6 @@
 @inherits HomeBase
 @page "/"
 
-<AuthorizeView>
-    <Authorized >
-        <h3>Hello,
-            @context.User.Identity.Name!
-            @context.User.FindFirst("FirstName")?.Value
-        </h3>
-    </Authorized>
-    <!-- Rest of your code -->
-</AuthorizeView>
 <PageTitle>Welcome to Code Connect!</PageTitle>
 
 <div class="flex flex-col flex-col-reverse md:flex-row md:items-center md:place-content-center animate-fadeIn ">
@@ -22,8 +13,15 @@
         <h1 class="text-light-secondaryColor dark:text-dark-secondaryColor font-bold md:text-7xl text-5xl text-center">&lt;Code Connect/&gt;</h1>
         <p class="text-center text-light-supportColor/90 dark:text-dark-supportColor/90 mt-4 font-medium">Building bridges through code</p>
         <div class="flex space-x-4 place-content-center mt-7">
-            <a class="rounded-md border-4 border-solid border-light-secondaryColor px-3 py-2 text-light-supportColor dark:text-dark-supportColor/90 hover:bg-dark-secondaryColor" href="Account/Register"><i class="bi bi-input-cursor-text"></i> Create An Account</a>
-            <a href="/Account/Login" class="rounded-md  border-4 border-solid hover:border-light-secondaryColor border-transparent px-3 py-2 text-light-supportColor/80 dark:text-dark-supportColor/90 bg-dark-secondaryColor hover:bg-transparent"><i class="bi bi-code-square"></i> Login</a>
+            <AuthorizeView>
+                <Authorized>
+                    <a class="rounded-md border-4 border-solid border-light-secondaryColor px-3 py-2 text-light-supportColor dark:text-dark-supportColor/90 hover:bg-dark-secondaryColor" href="/MyFeed"><i class="bi bi-input-cursor-text"></i>Go to my feed</a>
+                </Authorized>
+                <NotAuthorized>
+                    <a class="rounded-md border-4 border-solid border-light-secondaryColor px-3 py-2 text-light-supportColor dark:text-dark-supportColor/90 hover:bg-dark-secondaryColor" href="Account/Register"><i class="bi bi-input-cursor-text"></i> Create An Account</a>
+                    <a href="/Account/Login" class="rounded-md  border-4 border-solid hover:border-light-secondaryColor border-transparent px-3 py-2 text-light-supportColor/80 dark:text-dark-supportColor/90 bg-dark-secondaryColor hover:bg-transparent"><i class="bi bi-code-square"></i> Login</a>
+                </NotAuthorized>
+            </AuthorizeView>
         </div>
     </div>
 </div>

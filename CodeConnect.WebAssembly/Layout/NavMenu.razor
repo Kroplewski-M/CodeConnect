@@ -1,57 +1,59 @@
-﻿
-<div class="@(_openNav?"left-[65%]":"left-0") sm:hidden translate-x-full sm:-translate-x-0 transition-transform fixed top-5 z-[300] hover:bg-gray-100/10 rounded-full">
-    <i class="@(_openNav?"fa-xmark text-light-primaryColor dark:bg-text-supportColor/90":"fa-bars text-light-secondaryColor dark:text-dark-secondaryColor") fa-solid fa-2xl cursor-pointer" @onclick="() => _openNav = !_openNav"></i>
-</div>
-
-<aside class="sm:w-[250px] w-[80%] sm:relative fixed top-0 left-0 z-[200] h-screen transition-transform @(_openNav?"":"-translate-x-full sm:translate-x-0")" aria-label="Sidebar">
-    <div class="h-full px-3 py-4 overflow-y-auto bg-light-secondaryColor dark:bg-dark-secondaryColor">
-        <a href="/" class="flex items-center p-2 rounded-lg  group mb-5">
-            <span class="ms-3 text-light-primaryColor dark:bg-text-supportColor font-bold text-[20px]">&lt;Code Connect/&gt;</span>
-        </a>
-        <hr class="mb-5" />
-        <ul class="space-y-2 font-medium">
-            <li>
-                <a href="#" class="flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100/10 group mb-5">
-                    <i class="fa-solid fa-house fa-lg" style="color: #f8f9fa;"></i>
-                    <span class="ms-3 text-light-primaryColor dark:text-dark-supportColor">Home</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="flex items-center p-2  rounded-lg dark:text-white hover:bg-gray-100/10 group mb-5">
-                    <i class="fa-solid fa-bell fa-lg" style="color: #f8f9fa;"></i>
-                    <span class="ms-3 text-light-primaryColor dark:text-dark-supportColor">Notifications</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="flex items-center p-2  rounded-lg dark:text-white hover:bg-gray-100/10 group mb-5">
-                    <i class="fa-solid fa-user-group fa-lg" style="color: #f8f9fa;"></i>
-                    <span class="ms-3 text-light-primaryColor dark:text-dark-supportColor">Connect</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="flex items-center p-2 dark:text-white hover:bg-gray-100/10 rounded-lg group">
-                    <i class="fa-solid fa-message fa-lg" style="color: #f8f9fa;"></i>
-                    <span class="ms-3 text-light-primaryColor dark:text-dark-supportColor">Messages</span>
-                </a>
-            </li>
-        </ul>
-        
-        <div class="absolute bottom-[30px] left-[10px] hover:bg-gray-100/10 cursor-pointer rounded-md p-2 w-[90%]">
-            <img class="w-10 ms-3 h-10 rounded-full mb-3" src="https://picsum.photos/200/300" alt="Rounded avatar">
-            <p class="font-bold ms-3 mb-2 text-light-primaryColor dark:text-dark-supportColor">John Doe</p>
-            <p class="font-bold ms-3 mb-2 text-light-primaryColor dark:text-dark-supportColor">&commat;JohnDoe578</p>
-            
-            <p class="text-[13px] ms-3 text-light-primaryColor/90 dark:text-dark-supportColor/90 ">Followers: <span class=" text-light-primaryColor dark:text-dark-supportColor font-bold">3000</span></p>
-            <p class="text-[13px] ms-3 text-light-primaryColor/90 dark:text-dark-supportColor/90">Following: <span class=" text-light-primaryColor dark:text-dark-supportColor font-bold">1765</span></p>
-            
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager NavigationManager
+<AuthorizeView>
+    <Authorized>
+        <div class="@(_openNav ? "left-[65%]" : "left-0") sm:hidden translate-x-full sm:-translate-x-0 transition-transform fixed top-5 z-[300] hover:bg-gray-100/10 rounded-full">
+            <i class="@(_openNav ? "fa-xmark text-light-primaryColor dark:bg-text-supportColor/90" : "fa-bars text-light-secondaryColor dark:text-dark-secondaryColor") fa-solid fa-2xl cursor-pointer" @onclick="() => _openNav = !_openNav"></i>
         </div>
-    </div>
-</aside>
+
+        <aside class="sm:w-[250px] w-[80%] sm:relative fixed top-0 left-0 z-[200] h-screen transition-transform @(_openNav ? "" : "-translate-x-full sm:translate-x-0")" aria-label="Sidebar">
+            <div class="h-full px-3 py-4 overflow-y-auto bg-light-secondaryColor dark:bg-dark-secondaryColor">
+                <a href="/" class="flex items-center p-2 rounded-lg  group mb-5">
+                    <span class="ms-3 text-light-primaryColor dark:bg-text-supportColor font-bold text-[20px]">&lt;Code Connect/&gt;</span>
+                </a>
+                <hr class="mb-5"/>
+                <ul class="space-y-2 font-medium">
+                    <li>
+                        <a href="/MyFeed" class="flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100/10 group mb-5">
+                            <i class="fa-solid fa-house fa-lg" style="color: #f8f9fa;"></i>
+                            <span class="ms-3 text-light-primaryColor dark:text-dark-supportColor">Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center p-2  rounded-lg dark:text-white hover:bg-gray-100/10 group mb-5">
+                            <i class="fa-solid fa-bell fa-lg" style="color: #f8f9fa;"></i>
+                            <span class="ms-3 text-light-primaryColor dark:text-dark-supportColor">Notifications</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center p-2  rounded-lg dark:text-white hover:bg-gray-100/10 group mb-5">
+                            <i class="fa-solid fa-user-group fa-lg" style="color: #f8f9fa;"></i>
+                            <span class="ms-3 text-light-primaryColor dark:text-dark-supportColor">Connect</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center p-2 dark:text-white hover:bg-gray-100/10 rounded-lg group">
+                            <i class="fa-solid fa-message fa-lg" style="color: #f8f9fa;"></i>
+                            <span class="ms-3 text-light-primaryColor dark:text-dark-supportColor">Messages</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="absolute bottom-[30px] left-[10px] hover:bg-gray-100/10 cursor-pointer rounded-md p-2 w-[90%]" onclick="@(() => NavigationManager.NavigateTo("/MyProfile"))">
+                    <img class="w-10 ms-3 h-10 rounded-full mb-3" src="https://picsum.photos/200/300" alt="Rounded avatar">
+                    <p class="font-bold ms-3  text-light-primaryColor dark:text-dark-supportColor">@context.User.FindFirst("FirstName")?.Value</p>
+                    <p class="font-bold ms-3 mb-2 text-light-primaryColor dark:text-dark-supportColor">@context.User.FindFirst("LastName")?.Value</p>
+
+                    <p class="text-[13px] ms-3 text-light-primaryColor/90 dark:text-dark-supportColor/90 ">Followers: <span class=" text-light-primaryColor dark:text-dark-supportColor font-bold">3000</span></p>
+                    <p class="text-[13px] ms-3 text-light-primaryColor/90 dark:text-dark-supportColor/90">Following: <span class=" text-light-primaryColor dark:text-dark-supportColor font-bold">1765</span></p>
+                </div>
+            </div>
+        </aside>
+    </Authorized>
+</AuthorizeView>
 
 @code{
-
     private bool _openNav = false;
-
 }
 
 

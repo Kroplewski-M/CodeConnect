@@ -658,6 +658,10 @@ video {
   display: flex;
 }
 
+.grid {
+  display: grid;
+}
+
 .h-10 {
   height: 2.5rem;
 }
@@ -680,6 +684,10 @@ video {
 
 .w-\[300px\] {
   width: 300px;
+}
+
+.w-\[500px\] {
+  width: 500px;
 }
 
 .w-\[80\%\] {
@@ -1122,10 +1130,6 @@ video {
 }
 
 @media (min-width: 768px) {
-  .md\:min-w-\[400px\] {
-    min-width: 400px;
-  }
-
   .md\:min-w-\[500px\] {
     min-width: 500px;
   }
@@ -1140,24 +1144,6 @@ video {
 
   .md\:items-center {
     align-items: center;
-  }
-
-  .md\:space-x-5 > :not([hidden]) ~ :not([hidden]) {
-    --tw-space-x-reverse: 0;
-    margin-right: calc(1.25rem * var(--tw-space-x-reverse));
-    margin-left: calc(1.25rem * calc(1 - var(--tw-space-x-reverse)));
-  }
-
-  .md\:space-x-\[20px\] > :not([hidden]) ~ :not([hidden]) {
-    --tw-space-x-reverse: 0;
-    margin-right: calc(20px * var(--tw-space-x-reverse));
-    margin-left: calc(20px * calc(1 - var(--tw-space-x-reverse)));
-  }
-
-  .md\:space-x-\[100px\] > :not([hidden]) ~ :not([hidden]) {
-    --tw-space-x-reverse: 0;
-    margin-right: calc(100px * var(--tw-space-x-reverse));
-    margin-left: calc(100px * calc(1 - var(--tw-space-x-reverse)));
   }
 
   .md\:space-x-8 > :not([hidden]) ~ :not([hidden]) {

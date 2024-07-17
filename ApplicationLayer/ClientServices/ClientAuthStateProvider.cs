@@ -1,12 +1,8 @@
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Net.Http.Json;
 using System.Security.Claims;
-using System.Text.Json.Serialization;
-using ApplicationLayer.APIServices;
 using ApplicationLayer.DTO_s;
 using Blazored.LocalStorage;
-using DomainLayer.Entities.Auth;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Newtonsoft.Json;
@@ -14,7 +10,7 @@ using Newtonsoft.Json;
 namespace ApplicationLayer.ClientServices;
 
 public class ClientAuthStateProvider(HttpClient httpClient,
-    ILocalStorageService localStorageService) : AuthenticationStateProvider
+    ILocalStorageService localStorageService, NavigationManager navigationManager) : AuthenticationStateProvider
 {
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
@@ -61,6 +57,7 @@ public class ClientAuthStateProvider(HttpClient httpClient,
         var authState = new AuthenticationState(new ClaimsPrincipal(DecodeToken(token)));
         var test = Task.FromResult(authState);
         NotifyAuthenticationStateChanged(Task.FromResult(authState));
+        navigationManager.NavigateTo("/MyFeed");
         return authState;
     }
     private async Task<string?> RefreshToken(string refreshToken)
