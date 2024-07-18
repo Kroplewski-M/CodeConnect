@@ -46,6 +46,11 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         return new AuthResponse(false, "", "","Incorrect Email or Password");
     }
 
+    public Task<AuthResponse> LogoutUser()
+    {
+        throw new NotImplementedException();
+    }
+
     private List<Claim> GetClaimsForUser(ApplicationUser user)
     {
         return

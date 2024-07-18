@@ -1,8 +1,15 @@
+using ApplicationLayer.Interfaces;
 using Microsoft.AspNetCore.Components;
 
 namespace CodeConnect.WebAssembly.Pages.Account;
 
 public class MyProfileBase : ComponentBase
 {
-    
+    [Inject]
+    public required IAuthenticateService AuthenticateService { get; set; }
+
+    public async void Logout()
+    {
+        await AuthenticateService.LogoutUser();
+    }
 }

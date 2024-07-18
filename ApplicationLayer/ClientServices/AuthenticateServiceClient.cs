@@ -3,12 +3,13 @@ using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using Blazored.LocalStorage;
 using DomainLayer.Entities.Auth;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace ApplicationLayer.ClientServices;
 
 public class AuthenticateServiceClient(HttpClient httpClient,
-    ILocalStorageService localStorageService, AuthenticationStateProvider authenticationStateProvider) : IAuthenticateService
+    ILocalStorageService localStorageService, AuthenticationStateProvider authenticationStateProvider, NavigationManager navigationManager) : IAuthenticateService
 {
     public async Task<AuthResponse> CreateUser(RegisterForm registerForm)
     {
@@ -37,11 +38,19 @@ public class AuthenticateServiceClient(HttpClient httpClient,
             {
                 await localStorageService.SetItemAsync("AuthToken", authResponse.Token);
                 await localStorageService.SetItemAsync("RefreshToken", authResponse.RefreshToken);
-                await localStorageService.SetItemAsync("RefreshToken", authResponse.RefreshToken);
                 ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
                 return new AuthResponse(true, authResponse.Token, authResponse.RefreshToken, authResponse.Message);
             }
         }
         return new AuthResponse(false, "", "", authResponse?.Message ?? "Error occured during login please try again later");
+    }
+
+    public async Task<AuthResponse> LogoutUser()
+    {
+        await localStorageService.RemoveItemAsync("AuthToken");
+        await localStorageService.RemoveItemAsync("RefreshToken");
+        ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
+        navigationManager.NavigateTo("/");
+        return new AuthResponse(true, "", "", "Logged out successfully");
     }
 }
