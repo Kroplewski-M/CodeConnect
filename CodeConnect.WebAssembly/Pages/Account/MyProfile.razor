@@ -1,9 +1,24 @@
 @page "/MyProfile"
 @using Microsoft.AspNetCore.Components.Authorization
-
+@inherits MyProfileBase
 
 <AuthorizeView>
     <Authorized>
-        
+        <div class="w-[90%] mx-auto relative bg-dark-secondaryColor p-5 rounded-md">
+            <div class="w-[100%]">
+                <img src="images/background.jpg" class="w-[100%] h-[300px] rounded-md mx-auto" alt="" />
+            </div>
+            <div class="flex">
+                <div class="w-[340px] h-[340px] z-[50] relative">
+                    <div class="absolute -top-[50px] left-[30px] border rounded-full">
+                        <img src="https://picsum.photos/200/200" class="w-[100%] h-[100%] rounded-full" alt=""/>
+                    </div>
+                </div>
+                <div class="">
+                    <p class="font-bold text-4xl dark:text-dark-supportColor text-light-supportColor mt-5">@context.User.FindFirst("FirstName")?.Value @context.User.FindFirst("LastName")?.Value</p>
+                </div>
+            </div>
+        </div>
     </Authorized>
 </AuthorizeView>
+
