@@ -1,26 +1,31 @@
 @page "/MyProfile"
 @using Microsoft.AspNetCore.Components.Authorization
+@using CodeConnect.WebAssembly.Components
 @inherits MyProfileBase
 
 <AuthorizeView>
     <Authorized>
         <div class="w-[90%] mt-5 mx-auto relative bg-dark-secondaryColor p-5 rounded-md">
             <div class="w-[100%]">
-                <img src="images/background.jpg" class="w-[100%] sm:h-[450px] h-[300px] rounded-md mx-auto" alt="" />
+                <img src="images/background.jpg" class="w-[100%] md:h-[450px] h-[300px] rounded-md mx-auto" alt="" />
             </div>
             <div class="flex flex-col md:flex-row">
                 <div class="w-[340px] h-[200px] md:h-[340px] z-[50] relative">
-                    <div class="absolute -top-[50px] left-[30px] border rounded-full">
+                    <div class="absolute -top-[50px] md:left-[30px] left-[10px] border rounded-full">
                         <img src="https://picsum.photos/200/200" class="w-[100%] h-[100%] rounded-full" alt=""/>
                     </div>
                 </div>
                 <div class="mt-5">
-                        <button class="rounded-md border-red-800 bg-red-500 w-[150px] h-[30px] font-bold hover:bg-red-700" @onclick="Logout">Logout</button>
-                        <p class="font-bold text-4xl dark:text-dark-supportColor text-light-supportColor">@context.User.FindFirst("FirstName")?.Value @context.User.FindFirst("LastName")?.Value</p>
-                        <p class=" pt-[10px] dark:text-dark-supportColor/90 text-light-supportColor/90">This will be your desc type in anything you want like rly anything u want</p>
+                    <button class="rounded-md border-red-800 bg-red-500 w-[150px] h-[30px] font-bold hover:bg-red-700" @onclick="ToggleShowConfirmLogout">Logout</button>
+                    <p class="font-bold text-4xl dark:text-dark-supportColor text-light-supportColor">@context.User.FindFirst("FirstName")?.Value @context.User.FindFirst("LastName")?.Value</p>
+                    <p class=" pt-[10px] dark:text-dark-supportColor/90 text-light-supportColor/90">This will be your desc type in anything you want like rly anything u want</p>
                 </div>
             </div>
         </div>
+        @if (ShowConfirmLogout)
+        {
+            <LogoutConfirm />
+        }
     </Authorized>
 </AuthorizeView>
 

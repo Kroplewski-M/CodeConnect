@@ -8,8 +8,11 @@ public class MyProfileBase : ComponentBase
     [Inject]
     public required IAuthenticateService AuthenticateService { get; set; }
 
-    public async void Logout()
+    protected bool ShowConfirmLogout = false;
+
+    protected void ToggleShowConfirmLogout()
     {
-        await AuthenticateService.LogoutUser();
+        ShowConfirmLogout = !ShowConfirmLogout;
+        StateHasChanged();
     }
 }
