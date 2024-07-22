@@ -17,14 +17,19 @@
                 </div>
                 <div class="mt-5">
                     <button class="rounded-md border-red-800 bg-red-500 w-[150px] h-[30px] font-bold hover:bg-red-700" @onclick="ToggleShowConfirmLogout">Logout</button>
-                    <p class="font-bold text-4xl dark:text-dark-supportColor text-light-supportColor">@context.User.FindFirst("FirstName")?.Value @context.User.FindFirst("LastName")?.Value</p>
-                    <p class=" pt-[10px] dark:text-dark-supportColor/90 text-light-supportColor/90">This will be your desc type in anything you want like rly anything u want</p>
+                    <p class="pt-[20px] font-bold text-4xl dark:text-dark-supportColor text-light-supportColor">@context.User.FindFirst("FirstName")?.Value @context.User.FindFirst("LastName")?.Value
+                        <span class="fa-solid fa-pen-to-square fa-xs ml-5 hover:cursor-pointer"></span>
+                        </p>
+                    <p class="pt-[10px] dark:text-dark-supportColor/90 text-light-supportColor/90">This will be your desc type in anything you want like rly anything u want</p>
                 </div>
+            </div>
+            <div class="ml-5">
+                <h1 class="text-4xl font-bold dark:text-dark-supportColor text-light-supportColor">Recent Posts</h1>
             </div>
         </div>
         @if (ShowConfirmLogout)
         {
-            <LogoutConfirm />
+            <LogoutConfirm ConfirmLogout="AuthenticateService.LogoutUser" CancelLogout="ToggleShowConfirmLogout" />
         }
     </Authorized>
 </AuthorizeView>

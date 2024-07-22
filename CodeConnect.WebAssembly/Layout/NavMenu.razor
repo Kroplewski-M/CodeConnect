@@ -6,7 +6,7 @@
             <i class="@(_openNav ? "fa-xmark text-light-primaryColor dark:bg-text-supportColor/90" : "fa-bars text-light-secondaryColor dark:text-dark-secondaryColor") fa-solid fa-2xl cursor-pointer" @onclick="() => _openNav = !_openNav"></i>
         </div>
 
-        <aside class="sm:w-[250px] w-[80%] sm:relative fixed top-0 left-0 z-[200] h-screen transition-transform @(_openNav ? "" : "-translate-x-full sm:translate-x-0")" aria-label="Sidebar">
+        <aside class="sm:w-[250px] w-[80%] sm:relative sticky top-0 left-0 z-[200] h-screen transition-transform @(_openNav ? "" : "-translate-x-full sm:translate-x-0")" aria-label="Sidebar">
             <div class="h-full px-3 py-4 overflow-y-auto bg-light-secondaryColor dark:bg-dark-secondaryColor">
                 <a href="/" class="flex items-center p-2 rounded-lg  group mb-5">
                     <span class="ms-3 text-light-primaryColor dark:bg-text-supportColor font-bold text-[20px]">&lt;Code Connect/&gt;</span>

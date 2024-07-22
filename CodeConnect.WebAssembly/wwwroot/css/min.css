@@ -566,6 +566,10 @@ video {
   position: relative;
 }
 
+.sticky {
+  position: sticky;
+}
+
 .-top-\[50px\] {
   top: -50px;
 }
@@ -641,6 +645,10 @@ video {
 
 .ml-3 {
   margin-left: 0.75rem;
+}
+
+.ml-5 {
+  margin-left: 1.25rem;
 }
 
 .ms-3 {
@@ -999,6 +1007,10 @@ video {
   padding-top: 10px;
 }
 
+.pt-\[20px\] {
+  padding-top: 20px;
+}
+
 .text-center {
   text-align: center;
 }
@@ -1119,6 +1131,10 @@ video {
 
 * {
   transition: background-color 0.3s ease;
+}
+
+.hover\:cursor-pointer:hover {
+  cursor: pointer;
 }
 
 .hover\:border-light-secondaryColor:hover {
