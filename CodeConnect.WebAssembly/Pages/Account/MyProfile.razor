@@ -18,7 +18,7 @@
                 <div class="mt-5">
                     <button class="rounded-md border-red-800 bg-red-500 w-[150px] h-[30px] font-bold hover:bg-red-700" @onclick="ToggleShowConfirmLogout">Logout</button>
                     <p class="pt-[20px] font-bold text-4xl dark:text-dark-supportColor text-light-supportColor">@context.User.FindFirst("FirstName")?.Value @context.User.FindFirst("LastName")?.Value
-                        <span class="fa-solid fa-pen-to-square fa-xs ml-5 hover:cursor-pointer"></span>
+                        <a href="/EditProfile" class="fa-solid fa-pen-to-square fa-xs ml-5 hover:cursor-pointer"></a>
                         </p>
                     <p class="pt-[10px] dark:text-dark-supportColor/90 text-light-supportColor/90">This will be your desc type in anything you want like rly anything u want</p>
                 </div>

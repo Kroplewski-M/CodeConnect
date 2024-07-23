@@ -7,9 +7,9 @@ public class MyProfileBase : ComponentBase
 {
     [Inject]
     public required IAuthenticateService AuthenticateService { get; set; }
-
+    
     protected bool ShowConfirmLogout = false;
-
+    protected bool ShowEditProfile = false;
     protected void ToggleShowConfirmLogout()
     {
         ShowConfirmLogout = !ShowConfirmLogout;

@@ -11,7 +11,7 @@
 <div class="bg-light-primaryColor dark:bg-dark-primaryColor min-h-screen flex @(!IsNonNavPage()?"flex-row":"flex-col") pb-7">
     @if (!IsNonNavPage())
     {
-        <div class="z-[300] ">
+        <div class="z-[300] sm:w-[250px] w-[80%]">
             <NavMenu/>
         </div>
     }
@@ -21,8 +21,8 @@
             &lt;Code Connect/&gt;
         </a>
     }
-    <main class="px-4 z-[200] flex-grow pt-6 mt-5">
-        <span @onclick="() => SetDarkTheme(!_darkTheme)" class="fa-solid @(_darkTheme ? "fa-sun text-light-primaryColor" : "fa-moon text-dark-primaryColor") absolute top-5 right-5 cursor-pointer fa-lg"></span>
+    <main class="px-4 z-[200] flex-grow pt-6 mt-5 sm:pl-[250px]">
+        <span @onclick="() => SetDarkTheme(!_darkTheme)" class="fa-solid @(_darkTheme ? "fa-sun text-light-primaryColor" : "fa-moon text-dark-primaryColor") fixed top-5 right-5 cursor-pointer fa-lg"></span>
         <div class="absolute top-10 right-10 flex flex-col space-y-2 z-[500]">
             @foreach (var notification in Notifications)
             {
