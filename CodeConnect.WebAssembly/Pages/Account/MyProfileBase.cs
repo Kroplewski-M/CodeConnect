@@ -18,7 +18,6 @@ public class MyProfileBase : ComponentBase
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
-        Console.WriteLine(user.FindFirst(c => c.Type == "FirstName")?.Value ?? "Undefined");
         FirstName = user.FindFirst(c => c.Type == "FirstName")?.Value ?? "Undefined";
         LastName = user.FindFirst(c => c.Type == "LastName")?.Value ?? "Undefined";
         ImgUrl = String.IsNullOrEmpty(user.FindFirst(c => c.Type == "ProfileImg")?.Value) ? "images/profileImg.jpg" : user.FindFirst(c => c.Type == "ProfileImg")?.Value ?? "";
