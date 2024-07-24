@@ -55,9 +55,10 @@ public class ClientAuthStateProvider(HttpClient httpClient,
     private AuthenticationState CreateAuthenticationStateFromToken(string token)
     {
         var authState = new AuthenticationState(new ClaimsPrincipal(DecodeToken(token)));
-        var test = Task.FromResult(authState);
-        NotifyAuthenticationStateChanged(Task.FromResult(authState));
-        navigationManager.NavigateTo("/MyFeed");
+        var user = Task.FromResult(authState);
+        NotifyAuthenticationStateChanged(user);
+        if(navigationManager.Uri.EndsWith("/"))
+            navigationManager.NavigateTo("/MyFeed");
         return authState;
     }
     private async Task<string?> RefreshToken(string refreshToken)

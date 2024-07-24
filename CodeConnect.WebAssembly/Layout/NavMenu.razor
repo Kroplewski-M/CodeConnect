@@ -1,5 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
 <AuthorizeView>
     <Authorized>
         <div class="@(_openNav ? "left-[65%]" : "left-0") sm:hidden translate-x-full sm:-translate-x-0 transition-transform fixed top-5 z-[300] hover:bg-gray-100/10 rounded-full">
@@ -40,9 +42,9 @@
                 </ul>
 
                 <div class="absolute bottom-[30px] left-[10px] hover:bg-gray-100/10 cursor-pointer rounded-md p-2 w-[90%]" onclick="@(() => NavigationManager.NavigateTo("/MyProfile"))">
-                    <img class="w-10 ms-3 h-10 rounded-full mb-3" src="https://picsum.photos/200/300" alt="Rounded avatar">
-                    <p class="font-bold ms-3  text-light-primaryColor dark:text-dark-supportColor">@context.User.FindFirst("FirstName")?.Value</p>
-                    <p class="font-bold ms-3 mb-2 text-light-primaryColor dark:text-dark-supportColor">@context.User.FindFirst("LastName")?.Value</p>
+                    <img class="w-10 ms-3 h-10 rounded-full mb-3" src="@_imgUrl" alt="Rounded avatar">
+                    <p class="font-bold ms-3  text-light-primaryColor dark:text-dark-supportColor">@_firstName</p>
+                    <p class="font-bold ms-3 mb-2 text-light-primaryColor dark:text-dark-supportColor">@_lastName</p>
 
                     <p class="text-[13px] ms-3 text-light-primaryColor/90 dark:text-dark-supportColor/90 ">Followers: <span class=" text-light-primaryColor dark:text-dark-supportColor font-bold">3000</span></p>
                     <p class="text-[13px] ms-3 text-light-primaryColor/90 dark:text-dark-supportColor/90">Following: <span class=" text-light-primaryColor dark:text-dark-supportColor font-bold">1765</span></p>
@@ -54,6 +56,20 @@
 
 @code{
     private bool _openNav = false;
+    private string _firstName = "";
+    private string _lastName = "";
+    private string _imgUrl = "";
+
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        _firstName = user.FindFirst(c => c.Type == "FirstName")?.Value ?? "Undefined";
+        _lastName = user.FindFirst(c => c.Type == "LastName")?.Value ?? "Undefined";
+        _imgUrl = String.IsNullOrEmpty(user.FindFirst(c => c.Type == "ProfileImg")?.Value) ? "images/profileImg.jpg" : user.FindFirst(c => c.Type == "ProfileImg")?.Value ?? "";
+
+    }
 }
 
 
