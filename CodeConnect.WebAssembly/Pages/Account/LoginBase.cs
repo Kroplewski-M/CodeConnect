@@ -17,7 +17,7 @@ public class LoginBase : ComponentBase
     public required NavigationManager NavigationManager { get; set; }
 
     [Inject]
-    public required IAuthenticateService AuthenticateService { get; set; }
+    public required IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
 
     public LoginForm LoginForm = new LoginForm();
     public List<ValidationFailure> LoginErrors = new List<ValidationFailure>();
@@ -40,7 +40,7 @@ public class LoginBase : ComponentBase
                 DisableLogin = true;
                 NotificationsService.PushNotification(new Notification("Logging in",
                     NotificationType.Info));
-                var result = await AuthenticateService.LoginUser(LoginForm);
+                var result = await AuthenticateServiceClient.LoginUser(LoginForm);
                 if (!result.Flag)
                 {
                     LoginErrors.Add(new ValidationFailure

@@ -17,7 +17,7 @@ builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7124") });
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<AuthenticationStateProvider,ClientAuthStateProvider>();
-builder.Services.AddSingleton<IAuthenticateServiceClient, AuthenticateServiceClient>();
+builder.Services.AddScoped<IAuthenticateServiceClient, AuthenticateServiceClient>();
 builder.Services.AddSingleton<NotificationsService>();
 await builder.Build().RunAsync();
 

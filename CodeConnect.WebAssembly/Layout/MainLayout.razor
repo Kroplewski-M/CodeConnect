@@ -1,12 +1,14 @@
-﻿@using DomainLayer.Entities
+﻿@using ApplicationLayer.Interfaces
+@using DomainLayer.Entities
 @using Blazored.LocalStorage;
 @using CodeConnect.WebAssembly.Components
 @using Notification = DomainLayer.Entities.Notification
 @inherits LayoutComponentBase
 @inject NavigationManager NavManager
 @inject NotificationsService NotificationsService
-@inject IJSRuntime JS
-@inject ILocalStorageService localStorageService
+@inject IJSRuntime Js
+@inject ILocalStorageService LocalStorageService
+@inject IAuthenticateServiceClient AuthenticateServiceClient
 
 <div class="bg-light-primaryColor dark:bg-dark-primaryColor min-h-screen flex @(!IsNonNavPage()?"flex-row":"flex-col") pb-7">
     @if (!IsNonNavPage())
@@ -38,10 +40,11 @@
     private bool _darkTheme = false;
     protected override async Task OnInitializedAsync()
     {
+        await AuthenticateServiceClient.InitializeAsync();
         NotificationsService.OnChange += UpdateNotifications;
         Notifications = NotificationsService.GetNotification();
         
-        var darkTheme = await localStorageService.GetItemAsync<bool>("DarkTheme");
+        var darkTheme = await LocalStorageService.GetItemAsync<bool>("DarkTheme");
         if (darkTheme)
         {
             ToggleDarkMode();
@@ -67,14 +70,14 @@
 
     private void ToggleDarkMode()
     {
-        JS.InvokeVoidAsync("toggleDarkMode");
+        Js.InvokeVoidAsync("toggleDarkMode");
         _darkTheme = !_darkTheme;
     }
 
     private async Task SetDarkTheme(bool isDarkTheme)
     {
-        await localStorageService.SetItemAsync<bool>("DarkTheme", isDarkTheme);
-        await JS.InvokeVoidAsync("toggleDarkMode");
+        await LocalStorageService.SetItemAsync<bool>("DarkTheme", isDarkTheme);
+        await Js.InvokeVoidAsync("toggleDarkMode");
         _darkTheme = isDarkTheme;
     }
 }

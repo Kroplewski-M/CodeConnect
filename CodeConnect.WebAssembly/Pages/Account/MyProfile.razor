@@ -29,7 +29,7 @@
         </div>
         @if (ShowConfirmLogout)
         {
-            <LogoutConfirm ConfirmLogout="AuthenticateService.LogoutUser" CancelLogout="ToggleShowConfirmLogout" />
+            <LogoutConfirm ConfirmLogout="AuthenticateServiceClient.LogoutUser" CancelLogout="ToggleShowConfirmLogout" />
         }
     </Authorized>
 </AuthorizeView>

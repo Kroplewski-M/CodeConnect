@@ -20,7 +20,7 @@ public class RegisterBase
     public required NavigationManager NavigationManager { get; set; }
 
     [Inject]
-    public required IAuthenticateService AuthenticateService { get; set; }
+    public required IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
 
     public RegisterForm RegisterForm = new RegisterForm();
     protected List<ValidationFailure> RegisterErrors = [];
@@ -41,7 +41,7 @@ public class RegisterBase
             try
             {
                 DisableRegister = true;
-                var result = await AuthenticateService.CreateUser(RegisterForm);
+                var result = await AuthenticateServiceClient.CreateUser(RegisterForm);
                 if (!result.Flag)
                 {
                     RegisterErrors.Add(new ValidationFailure
