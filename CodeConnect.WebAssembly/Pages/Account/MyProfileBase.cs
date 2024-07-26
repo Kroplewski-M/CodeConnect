@@ -10,14 +10,23 @@ public class MyProfileBase : ComponentBase
     [Inject]
     public required  IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
     protected bool ShowConfirmLogout = false;
-    protected string FirstName = "";
-    protected string LastName = "";
-    protected string ImgUrl = "";
-    protected UserDetails _userDetails { get; set; }
+    protected UserDetails? _userDetails = null;
+    [CascadingParameter]
+    private Task<AuthenticationState>? AuthenticationState { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
-        _userDetails = AuthenticateServiceClient.GetUserDetails();
-        StateHasChanged();
+        if (AuthenticationState is not null)
+        {
+            var authState = await AuthenticationState;
+            var user = authState?.User;
+
+            if (user?.Identity is not null && user.Identity.IsAuthenticated)
+            {
+                _userDetails = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
+                StateHasChanged();
+            }
+        }
     }
     protected void ToggleShowConfirmLogout()
     {

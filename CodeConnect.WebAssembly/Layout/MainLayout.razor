@@ -40,7 +40,6 @@
     private bool _darkTheme = false;
     protected override async Task OnInitializedAsync()
     {
-        await AuthenticateServiceClient.InitializeAsync();
         NotificationsService.OnChange += UpdateNotifications;
         Notifications = NotificationsService.GetNotification();
         

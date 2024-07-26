@@ -8,7 +8,7 @@ appsettings.json
 appsettings.Development.json
 CodeConnect.WebAPI/appsettings.json
 CodeConnect.WebAPI/appsettings.Development.json
-
+.cache
 # OS generated files #
 ######################
 .DS_Store

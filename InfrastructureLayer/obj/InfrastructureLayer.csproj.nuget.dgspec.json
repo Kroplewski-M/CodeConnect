@@ -1,0 +1,148 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/mateuszkroplewski/RiderProjects/CodeConnect/InfrastructureLayer/InfrastructureLayer.csproj": {}
+  },
+  "projects": {
+    "/home/mateuszkroplewski/RiderProjects/CodeConnect/DomainLayer/DomainLayer.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/mateuszkroplewski/RiderProjects/CodeConnect/DomainLayer/DomainLayer.csproj",
+        "projectName": "DomainLayer",
+        "projectPath": "/home/mateuszkroplewski/RiderProjects/CodeConnect/DomainLayer/DomainLayer.csproj",
+        "packagesPath": "/home/mateuszkroplewski/.nuget/packages/",
+        "outputPath": "/home/mateuszkroplewski/RiderProjects/CodeConnect/DomainLayer/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/mateuszkroplewski/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "FluentValidation": {
+              "target": "Package",
+              "version": "[11.9.2, )"
+            },
+            "Microsoft.Extensions.Identity.Stores": {
+              "target": "Package",
+              "version": "[8.0.6, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/home/mateuszkroplewski/.dotnet/sdk/8.0.302/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/mateuszkroplewski/RiderProjects/CodeConnect/InfrastructureLayer/InfrastructureLayer.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/mateuszkroplewski/RiderProjects/CodeConnect/InfrastructureLayer/InfrastructureLayer.csproj",
+        "projectName": "InfrastructureLayer",
+        "projectPath": "/home/mateuszkroplewski/RiderProjects/CodeConnect/InfrastructureLayer/InfrastructureLayer.csproj",
+        "packagesPath": "/home/mateuszkroplewski/.nuget/packages/",
+        "outputPath": "/home/mateuszkroplewski/RiderProjects/CodeConnect/InfrastructureLayer/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/mateuszkroplewski/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "/home/mateuszkroplewski/RiderProjects/CodeConnect/DomainLayer/DomainLayer.csproj": {
+                "projectPath": "/home/mateuszkroplewski/RiderProjects/CodeConnect/DomainLayer/DomainLayer.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.6, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.6, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[8.0.6, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.6, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/home/mateuszkroplewski/.dotnet/sdk/8.0.302/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

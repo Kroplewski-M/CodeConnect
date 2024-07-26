@@ -42,15 +42,18 @@
                         </a>
                     </li>
                 </ul>
+                @if (_userDetails != null)
+                {
+                    <div class="absolute bottom-[30px] left-[10px] hover:bg-gray-100/10 cursor-pointer rounded-md p-2 w-[90%]" onclick="@(() => NavigationManager.NavigateTo("/MyProfile"))">
+                        <img class="w-10 ms-3 h-10 rounded-full mb-3" src="@_userDetails.profileImg" alt="Rounded avatar">
+                        
+                        <p class="font-bold ms-3  text-light-primaryColor dark:text-dark-supportColor">@_userDetails.firstName</p>
+                        <p class="font-bold ms-3 mb-2 text-light-primaryColor dark:text-dark-supportColor">@_userDetails.lastName</p>
 
-                <div class="absolute bottom-[30px] left-[10px] hover:bg-gray-100/10 cursor-pointer rounded-md p-2 w-[90%]" onclick="@(() => NavigationManager.NavigateTo("/MyProfile"))">
-                    <img class="w-10 ms-3 h-10 rounded-full mb-3" src="@_userDetails.profileImg" alt="Rounded avatar">
-                    <p class="font-bold ms-3  text-light-primaryColor dark:text-dark-supportColor">@_userDetails.firstName</p>
-                    <p class="font-bold ms-3 mb-2 text-light-primaryColor dark:text-dark-supportColor">@_userDetails.lastName</p>
-
-                    <p class="text-[13px] ms-3 text-light-primaryColor/90 dark:text-dark-supportColor/90 ">Followers: <span class=" text-light-primaryColor dark:text-dark-supportColor font-bold">3000</span></p>
-                    <p class="text-[13px] ms-3 text-light-primaryColor/90 dark:text-dark-supportColor/90">Following: <span class=" text-light-primaryColor dark:text-dark-supportColor font-bold">1765</span></p>
-                </div>
+                        <p class="text-[13px] ms-3 text-light-primaryColor/90 dark:text-dark-supportColor/90 ">Followers: <span class=" text-light-primaryColor dark:text-dark-supportColor font-bold">3000</span></p>
+                        <p class="text-[13px] ms-3 text-light-primaryColor/90 dark:text-dark-supportColor/90">Following: <span class=" text-light-primaryColor dark:text-dark-supportColor font-bold">1765</span></p>
+                    </div>
+                }
             </div>
         </aside>
     </Authorized>
@@ -58,20 +61,25 @@
 
 @code{
     private bool _openNav = false;
-    private UserDetails _userDetails = new UserDetails("","","","","","","",DateOnly.MinValue,"");
-    
-    protected override void OnInitialized()
-    {
-        AuthenticateServiceClient.OnChange += GetUser;
-       
-    }
+    private UserDetails? _userDetails = null;
+    [CascadingParameter]
+    private Task<AuthenticationState>? AuthenticationState { get; set; }
 
-    protected void GetUser()
+    protected override async Task OnInitializedAsync()
     {
-        _userDetails = AuthenticateServiceClient.GetUserDetails();
-        StateHasChanged();
-       Console.WriteLine("Nav name: " + _userDetails.firstName);
+        if (AuthenticationState is not null)
+        {
+            var authState = await AuthenticationState;
+            var user = authState?.User;
+
+            if (user?.Identity is not null && user.Identity.IsAuthenticated)
+            {
+                _userDetails = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
+                StateHasChanged();
+            }
+        }
     }
+    
 }
 
 

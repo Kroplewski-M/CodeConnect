@@ -12,12 +12,12 @@
             <div class="flex flex-col md:flex-row">
                 <div class="w-[200px] h-[200px] z-[50] relative">
                     <div class="absolute w-[200px] h-[200px] -top-[50px] md:left-[30px] left-[10px] border rounded-full">
-                        <img src="@ImgUrl" class="w-[200px] h-[200px] rounded-full" alt="profile image"/>
+                        <img src="@_userDetails.profileImg" class="w-[200px] h-[200px] rounded-full" alt="profile image"/>
                     </div>
                 </div>
                 <div class="mt-5 md:pl-[80px]">
                     <button class="rounded-md border-red-800 bg-red-500 w-[150px] h-[30px] font-bold hover:bg-red-700" @onclick="ToggleShowConfirmLogout">Logout</button>
-                    <p class="pt-[20px] font-bold text-4xl dark:text-dark-supportColor text-light-primaryColor">@FirstName @LastName
+                    <p class="pt-[20px] font-bold text-4xl dark:text-dark-supportColor text-light-primaryColor">@_userDetails.firstName @_userDetails.lastName
                         <a href="/EditProfile" class="fa-solid fa-pen-to-square fa-xs ml-5 hover:cursor-pointer"></a>
                         </p>
                     <p class="pt-[10px] dark:text-dark-supportColor/90 text-light-primaryColor/90">This will be your desc type in anything you want like rly anything u want</p>
