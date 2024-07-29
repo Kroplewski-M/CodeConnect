@@ -1,5 +1,16 @@
 @page "/EditProfile"
+@using ApplicationLayer.DTO_s
 @inherits EditProfileBase
 
-<h3 class="font-bold dark:text-dark-supportColor text-light-primaryColor text-4xl">Edit Profile</h3>
+<div class="w-[90%] mt-5 mx-auto relative bg-dark-secondaryColor p-5 rounded-md">
+    <h3 class="font-bold dark:text-dark-supportColor text-light-primaryColor text-4xl">Edit Profile</h3>
+    <EditForm Model="EditProfileForm" FormName="editProfile" OnSubmit="ConfirmEditProfile">
+        <InputText @bind-Value="EditProfileForm.FirstName" id="email" placeholder="Email"
+                   class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
+        </InputText>
+        <InputText @bind-Value="EditProfileForm.LastName" id="email" placeholder="Email"
+                   class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
+        </InputText>
+    </EditForm>
+</div>
 
