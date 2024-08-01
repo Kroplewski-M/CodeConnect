@@ -52,21 +52,22 @@ public class AuthenticateServiceClient(
 
     public UserDetails GetUserFromFromAuthState(AuthenticationState? authState)
     {
-        var DOB = authState.User.FindFirst(c => c.Type == "DOB")?.Value ?? null;
-        var profileImg = authState.User.FindFirst(c => c.Type == "ProfileImg")?.Value;
+        var DOB = authState?.User.FindFirst(c => c.Type == "DOB")?.Value ?? null;
+        var profileImg = authState?.User.FindFirst(c => c.Type == "ProfileImg")?.Value;
         if (string.IsNullOrEmpty(profileImg))
             profileImg = "images/profileImg.jpg";
         
         return new UserDetails(
-            firstName: authState.User.FindFirst(c => c.Type == "FirstName")?.Value ?? "",
-        lastName: authState.User.FindFirst(c => c.Type == "LastName")?.Value ?? "",
-        email: authState.User.FindFirst(c => c.Type == "Email")?.Value ?? "",
-        profileImg: profileImg,
-        BackgroundImg: authState.User.FindFirst(c => c.Type == "BackgroundImg")?.Value ?? "images/background/jpg",
-        githubLink: authState.User.FindFirst(c => c.Type == "GithubLink")?.Value ?? "",
-        websiteLink:authState.User.FindFirst(c => c.Type == "WebsiteLink")?.Value ?? "",
-        DOB: DateOnly.MaxValue, 
-        bio:authState.User.FindFirst(c => c.Type == "Bio")?.Value ?? "");
+            firstName: authState?.User.FindFirst(c => c.Type == "FirstName")?.Value ?? "",
+            lastName: authState?.User.FindFirst(c => c.Type == "LastName")?.Value ?? "",
+            email: authState?.User.FindFirst(c => c.Type == "Email")?.Value ?? "",
+            profileImg: profileImg,
+            BackgroundImg: authState?.User.FindFirst(c => c.Type == "BackgroundImg")?.Value ?? "images/background/jpg",
+            githubLink: authState?.User.FindFirst(c => c.Type == "GithubLink")?.Value ?? "",
+            websiteLink:authState?.User.FindFirst(c => c.Type == "WebsiteLink")?.Value ?? "",
+            DOB: DateOnly.Parse(DOB ?? DateOnly.MaxValue.ToString()), 
+            bio:authState?.User.FindFirst(c => c.Type == "Bio")?.Value ?? ""
+            );
     }
     public async Task<AuthResponse> LogoutUser()
     {

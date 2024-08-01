@@ -45,7 +45,11 @@ public class EditProfileBase : ComponentBase
     }
     protected void ConfirmEditProfile()
     {
-        
+        Console.WriteLine("FirstName: " + EditProfileForm.FirstName);
+        Console.WriteLine("LastName: " + EditProfileForm.LastName);
+        Console.WriteLine("DOB: " + EditProfileForm.DOB);
+        Console.WriteLine("Bio: " + EditProfileForm.Bio);
+
     }
     
 }
