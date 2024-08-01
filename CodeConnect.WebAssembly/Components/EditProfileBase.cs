@@ -1,16 +1,19 @@
-using ApplicationLayer.ClientServices;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Entities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace CodeConnect.WebAssembly.Pages.Account;
+namespace CodeConnect.WebAssembly.Components;
 
 public class EditProfileBase : ComponentBase
 {
     [Inject]
     public required  IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
+    
+    [Parameter]
+    public EventCallback Cancel { get; set; }
+
     
     protected EditProfileForm EditProfileForm = new EditProfileForm();
     private UserDetails _userDetails;

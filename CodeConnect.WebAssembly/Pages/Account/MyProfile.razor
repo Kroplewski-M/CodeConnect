@@ -6,20 +6,22 @@
 <AuthorizeView>
     <Authorized>
         <div class="w-[90%] mt-5 mx-auto relative bg-dark-secondaryColor p-5 rounded-md">
-            <div class="w-[100%]">
-                <img src="images/background.jpg" class="w-[100%] md:h-[450px] h-[300px] rounded-md mx-auto" alt="" />
+            <div class="w-[100%] relative">
+                <div class="absolute w-[100%] md:h-[450px] h-[300px] rounded-md hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex"><i class="fa-solid fa-pen-to-square fa-2xl text-gray-200 mx-auto self-center"></i></div>
+                <img src="images/background.jpg" class="w-[100%] md:h-[450px] h-[300px] rounded-md mx-auto" alt=""/>
             </div>
             <div class="flex flex-col md:flex-row">
                 <div class="w-[200px] h-[200px] z-[50] relative">
                     <div class="absolute w-[200px] h-[200px] -top-[50px] md:left-[30px] left-[10px] border rounded-full">
+                        <div class="absolute w-[200px] h-[200px] hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex"><i class="fa-solid fa-pen-to-square fa-2xl text-gray-200 mx-auto self-center"></i></div>
                         <img src="@_userDetails.profileImg" class="w-[200px] h-[200px] rounded-full" alt="profile image"/>
                     </div>
                 </div>
                 <div class="mt-5 md:pl-[80px]">
                     <button class="rounded-md border-red-800 bg-red-500 w-[150px] h-[30px] font-bold hover:bg-red-700" @onclick="ToggleShowConfirmLogout">Logout</button>
                     <p class="pt-[20px] font-bold text-4xl dark:text-dark-supportColor text-light-primaryColor">@_userDetails.firstName @_userDetails.lastName
-                        <a href="/EditProfile" class="fa-solid fa-pen-to-square fa-xs ml-5 hover:cursor-pointer"></a>
-                        </p>
+                        <button @onclick="ToggleEditProfile" class="fa-solid fa-pen-to-square fa-xs ml-5 hover:cursor-pointer"></button>
+                    </p>
                     <p class="pt-[10px] dark:text-dark-supportColor/90 text-light-primaryColor/90">This will be your desc type in anything you want like rly anything u want</p>
                 </div>
             </div>
@@ -27,9 +29,14 @@
                 <h1 class="text-4xl font-bold dark:text-dark-supportColor text-light-primaryColor">Recent Posts</h1>
             </div>
         </div>
+        
         @if (ShowConfirmLogout)
         {
             <LogoutConfirm ConfirmLogout="AuthenticateServiceClient.LogoutUser" CancelLogout="ToggleShowConfirmLogout" />
+        }
+        @if (ShowEditProfile)
+        {
+            <EditProfile Cancel="ToggleEditProfile" />
         }
     </Authorized>
 </AuthorizeView>

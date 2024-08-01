@@ -10,6 +10,7 @@ public class MyProfileBase : ComponentBase
     [Inject]
     public required  IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
     protected bool ShowConfirmLogout = false;
+    protected bool ShowEditProfile = false;
     protected UserDetails? _userDetails = null;
     [CascadingParameter]
     private Task<AuthenticationState>? AuthenticationState { get; set; }
@@ -31,6 +32,11 @@ public class MyProfileBase : ComponentBase
     protected void ToggleShowConfirmLogout()
     {
         ShowConfirmLogout = !ShowConfirmLogout;
+        StateHasChanged();
+    }
+    protected void ToggleEditProfile()
+    {
+        ShowEditProfile = !ShowEditProfile;
         StateHasChanged();
     }
 }
