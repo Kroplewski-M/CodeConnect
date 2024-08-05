@@ -22,7 +22,7 @@ public class EditProfileBase : ComponentBase
 
     
     protected EditProfileForm EditProfileForm = new EditProfileForm();
-    private UserDetails _userDetails;
+    private UserDetails? _userDetails;
 
     [CascadingParameter]
     private Task<AuthenticationState>? AuthenticationState { get; set; }

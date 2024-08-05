@@ -14,10 +14,10 @@ public class NotificationsService
 {
     public NotificationsService()
     {
-        timer = new Timer(RemoveOldestNotification, null, TimeSpan.Zero, TimeSpan.FromSeconds(3));
+        Timer = new Timer(RemoveOldestNotification, null, TimeSpan.Zero, TimeSpan.FromSeconds(3));
     }
     public List<Notification> Notifications = [];
-    public Timer timer;
+    public Timer Timer;
 
     public event Action? OnChange;
     private void NotifyStateChanged() => OnChange?.Invoke();

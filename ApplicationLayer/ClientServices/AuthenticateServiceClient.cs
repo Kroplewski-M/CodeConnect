@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using Blazored.LocalStorage;
+using DomainLayer.Entities;
 using DomainLayer.Entities.Auth;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -13,7 +14,7 @@ public class AuthenticateServiceClient(
     HttpClient httpClient,
     ILocalStorageService localStorageService,
     AuthenticationStateProvider authenticationStateProvider,
-    NavigationManager navigationManager)
+    NavigationManager navigationManager,NotificationsService notificationsService)
     : IAuthenticateServiceClient
 {
     public async Task<AuthResponse> CreateUser(RegisterForm registerForm)
@@ -75,6 +76,7 @@ public class AuthenticateServiceClient(
         await localStorageService.RemoveItemAsync("RefreshToken");
         ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
         navigationManager.NavigateTo("/");
+        notificationsService.PushNotification(new Notification("Logged out successfully",NotificationType.Success));
         return new AuthResponse(true, "", "", "Logged out successfully");
     }
     private async Task CheckIfUserIsValid()
