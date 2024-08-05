@@ -11,7 +11,7 @@ public class MyProfileBase : ComponentBase
     public required  IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
     protected bool ShowConfirmLogout = false;
     protected bool ShowEditProfile = false;
-    protected UserDetails? _userDetails = null;
+    protected UserDetails? UserDetails = null;
     [CascadingParameter]
     private Task<AuthenticationState>? AuthenticationState { get; set; }
 
@@ -24,7 +24,7 @@ public class MyProfileBase : ComponentBase
 
             if (user?.Identity is not null && user.Identity.IsAuthenticated)
             {
-                _userDetails = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
+                UserDetails = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
                 StateHasChanged();
             }
         }

@@ -1,6 +1,8 @@
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Entities;
+using DomainLayer.Entities.Validators;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
@@ -10,9 +12,13 @@ public class EditProfileBase : ComponentBase
 {
     [Inject]
     public required  IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
+    [Inject]
+    public required NotificationsService NotificationsService { get; set; }
     
     [Parameter]
     public EventCallback Cancel { get; set; }
+
+    protected List<ValidationFailure> EditProfileErrors = [];
 
     
     protected EditProfileForm EditProfileForm = new EditProfileForm();
@@ -37,22 +43,42 @@ public class EditProfileBase : ComponentBase
                     LastName = _userDetails.lastName,
                     DOB = _userDetails.DOB,
                     Bio = _userDetails.bio,
-                    ProfileImgUrl = "",
-                    ProfileImgExtention = "",
-                    BackgroundImgUrl = "",
-                    BackgoundImgExtention = ""
                 };
                 StateHasChanged();
             }
         }
     }
-    protected void ConfirmEditProfile()
+
+    public bool disableEdit = false;
+    protected async Task ConfirmEditProfile()
     {
         Console.WriteLine("FirstName: " + EditProfileForm.FirstName);
         Console.WriteLine("LastName: " + EditProfileForm.LastName);
         Console.WriteLine("DOB: " + EditProfileForm.DOB);
         Console.WriteLine("Bio: " + EditProfileForm.Bio);
-
+        EditProfileErrors = [];
+        EditProfileValidator editProfileValidator = new EditProfileValidator();
+        var validate = await editProfileValidator.ValidateAsync(EditProfileForm);
+        if (!validate.IsValid)
+        {
+            EditProfileErrors = validate.Errors;
+            return;
+        }
+        try
+        {
+            disableEdit = true;
+            NotificationsService.PushNotification(new DomainLayer.Entities.Notification("Updating Profile...",
+                NotificationType.Info));
+        }
+        catch
+        {
+            NotificationsService.PushNotification(new DomainLayer.Entities.Notification("Error while updating profile details, please try again later.",
+                NotificationType.Error));
+        }
+        finally
+        {
+            disableEdit = false;
+        }
     }
     
 }

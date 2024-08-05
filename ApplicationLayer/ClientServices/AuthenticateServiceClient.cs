@@ -16,7 +16,6 @@ public class AuthenticateServiceClient(
     NavigationManager navigationManager)
     : IAuthenticateServiceClient
 {
-    private Timer? _timer { get; set; } = null;
     public async Task<AuthResponse> CreateUser(RegisterForm registerForm)
     {
         var response = await httpClient.PostAsJsonAsync("/api/Authentication/RegisterUser", registerForm);
@@ -53,7 +52,7 @@ public class AuthenticateServiceClient(
 
     public UserDetails GetUserFromFromAuthState(AuthenticationState? authState)
     {
-        var DOB = authState?.User.FindFirst(c => c.Type == "DOB")?.Value?.Trim() ?? null;
+        var dob = authState?.User.FindFirst(c => c.Type == "DOB")?.Value?.Trim() ?? null;
         string format = "MM/dd/yyyy";
         var profileImg = authState?.User.FindFirst(c => c.Type == "ProfileImg")?.Value;
         if (string.IsNullOrEmpty(profileImg))
@@ -66,7 +65,7 @@ public class AuthenticateServiceClient(
             BackgroundImg: authState?.User.FindFirst(c => c.Type == "BackgroundImg")?.Value ?? "images/background/jpg",
             githubLink: authState?.User.FindFirst(c => c.Type == "GithubLink")?.Value ?? "",
             websiteLink:authState?.User.FindFirst(c => c.Type == "WebsiteLink")?.Value ?? "",
-            DOB: DateOnly.ParseExact(DOB, format, CultureInfo.InvariantCulture), 
+            DOB: DateOnly.ParseExact(dob ?? "", format, CultureInfo.InvariantCulture), 
             bio:authState?.User.FindFirst(c => c.Type == "Bio")?.Value ?? ""
             );
     }
