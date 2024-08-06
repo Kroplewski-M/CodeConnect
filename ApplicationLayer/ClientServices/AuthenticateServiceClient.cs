@@ -7,7 +7,7 @@ using DomainLayer.Entities;
 using DomainLayer.Entities.Auth;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-
+using ApplicationLayer.ExtensionClasses;
 namespace ApplicationLayer.ClientServices;
 
 public class AuthenticateServiceClient(
@@ -53,21 +53,26 @@ public class AuthenticateServiceClient(
 
     public UserDetails GetUserFromFromAuthState(AuthenticationState? authState)
     {
-        var dob = authState?.User.FindFirst(c => c.Type == "DOB")?.Value?.Trim() ?? null;
+        var dob = authState.GetUserInfo("DOB").Trim() ?? null;
         string format = "MM/dd/yyyy";
-        var profileImg = authState?.User.FindFirst(c => c.Type == "ProfileImg")?.Value;
+        var profileImg = authState.GetUserInfo("ProfileImg");
+        var backgroundImg = authState.GetUserInfo("BackgroundImg");
+
         if (string.IsNullOrEmpty(profileImg))
             profileImg = "images/profileImg.jpg";
+        if (string.IsNullOrEmpty(backgroundImg))
+            backgroundImg = "images/background.jpg";
+
         return new UserDetails(
-            firstName: authState?.User.FindFirst(c => c.Type == "FirstName")?.Value ?? "",
-            lastName: authState?.User.FindFirst(c => c.Type == "LastName")?.Value ?? "",
-            email: authState?.User.FindFirst(c => c.Type == "Email")?.Value ?? "",
+            firstName: authState.GetUserInfo("FirstName"),
+            lastName: authState.GetUserInfo("LastName"),
+            email: authState.GetUserInfo("Email"),
             profileImg: profileImg,
-            BackgroundImg: authState?.User.FindFirst(c => c.Type == "BackgroundImg")?.Value ?? "images/background/jpg",
-            githubLink: authState?.User.FindFirst(c => c.Type == "GithubLink")?.Value ?? "",
-            websiteLink:authState?.User.FindFirst(c => c.Type == "WebsiteLink")?.Value ?? "",
+            BackgroundImg: backgroundImg,
+            githubLink: authState.GetUserInfo("GithubLink"),
+            websiteLink: authState.GetUserInfo("WebsiteLink"),
             DOB: DateOnly.ParseExact(dob ?? "", format, CultureInfo.InvariantCulture), 
-            bio:authState?.User.FindFirst(c => c.Type == "Bio")?.Value ?? ""
+            bio:authState.GetUserInfo("Bio")
             );
     }
     public async Task<AuthResponse> LogoutUser()
