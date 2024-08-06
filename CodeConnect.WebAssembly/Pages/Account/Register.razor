@@ -1,4 +1,5 @@
 @page "/Account/Register"
+@using System.Security.Claims
 @inherits RegisterBase
 
 
@@ -21,9 +22,9 @@
                            class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
                 </InputText>
                 <div>
-                    @if (RegisterErrors.Any(x => x.PropertyName == "FirstName"))
+                    @if (RegisterErrors.Any(x => x.PropertyName == DomainLayer.Constants.ClaimTypes.FirstName))
                     {
-                        foreach (var error in RegisterErrors.Where(x=> x.PropertyName == "FirstName"))
+                        foreach (var error in RegisterErrors.Where(x=> x.PropertyName == DomainLayer.Constants.ClaimTypes.FirstName))
                         {
                             <p class="text-red-800 font-bold"><span class="fa fa-circle-exclamation text-red-800"></span> @error.ErrorMessage</p>
                         }
@@ -35,9 +36,9 @@
                            class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
                 </InputText>
                 <div>
-                    @if (RegisterErrors.Any(x => x.PropertyName == "LastName"))
+                    @if (RegisterErrors.Any(x => x.PropertyName == DomainLayer.Constants.ClaimTypes.LastName))
                     {
-                        foreach (var error in RegisterErrors.Where(x=> x.PropertyName == "LastName"))
+                        foreach (var error in RegisterErrors.Where(x=> x.PropertyName == DomainLayer.Constants.ClaimTypes.LastName))
                         {   
                             <p class="text-red-800 font-bold"><span class="fa fa-circle-exclamation text-red-800"></span> @error.ErrorMessage</p>
                         }
@@ -49,9 +50,9 @@
                            class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
                 </InputText>
                 <div>
-                    @if (RegisterErrors.Any(x => x.PropertyName == "Email"))
+                    @if (RegisterErrors.Any(x => x.PropertyName == DomainLayer.Constants.ClaimTypes.Email))
                     {
-                        foreach (var error in RegisterErrors.Where(x=> x.PropertyName == "Email"))
+                        foreach (var error in RegisterErrors.Where(x=> x.PropertyName == DomainLayer.Constants.ClaimTypes.Email))
                         {
                             <p class="text-red-800 font-bold"><span class="fa fa-circle-exclamation text-red-800"></span> @error.ErrorMessage</p>
                         }
@@ -63,9 +64,9 @@
                            class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
                 </InputDate>
                 <div>
-                    @if (RegisterErrors.Any(x => x.PropertyName == "DOB"))
+                    @if (RegisterErrors.Any(x => x.PropertyName == DomainLayer.Constants.ClaimTypes.Dob))
                     {
-                        foreach (var error in RegisterErrors.Where(x=> x.PropertyName == "DOB"))
+                        foreach (var error in RegisterErrors.Where(x=> x.PropertyName == DomainLayer.Constants.ClaimTypes.Dob))
                         {
                             <p class="text-red-800 font-bold"><span class="fa fa-circle-exclamation text-red-800"></span> @error.ErrorMessage</p>
                         }
@@ -77,9 +78,9 @@
                            class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
                 </InputText>
                 <div>
-                    @if (RegisterErrors.Any(x => x.PropertyName == "Password"))
+                    @if (RegisterErrors.Any(x => x.PropertyName == DomainLayer.Constants.ClaimTypes.Password))
                     {
-                        foreach (var error in RegisterErrors.Where(x=> x.PropertyName == "Password"))
+                        foreach (var error in RegisterErrors.Where(x=> x.PropertyName == DomainLayer.Constants.ClaimTypes.Password))
                         {
                             <p class="text-red-800 font-bold"><span class="fa fa-circle-exclamation text-red-800"></span> @error.ErrorMessage</p>
                         }

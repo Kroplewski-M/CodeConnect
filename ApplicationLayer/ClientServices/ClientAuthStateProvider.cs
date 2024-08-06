@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using System.Security.Claims;
 using ApplicationLayer.DTO_s;
 using Blazored.LocalStorage;
+using DomainLayer.Constants;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Newtonsoft.Json;
@@ -16,14 +17,14 @@ public class ClientAuthStateProvider(HttpClient httpClient,
     {
         try
         {
-            var token = await localStorageService.GetItemAsync<string>("AuthToken");
+            var token = await localStorageService.GetItemAsync<string>(Tokens.AuthToken);
             var isAuthedFromToken = !string.IsNullOrEmpty(token) && await IsTokenValid(token);
             if (isAuthedFromToken)
             {
                 return CreateAuthenticationStateFromToken(token ?? "");
             }
 
-            var refreshToken = await localStorageService.GetItemAsync<string>("RefreshToken");
+            var refreshToken = await localStorageService.GetItemAsync<string>(Tokens.RefreshToken);
             isAuthedFromToken = !string.IsNullOrEmpty(refreshToken) && await IsTokenValid(refreshToken);
             if (!isAuthedFromToken)
             {
@@ -33,7 +34,7 @@ public class ClientAuthStateProvider(HttpClient httpClient,
             var newToken = !string.IsNullOrEmpty(refreshToken) ? await RefreshToken(refreshToken) : null;
             if (newToken != null)
             {
-                await localStorageService.SetItemAsync("AuthToken", newToken);
+                await localStorageService.SetItemAsync(Tokens.AuthToken, newToken);
                 return CreateAuthenticationStateFromToken(newToken);
             }
         }
@@ -84,7 +85,7 @@ public class ClientAuthStateProvider(HttpClient httpClient,
             claims.Add(new Claim(claim.Type, claim.Value));
         }
 
-        var identity = new ClaimsIdentity(claims, "Jwt");
+        var identity = new ClaimsIdentity(claims, Tokens.AuthType);
         return new ClaimsPrincipal(identity);
     }
 }

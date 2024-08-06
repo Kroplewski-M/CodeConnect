@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Net.Http.Json;
+using System.Security.Claims;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using Blazored.LocalStorage;
@@ -8,6 +9,9 @@ using DomainLayer.Entities.Auth;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using ApplicationLayer.ExtensionClasses;
+using DomainLayer.Constants;
+using ClaimTypes = DomainLayer.Constants.ClaimTypes;
+
 namespace ApplicationLayer.ClientServices;
 
 public class AuthenticateServiceClient(
@@ -25,8 +29,8 @@ public class AuthenticateServiceClient(
         {
             if (authResponse != null && authResponse.Flag)
             {
-                await localStorageService.SetItemAsync("AuthToken", authResponse.Token);
-                await localStorageService.SetItemAsync("RefreshToken", authResponse.RefreshToken);
+                await localStorageService.SetItemAsync(Tokens.AuthToken, authResponse.Token);
+                await localStorageService.SetItemAsync(Tokens.RefreshToken, authResponse.RefreshToken);
                 ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
                 return new AuthResponse(true, authResponse.Token, authResponse.RefreshToken, "Registered successfully");
             }
@@ -42,8 +46,8 @@ public class AuthenticateServiceClient(
         {
             if (authResponse != null && authResponse.Flag)
             {
-                await localStorageService.SetItemAsync("AuthToken", authResponse.Token);
-                await localStorageService.SetItemAsync("RefreshToken", authResponse.RefreshToken);
+                await localStorageService.SetItemAsync(Tokens.AuthToken, authResponse.Token);
+                await localStorageService.SetItemAsync(Tokens.RefreshToken, authResponse.RefreshToken);
                 ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
                 return new AuthResponse(true, authResponse.Token, authResponse.RefreshToken, authResponse.Message);
             }
@@ -53,10 +57,10 @@ public class AuthenticateServiceClient(
 
     public UserDetails GetUserFromFromAuthState(AuthenticationState? authState)
     {
-        var dob = authState.GetUserInfo("DOB").Trim() ?? null;
+        var dob = authState.GetUserInfo(ClaimTypes.Dob).Trim() ?? null;
         string format = "MM/dd/yyyy";
-        var profileImg = authState.GetUserInfo("ProfileImg");
-        var backgroundImg = authState.GetUserInfo("BackgroundImg");
+        var profileImg = authState.GetUserInfo(ClaimTypes.ProfileImg);
+        var backgroundImg = authState.GetUserInfo(ClaimTypes.BackgroundImg);
 
         if (string.IsNullOrEmpty(profileImg))
             profileImg = "images/profileImg.jpg";
@@ -64,21 +68,21 @@ public class AuthenticateServiceClient(
             backgroundImg = "images/background.jpg";
 
         return new UserDetails(
-            firstName: authState.GetUserInfo("FirstName"),
-            lastName: authState.GetUserInfo("LastName"),
-            email: authState.GetUserInfo("Email"),
+            firstName: authState.GetUserInfo(ClaimTypes.FirstName),
+            lastName: authState.GetUserInfo(ClaimTypes.LastName),
+            email: authState.GetUserInfo(ClaimTypes.Email),
             profileImg: profileImg,
             BackgroundImg: backgroundImg,
-            githubLink: authState.GetUserInfo("GithubLink"),
-            websiteLink: authState.GetUserInfo("WebsiteLink"),
+            githubLink: authState.GetUserInfo(ClaimTypes.GithubLink),
+            websiteLink: authState.GetUserInfo(ClaimTypes.WebsiteLink),
             DOB: DateOnly.ParseExact(dob ?? "", format, CultureInfo.InvariantCulture), 
-            bio:authState.GetUserInfo("Bio")
+            bio:authState.GetUserInfo(ClaimTypes.Bio)
             );
     }
     public async Task<AuthResponse> LogoutUser()
     {
-        await localStorageService.RemoveItemAsync("AuthToken");
-        await localStorageService.RemoveItemAsync("RefreshToken");
+        await localStorageService.RemoveItemAsync(Tokens.AuthToken);
+        await localStorageService.RemoveItemAsync(Tokens.RefreshToken);
         ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
         navigationManager.NavigateTo("/");
         notificationsService.PushNotification(new Notification("Logged out successfully",NotificationType.Success));

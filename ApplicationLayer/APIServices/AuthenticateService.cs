@@ -55,13 +55,13 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
     {
         return
         [
-            new Claim("FirstName", user.FirstName ?? ""),
-            new Claim("LastName", user.LastName ?? ""),
-            new Claim(ClaimTypes.Email, user.Email ?? ""),
-            new Claim("DOB", user.DOB.ToString(CultureInfo.InvariantCulture)),
-            new Claim("CreatedAt", user.CreatedAt.ToString(CultureInfo.InvariantCulture)),
-            new Claim("ProfileImg", user.ProfileImageUrl ?? ""),
-            new Claim("BackgroundImg", user.BackgroundImageUrl ?? "")
+            new Claim(DomainLayer.Constants.ClaimTypes.FirstName, user.FirstName ?? ""),
+            new Claim(DomainLayer.Constants.ClaimTypes.LastName, user.LastName ?? ""),
+            new Claim(DomainLayer.Constants.ClaimTypes.Email, user.Email ?? ""),
+            new Claim(DomainLayer.Constants.ClaimTypes.Dob, user.DOB.ToString(CultureInfo.InvariantCulture)),
+            new Claim(DomainLayer.Constants.ClaimTypes.CreatedAt, user.CreatedAt.ToString(CultureInfo.InvariantCulture)),
+            new Claim(DomainLayer.Constants.ClaimTypes.ProfileImg, user.ProfileImageUrl ?? ""),
+            new Claim(DomainLayer.Constants.ClaimTypes.BackgroundImg, user.BackgroundImageUrl ?? "")
         ];
     }
 
