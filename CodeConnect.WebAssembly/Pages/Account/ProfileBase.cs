@@ -5,10 +5,12 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace CodeConnect.WebAssembly.Pages.Account;
 
-public class MyProfileBase : ComponentBase
+public class ProfileBase : ComponentBase
 {
     [Inject]
     public required  IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
+    [Parameter]
+    public string? Username { get; set; }
     protected bool ShowConfirmLogout = false;
     protected bool ShowEditProfile = false;
     protected UserDetails? UserDetails = null;

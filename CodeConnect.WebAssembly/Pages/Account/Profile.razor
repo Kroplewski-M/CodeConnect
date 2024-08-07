@@ -1,7 +1,7 @@
-@page "/MyProfile"
+@page "/Profile/{Username}"
 @using Microsoft.AspNetCore.Components.Authorization
 @using CodeConnect.WebAssembly.Components
-@inherits MyProfileBase
+@inherits ProfileBase
 
 <AuthorizeView>
     <Authorized>
@@ -35,14 +35,14 @@
                 <h1 class="text-4xl font-bold dark:text-dark-supportColor text-light-primaryColor">Recent Posts</h1>
             </div>
         </div>
-        
+
         @if (ShowConfirmLogout)
         {
-            <LogoutConfirm ConfirmLogout="AuthenticateServiceClient.LogoutUser" CancelLogout="ToggleShowConfirmLogout" />
+            <LogoutConfirm ConfirmLogout="AuthenticateServiceClient.LogoutUser" CancelLogout="ToggleShowConfirmLogout"/>
         }
         @if (ShowEditProfile)
         {
-            <EditProfile Cancel="ToggleEditProfile" />
+            <EditProfile Cancel="ToggleEditProfile"/>
         }
     </Authorized>
 </AuthorizeView>
