@@ -12,5 +12,6 @@ public static class ClaimTypes
     public const string Dob = "DOB";
     public const string Bio = "Bio";
     public const string CreatedAt = "CreatedAt";
+    public const string UserName = "UserName";
     public const string Password = "Password";
 }

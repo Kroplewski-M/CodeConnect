@@ -27,6 +27,7 @@
                     <p class="pt-[20px] font-bold text-4xl dark:text-dark-supportColor text-light-primaryColor">@UserDetails?.FirstName @UserDetails?.LastName
                         <button @onclick="ToggleEditProfile" class="fa-solid fa-pen-to-square fa-xs ml-5 hover:cursor-pointer"></button>
                     </p>
+                    <p class="pt-[5px] font-bold text-lg dark:text-dark-supportColor/70 text-light-primaryColor/70">&#x40;@UserDetails?.UserName</p>
                     <p class="pt-[10px] dark:text-dark-supportColor/90 text-light-primaryColor/90">@(string.IsNullOrEmpty(UserDetails?.Bio) ? "Bio is looking empty..." : UserDetails?.Bio)</p>
                 </div>
             </div>

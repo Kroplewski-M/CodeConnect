@@ -72,6 +72,7 @@ public class AuthenticateServiceClient(
             FirstName: authState.GetUserInfo(ClaimTypes.FirstName),
             LastName: authState.GetUserInfo(ClaimTypes.LastName),
             Email: authState.GetUserInfo(ClaimTypes.Email),
+            UserName: authState.GetUserInfo(ClaimTypes.UserName),
             ProfileImg: profileImg,
             BackgroundImg: backgroundImg,
             GithubLink: authState.GetUserInfo(ClaimTypes.GithubLink),

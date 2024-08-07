@@ -14,11 +14,11 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
     {
         var user = new ApplicationUser
         {
-            UserName = registerForm.Email,
+            UserName = registerForm.UserName,
             FirstName = registerForm.FirstName,
             LastName = registerForm.LastName,
             Email = registerForm.Email,
-            DOB = registerForm.DOB,
+            DOB = registerForm.Dob,
             CreatedAt = DateOnly.FromDateTime(DateTime.Now),
         };
         var result = await userManager.CreateAsync(user, registerForm.Password);
@@ -57,6 +57,7 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         [
             new Claim(DomainLayer.Constants.ClaimTypes.FirstName, user.FirstName ?? ""),
             new Claim(DomainLayer.Constants.ClaimTypes.LastName, user.LastName ?? ""),
+            new Claim(DomainLayer.Constants.ClaimTypes.UserName, user.UserName ?? ""),
             new Claim(DomainLayer.Constants.ClaimTypes.Email, user.Email ?? ""),
             new Claim(DomainLayer.Constants.ClaimTypes.Dob, user.DOB.ToString(CultureInfo.InvariantCulture)),
             new Claim(DomainLayer.Constants.ClaimTypes.CreatedAt, user.CreatedAt.ToString(CultureInfo.InvariantCulture)),

@@ -46,6 +46,20 @@
                 </div>
             </div>
             <div class="mt-5">
+                <InputText @bind-Value="RegisterForm.UserName" id="username" placeholder="Username"
+                           class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
+                </InputText>
+                <div>
+                    @if (RegisterErrors.Any(x => x.PropertyName == DomainLayer.Constants.ClaimTypes.UserName))
+                    {
+                    foreach (var error in RegisterErrors.Where(x=> x.PropertyName == DomainLayer.Constants.ClaimTypes.UserName))
+                    {
+                    <p class="text-red-800 font-bold"><span class="fa fa-circle-exclamation text-red-800"></span> @error.ErrorMessage</p>
+                    }
+                    }
+                </div>
+            </div>
+            <div class="mt-5">
                 <InputText @bind-Value="RegisterForm.Email" id="email" placeholder="Email"
                            class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
                 </InputText>
@@ -60,7 +74,7 @@
                 </div>
             </div>
             <div class="mt-5">
-                <InputDate @bind-Value="RegisterForm.DOB" id="Dob"
+                <InputDate @bind-Value="RegisterForm.Dob" id="Dob"
                            class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
                 </InputDate>
                 <div>
