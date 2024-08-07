@@ -39,10 +39,10 @@ public class EditProfileBase : ComponentBase
                 _userDetails = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
                 EditProfileForm = new EditProfileForm
                 {
-                    FirstName = _userDetails.firstName,
-                    LastName = _userDetails.lastName,
-                    DOB = _userDetails.DOB,
-                    Bio = _userDetails.bio,
+                    FirstName = _userDetails.FirstName,
+                    LastName = _userDetails.LastName,
+                    DOB = _userDetails.Dob,
+                    Bio = _userDetails.Bio,
                 };
                 StateHasChanged();
             }

@@ -1,3 +1,3 @@
 namespace ApplicationLayer.DTO_s;
 
-public record UserDetails(string firstName,string lastName, string email,string profileImg,string BackgroundImg, string githubLink,string websiteLink, DateOnly? DOB, string bio);
+public record UserDetails(string FirstName,string LastName, string Email,string ProfileImg,string BackgroundImg, string GithubLink,string WebsiteLink, DateOnly? Dob,DateOnly? CreatedAt, string Bio);

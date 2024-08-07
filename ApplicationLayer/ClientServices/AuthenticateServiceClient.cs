@@ -58,6 +58,7 @@ public class AuthenticateServiceClient(
     public UserDetails GetUserFromFromAuthState(AuthenticationState? authState)
     {
         var dob = authState.GetUserInfo(ClaimTypes.Dob).Trim() ?? null;
+        var createdAt = authState.GetUserInfo(ClaimTypes.CreatedAt).Trim() ?? null;
         string format = "MM/dd/yyyy";
         var profileImg = authState.GetUserInfo(ClaimTypes.ProfileImg);
         var backgroundImg = authState.GetUserInfo(ClaimTypes.BackgroundImg);
@@ -68,15 +69,16 @@ public class AuthenticateServiceClient(
             backgroundImg = "images/background.jpg";
 
         return new UserDetails(
-            firstName: authState.GetUserInfo(ClaimTypes.FirstName),
-            lastName: authState.GetUserInfo(ClaimTypes.LastName),
-            email: authState.GetUserInfo(ClaimTypes.Email),
-            profileImg: profileImg,
+            FirstName: authState.GetUserInfo(ClaimTypes.FirstName),
+            LastName: authState.GetUserInfo(ClaimTypes.LastName),
+            Email: authState.GetUserInfo(ClaimTypes.Email),
+            ProfileImg: profileImg,
             BackgroundImg: backgroundImg,
-            githubLink: authState.GetUserInfo(ClaimTypes.GithubLink),
-            websiteLink: authState.GetUserInfo(ClaimTypes.WebsiteLink),
-            DOB: DateOnly.ParseExact(dob ?? "", format, CultureInfo.InvariantCulture), 
-            bio:authState.GetUserInfo(ClaimTypes.Bio)
+            GithubLink: authState.GetUserInfo(ClaimTypes.GithubLink),
+            WebsiteLink: authState.GetUserInfo(ClaimTypes.WebsiteLink),
+            Dob: DateOnly.ParseExact(dob ?? "", format, CultureInfo.InvariantCulture), 
+            CreatedAt:DateOnly.ParseExact(createdAt ?? "", format, CultureInfo.InvariantCulture),
+            Bio:authState.GetUserInfo(ClaimTypes.Bio)
             );
     }
     public async Task<AuthResponse> LogoutUser()
