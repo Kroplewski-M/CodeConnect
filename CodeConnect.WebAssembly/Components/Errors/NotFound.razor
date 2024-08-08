@@ -1,0 +1,24 @@
+@using CodeConnect.WebAssembly.Components.SVGs
+@inject NavigationManager NavigationManager
+
+<div class="w-[100vw] h-[100vh] bg-dark-primaryColor">
+    <div class="text-center text-dark-supportColor/90 font-bold text-4xl pt-[100px]">
+        <h1 class="text-dark-secondaryColor font-bold md:text-7xl text-5xl text-center">&lt;Code Connect/&gt;</h1>
+        <div class="w-[256px] mx-auto rotate-[-10deg]">
+            <NotFoundSVG/>
+        </div>
+        <h1>You'll find nothing here... this page doesn't exist</h1>
+        <div class="mt-10">
+            <button class="rounded-md border-4 border-solid border-light-secondaryColor px-3 py-2 text-dark-supportColor hover:bg-dark-secondaryColor" @onclick="Redirect"><i class="bi bi-input-cursor-text"></i>Back to home</button>
+        </div>
+    </div>
+</div>
+
+@code{
+
+    private void Redirect()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+}

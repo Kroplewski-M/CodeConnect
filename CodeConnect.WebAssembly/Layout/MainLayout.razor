@@ -52,7 +52,7 @@
 
     private bool IsNonNavPage()
     {
-        string[] nonNavPages = ["/","/Account/Register", "/Account/Login"]; 
+        string[] nonNavPages = ["/","/Account/Register", "/Account/Login","/404"]; 
         return nonNavPages.Any(page => NavManager.Uri.EndsWith(page));
     }
 
