@@ -1,5 +1,6 @@
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
+using CodeConnect.WebAssembly.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
@@ -40,5 +41,18 @@ public class ProfileBase : ComponentBase
     {
         ShowEditProfile = !ShowEditProfile;
         StateHasChanged();
+    }
+    public TypeOfUpdate UpdateType { get; set; }
+    protected bool ShowUpdateImage { get; set; }
+    protected void UpdateImage(TypeOfUpdate imageType)
+    {
+        UpdateType = imageType;
+        ShowUpdateImage = true;
+        StateHasChanged();
+    }
+
+    protected void ToggleEditImage()
+    {
+        ShowUpdateImage = !ShowUpdateImage;
     }
 }

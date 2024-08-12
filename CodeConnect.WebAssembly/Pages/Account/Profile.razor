@@ -8,7 +8,7 @@
         <div class="w-[90vw] max-w-[1100px] bg-dark-secondaryColor rounded-md mx-auto pt-5 pb-10 mt-5">
             <div class="w-[85%] max-w-[1000px] mt-5 mx-auto relative rounded-md">
                 <div class="w-[100%] relative">
-                    <div class="absolute w-[100%] md:h-[450px] h-[300px] rounded-md hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex"><i class="fa-solid fa-pen-to-square fa-2xl text-gray-200 mx-auto self-center"></i></div>
+                    <div class="absolute w-[100%] md:h-[450px] h-[300px] rounded-md hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex" @onclick="() => UpdateImage(TypeOfUpdate.BackgroundImage)"><i class="fa-solid fa-pen-to-square fa-2xl text-gray-200 mx-auto self-center"></i></div>
                     <img src="@UserDetails?.BackgroundImg" class="w-[100%] md:h-[450px] h-[300px] rounded-md mx-auto" alt=""/>
                 </div>
                 <div class="flex flex-col md:flex-row">
@@ -16,7 +16,7 @@
                         <div class="flex flex-col">
                             <div class="relative h-[150px]">
                                 <div class="absolute w-[200px] h-[200px] -top-[50px] md:left-[30px] left-[10px] border rounded-full">
-                                    <div class="absolute w-[200px] h-[200px] hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex"><i class="fa-solid fa-pen-to-square fa-2xl text-gray-200 mx-auto self-center"></i></div>
+                                    <div class="absolute w-[200px] h-[200px] hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex" @onclick="() => UpdateImage(TypeOfUpdate.ProfileImage)"><i class="fa-solid fa-pen-to-square fa-2xl text-gray-200 mx-auto self-center"></i></div>
                                     <img src="@UserDetails?.ProfileImg" class="w-[200px] h-[200px] rounded-full" alt="profile image"/>
                                 </div>
                             </div>
@@ -45,6 +45,10 @@
         @if (ShowEditProfile)
         {
             <EditProfile Cancel="ToggleEditProfile"/>
+        }
+        @if (ShowUpdateImage)
+        {
+            <UpdateImage UpdateOfType="UpdateType" Cancel="ToggleEditImage"/>
         }
     </Authorized>
 </AuthorizeView>

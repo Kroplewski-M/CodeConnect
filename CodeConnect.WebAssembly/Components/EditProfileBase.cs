@@ -49,13 +49,9 @@ public class EditProfileBase : ComponentBase
         }
     }
 
-    public bool disableEdit = false;
+    public bool DisableEdit = false;
     protected async Task ConfirmEditProfile()
     {
-        Console.WriteLine("FirstName: " + EditProfileForm.FirstName);
-        Console.WriteLine("LastName: " + EditProfileForm.LastName);
-        Console.WriteLine("DOB: " + EditProfileForm.DOB);
-        Console.WriteLine("Bio: " + EditProfileForm.Bio);
         EditProfileErrors = [];
         EditProfileValidator editProfileValidator = new EditProfileValidator();
         var validate = await editProfileValidator.ValidateAsync(EditProfileForm);
@@ -66,7 +62,7 @@ public class EditProfileBase : ComponentBase
         }
         try
         {
-            disableEdit = true;
+            DisableEdit = true;
             NotificationsService.PushNotification(new DomainLayer.Entities.Notification("Updating Profile...",
                 NotificationType.Info));
         }
@@ -77,7 +73,7 @@ public class EditProfileBase : ComponentBase
         }
         finally
         {
-            disableEdit = false;
+            DisableEdit = false;
         }
     }
     
