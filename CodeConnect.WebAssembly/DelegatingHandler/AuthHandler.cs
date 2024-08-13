@@ -16,11 +16,7 @@ public class AuthHandler(ILocalStorageService localStorageService) : System.Net.
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
         }
         var response = await base.SendAsync(request, cancellationToken);
-        if (response.IsSuccessStatusCode)
-        {
-            Console.WriteLine("Response was a success");
-        }
-        Console.WriteLine("This is form the handler token: " + token);
         return response;
     }
+    
 }
