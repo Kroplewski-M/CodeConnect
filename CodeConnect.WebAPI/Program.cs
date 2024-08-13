@@ -48,10 +48,11 @@ builder.Services.AddAuthentication(options =>
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddTransient<TokenService>();
 builder.Services.AddScoped<IAuthenticateService,AuthenticateService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers().AddJsonOptions(x =>
-    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);;
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CodeConnect", policy =>
@@ -72,8 +73,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.MapControllers();
-
 app.UseCors("CodeConnect");
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapControllers();
 app.Run();
 

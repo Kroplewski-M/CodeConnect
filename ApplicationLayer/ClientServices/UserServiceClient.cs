@@ -8,7 +8,7 @@ public class UserServiceClient(HttpClient httpClient) : IUserService
 {
     public async Task UpdateUserDetails(EditProfileForm editProfileForm)
     {
-        var response = await httpClient.PostAsJsonAsync("/api/User/UpdateUserDetails", editProfileForm);   
+        var response = await httpClient.PostAsJsonAsync("/api/User/EditUserDetails", editProfileForm);   
         
     }
 }

@@ -25,7 +25,7 @@ builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().Cre
 builder.Services.AddScoped<AuthenticationStateProvider,ClientAuthStateProvider>();
 builder.Services.AddScoped<IAuthenticateServiceClient, AuthenticateServiceClient>();
 builder.Services.AddBlazoredLocalStorage();
-
+builder.Services.AddScoped<IUserService, UserServiceClient>();
 builder.Services.AddSingleton<NotificationsService>();
 await builder.Build().RunAsync();
 

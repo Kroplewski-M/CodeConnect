@@ -14,6 +14,8 @@ public class EditProfileBase : ComponentBase
     public required  IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
     [Inject]
     public required NotificationsService NotificationsService { get; set; }
+    [Inject]
+    public required IUserService UserService { get; set; }
     
     [Parameter]
     public EventCallback Cancel { get; set; }
@@ -65,9 +67,8 @@ public class EditProfileBase : ComponentBase
             DisableEdit = true;
             NotificationsService.PushNotification(new DomainLayer.Entities.Notification("Updating Profile...",
                 NotificationType.Info));
-            //Get User ID from controller
-            
             //Post edit profile
+            await UserService.UpdateUserDetails(EditProfileForm);
         }
         catch
         {

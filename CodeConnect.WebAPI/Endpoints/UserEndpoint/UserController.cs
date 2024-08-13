@@ -1,4 +1,5 @@
 using DomainLayer.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodeConnect.WebAPI.Endpoints.UserEndpoint;
@@ -7,15 +8,10 @@ namespace CodeConnect.WebAPI.Endpoints.UserEndpoint;
 [ApiController]
 public class UserController : ControllerBase
 {
+    [Authorize]
     [HttpPost("EditUserDetails")]
     public async Task<IActionResult> EditUserDetails([FromBody] EditProfileForm editProfileForm)
     {
         return Ok(editProfileForm);
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> GetUserID(string username)
-    {
-        return Ok(username);
     }
 }
