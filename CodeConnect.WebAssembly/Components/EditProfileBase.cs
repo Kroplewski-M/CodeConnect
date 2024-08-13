@@ -65,6 +65,9 @@ public class EditProfileBase : ComponentBase
             DisableEdit = true;
             NotificationsService.PushNotification(new DomainLayer.Entities.Notification("Updating Profile...",
                 NotificationType.Info));
+            //Get User ID from controller
+            
+            //Post edit profile
         }
         catch
         {
