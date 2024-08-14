@@ -3,6 +3,7 @@ using ApplicationLayer.APIServices;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Entities.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodeConnect.WebAPI.Endpoints.AuthenticationEndpoint;
@@ -37,9 +38,10 @@ public class AuthenticationController(IAuthenticateService authenticateService,
             return Ok(result);
         return Unauthorized(result);
     }
-    [HttpPost("RefreshToken")]
-    public IActionResult RefreshToken([FromBody]string token)
+    [HttpGet("RefreshToken")]
+    public IActionResult RefreshToken()
     {
-        return Ok(tokenService.RefreshToken(token));
+        var token = tokenService.GenerateJwtToken(User.Claims.ToList(), DateTime.UtcNow.AddMinutes(60));
+        return Ok(tokenService.GenerateJwtToken(User.Claims.ToList(),DateTime.UtcNow.AddMinutes(60)));
     }
 }

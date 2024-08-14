@@ -30,12 +30,11 @@ public class AuthenticateServiceClient(
             if (authResponse != null && authResponse.Flag)
             {
                 await localStorageService.SetItemAsync(Tokens.AuthToken, authResponse.Token);
-                await localStorageService.SetItemAsync(Tokens.RefreshToken, authResponse.RefreshToken);
                 ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
-                return new AuthResponse(true, authResponse.Token, authResponse.RefreshToken, "Registered successfully");
+                return new AuthResponse(true, authResponse.Token, "Registered successfully");
             }
         }
-        return new AuthResponse(false, "", "", authResponse?.Message ?? "An error occured please try again later");
+        return new AuthResponse(false, "", authResponse?.Message ?? "An error occured please try again later");
     }
 
     public async Task<AuthResponse> LoginUser(LoginForm loginForm)
@@ -47,12 +46,11 @@ public class AuthenticateServiceClient(
             if (authResponse != null && authResponse.Flag)
             {
                 await localStorageService.SetItemAsync(Tokens.AuthToken, authResponse.Token);
-                await localStorageService.SetItemAsync(Tokens.RefreshToken, authResponse.RefreshToken);
                 ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
-                return new AuthResponse(true, authResponse.Token, authResponse.RefreshToken, authResponse.Message);
+                return new AuthResponse(true, authResponse.Token, authResponse.Message);
             }
         }
-        return new AuthResponse(false, "", "", authResponse?.Message ?? "Error occured during login please try again later");
+        return new AuthResponse(false, "", authResponse?.Message ?? "Error occured during login please try again later");
     }
 
     public UserDetails GetUserFromFromAuthState(AuthenticationState? authState)
@@ -89,7 +87,7 @@ public class AuthenticateServiceClient(
         ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
         navigationManager.NavigateTo("/");
         notificationsService.PushNotification(new Notification("Logged out successfully",NotificationType.Success));
-        return new AuthResponse(true, "", "", "Logged out successfully");
+        return new AuthResponse(true, "", "Logged out successfully");
     }
     private async Task CheckIfUserIsValid()
     {

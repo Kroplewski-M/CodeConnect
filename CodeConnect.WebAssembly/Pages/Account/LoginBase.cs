@@ -56,7 +56,7 @@ public class LoginBase : ComponentBase
             }
             catch
             {
-                NotificationsService.PushNotification(new Notification("Error Occured During Registering Please Try Again Later.",
+                NotificationsService.PushNotification(new Notification("Error Occured During Log In Please Try Again Later.",
                     NotificationType.Error));
             }
             finally

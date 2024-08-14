@@ -1,6 +1,9 @@
+using System.Net;
+using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using Blazored.LocalStorage;
 using DomainLayer.Constants;
+using Newtonsoft.Json;
 
 namespace CodeConnect.WebAssembly.DelegatingHandler;
 
@@ -16,6 +19,10 @@ public class AuthHandler(ILocalStorageService localStorageService) : System.Net.
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
         }
         var response = await base.SendAsync(request, cancellationToken);
+        if (response.IsSuccessStatusCode)
+        {
+            
+        }
         return response;
     }
     

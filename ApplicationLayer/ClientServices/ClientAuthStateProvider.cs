@@ -18,24 +18,10 @@ public class ClientAuthStateProvider(HttpClient httpClient,
         try
         {
             var token = await localStorageService.GetItemAsync<string>(Tokens.AuthToken);
-            var isAuthedFromToken = !string.IsNullOrEmpty(token) && await IsTokenValid(token);
-            if (isAuthedFromToken)
+            var isValid = await IsTokenValid(token);
+            if (isValid)
             {
-                return CreateAuthenticationStateFromToken(token ?? "");
-            }
-
-            var refreshToken = await localStorageService.GetItemAsync<string>(Tokens.RefreshToken);
-            isAuthedFromToken = !string.IsNullOrEmpty(refreshToken) && await IsTokenValid(refreshToken);
-            if (!isAuthedFromToken)
-            {
-                return new AuthenticationState(new ClaimsPrincipal());
-            }
-
-            var newToken = !string.IsNullOrEmpty(refreshToken) ? await RefreshToken(refreshToken) : null;
-            if (newToken != null)
-            {
-                await localStorageService.SetItemAsync(Tokens.AuthToken, newToken);
-                return CreateAuthenticationStateFromToken(newToken);
+                return CreateAuthenticationStateFromToken(token);
             }
         }
         catch (Exception ex)
@@ -48,12 +34,12 @@ public class ClientAuthStateProvider(HttpClient httpClient,
     {
         NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
     }
-    private async Task<bool> IsTokenValid(string token)
+    private async Task<bool> IsTokenValid(string? token)
     {
         var response = await httpClient.PostAsJsonAsync("/api/Authentication/ValidateToken", token);
         return response.IsSuccessStatusCode;
     }
-    private AuthenticationState CreateAuthenticationStateFromToken(string token)
+    private AuthenticationState CreateAuthenticationStateFromToken(string? token)
     {
         var authState = new AuthenticationState(new ClaimsPrincipal(DecodeToken(token)));
         var user = Task.FromResult(authState);
@@ -62,19 +48,7 @@ public class ClientAuthStateProvider(HttpClient httpClient,
             navigationManager.NavigateTo("/MyFeed");
         return authState;
     }
-    private async Task<string?> RefreshToken(string refreshToken)
-    {
-        var responseMessage = await httpClient.PostAsJsonAsync("/api/Authentication/RefreshToken", refreshToken);
-        if (responseMessage.IsSuccessStatusCode)
-        {
-            var responseContent = await responseMessage.Content.ReadAsStringAsync();
-            var response = JsonConvert.DeserializeObject<TokenResponse>(responseContent);
-            return response?.Key;
-        }
-        return null;
-    }
-
-    private ClaimsPrincipal DecodeToken(string token)
+    private ClaimsPrincipal DecodeToken(string? token)
     {
         var handler = new JwtSecurityTokenHandler();
         var jwtSecurityToken = handler.ReadJwtToken(token);

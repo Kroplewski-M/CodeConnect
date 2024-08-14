@@ -28,7 +28,7 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
             return GenerateAuthResponse(userClaims);
         }
         string error = result.Errors.Select(x => x.Description).FirstOrDefault() ?? "";
-        return new AuthResponse(false,"", "",error);
+        return new AuthResponse(false,"",error);
     }
 
     public async Task<AuthResponse> LoginUser(LoginForm loginForm)
@@ -43,7 +43,7 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
                 return GenerateAuthResponse(userClaims);
             }
         }
-        return new AuthResponse(false, "", "","Incorrect Email or Password");
+        return new AuthResponse(false, "","Incorrect Email or Password");
     }
 
     public Task<AuthResponse> LogoutUser()
@@ -72,6 +72,6 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         var token = tokenGenerationService.GenerateJwtToken(userClaims,expiresAt);
         var refreshExpiresAt = DateTime.UtcNow.AddDays(30);
         var refreshToken = tokenGenerationService.GenerateJwtToken(userClaims,refreshExpiresAt);
-        return new AuthResponse(true, token, refreshToken, "Auth successful");
+        return new AuthResponse(true, token, "Auth successful");
     }
 }
