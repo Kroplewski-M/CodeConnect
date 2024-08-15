@@ -38,10 +38,13 @@ public class AuthenticationController(IAuthenticateService authenticateService,
             return Ok(result);
         return Unauthorized(result);
     }
+    [Authorize]
     [HttpGet("RefreshToken")]
     public IActionResult RefreshToken()
     {
         var token = tokenService.GenerateJwtToken(User.Claims.ToList(), DateTime.UtcNow.AddMinutes(60));
-        return Ok(tokenService.GenerateJwtToken(User.Claims.ToList(),DateTime.UtcNow.AddMinutes(60)));
+        if(!string.IsNullOrEmpty(token))
+            return Ok(tokenService.GenerateJwtToken(User.Claims.ToList(),DateTime.UtcNow.AddMinutes(60)));
+        return BadRequest("Could not create token!");
     }
 }
