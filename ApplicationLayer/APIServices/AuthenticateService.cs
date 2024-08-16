@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Security.Claims;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
+using DomainLayer.Constants;
 using DomainLayer.Entities.Auth;
 using Microsoft.AspNetCore.Identity;
 
@@ -55,14 +56,17 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
     {
         return
         [
-            new Claim(DomainLayer.Constants.ClaimTypes.FirstName, user.FirstName ?? ""),
-            new Claim(DomainLayer.Constants.ClaimTypes.LastName, user.LastName ?? ""),
-            new Claim(DomainLayer.Constants.ClaimTypes.UserName, user.UserName ?? ""),
-            new Claim(DomainLayer.Constants.ClaimTypes.Email, user.Email ?? ""),
-            new Claim(DomainLayer.Constants.ClaimTypes.Dob, user.DOB.ToString(CultureInfo.InvariantCulture)),
-            new Claim(DomainLayer.Constants.ClaimTypes.CreatedAt, user.CreatedAt.ToString(CultureInfo.InvariantCulture)),
-            new Claim(DomainLayer.Constants.ClaimTypes.ProfileImg, user.ProfileImageUrl ?? ""),
-            new Claim(DomainLayer.Constants.ClaimTypes.BackgroundImg, user.BackgroundImageUrl ?? "")
+            new Claim(Constants.ClaimTypes.FirstName, user.FirstName ?? ""),
+            new Claim(Constants.ClaimTypes.LastName, user.LastName ?? ""),
+            new Claim(Constants.ClaimTypes.UserName, user.UserName ?? ""),
+            new Claim(Constants.ClaimTypes.Bio, user.Bio ?? ""),
+            new Claim(Constants.ClaimTypes.Email, user.Email ?? ""),
+            new Claim(Constants.ClaimTypes.Dob, user.DOB.ToString(CultureInfo.InvariantCulture)),
+            new Claim(Constants.ClaimTypes.CreatedAt, user.CreatedAt.ToString(CultureInfo.InvariantCulture)),
+            new Claim(Constants.ClaimTypes.ProfileImg, user.ProfileImageUrl ?? ""),
+            new Claim(Constants.ClaimTypes.BackgroundImg, user.BackgroundImageUrl ?? ""),
+            new Claim(Constants.ClaimTypes.GithubLink, user.GithubLink ?? ""),
+            new Claim(Constants.ClaimTypes.WebsiteLink, user.WebsiteLink ?? ""),
         ];
     }
 

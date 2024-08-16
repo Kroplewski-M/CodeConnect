@@ -1,4 +1,5 @@
 @page "/Account/Login"
+@using DomainLayer.Constants
 @using Microsoft.AspNetCore.Authorization
 @inherits LoginBase
 
@@ -12,9 +13,9 @@
                            class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
                 </InputText>
                 <div>
-                    @if (LoginErrors.Any(x => x.PropertyName == DomainLayer.Constants.ClaimTypes.Email))
+                    @if (LoginErrors.Any(x => x.PropertyName == Constants.ClaimTypes.Email))
                     {
-                        foreach (var error in LoginErrors.Where(x=> x.PropertyName == DomainLayer.Constants.ClaimTypes.Email))
+                        foreach (var error in LoginErrors.Where(x=> x.PropertyName == Constants.ClaimTypes.Email))
                         {
                             <p class="text-red-800 font-bold"><span class="fa fa-circle-exclamation text-red-800"></span> @error.ErrorMessage</p>
                         }
@@ -26,9 +27,9 @@
                            class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
                 </InputText>
                 <div>
-                    @if (LoginErrors.Any(x => x.PropertyName == DomainLayer.Constants.ClaimTypes.Password))
+                    @if (LoginErrors.Any(x => x.PropertyName == Constants.ClaimTypes.Password))
                     {
-                        foreach (var error in LoginErrors.Where(x=> x.PropertyName == DomainLayer.Constants.ClaimTypes.Password))
+                        foreach (var error in LoginErrors.Where(x=> x.PropertyName == Constants.ClaimTypes.Password))
                         {
                             <p class="text-red-800 font-bold"><span class="fa fa-circle-exclamation text-red-800"></span> @error.ErrorMessage</p>
                         }

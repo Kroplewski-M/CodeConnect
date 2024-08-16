@@ -14,7 +14,7 @@ public class UserController(IUserService userService) : ControllerBase
     [HttpPost("EditUserDetails")]
     public async Task<IActionResult> EditUserDetails([FromBody] EditProfileForm editProfileForm)
     {
-        var username = User.FindFirst(ClaimTypes.UserName)?.Value;
+        var username = User.FindFirst(Constants.ClaimTypes.UserName)?.Value;
         if (username != editProfileForm.Username)
             return Unauthorized();
         await userService.UpdateUserDetails(editProfileForm);

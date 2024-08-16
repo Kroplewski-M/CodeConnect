@@ -15,19 +15,19 @@ public class AuthHandler(ILocalStorageService localStorageService) : System.Net.
     
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        var token = await localStorageService.GetItemAsync<string>(Tokens.AuthToken);
+        var token = await localStorageService.GetItemAsync<string>(Constants.Tokens.AuthToken);
         if (!string.IsNullOrEmpty(token))
         {
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            request.Headers.Authorization = new AuthenticationHeaderValue(Constants.Tokens.ApiAuthTokenName, token);
         }
         var response = await base.SendAsync(request, cancellationToken);
         if (response.IsSuccessStatusCode)
         {
-            var refreshRequest = new HttpRequestMessage(HttpMethod.Get, "https://localhost:7124/api/Authentication/RefreshToken");
-            refreshRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var refreshRequest = new HttpRequestMessage(HttpMethod.Get, $"{Constants.Base.baseUrl}/api/Authentication/RefreshToken");
+            refreshRequest.Headers.Authorization = new AuthenticationHeaderValue(Constants.Tokens.ApiAuthTokenName, token);
             var tokenResponse = await base.SendAsync(refreshRequest, cancellationToken);
             var refreshToken = await tokenResponse.Content.ReadAsStringAsync();
-            await localStorageService.SetItemAsync(Tokens.AuthToken,refreshToken); 
+            await localStorageService.SetItemAsync(Constants.Tokens.AuthToken,refreshToken); 
         }
         return response;
     }

@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using ApplicationLayer.ExtensionClasses;
 using DomainLayer.Constants;
-using ClaimTypes = DomainLayer.Constants.ClaimTypes;
 
 namespace ApplicationLayer.ClientServices;
 
@@ -29,7 +28,7 @@ public class AuthenticateServiceClient(
         {
             if (authResponse != null && authResponse.Flag)
             {
-                await localStorageService.SetItemAsync(Tokens.AuthToken, authResponse.Token);
+                await localStorageService.SetItemAsync(Constants.Tokens.AuthToken, authResponse.Token);
                 ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
                 return new AuthResponse(true, authResponse.Token, "Registered successfully");
             }
@@ -45,7 +44,7 @@ public class AuthenticateServiceClient(
         {
             if (authResponse != null && authResponse.Flag)
             {
-                await localStorageService.SetItemAsync(Tokens.AuthToken, authResponse.Token);
+                await localStorageService.SetItemAsync(Constants.Tokens.AuthToken, authResponse.Token);
                 ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
                 return new AuthResponse(true, authResponse.Token, authResponse.Message);
             }
@@ -55,11 +54,11 @@ public class AuthenticateServiceClient(
 
     public UserDetails GetUserFromFromAuthState(AuthenticationState? authState)
     {
-        var dob = authState.GetUserInfo(ClaimTypes.Dob).Trim() ?? null;
-        var createdAt = authState.GetUserInfo(ClaimTypes.CreatedAt).Trim() ?? null;
+        var dob = authState.GetUserInfo(Constants.ClaimTypes.Dob).Trim() ?? null;
+        var createdAt = authState.GetUserInfo(Constants.ClaimTypes.CreatedAt).Trim() ?? null;
         string format = "MM/dd/yyyy";
-        var profileImg = authState.GetUserInfo(ClaimTypes.ProfileImg);
-        var backgroundImg = authState.GetUserInfo(ClaimTypes.BackgroundImg);
+        var profileImg = authState.GetUserInfo(Constants.ClaimTypes.ProfileImg);
+        var backgroundImg = authState.GetUserInfo(Constants.ClaimTypes.BackgroundImg);
 
         if (string.IsNullOrEmpty(profileImg))
             profileImg = "images/profileImg.jpg";
@@ -67,23 +66,22 @@ public class AuthenticateServiceClient(
             backgroundImg = "images/background.jpg";
 
         return new UserDetails(
-            FirstName: authState.GetUserInfo(ClaimTypes.FirstName),
-            LastName: authState.GetUserInfo(ClaimTypes.LastName),
-            Email: authState.GetUserInfo(ClaimTypes.Email),
-            UserName: authState.GetUserInfo(ClaimTypes.UserName),
+            FirstName: authState.GetUserInfo(Constants.ClaimTypes.FirstName),
+            LastName: authState.GetUserInfo(Constants.ClaimTypes.LastName),
+            Email: authState.GetUserInfo(Constants.ClaimTypes.Email),
+            UserName: authState.GetUserInfo(Constants.ClaimTypes.UserName),
             ProfileImg: profileImg,
             BackgroundImg: backgroundImg,
-            GithubLink: authState.GetUserInfo(ClaimTypes.GithubLink),
-            WebsiteLink: authState.GetUserInfo(ClaimTypes.WebsiteLink),
+            GithubLink: authState.GetUserInfo(Constants.ClaimTypes.GithubLink),
+            WebsiteLink: authState.GetUserInfo(Constants.ClaimTypes.WebsiteLink),
             Dob: DateOnly.ParseExact(dob ?? "", format, CultureInfo.InvariantCulture), 
             CreatedAt:DateOnly.ParseExact(createdAt ?? "", format, CultureInfo.InvariantCulture),
-            Bio:authState.GetUserInfo(ClaimTypes.Bio)
+            Bio:authState.GetUserInfo(Constants.ClaimTypes.Bio)
             );
     }
     public async Task<AuthResponse> LogoutUser()
     {
-        await localStorageService.RemoveItemAsync(Tokens.AuthToken);
-        await localStorageService.RemoveItemAsync(Tokens.RefreshToken);
+        await localStorageService.RemoveItemAsync(Constants.Tokens.AuthToken);
         ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
         navigationManager.NavigateTo("/");
         notificationsService.PushNotification(new Notification("Logged out successfully",NotificationType.Success));
