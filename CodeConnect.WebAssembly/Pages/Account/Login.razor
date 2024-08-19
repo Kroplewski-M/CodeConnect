@@ -5,12 +5,12 @@
 
 <div class="flex flex-col md:space-x-8  md:flex-row place-content-center">
     <div class="rounded-md dark:bg-dark-secondaryColor bg-light-secondaryColor mb-5 p-5 md:min-w-[500px] w-[300px] text-center">
-        <h1 class="text-4xl text-light-supportColor dark:text-dark-supportColor font-bold">Login</h1>
+        <h1 class="text-4xl text-dark-supportColor font-bold">Login</h1>
         <EditForm FormName="Login" Model="LoginForm" OnSubmit="SubmitLogin">
             
             <div class="mt-5">
                 <InputText @bind-Value="LoginForm.Email" id="email" placeholder="Email"
-                           class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
+                           class="bg-transparent border-b-4 text-dark-supportColor border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
                 </InputText>
                 <div>
                     @if (LoginErrors.Any(x => x.PropertyName == Constants.ClaimTypes.Email))
@@ -24,7 +24,7 @@
             </div>
             <div class="mt-5">
                 <InputText type="password" @bind-Value="LoginForm.Password" id="password" placeholder="Password"
-                           class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
+                           class="bg-transparent border-b-4 text-dark-supportColor border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
                 </InputText>
                 <div>
                     @if (LoginErrors.Any(x => x.PropertyName == Constants.ClaimTypes.Password))
@@ -37,7 +37,7 @@
                 </div>
             </div>
             <div class="mt-5">
-                <button type="submit" class="rounded-md border-4 border-solid border-light-supportColor dark:border-dark-supportColor px-3 py-2 text-light-primaryColor hover:bg-dark-supportColor hover:text-light-secondaryColor font-bold">Login</button>
+                <button type="submit" class="rounded-md border-4 border-solid border-dark-supportColor px-3 py-2 text-light-primaryColor hover:bg-dark-supportColor hover:text-light-secondaryColor font-bold">Login</button>
             </div>
             <div class="mt-5">
                 @if (LoginErrors.Any(x => x.PropertyName == "ResponseError"))
@@ -51,13 +51,13 @@
         </EditForm>
     </div>
     <div class="">
-        <h1 class="text-5xl text-light-secondaryColor dark:text-dark-secondaryColor font-bold">Welcome back!</h1>
+        <h1 class="text-5xl text-dark-secondaryColor font-bold">Welcome back!</h1>
         <div class="dark:text-dark-supportColor text-light-supportColor mt-1">
             <p class="mt-2">Login now to get back to sharing and connecting with nerds!</p>
         </div>
-        <h3 class="mt-5 text-light-secondaryColor dark:text-dark-secondaryColor font-bold font-medium">Don't have an account?</h3>
+        <h3 class="mt-5 text-dark-secondaryColor font-bold font-medium">Don't have an account?</h3>
         <div class="mt-5">
-            <a href="/Account/Register" class="rounded-md  border-4 border-solid hover:border-light-secondaryColor border-transparent px-3 py-2 text-light-supportColor/80 dark:text-dark-supportColor/90 bg-dark-secondaryColor hover:bg-transparent"><i class="bi bi-code-square"></i>Create an account</a>
+            <a href="/Account/Register" class="rounded-md  border-4 border-solid hover:border-light-secondaryColor border-transparent px-3 py-2 text-dark-supportColor/90 bg-dark-secondaryColor hover:bg-dark-secondaryColor/80"><i class="bi bi-code-square"></i>Create an account</a>
         </div>
     </div>
 </div>

@@ -16,11 +16,11 @@
         </div>
     </div>
     <div class="rounded-md dark:bg-dark-secondaryColor bg-light-secondaryColor mb-5 p-5 md:min-w-[500px] w-[300px] text-center">
-        <h1 class="text-4xl text-light-supportColor dark:text-dark-supportColor font-bold">Register</h1>
+        <h1 class="text-4xl text-dark-supportColor font-bold">Register</h1>
         <EditForm FormName="Register" Model="RegisterForm" OnSubmit="SubmitRegister">
             <div class="mt-5">
                 <InputText @bind-Value="RegisterForm.FirstName" id="firstName" placeholder="First Name"
-                           class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
+                           class="bg-transparent border-b-4 text-dark-supportColor border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
                 </InputText>
                 <div>
                     @if (RegisterErrors.Any(x => x.PropertyName == Constants.ClaimTypes.FirstName))
@@ -34,7 +34,7 @@
             </div>
             <div class="mt-5">
                 <InputText @bind-Value="RegisterForm.LastName" id="lastName" placeholder="Last Name"
-                           class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
+                           class="bg-transparent border-b-4 text-dark-supportColor border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
                 </InputText>
                 <div>
                     @if (RegisterErrors.Any(x => x.PropertyName == Constants.ClaimTypes.LastName))
@@ -48,7 +48,7 @@
             </div>
             <div class="mt-5">
                 <InputText @bind-Value="RegisterForm.UserName" id="username" placeholder="Username"
-                           class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
+                           class="bg-transparent border-b-4 text-dark-supportColor border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
                 </InputText>
                 <div>
                     @if (RegisterErrors.Any(x => x.PropertyName == Constants.ClaimTypes.UserName))
@@ -62,7 +62,7 @@
             </div>
             <div class="mt-5">
                 <InputText @bind-Value="RegisterForm.Email" id="email" placeholder="Email"
-                           class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
+                           class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
                 </InputText>
                 <div>
                     @if (RegisterErrors.Any(x => x.PropertyName == Constants.ClaimTypes.Email))
@@ -76,7 +76,7 @@
             </div>
             <div class="mt-5">
                 <InputDate @bind-Value="RegisterForm.Dob" id="Dob"
-                           class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
+                           class="bg-transparent border-b-4 text-dark-supportColor border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
                 </InputDate>
                 <div>
                     @if (RegisterErrors.Any(x => x.PropertyName == Constants.ClaimTypes.Dob))
@@ -90,7 +90,7 @@
             </div>
             <div class="mt-5">
                 <InputText type="password" @bind-Value="RegisterForm.Password" id="password" placeholder="Password"
-                           class="bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
+                           class="bg-transparent border-b-4 text-dark-supportColor border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
                 </InputText>
                 <div>
                     @if (RegisterErrors.Any(x => x.PropertyName == Constants.ClaimTypes.Password))
@@ -103,7 +103,7 @@
                 </div>
             </div>
             <div class="mt-5">
-                <button disabled="@DisableRegister" type="submit" class="rounded-md border-4 border-solid border-light-supportColor dark:border-dark-supportColor px-3 py-2 text-light-primaryColor hover:bg-dark-supportColor hover:text-light-secondaryColor font-bold">Register</button>
+                <button disabled="@DisableRegister" type="submit" class="rounded-md border-4 border-solid border-dark-supportColor px-3 py-2 text-light-primaryColor hover:bg-dark-supportColor hover:text-light-secondaryColor font-bold">Register</button>
             </div>
             @if (RegisterErrors.Any(x => x.PropertyName == "ResponseError"))
             {
