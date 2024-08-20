@@ -44,6 +44,8 @@ public class EditProfileBase : ComponentBase
                     Username = _userDetails.UserName,
                     FirstName = _userDetails.FirstName,
                     LastName = _userDetails.LastName,
+                    GithubLink = _userDetails.GithubLink,
+                    WebsiteLink = _userDetails.WebsiteLink,
                     DOB = _userDetails.Dob,
                     Bio = _userDetails.Bio,
                 };

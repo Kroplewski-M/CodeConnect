@@ -683,6 +683,10 @@ video {
   margin-top: 1.75rem;
 }
 
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
 .block {
   display: block;
 }
@@ -779,12 +783,32 @@ video {
   width: 90vw;
 }
 
+.w-\[400px\] {
+  width: 400px;
+}
+
 .max-w-\[1000px\] {
   max-width: 1000px;
 }
 
 .max-w-\[1100px\] {
   max-width: 1100px;
+}
+
+.max-w-\[500px\] {
+  max-width: 500px;
+}
+
+.max-w-\[400px\] {
+  max-width: 400px;
+}
+
+.max-w-\[450px\] {
+  max-width: 450px;
+}
+
+.max-w-\[410px\] {
+  max-width: 410px;
 }
 
 .flex-grow {
@@ -854,6 +878,10 @@ video {
 
 .flex-col-reverse {
   flex-direction: column-reverse;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
 }
 
 .place-content-center {
@@ -1023,6 +1051,18 @@ video {
   background-color: transparent;
 }
 
+.bg-dark-secondaryColor\/70 {
+  background-color: rgb(123 98 204 / 0.7);
+}
+
+.bg-dark-primaryColor\/60 {
+  background-color: rgb(68 68 68 / 0.6);
+}
+
+.bg-dark-primaryColor\/70 {
+  background-color: rgb(68 68 68 / 0.7);
+}
+
 .p-2 {
   padding: 0.5rem;
 }
@@ -1033,6 +1073,10 @@ video {
 
 .p-5 {
   padding: 1.25rem;
+}
+
+.p-3 {
+  padding: 0.75rem;
 }
 
 .px-3 {
@@ -1099,6 +1143,18 @@ video {
   padding-top: 5px;
 }
 
+.pl-\[30px\] {
+  padding-left: 30px;
+}
+
+.pl-\[40px\] {
+  padding-left: 40px;
+}
+
+.pl-\[50px\] {
+  padding-left: 50px;
+}
+
 .text-center {
   text-align: center;
 }
@@ -1141,12 +1197,24 @@ video {
   line-height: 1.75rem;
 }
 
+.text-\[15px\] {
+  font-size: 15px;
+}
+
+.text-\[10px\] {
+  font-size: 10px;
+}
+
 .font-bold {
   font-weight: 700;
 }
 
 .font-medium {
   font-weight: 500;
+}
+
+.font-\[15px\] {
+  font-weight: 15px;
 }
 
 .text-amber-400 {
@@ -1370,6 +1438,10 @@ video {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
+.dark\:text-dark-primaryColor\/90:is(.dark *) {
+  color: rgb(68 68 68 / 0.9);
+}
+
 @media (min-width: 640px) {
   .sm\:hidden {
     display: none;
@@ -1395,6 +1467,22 @@ video {
     left: 30px;
   }
 
+  .md\:mt-0 {
+    margin-top: 0px;
+  }
+
+  .md\:ml-5 {
+    margin-left: 1.25rem;
+  }
+
+  .md\:ml-8 {
+    margin-left: 2rem;
+  }
+
+  .md\:ml-\[30px\] {
+    margin-left: 30px;
+  }
+
   .md\:h-\[450px\] {
     height: 450px;
   }
@@ -1405,6 +1493,10 @@ video {
 
   .md\:w-\[500px\] {
     width: 500px;
+  }
+
+  .md\:w-\[700px\] {
+    width: 700px;
   }
 
   .md\:min-w-\[500px\] {

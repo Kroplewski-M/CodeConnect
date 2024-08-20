@@ -1,6 +1,7 @@
 @page "/Profile/{Username}"
 @using Microsoft.AspNetCore.Components.Authorization
 @using CodeConnect.WebAssembly.Components
+@using CodeConnect.WebAssembly.Components.SVGs
 @inherits ProfileBase
 
 <AuthorizeView>
@@ -20,7 +21,7 @@
                                     <img src="@UserDetails?.ProfileImg" class="w-[200px] h-[200px] rounded-full" alt="profile image"/>
                                 </div>
                             </div>
-                            <p class="pl-[20px] pt-[10px] dark:text-dark-supportColor/80 text-light-primaryColor/80">Profile created: @UserDetails?.CreatedAt</p>
+                            <p class="pl-[40px] pt-[10px] dark:text-dark-supportColor/80 text-light-primaryColor/80 text-sm">Profile created: @UserDetails?.CreatedAt</p>
                         </div>
                     </div>
                     <div class="mt-5 md:pl-[80px]">
@@ -28,11 +29,27 @@
                         <p class="pt-[20px] font-bold text-4xl dark:text-dark-supportColor text-light-primaryColor">@UserDetails?.FirstName @UserDetails?.LastName
                             <button @onclick="ToggleEditProfile" class="fa-solid fa-pen-to-square fa-xs ml-5 hover:cursor-pointer"></button>
                         </p>
-                        <p class="pt-[5px] font-bold text-lg dark:text-dark-supportColor/70 text-light-primaryColor/70">&#x40;@UserDetails?.UserName</p>
-                        <p class="pt-[10px] dark:text-dark-supportColor/90 text-light-primaryColor/90">@(string.IsNullOrEmpty(UserDetails?.Bio) ? "Bio is looking empty..." : UserDetails?.Bio)</p>
+                        <div class="flex">
+                            <p class="pt-[5px] font-bold text-lg dark:text-dark-supportColor/70 text-light-primaryColor/70">&#x40;@UserDetails?.UserName</p>
+                            @if (!string.IsNullOrEmpty(UserDetails?.GithubLink))
+                            {
+                                <div class="ml-5">
+                                    <a href="@UserDetails?.GithubLink" target="_blank"><GithubSVG Width="40" Height="40" Color="#333333"/></a>
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(UserDetails?.WebsiteLink))
+                            {
+                                <div class="ml-2">
+                                    <a href="@UserDetails?.WebsiteLink" target="_blank"><WebsiteSVG Width="40" Height="40" Color="#333333"/></a>
+                                </div>
+                            }
+                        </div>
+                <div class="bg-dark-primaryColor/70 rounded-md p-3 mt-3 max-w-[400px]">
+                    <p class=" dark:text-dark-supportColor/90 text-light-primaryColor/90">@(string.IsNullOrEmpty(UserDetails?.Bio) ? "Bio is looking empty..." : UserDetails?.Bio)</p>
+                </div>
                     </div>
                 </div>
-                <div class="ml-5">
+                <div class="ml-5 mt-5">
                     <h1 class="text-4xl font-bold dark:text-dark-supportColor text-light-primaryColor">Recent Posts</h1>
                 </div>
             </div>
