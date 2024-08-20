@@ -52,7 +52,7 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         throw new NotImplementedException();
     }
 
-    private List<Claim> GetClaimsForUser(ApplicationUser user)
+    public List<Claim> GetClaimsForUser(ApplicationUser user)
     {
         return
         [

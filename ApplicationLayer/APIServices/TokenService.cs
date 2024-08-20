@@ -46,10 +46,5 @@ public class TokenService(IOptions<JwtSettings> jwtSettings)
             return new ClaimsPrincipalResponse(false, new ClaimsPrincipal());
         }
     }
-
-    public TokenResponse RefreshToken(string token)
-    {
-        var principal = ValidateToken(token);
-        return principal.ClaimsPrincipal.Claims.ToList().Any() ? new TokenResponse(GenerateJwtToken(principal.ClaimsPrincipal.Claims, DateTime.Now.AddMinutes(60))) : new TokenResponse("");
-    }
+    
 }
