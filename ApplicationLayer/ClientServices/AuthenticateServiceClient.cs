@@ -87,11 +87,4 @@ public class AuthenticateServiceClient(
         notificationsService.PushNotification(new Notification("Logged out successfully",NotificationType.Success));
         return new AuthResponse(true, "", "Logged out successfully");
     }
-    private async Task CheckIfUserIsValid()
-    {
-        var authState = await authenticationStateProvider.GetAuthenticationStateAsync();
-        if (authState.User.Identity == null)
-            await LogoutUser();
-        ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
-    }
 }

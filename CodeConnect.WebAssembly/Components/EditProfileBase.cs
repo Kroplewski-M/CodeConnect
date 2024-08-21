@@ -60,7 +60,6 @@ public class EditProfileBase : ComponentBase
         EditProfileErrors = [];
         EditProfileValidator editProfileValidator = new EditProfileValidator();
         var validate = await editProfileValidator.ValidateAsync(EditProfileForm);
-        Console.WriteLine("github " + EditProfileForm.GithubLink);
         if (!validate.IsValid)
         {
             EditProfileErrors = validate.Errors;
@@ -72,7 +71,6 @@ public class EditProfileBase : ComponentBase
             NotificationsService.PushNotification(new DomainLayer.Entities.Notification("Updating Profile...",
                 NotificationType.Info));
             await UserService.UpdateUserDetails(EditProfileForm);
-            StateHasChanged();
             NotificationsService.PushNotification(new DomainLayer.Entities.Notification("Updated Profile Successfully!",
                 NotificationType.Success));
         }
