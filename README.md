@@ -1,4 +1,4 @@
-# CodeConnect
+# &lt;Code Connect/&gt;
 CodeConnect is a social media platform designed specifically for developers. 
 Built using Blazor WebAssembly for the frontend and a C# Web API for the backend, CodeConnect allows developers to create profiles, share their work, and connect with other like-minded individuals.
 
