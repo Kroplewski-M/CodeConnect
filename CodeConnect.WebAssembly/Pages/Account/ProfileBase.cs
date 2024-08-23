@@ -10,10 +10,14 @@ public class ProfileBase : ComponentBase
 {
     [Inject]
     public required  IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
+    [Inject]
+    public required IUserService UserService { get; set; }
     [Parameter]
     public string? Username { get; set; }
     protected bool ShowConfirmLogout = false;
     protected bool ShowEditProfile = false;
+    protected bool IsCurrentUser = false;
+    protected bool FoundUser = false;
     protected UserDetails? UserDetails = null;
     [CascadingParameter]
     private Task<AuthenticationState>? AuthenticationState { get; set; }
@@ -24,10 +28,22 @@ public class ProfileBase : ComponentBase
         {
             var authState = await AuthenticationState;
             var user = authState?.User;
-
+            
             if (user?.Identity is not null && user.Identity.IsAuthenticated)
             {
-                UserDetails = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
+                var currentUser = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
+                if (currentUser.UserName == Username)
+                {
+                    IsCurrentUser = true;
+                    UserDetails = currentUser;
+                }
+                else
+                {
+                    IsCurrentUser = false;
+                    UserDetails = await UserService.GetUserDetails(Username ?? "");
+                }
+                if (UserDetails != null)
+                    FoundUser = true;
                 StateHasChanged();
             }
         }

@@ -20,8 +20,20 @@ public class UserService(UserManager<ApplicationUser>userManager) : IUserService
        user.WebsiteLink = editProfileForm.WebsiteLink;
 
        await userManager.UpdateAsync(user);
-       //update token for user
-       return new ServiceResponse(true, "");
+       return new ServiceResponse(true, "Updated User Successfully");
     }
-    
+
+    public async Task<UserDetails?> GetUserDetails(string username)
+    {
+        var user = await userManager.FindByNameAsync(username);
+        if (user == null)
+            return null;
+        if (string.IsNullOrEmpty(user.ProfileImageUrl))
+            user.ProfileImageUrl = "images/profileImg.jpg";
+        if (string.IsNullOrEmpty(user.BackgroundImageUrl))
+            user.BackgroundImageUrl = "images/background.jpg";
+        return new UserDetails(user.FirstName ?? "", user.LastName ?? "", user.UserName ?? "", user.Email ?? "", user.ProfileImageUrl ?? "",
+            user.BackgroundImageUrl ?? "", user.GithubLink ?? "",
+            user.WebsiteLink ?? "", user.DOB, user.CreatedAt,user.Bio ?? "");
+    }
 }

@@ -1,6 +1,9 @@
-@CodeConnect.WebAPI_HostAddress = http://localhost:5298
+@CodeConnect.WebAPI_HostAddress = https://localhost:7124
 
-GET {{CodeConnect.WebAPI_HostAddress}}/weatherforecast/
+POST {{CodeConnect.WebAPI_HostAddress}}/api/user/getuserdetails
 Accept: application/json
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJGaXJzdE5hbWUiOiJNYXRldXN6IE0iLCJMYXN0TmFtZSI6Iktyb3BsZXdza2kiLCJVc2VyTmFtZSI6Ik1hdEsiLCJCaW8iOiJ0aGlzIGlzIGEgYmlvIiwiRW1haWwiOiJrcm9wQGdtYWlsLmNvbSIsIkRPQiI6IjA0LzE3LzIwMDIiLCJDcmVhdGVkQXQiOiIwOC8wNy8yMDI0IiwiUHJvZmlsZUltZyI6IiIsIkJhY2tncm91bmRJbWciOiIiLCJHaXRodWJMaW5rIjoiIiwiV2Vic2l0ZUxpbmsiOiIiLCJleHAiOjE3MjQ0MzY0NDEsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjcxMjQiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MjAyIn0.eIpqqncAOnxqWZas5RstpZB0bRa9LcGo-gV37tggk34
 
+"MatK"
 ###

@@ -6,5 +6,6 @@ namespace ApplicationLayer.Interfaces;
 public interface IUserService
 {
     public Task<ServiceResponse> UpdateUserDetails(EditProfileForm editProfileForm);
+    public Task<UserDetails?> GetUserDetails(string username);
 
 }

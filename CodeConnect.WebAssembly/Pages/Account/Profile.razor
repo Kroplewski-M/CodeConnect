@@ -4,77 +4,95 @@
 @using CodeConnect.WebAssembly.Components.SVGs
 @inherits ProfileBase
 
-<AuthorizeView>
-    <Authorized>
-        <div class="w-[90vw] max-w-[1100px] bg-dark-secondaryColor rounded-md mx-auto pt-5 pb-10 mt-5">
-            <div class="w-[85%] max-w-[1000px] mt-5 mx-auto relative rounded-md">
-                <div class="w-[100%] relative">
-                    <div class="absolute w-[100%] md:h-[450px] h-[300px] rounded-md hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex" @onclick="() => UpdateImage(TypeOfUpdate.BackgroundImage)"><i class="fa-solid fa-pen-to-square fa-2xl text-gray-200 mx-auto self-center"></i></div>
-                    <img src="@UserDetails?.BackgroundImg" class="w-[100%] md:h-[450px] h-[300px] rounded-md mx-auto" alt=""/>
-                </div>
-                <div class="flex flex-col md:flex-row">
-                    <div class="w-[200px] h-[200px] z-[50] relative">
-                        <div class="flex flex-col">
-                            <div class="relative h-[150px]">
-                                <div class="absolute w-[200px] h-[200px] -top-[50px] md:left-[30px] left-[10px] border rounded-full">
-                                    <div class="absolute w-[200px] h-[200px] hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex" @onclick="() => UpdateImage(TypeOfUpdate.ProfileImage)"><i class="fa-solid fa-pen-to-square fa-2xl text-gray-200 mx-auto self-center"></i></div>
-                                    <img src="@UserDetails?.ProfileImg" class="w-[200px] h-[200px] rounded-full" alt="profile image"/>
+@if (FoundUser)
+{
+
+
+    <AuthorizeView>
+        <Authorized>
+            <div class="w-[90vw] max-w-[1100px] bg-dark-secondaryColor rounded-md mx-auto pt-5 pb-10 mt-5">
+                <div class="w-[85%] max-w-[1000px] mt-5 mx-auto relative rounded-md">
+                    <div class="w-[100%] relative">
+                        @if (IsCurrentUser)
+                        {
+                            <div class="absolute w-[100%] md:h-[450px] h-[300px] rounded-md hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex" @onclick="() => UpdateImage(TypeOfUpdate.BackgroundImage)"><i class="fa-solid fa-pen-to-square fa-2xl text-gray-200 mx-auto self-center"></i></div>
+                        }
+                        <img src="@UserDetails?.BackgroundImg" class="w-[100%] md:h-[450px] h-[300px] rounded-md mx-auto" alt=""/>
+                    </div>
+                    <div class="flex flex-col md:flex-row">
+                        <div class="w-[200px] h-[200px] z-[50] relative">
+                            <div class="flex flex-col">
+                                <div class="relative h-[150px]">
+                                    <div class="absolute w-[200px] h-[200px] -top-[50px] md:left-[30px] left-[10px] border rounded-full">
+                                        @if (IsCurrentUser)
+                                        {
+                                            <div class="absolute w-[200px] h-[200px] hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex" @onclick="() => UpdateImage(TypeOfUpdate.ProfileImage)"><i class="fa-solid fa-pen-to-square fa-2xl text-gray-200 mx-auto self-center"></i></div>
+                                        }
+                                        <img src="@UserDetails?.ProfileImg" class="w-[200px] h-[200px] rounded-full" alt="profile image"/>
+                                    </div>
+                                </div>
+                                <p class="pl-[40px] pt-[10px] dark:text-dark-supportColor/80 text-light-primaryColor/80 text-sm">Profile created: @UserDetails?.CreatedAt</p>
+                                <div class="flex w-[100px] mx-auto mt-2">
+                                    @if (!string.IsNullOrEmpty(UserDetails?.GithubLink))
+                                    {
+                                        <div class="ml-5">
+                                            <a href="@UserDetails?.GithubLink" target="_blank"><GithubSVG Width="40" Height="40" Color="#333333"/></a>
+                                        </div>
+                                    }
+                                    @if (!string.IsNullOrEmpty(UserDetails?.WebsiteLink))
+                                    {
+                                        <div class="ml-2">
+                                            <a href="@UserDetails?.WebsiteLink" target="_blank"><WebsiteSVG Width="40" Height="40" Color="#333333"/></a>
+                                        </div>
+                                    }
                                 </div>
                             </div>
-                            <p class="pl-[40px] pt-[10px] dark:text-dark-supportColor/80 text-light-primaryColor/80 text-sm">Profile created: @UserDetails?.CreatedAt</p>
-                            <div class="flex w-[100px] mx-auto mt-2">
-                                @if (!string.IsNullOrEmpty(UserDetails?.GithubLink))
+                        </div>
+                        <div class="mt-5 md:pl-[80px]">
+                            @if (IsCurrentUser)
+                            {
+                                <button class="rounded-md border-red-800 bg-red-500 w-[150px] h-[30px] font-bold hover:bg-red-700" @onclick="ToggleShowConfirmLogout">Logout</button>
+                            }
+                            <div class="flex">
+                                <p class="pt-[20px] font-bold text-4xl dark:text-dark-supportColor text-light-primaryColor">@UserDetails?.FirstName @UserDetails?.LastName</p>
+                                @if (IsCurrentUser)
                                 {
-                                    <div class="ml-5">
-                                        <a href="@UserDetails?.GithubLink" target="_blank"><GithubSVG Width="40" Height="40" Color="#333333"/></a>
-                                    </div>
+                                    <button @onclick="ToggleEditProfile" class="dark:text-dark-supportColor text-light-supportColor fa-solid fa-pen-to-square fa-2xl ml-5 hover:cursor-pointer"></button>
                                 }
-                                @if (!string.IsNullOrEmpty(UserDetails?.WebsiteLink))
-                                {
-                                    <div class="ml-2">
-                                        <a href="@UserDetails?.WebsiteLink" target="_blank"><WebsiteSVG Width="40" Height="40" Color="#333333"/></a>
-                                    </div>
-                                }
+                            </div>
+                            <p class="pt-[5px] font-bold text-lg dark:text-dark-supportColor/70 text-light-primaryColor/70">&#x40;@UserDetails?.UserName</p>
+
+                            <div class="bg-dark-primaryColor/70 rounded-md p-3 mt-3 max-w-[400px]">
+                                <p class=" dark:text-dark-supportColor/90 text-light-primaryColor/90">@(string.IsNullOrEmpty(UserDetails?.Bio) ? "Bio is looking empty..." : UserDetails?.Bio)</p>
                             </div>
                         </div>
                     </div>
-                    <div class="mt-5 md:pl-[80px]">
-                        <button class="rounded-md border-red-800 bg-red-500 w-[150px] h-[30px] font-bold hover:bg-red-700" @onclick="ToggleShowConfirmLogout">Logout</button>
-                        <p class="pt-[20px] font-bold text-4xl dark:text-dark-supportColor text-light-primaryColor">@UserDetails?.FirstName @UserDetails?.LastName
-                            <button @onclick="ToggleEditProfile" class="fa-solid fa-pen-to-square fa-xs ml-5 hover:cursor-pointer"></button>
-                        </p>
-                        <p class="pt-[5px] font-bold text-lg dark:text-dark-supportColor/70 text-light-primaryColor/70">&#x40;@UserDetails?.UserName</p>
-                        
-                        <div class="bg-dark-primaryColor/70 rounded-md p-3 mt-3 max-w-[400px]">
-                            <p class=" dark:text-dark-supportColor/90 text-light-primaryColor/90">@(string.IsNullOrEmpty(UserDetails?.Bio) ? "Bio is looking empty..." : UserDetails?.Bio)</p>
-                        </div>
-                    </div>
                 </div>
-            </div>
 
-        </div>
-        <div class="ml-[80px] mt-5">
-            <p class="text-4xl font-bold dark:text-dark-supportColor text-light-supportColor">Recent Posts</p>
-            <div class="mt-5 text-center dark:text-dark-supportColor text-light-supportColor">
-                <p>...Winds howling</p>
-                <div class="w-[100px] mx-auto">
-                    <EmptySVG Width="100" Height="100" Color="555555"></EmptySVG>
-                </div>
-                <p>man its empty in here, just make a post already</p>
-                
             </div>
-        </div>
-        @if (ShowConfirmLogout)
-        {
-            <LogoutConfirm ConfirmLogout="AuthenticateServiceClient.LogoutUser" CancelLogout="ToggleShowConfirmLogout"/>
-        }
-        @if (ShowEditProfile)
-        {
-            <EditProfile Cancel="ToggleEditProfile"/>
-        }
-        @if (ShowUpdateImage)
-        {
-            <UpdateImage UpdateOfType="UpdateType" Cancel="ToggleEditImage"/>
-        }
-    </Authorized>
-</AuthorizeView>
+            <div class="w-[85%] max-w-[1000px] mt-5 mx-auto relative">
+                <p class="text-4xl font-bold dark:text-dark-supportColor text-light-supportColor">Recent Posts</p>
+                <div class="mt-5 text-center dark:text-dark-supportColor text-light-supportColor">
+                    <p>...Winds howling</p>
+                    <div class="w-[100px] mx-auto">
+                        <EmptySVG Width="100" Height="100" Color="555555"></EmptySVG>
+                    </div>
+                    <p>man its empty in here, @(IsCurrentUser ? "just make a post already" : "this user hasn't posted yet")</p>
+
+                </div>
+            </div>
+            @if (ShowConfirmLogout)
+            {
+                <LogoutConfirm ConfirmLogout="AuthenticateServiceClient.LogoutUser" CancelLogout="ToggleShowConfirmLogout"/>
+            }
+            @if (ShowEditProfile)
+            {
+                <EditProfile Cancel="ToggleEditProfile"/>
+            }
+            @if (ShowUpdateImage)
+            {
+                <UpdateImage UpdateOfType="UpdateType" Cancel="ToggleEditImage"/>
+            }
+        </Authorized>
+    </AuthorizeView>
+}

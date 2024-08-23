@@ -31,4 +31,16 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
         }
         return Unauthorized();
     }
+
+    [Authorize]
+    [HttpPost("GetUserDetails")]
+    public async Task<IActionResult> GetUserDetails([FromBody] string username)
+    {
+        var user = await userService.GetUserDetails(username);
+        if (user == null)
+        {
+            return NotFound("User does not exist");
+        }
+        return Ok(user);
+    }
 }
