@@ -1,5 +1,6 @@
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
+using DomainLayer.Constants;
 using DomainLayer.Entities;
 using DomainLayer.Entities.Auth;
 using Microsoft.AspNetCore.Identity;
@@ -29,9 +30,9 @@ public class UserService(UserManager<ApplicationUser>userManager) : IUserService
         if (user == null)
             return null;
         if (string.IsNullOrEmpty(user.ProfileImageUrl))
-            user.ProfileImageUrl = "images/profileImg.jpg";
+            user.ProfileImageUrl = Constants.ProfilleDefaults.ProfileImg;
         if (string.IsNullOrEmpty(user.BackgroundImageUrl))
-            user.BackgroundImageUrl = "images/background.jpg";
+            user.BackgroundImageUrl = Constants.ProfilleDefaults.BackgroundImg;
         return new UserDetails(user.FirstName ?? "", user.LastName ?? "", user.UserName ?? "", user.Email ?? "", user.ProfileImageUrl ?? "",
             user.BackgroundImageUrl ?? "", user.GithubLink ?? "",
             user.WebsiteLink ?? "", user.DOB, user.CreatedAt,user.Bio ?? "");

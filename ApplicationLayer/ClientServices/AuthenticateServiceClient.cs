@@ -61,9 +61,9 @@ public class AuthenticateServiceClient(
         var backgroundImg = authState.GetUserInfo(Constants.ClaimTypes.BackgroundImg);
 
         if (string.IsNullOrEmpty(profileImg))
-            profileImg = "images/profileImg.jpg";
+            profileImg = Constants.ProfilleDefaults.ProfileImg;
         if (string.IsNullOrEmpty(backgroundImg))
-            backgroundImg = "images/background.jpg";
+            backgroundImg = Constants.ProfilleDefaults.BackgroundImg;
 
         return new UserDetails(
             FirstName: authState.GetUserInfo(Constants.ClaimTypes.FirstName),

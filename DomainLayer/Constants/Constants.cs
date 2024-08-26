@@ -27,4 +27,11 @@ public static class Constants
         public const string UserName = "UserName";
         public const string Password = "Password";
     }
+
+    public static class ProfilleDefaults
+    {
+        public const string ProfileImg = "images/profileImg.jpg";
+        public const string BackgroundImg = "images/background.jpg";
+        
+    }
 }
