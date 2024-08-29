@@ -2,14 +2,17 @@
 <div class="top-0 left-0 absolute z-[300] w-[100vw] h-[100vh] backdrop-blur-md grid place-content-center">
     <div class="shadow-xl md:w-[500px] w-[90%]  mt-5 relative bg-dark-secondaryColor p-5 rounded-md -mt-16">
         <button @onclick="Cancel" class="rounded-md border-4 border-solid border-light-secondaryColor px-3 py-2 text-light-supportColor dark:text-dark-supportColor/90 hover:bg-dark-secondaryColor" ><i class="fa-solid fa-angles-left"></i> Back</button>
-        <h3 class="font-bold dark:text-dark-supportColor text-light-primaryColor text-4xl mt-4"> Update @(UpdateOfType == TypeOfUpdate.ProfileImage ? "Profile" : "Background") Image</h3>
-        @if (!string.IsNullOrEmpty(TempFilePath))
-        {
-            <img alt="tempImg" src="@TempFilePath" class="rounded-md mt-5 max-w-[90%] mx-auto"/>
-        }
-        <div class="w-[300px] mx-auto" >
-        <InputFile OnChange="HandleFileSelection" accept="image/*" class="w-[100%] rounded-md px-4 h-10 cursor-pointer bg-white border border-black/10 dark:border-dark-supportColor shadow-sm mr-4 mt-5 grid place-content-center"></InputFile>
+        <h3 class="font-bold dark:text-dark-supportColor text-light-primaryColor text-4xl mt-4 text-center"> Update @(UpdateOfType == TypeOfUpdate.ProfileImage ? "Profile" : "Background") Image</h3>
+        <div class="mt-5 mb-2">
+            <img id="uploadedImgPreview" class="rounded w-[90%] mx-auto @(!LoadedImg ? "hidden" : "")" src="" alt="preview">
         </div>
+        <div class="w-[300px] mx-auto">
+            <InputFile OnChange="HandleFileSelection" id="uploadImg" accept="image/*" class="w-[100%] rounded-md px-4 h-10 cursor-pointer bg-white border border-black/10 dark:border-dark-supportColor shadow-sm mr-4 mt-5 grid place-content-center"></InputFile>
+        </div>
+        <div class="w-[150px] h-[30px] mx-auto mt-5 mb-5">
+            <button class="rounded-md bg-gray-200 w-[100%] h-[100%] font-bold hover:bg-gray-300" @onclick="SaveImg">Save</button>
+        </div>
+
     </div>
 </div>
 

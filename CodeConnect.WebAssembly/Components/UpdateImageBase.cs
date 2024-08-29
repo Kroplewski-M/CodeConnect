@@ -1,5 +1,7 @@
+using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.JSInterop;
 
 namespace CodeConnect.WebAssembly.Components;
 
@@ -11,30 +13,29 @@ public enum TypeOfUpdate
 
 public class UpdateImageBase : ComponentBase
 {
+    [Inject]
+    public IJSRuntime Js { get; set; }
     [Parameter]
     public TypeOfUpdate UpdateOfType { get; set; }
     [Parameter]
     public EventCallback Cancel { get; set; }
 
-    protected string TempFilePath { get; set; } = ""; 
-    protected async Task HandleFileSelection(InputFileChangeEventArgs e)
+    protected bool LoadedImg { get; set; } = false;
+    protected IBrowserFile? SelectedImg { get; set; } = null;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        string result = Path.GetTempPath();
-        Console.WriteLine(result);
-        var file = e.GetMultipleFiles().FirstOrDefault();
-        if (file != null)
-        {
-            string tempFileName = "temp" + Path.GetExtension(file.Name);
-            TempFilePath = Path.Combine(Path.GetTempPath(), tempFileName);
-            await using (var stream = file.OpenReadStream())
-            {
-                await using (var fileStream = new FileStream(TempFilePath, FileMode.Create, FileAccess.ReadWrite))
-                {
-                    await stream.CopyToAsync(fileStream);
-                }
-            }
-            Console.WriteLine($"File saved to: {TempFilePath}");
-        }
-        StateHasChanged();
+        if(firstRender)
+            await Js.InvokeVoidAsync("PreviewImg",SelectedImg);
+    }
+    protected void HandleFileSelection(InputFileChangeEventArgs e)
+    {
+        SelectedImg = e.GetMultipleFiles().FirstOrDefault();
+        LoadedImg = true;
+    }
+
+    protected void SaveImg()
+    {
+        Console.WriteLine(SelectedImg?.Name);
     }
 }
