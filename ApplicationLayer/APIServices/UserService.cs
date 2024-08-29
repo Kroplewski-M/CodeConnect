@@ -30,9 +30,9 @@ public class UserService(UserManager<ApplicationUser>userManager) : IUserService
         if (user == null)
             return null;
         if (string.IsNullOrEmpty(user.ProfileImageUrl))
-            user.ProfileImageUrl = Constants.ProfilleDefaults.ProfileImg;
+            user.ProfileImageUrl = Constants.ProfileDefaults.ProfileImg;
         if (string.IsNullOrEmpty(user.BackgroundImageUrl))
-            user.BackgroundImageUrl = Constants.ProfilleDefaults.BackgroundImg;
+            user.BackgroundImageUrl = Constants.ProfileDefaults.BackgroundImg;
         return new UserDetails(user.FirstName ?? "", user.LastName ?? "", user.UserName ?? "", user.Email ?? "", user.ProfileImageUrl ?? "",
             user.BackgroundImageUrl ?? "", user.GithubLink ?? "",
             user.WebsiteLink ?? "", user.DOB, user.CreatedAt,user.Bio ?? "");
