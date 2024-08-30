@@ -1,22 +1,17 @@
 using System.Reflection.Metadata;
+using DomainLayer.Constants;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 
 namespace CodeConnect.WebAssembly.Components;
 
-public enum TypeOfUpdate
-{
-    ProfileImage,
-    BackgroundImage
-}
-
 public class UpdateImageBase : ComponentBase
 {
     [Inject]
     public IJSRuntime Js { get; set; }
     [Parameter]
-    public TypeOfUpdate UpdateOfType { get; set; }
+    public Constants.ImageTypeOfUpdate UpdateOfImageType { get; set; }
     [Parameter]
     public EventCallback Cancel { get; set; }
 

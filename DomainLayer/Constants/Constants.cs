@@ -4,7 +4,7 @@ public static class Constants
 {
     public static class Base
     {
-        public const string baseUrl = "https://localhost:7124";
+        public const string BaseUrl = "https://localhost:7124";
     }
     public static class Tokens
     {
@@ -32,5 +32,10 @@ public static class Constants
     {
         public const string ProfileImg = "images/profileImg.jpg";
         public const string BackgroundImg = "images/background.jpg";
+    }
+    public enum ImageTypeOfUpdate
+    {
+        ProfileImage,
+        BackgroundImage
     }
 }

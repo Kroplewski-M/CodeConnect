@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using CodeConnect.WebAssembly;
 using CodeConnect.WebAssembly.DelegatingHandler;
+using DomainLayer.Constants;
 using DomainLayer.Entities;
 using Microsoft.AspNetCore.Components.Authorization;
 
@@ -19,7 +20,7 @@ builder.Services.AddTransient<AuthHandler>();
 builder.Services.AddHttpClient("DefaultClient",
     client =>
     {
-        client.BaseAddress = new Uri("https://localhost:7124");
+        client.BaseAddress = new Uri(Constants.Base.BaseUrl);
     }).AddHttpMessageHandler<AuthHandler>();
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("DefaultClient"));
 builder.Services.AddScoped<AuthenticationStateProvider,ClientAuthStateProvider>();

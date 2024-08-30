@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @using CodeConnect.WebAssembly.Components
 @using CodeConnect.WebAssembly.Components.SVGs
+@using DomainLayer.Constants
 @inherits ProfileBase
 
 @if (FoundUser)
@@ -15,7 +16,7 @@
                     <div class="w-[100%] relative">
                         @if (IsCurrentUser)
                         {
-                            <div class="absolute w-[100%] md:h-[450px] h-[300px] rounded-md hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex" @onclick="() => UpdateImage(TypeOfUpdate.BackgroundImage)"><i class="fa-solid fa-pen-to-square fa-2xl text-gray-200 mx-auto self-center"></i></div>
+                            <div class="absolute w-[100%] md:h-[450px] h-[300px] rounded-md hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex" @onclick="() => UpdateImage(Constants.ImageTypeOfUpdate.BackgroundImage)"><i class="fa-solid fa-pen-to-square fa-2xl text-gray-200 mx-auto self-center"></i></div>
                         }
                         <img src="@UserDetails?.BackgroundImg" class="w-[100%] md:h-[450px] h-[300px] rounded-md mx-auto" alt=""/>
                     </div>
@@ -26,7 +27,7 @@
                                     <div class="absolute w-[200px] h-[200px] -top-[50px] md:left-[30px] left-[10px] border rounded-full">
                                         @if (IsCurrentUser)
                                         {
-                                            <div class="absolute w-[200px] h-[200px] hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex" @onclick="() => UpdateImage(TypeOfUpdate.ProfileImage)"><i class="fa-solid fa-pen-to-square fa-2xl text-gray-200 mx-auto self-center"></i></div>
+                                            <div class="absolute w-[200px] h-[200px] hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex" @onclick="() => UpdateImage(Constants.ImageTypeOfUpdate.ProfileImage)"><i class="fa-solid fa-pen-to-square fa-2xl text-gray-200 mx-auto self-center"></i></div>
                                         }
                                         <img src="@UserDetails?.ProfileImg" class="w-[200px] h-[200px] rounded-full" alt="profile image"/>
                                     </div>
@@ -91,7 +92,7 @@
             }
             @if (ShowUpdateImage)
             {
-                <UpdateImage UpdateOfType="UpdateType" Cancel="ToggleEditImage"/>
+                <UpdateImage UpdateOfImageType="UpdateImageType" Cancel="ToggleEditImage"/>
             }
         </Authorized>
     </AuthorizeView>
