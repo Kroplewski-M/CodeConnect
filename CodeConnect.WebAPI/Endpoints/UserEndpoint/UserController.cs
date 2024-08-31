@@ -5,6 +5,7 @@ using DomainLayer.Constants;
 using DomainLayer.Entities;
 using DomainLayer.Entities.Auth;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +14,7 @@ namespace CodeConnect.WebAPI.Endpoints.UserEndpoint;
 [Route("api/[controller]")]
 [ApiController]
 public class UserController(IUserService userService, UserManager<ApplicationUser>userManager,TokenService tokenService,
-    IAuthenticateService authenticateService) : ControllerBase
+    IAuthenticateService authenticateService,IUserImageService userImageService) : ControllerBase
 {
     [Authorize]
     [HttpPost("EditUserDetails")]
@@ -42,5 +43,31 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
             return NotFound("User does not exist");
         }
         return Ok(user);
+    }
+
+    [Authorize]
+    [HttpPost("UpdateUserImage")]
+    public async Task<IActionResult> UpdateUserImage([FromForm]IFormFile image, [FromForm] int typeOfImage)
+    {
+        var username = User.FindFirst(Constants.ClaimTypes.UserName)?.Value;
+        if (!string.IsNullOrEmpty(username))
+        {
+            var updateUserImageRequest = new UpdateUserImageRequest
+            {
+                ImageStream = image.OpenReadStream(),
+                ContentType = image.ContentType,
+                FileName = image.FileName,
+                TypeOfImage = (Constants.ImageTypeOfUpdate)typeOfImage,
+                Username = username
+            };
+
+            var url = await userImageService.UpdateUserImage(updateUserImageRequest);
+            if (string.IsNullOrEmpty(url))
+                return BadRequest("An error occurred");
+
+            return Ok(url);
+        }
+        return BadRequest("User not found or image is null");
+
     }
 }

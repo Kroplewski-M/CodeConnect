@@ -1,5 +1,7 @@
 using System.Reflection.Metadata;
+using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
+using DomainLayer.Entities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
@@ -10,6 +12,9 @@ public class UpdateImageBase : ComponentBase
 {
     [Inject]
     public IJSRuntime Js { get; set; }
+
+    [Inject] public IUserImageService UserImageService { get; set; }
+
     [Parameter]
     public Constants.ImageTypeOfUpdate UpdateOfImageType { get; set; }
     [Parameter]
@@ -29,8 +34,22 @@ public class UpdateImageBase : ComponentBase
         LoadedImg = true;
     }
 
-    protected void SaveImg()
+    protected async Task SaveImg()
     {
-        Console.WriteLine(SelectedImg?.Name);
+        if (SelectedImg != null)
+        {
+            var maxAllowedSize = 10 * 1024 * 1024; //10MB
+            Console.WriteLine("Type: " + UpdateOfImageType);
+            var imageStream = SelectedImg.OpenReadStream(maxAllowedSize);
+            var updateUserImageRequest = new UpdateUserImageRequest
+            {
+                TypeOfImage = UpdateOfImageType,
+                ImageStream = imageStream,
+                ContentType = SelectedImg.ContentType,
+                FileName = SelectedImg.Name
+            };
+
+            await UserImageService.UpdateUserImage(updateUserImageRequest);
+        }
     }
 }
