@@ -18,7 +18,7 @@
                         {
                             <div class="absolute w-[100%] md:h-[450px] h-[300px] rounded-md hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex" @onclick="() => UpdateImage(Constants.ImageTypeOfUpdate.BackgroundImage)"><i class="fa-solid fa-pen-to-square fa-2xl text-gray-200 mx-auto self-center"></i></div>
                         }
-                        <img src="@UserDetails?.BackgroundImg" class="w-[100%] md:h-[450px] h-[300px] rounded-md mx-auto" alt=""/>
+                        <img src="@UserDetails?.BackgroundImg" class="w-[100%] md:h-[450px] h-[300px] rounded-md mx-auto object-cover" alt=""/>
                     </div>
                     <div class="flex flex-col md:flex-row">
                         <div class="w-[200px] h-[200px] z-[50] relative">
@@ -29,7 +29,7 @@
                                         {
                                             <div class="absolute w-[200px] h-[200px] hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex" @onclick="() => UpdateImage(Constants.ImageTypeOfUpdate.ProfileImage)"><i class="fa-solid fa-pen-to-square fa-2xl text-gray-200 mx-auto self-center"></i></div>
                                         }
-                                        <img src="@UserDetails?.ProfileImg" class="w-[200px] h-[200px] rounded-full" alt="profile image"/>
+                                        <img src="@UserDetails?.ProfileImg" class="w-[200px] h-[200px] rounded-full object-cover" alt="profile image"/>
                                     </div>
                                 </div>
                                 <p class="pl-[40px] pt-[10px] dark:text-dark-supportColor/80 text-light-primaryColor/80 text-sm">Profile created: @UserDetails?.CreatedAt</p>
