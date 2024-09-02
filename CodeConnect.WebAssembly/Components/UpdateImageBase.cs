@@ -14,13 +14,14 @@ public class UpdateImageBase : ComponentBase
     public IJSRuntime Js { get; set; }
 
     [Inject] public IUserImageService UserImageService { get; set; }
-
+    [Inject] public NotificationsService NotificationsService { get; set; }
     [Parameter]
     public Constants.ImageTypeOfUpdate UpdateOfImageType { get; set; }
     [Parameter]
     public EventCallback Cancel { get; set; }
 
     protected bool LoadedImg { get; set; } = false;
+    protected bool DisableImg { get; set; } = false;
     protected IBrowserFile? SelectedImg { get; set; } = null;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -38,18 +39,39 @@ public class UpdateImageBase : ComponentBase
     {
         if (SelectedImg != null)
         {
-            var maxAllowedSize = 10 * 1024 * 1024; //10MB
-            Console.WriteLine("Type: " + UpdateOfImageType);
-            var imageStream = SelectedImg.OpenReadStream(maxAllowedSize);
-            var updateUserImageRequest = new UpdateUserImageRequest
+            try
             {
-                TypeOfImage = UpdateOfImageType,
-                ImageStream = imageStream,
-                ContentType = SelectedImg.ContentType,
-                FileName = SelectedImg.Name
-            };
-
-            await UserImageService.UpdateUserImage(updateUserImageRequest);
+                DisableImg = true;
+                var maxAllowedSize = 10 * 1024 * 1024; //10MB
+                var imageStream = SelectedImg.OpenReadStream(maxAllowedSize);
+                var updateUserImageRequest = new UpdateUserImageRequest
+                {
+                    TypeOfImage = UpdateOfImageType,
+                    ImageStream = imageStream,
+                    ContentType = SelectedImg.ContentType,
+                    FileName = SelectedImg.Name
+                };
+                NotificationsService.PushNotification(new DomainLayer.Entities.Notification("Updating please wait...", NotificationType.Info));
+                var result = await UserImageService.UpdateUserImage(updateUserImageRequest);
+                if (result.Flag)
+                {
+                    NotificationsService.PushNotification(new DomainLayer.Entities.Notification(result.Message, NotificationType.Success));
+                    StateHasChanged();
+                }
+                else
+                {
+                    NotificationsService.PushNotification(new DomainLayer.Entities.Notification(result.Message, NotificationType.Error));
+                }
+            }
+            catch
+            {
+                NotificationsService.PushNotification(new DomainLayer.Entities.Notification("An error occured please try again later.", NotificationType.Error));
+            }
+            finally
+            {
+                DisableImg = false;
+            }
+            
         }
     }
 }

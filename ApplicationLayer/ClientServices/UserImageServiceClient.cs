@@ -22,13 +22,12 @@ public class UserImageServiceClient(HttpClient httpClient,ILocalStorageService l
         content.Add(new StringContent(((int)updateUserImageRequest.TypeOfImage).ToString()), "typeOfImage");
         var response = await httpClient.PostAsync("/api/User/UpdateUserImage", content);
         response.EnsureSuccessStatusCode();
-        var result = await response.Content.ReadFromJsonAsync<AuthResponse>();
-        if (result != null && result.Flag)
+        var result = await response.Content.ReadFromJsonAsync<TokenResponse>();
+        if (!string.IsNullOrEmpty(result?.Key))
         {
-            var newToken = await response.Content.ReadFromJsonAsync<TokenResponse>();
-            await localStorageService.SetItemAsync(Constants.Tokens.AuthToken, newToken?.Key);
+            await localStorageService.SetItemAsync(Constants.Tokens.AuthToken, result.Key);
             ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
-            return new ServiceResponse(true, "Updated Details Successfully");
+            return new ServiceResponse(true, "User image updated");
         }
         return new ServiceResponse(false, "An error occured, please try again later.");
     }
