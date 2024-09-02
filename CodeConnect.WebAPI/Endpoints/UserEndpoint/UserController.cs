@@ -16,6 +16,11 @@ namespace CodeConnect.WebAPI.Endpoints.UserEndpoint;
 public class UserController(IUserService userService, UserManager<ApplicationUser>userManager,TokenService tokenService,
     IAuthenticateService authenticateService,IUserImageService userImageService) : ControllerBase
 {
+    private TokenResponse GenerateNewToken(ApplicationUser user)
+    {
+        var claims = authenticateService.GetClaimsForUser(user);
+        return new TokenResponse(tokenService.GenerateJwtToken(claims.AsEnumerable(),DateTime.Now.AddHours(1)));
+    }
     [Authorize]
     [HttpPost("EditUserDetails")]
     public async Task<IActionResult> EditUserDetails([FromBody] EditProfileForm editProfileForm)
@@ -27,8 +32,7 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
         var updatedUser = await userManager.FindByNameAsync(editProfileForm.Username);
         if (updatedUser != null)
         {
-            var claims = authenticateService.GetClaimsForUser(updatedUser);
-            return Ok(new TokenResponse(tokenService.GenerateJwtToken(claims.AsEnumerable(),DateTime.Now.AddHours(1))));
+            return Ok(GenerateNewToken(updatedUser));
         }
         return Unauthorized();
     }
@@ -61,13 +65,16 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
                 Username = username
             };
 
-            var url = await userImageService.UpdateUserImage(updateUserImageRequest);
-            if (string.IsNullOrEmpty(url))
-                return BadRequest("An error occurred");
-
-            return Ok(url);
+            var response = await userImageService.UpdateUserImage(updateUserImageRequest);
+            if (!response.Flag)
+                return BadRequest(response.Message);
+            //GET NEW TOKEN
+            var updatedUser = await userManager.FindByNameAsync(username);
+            if (updatedUser != null)
+            {
+                return Ok(GenerateNewToken(updatedUser));
+            }
         }
         return BadRequest("User not found or image is null");
-
     }
 }

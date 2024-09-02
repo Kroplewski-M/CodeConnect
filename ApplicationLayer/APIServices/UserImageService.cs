@@ -1,3 +1,4 @@
+using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using Azure.Storage.Blobs;
 using DomainLayer.Constants;
@@ -11,46 +12,54 @@ namespace ApplicationLayer.APIServices;
 
 public class UserImageService(IOptions<AzureSettings>azureSettings, UserManager<ApplicationUser>userManager) : IUserImageService
 {
-    public async Task<string> UpdateUserImage(UpdateUserImageRequest updateUserImageRequest)
+    public async Task<ServiceResponse> UpdateUserImage(UpdateUserImageRequest updateUserImageRequest)
     {
+        var user = await userManager.FindByNameAsync(updateUserImageRequest.Username);
+        if (user == null)
+            return new ServiceResponse(false, "The user could not be found");
+        
         //SETUP AZURE CLIENT
         var blobServiceClient = new BlobServiceClient(azureSettings.Value.ConnectionString);
         var containerClient = updateUserImageRequest.TypeOfImage == Constants.ImageTypeOfUpdate.ProfileImage
             ? blobServiceClient.GetBlobContainerClient(azureSettings.Value.ProfileImgContainer)
             : blobServiceClient.GetBlobContainerClient(azureSettings.Value.BackgroundImgContainer);
-
+        
         await containerClient.CreateIfNotExistsAsync();
         
         //CHECK IF USER ALREADY HAS AN IMAGE
-        var user = await userManager.FindByNameAsync(updateUserImageRequest.Username);
-        if (user != null)
-        {
-            var imageUrl = updateUserImageRequest.TypeOfImage == Constants.ImageTypeOfUpdate.ProfileImage
-                ? user.ProfileImageUrl
-                : user.BackgroundImageUrl;
-            if (!string.IsNullOrEmpty(imageUrl))
-            {
-                var imageExt = Path.GetExtension(imageUrl);
-                var existingBlobClient = containerClient.GetBlobClient($"{updateUserImageRequest.Username}{imageExt}");
-                await existingBlobClient.DeleteIfExistsAsync();
-            }
-        }
-        var fileExtension = Path.GetExtension(updateUserImageRequest.FileName)?.ToLower();
+        await RemoveIfOldImageExists(user,updateUserImageRequest.TypeOfImage, containerClient);
+        
         //Upload To Azure
-
+        var fileExtension = Path.GetExtension(updateUserImageRequest.FileName)?.ToLower();
         var blobClient = containerClient.GetBlobClient($"{updateUserImageRequest.Username}{fileExtension}");
 
         await blobClient.UploadAsync(updateUserImageRequest.ImageStream, overwrite: true);
 
         //Update User in DB
-        if (user != null)
-        {
-            if(updateUserImageRequest.TypeOfImage == Constants.ImageTypeOfUpdate.ProfileImage)
-                user.ProfileImageUrl = blobClient.Uri.ToString();
-            if(updateUserImageRequest.TypeOfImage == Constants.ImageTypeOfUpdate.BackgroundImage)
-                user.BackgroundImageUrl = blobClient.Uri.ToString();
-            await userManager.UpdateAsync(user);
-        }
-        return blobClient.Uri.ToString();
+        await UpdateUserImage(user, updateUserImageRequest.TypeOfImage, blobClient.Uri.ToString());
+        
+        return new ServiceResponse(true, "Image updated successfully");
+    }
+
+    private async Task RemoveIfOldImageExists(ApplicationUser user, Constants.ImageTypeOfUpdate imageType, BlobContainerClient containerClient)
+    {
+            var imageUrl = imageType == Constants.ImageTypeOfUpdate.ProfileImage
+                ? user.ProfileImageUrl
+                : user.BackgroundImageUrl;
+            if (!string.IsNullOrEmpty(imageUrl))
+            {
+                var imageExt = Path.GetExtension(imageUrl);
+                var existingBlobClient = containerClient.GetBlobClient($"{user.UserName}{imageExt}");
+                await existingBlobClient.DeleteIfExistsAsync();
+            }
+    }
+
+    private async Task UpdateUserImage(ApplicationUser user, Constants.ImageTypeOfUpdate imageType, string url)
+    {
+        if(imageType == Constants.ImageTypeOfUpdate.ProfileImage)
+            user.ProfileImageUrl = url;
+        if(imageType == Constants.ImageTypeOfUpdate.BackgroundImage)
+            user.BackgroundImageUrl = url;
+        await userManager.UpdateAsync(user);
     }
 }
