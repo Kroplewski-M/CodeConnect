@@ -11,4 +11,7 @@ public interface IAuthenticateServiceClient
     public Task<AuthResponse> CreateUser(RegisterForm registerForm);
     public Task<AuthResponse> LoginUser(LoginForm loginForm);
     public Task<AuthResponse> LogoutUser();
+    public event Action? OnChange;
+    public void NotifyStateChanged();
+
 }

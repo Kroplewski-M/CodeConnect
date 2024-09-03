@@ -20,6 +20,8 @@ public class AuthenticateServiceClient(
     NavigationManager navigationManager,NotificationsService notificationsService)
     : IAuthenticateServiceClient
 {
+    public event Action? OnChange;
+    public void NotifyStateChanged() => OnChange?.Invoke();
     public async Task<AuthResponse> CreateUser(RegisterForm registerForm)
     {
         var response = await httpClient.PostAsJsonAsync("/api/Authentication/RegisterUser", registerForm);
@@ -30,6 +32,7 @@ public class AuthenticateServiceClient(
             {
                 await localStorageService.SetItemAsync(Constants.Tokens.AuthToken, authResponse.Token);
                 ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
+                NotifyStateChanged();
                 return new AuthResponse(true, authResponse.Token, "Registered successfully");
             }
         }
@@ -46,6 +49,7 @@ public class AuthenticateServiceClient(
             {
                 await localStorageService.SetItemAsync(Constants.Tokens.AuthToken, authResponse.Token);
                 ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
+                NotifyStateChanged();
                 return new AuthResponse(true, authResponse.Token, authResponse.Message);
             }
         }
@@ -83,6 +87,7 @@ public class AuthenticateServiceClient(
     {
         await localStorageService.RemoveItemAsync(Constants.Tokens.AuthToken);
         ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
+        NotifyStateChanged();
         navigationManager.NavigateTo("/");
         notificationsService.PushNotification(new Notification("Logged out successfully",NotificationType.Success));
         return new AuthResponse(true, "", "Logged out successfully");

@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 namespace ApplicationLayer.ClientServices;
 
 public class UserServiceClient(HttpClient httpClient,ILocalStorageService localStorageService, 
-    AuthenticationStateProvider authenticationStateProvider, NavigationManager navigationManager) : IUserService
+    AuthenticationStateProvider authenticationStateProvider, NavigationManager navigationManager, IAuthenticateServiceClient authenticateServiceClient) : IUserService
 {
     public async Task<ServiceResponse> UpdateUserDetails(EditProfileForm editProfileForm)
     {
@@ -18,6 +18,7 @@ public class UserServiceClient(HttpClient httpClient,ILocalStorageService localS
         var newToken = await response.Content.ReadFromJsonAsync<TokenResponse>();
         await localStorageService.SetItemAsync(Constants.Tokens.AuthToken, newToken?.Key);
         ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
+        authenticateServiceClient.NotifyStateChanged();
         return new ServiceResponse(true, "Updated Details Successfully");
     }
 

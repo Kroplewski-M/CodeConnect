@@ -1,4 +1,5 @@
 using System.Net.Http;
+using ApplicationLayer;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Entities;
 using DomainLayer.Entities.Auth;

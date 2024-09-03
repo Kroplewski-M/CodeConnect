@@ -59,27 +59,39 @@
     </Authorized>
 </AuthorizeView>
 
+@implements IDisposable
 @code{
     private bool _openNav = false;
     private UserDetails? _userDetails = null;
     [CascadingParameter]
     private Task<AuthenticationState>? AuthenticationState { get; set; }
-
-    protected override async Task OnInitializedAsync()
+    
+    
+    protected override void OnInitialized()
     {
-        if (AuthenticationState is not null)
+        AuthenticateServiceClient.OnChange +=  OnAuthenticationStateChanged;
+        OnAuthenticationStateChanged();
+    }
+    
+    private void OnAuthenticationStateChanged()
+    {
+        Task.Run(async () =>
         {
+            if (AuthenticationState == null) return;
             var authState = await AuthenticationState;
             var user = authState?.User;
 
             if (user?.Identity is not null && user.Identity.IsAuthenticated)
             {
                 _userDetails = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
-                StateHasChanged();
+                await InvokeAsync(StateHasChanged);
             }
-        }
+        });
     }
-    
+    public void Dispose()
+    {
+        AuthenticateServiceClient.OnChange -= OnAuthenticationStateChanged;
+    }
 }
 
 

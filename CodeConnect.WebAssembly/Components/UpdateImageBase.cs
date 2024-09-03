@@ -1,4 +1,5 @@
 using System.Reflection.Metadata;
+using ApplicationLayer;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
 using DomainLayer.Entities;
@@ -51,21 +52,21 @@ public class UpdateImageBase : ComponentBase
                     ContentType = SelectedImg.ContentType,
                     FileName = SelectedImg.Name
                 };
-                NotificationsService.PushNotification(new DomainLayer.Entities.Notification("Updating please wait...", NotificationType.Info));
+                NotificationsService.PushNotification(new ApplicationLayer.Notification("Updating please wait...", NotificationType.Info));
                 var result = await UserImageService.UpdateUserImage(updateUserImageRequest);
                 if (result.Flag)
                 {
-                    NotificationsService.PushNotification(new DomainLayer.Entities.Notification(result.Message, NotificationType.Success));
+                    NotificationsService.PushNotification(new ApplicationLayer.Notification(result.Message, NotificationType.Success));
                     StateHasChanged();
                 }
                 else
                 {
-                    NotificationsService.PushNotification(new DomainLayer.Entities.Notification(result.Message, NotificationType.Error));
+                    NotificationsService.PushNotification(new ApplicationLayer.Notification(result.Message, NotificationType.Error));
                 }
             }
             catch
             {
-                NotificationsService.PushNotification(new DomainLayer.Entities.Notification("An error occured please try again later.", NotificationType.Error));
+                NotificationsService.PushNotification(new ApplicationLayer.Notification("An error occured please try again later.", NotificationType.Error));
             }
             finally
             {

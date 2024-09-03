@@ -31,7 +31,8 @@ public class UserImageService(IOptions<AzureSettings>azureSettings, UserManager<
         
         //Upload To Azure
         var fileExtension = Path.GetExtension(updateUserImageRequest.FileName)?.ToLower();
-        var blobClient = containerClient.GetBlobClient($"{updateUserImageRequest.Username}{fileExtension}");
+        var guid = Guid.NewGuid();
+        var blobClient = containerClient.GetBlobClient($"{updateUserImageRequest.Username}-{guid}{fileExtension}");
 
         await blobClient.UploadAsync(updateUserImageRequest.ImageStream, overwrite: true);
 

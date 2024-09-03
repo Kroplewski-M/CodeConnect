@@ -1,4 +1,4 @@
-namespace DomainLayer.Entities;
+namespace ApplicationLayer;
 
 public enum NotificationType
 {

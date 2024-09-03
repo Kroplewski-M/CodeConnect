@@ -1,3 +1,4 @@
+using ApplicationLayer;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Entities;
@@ -68,15 +69,15 @@ public class EditProfileBase : ComponentBase
         try
         {
             DisableEdit = true;
-            NotificationsService.PushNotification(new DomainLayer.Entities.Notification("Updating Profile...",
+            NotificationsService.PushNotification(new ApplicationLayer.Notification("Updating Profile...",
                 NotificationType.Info));
             await UserService.UpdateUserDetails(EditProfileForm);
-            NotificationsService.PushNotification(new DomainLayer.Entities.Notification("Updated Profile Successfully!",
+            NotificationsService.PushNotification(new ApplicationLayer.Notification("Updated Profile Successfully!",
                 NotificationType.Success));
         }
         catch
         {
-            NotificationsService.PushNotification(new DomainLayer.Entities.Notification("Error while updating profile details, please try again later.",
+            NotificationsService.PushNotification(new ApplicationLayer.Notification("Error while updating profile details, please try again later.",
                 NotificationType.Error));
         }
         finally

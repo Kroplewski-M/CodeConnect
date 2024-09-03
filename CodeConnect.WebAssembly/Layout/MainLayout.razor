@@ -1,8 +1,9 @@
-﻿@using ApplicationLayer.Interfaces
+﻿@using ApplicationLayer
+@using ApplicationLayer.Interfaces
 @using DomainLayer.Entities
 @using Blazored.LocalStorage;
 @using CodeConnect.WebAssembly.Components
-@using Notification = DomainLayer.Entities.Notification
+@using Notification = ApplicationLayer.Notification
 @inherits LayoutComponentBase
 @inject NavigationManager NavManager
 @inject NotificationsService NotificationsService

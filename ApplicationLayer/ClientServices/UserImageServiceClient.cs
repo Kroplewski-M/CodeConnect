@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 namespace ApplicationLayer.ClientServices;
 
 public class UserImageServiceClient(HttpClient httpClient,ILocalStorageService localStorageService,
-    AuthenticationStateProvider authenticationStateProvider): IUserImageService
+    AuthenticationStateProvider authenticationStateProvider, IAuthenticateServiceClient authenticateServiceClient): IUserImageService
 {
     public async Task<ServiceResponse> UpdateUserImage(UpdateUserImageRequest updateUserImageRequest)
     {
@@ -27,6 +27,7 @@ public class UserImageServiceClient(HttpClient httpClient,ILocalStorageService l
         {
             await localStorageService.SetItemAsync(Constants.Tokens.AuthToken, result.Key);
             ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
+            authenticateServiceClient.NotifyStateChanged();
             return new ServiceResponse(true, "User image updated");
         }
         return new ServiceResponse(false, "An error occured, please try again later.");
