@@ -103,7 +103,7 @@
                 </div>
             </div>
             <div class="mt-5">
-                <button disabled="@DisableRegister" type="submit" class="rounded-md border-4 border-solid border-dark-supportColor px-3 py-2 text-light-primaryColor hover:bg-dark-supportColor hover:text-light-secondaryColor font-bold">Register</button>
+                <button disabled="@DisableRegister" type="submit" class="rounded-md border-4 border-solid border-dark-supportColor px-3 py-2 text-light-primaryColor hover:bg-dark-supportColor hover:text-light-secondaryColor font-bold">@(DisableRegister?"Creating account...":"Register")</button>
             </div>
             @if (RegisterErrors.Any(x => x.PropertyName == "ResponseError"))
             {

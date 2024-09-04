@@ -37,7 +37,7 @@
                 </div>
             </div>
             <div class="mt-5">
-                <button type="submit" class="rounded-md border-4 border-solid border-dark-supportColor px-3 py-2 text-light-primaryColor hover:bg-dark-supportColor hover:text-light-secondaryColor font-bold">Login</button>
+                <button disabled="@DisableLogin" type="submit" class="rounded-md border-4 border-solid border-dark-supportColor px-3 py-2 text-light-primaryColor hover:bg-dark-supportColor hover:text-light-secondaryColor font-bold">@(DisableLogin?"Trying to find you...":"Login")</button>
             </div>
             <div class="mt-5">
                 @if (LoginErrors.Any(x => x.PropertyName == "ResponseError"))
