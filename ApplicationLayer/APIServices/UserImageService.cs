@@ -47,10 +47,10 @@ public class UserImageService(IOptions<AzureSettings>azureSettings, UserManager<
             var imageUrl = imageType == Constants.ImageTypeOfUpdate.ProfileImage
                 ? user.ProfileImageUrl
                 : user.BackgroundImageUrl;
+            var fileName = Path.GetFileName(imageUrl);
             if (!string.IsNullOrEmpty(imageUrl))
             {
-                var imageExt = Path.GetExtension(imageUrl);
-                var existingBlobClient = containerClient.GetBlobClient($"{user.UserName}{imageExt}");
+                var existingBlobClient = containerClient.GetBlobClient(fileName);
                 await existingBlobClient.DeleteIfExistsAsync();
             }
     }

@@ -19,9 +19,9 @@
                         <img src="@UserDetails?.BackgroundImg" class="w-[100%] md:h-[450px] h-[300px] rounded-md mx-auto object-cover" alt=""/>
                     </div>
                     <div class="flex flex-col md:flex-row">
-                        <div class="w-[200px] md:h-[200px] h-[100px] z-[50] relative">
+                        <div class="w-[200px] md:h-[200px] h-[70px] z-[50] relative">
                             <div class="flex flex-col">
-                                <div class="relative md:h-[150px] md:h-[200px] h-[55px]">
+                                <div class="relative md:h-[150px] h-[55px]">
                                     <div class="absolute md:w-[200px] md:h-[200px] w-[100px] h-[100px] -top-[50px] md:left-[30px] left-[10px] border rounded-full">
                                         @if (IsCurrentUser)
                                         {
@@ -32,44 +32,68 @@
                                         </div>
                                     </div>
                                 </div>
-                                <p class="md:pl-[40px] pl-[5px] md:pt-[10px] dark:text-dark-supportColor/80 text-light-primaryColor/80 text-sm">Profile created: @UserDetails?.CreatedAt</p>
-                                <div class="flex w-[100px] md:mx-auto md:mt-2">
-                                    @if (!string.IsNullOrEmpty(UserDetails?.GithubLink))
+                            </div>
+                        </div>
+                        <div class="md:mt-5 md:pl-[80px]">
+                            <div>
+                                @if (IsCurrentUser)
+                                {
+                                    <button class="rounded-md border-red-800 bg-red-500 w-[150px] h-[30px] font-bold hover:bg-red-700" @onclick="ToggleShowConfirmLogout">Logout</button>
+                                }
+                                <div class="flex pt-[20px]">
+                                    <div>
+                                        <p class="font-bold md:text-4xl text-2xl dark:text-dark-supportColor text-light-primaryColor">@UserDetails?.FirstName @UserDetails?.LastName</p>
+                                    </div>
+                                    @if (IsCurrentUser)
                                     {
-                                        <div class="md:ml-5">
-                                            <a href="@UserDetails?.GithubLink" target="_blank"><GithubSVG Width="40" Height="40" Color="#333333"/></a>
-                                        </div>
+                                        <button @onclick="ToggleEditProfile" class="dark:text-dark-supportColor text-light-supportColor fa-solid fa-pen-to-square md:fa-2xl fa-xl ml-5 hover:cursor-pointer"></button>
                                     }
-                                    @if (!string.IsNullOrEmpty(UserDetails?.WebsiteLink))
-                                    {
-                                        <div class="ml-2">
-                                            <a href="@UserDetails?.WebsiteLink" target="_blank"><WebsiteSVG Width="40" Height="40" Color="#333333"/></a>
-                                        </div>
-                                    }
+                                </div>
+                                <div class="flex">
+                                    <p class="pt-[5px] font-bold text-lg dark:text-dark-supportColor/70 text-light-primaryColor/70">&#x40;@UserDetails?.UserName</p>
+                                    <div class="flex md:mt-2 ml-[10px] md:ml-[5px]">
+                                        @if (!string.IsNullOrEmpty(UserDetails?.GithubLink))
+                                        {
+                                            <div class="md:ml-5">
+                                                <a href="@UserDetails?.GithubLink" target="_blank"><GithubSVG Width="30" Height="30" Color="#333333"/></a>
+                                            </div>
+                                        }
+                                        @if (!string.IsNullOrEmpty(UserDetails?.WebsiteLink))
+                                        {
+                                            <div class="ml-2">
+                                                <a href="@UserDetails?.WebsiteLink" target="_blank"><WebsiteSVG Width="30" Height="30" Color="#333333"/></a>
+                                            </div>
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="md:mt-5 mt-10 md:pl-[80px]">
-                            @if (IsCurrentUser)
-                            {
-                                <button class="rounded-md border-red-800 bg-red-500 w-[150px] h-[30px] font-bold hover:bg-red-700" @onclick="ToggleShowConfirmLogout">Logout</button>
-                            }
-                            <div class="flex pt-[20px]">
-                                <p class="font-bold text-4xl dark:text-dark-supportColor text-light-primaryColor">@UserDetails?.FirstName @UserDetails?.LastName</p>
-                                @if (IsCurrentUser)
+                    </div>
+                    <div class="flex flex-col md:flex-row md:space-x-4 mt-5 md:mt-0">
+                        <div class="bg-dark-primaryColor/70 rounded-md p-3 md:w-[500px] md:max-h-[200px]">
+                            <h3 class="text-2xl font-semibold dark:text-dark-supportColor text-light-primaryColor">Bio</h3>
+                            <p class="dark:text-dark-supportColor/90 text-light-primaryColor/90">@(string.IsNullOrEmpty(UserDetails?.Bio) ? "Bio is looking empty..." : UserDetails?.Bio)</p>
+                        </div>
+                        <div class="p-3 bg-dark-primaryColor/70 rounded-md min min-w-[200px] max-w-[400px] mt-5 md:mt-0">
+                            <h3 class="text-2xl ml-2 font-semibold dark:text-dark-supportColor text-light-primaryColor">Interests</h3>
+                            <div class="flex flex-wrap w-[100%]">
+                                @if (false)
                                 {
-                                    <button @onclick="ToggleEditProfile" class="dark:text-dark-supportColor text-light-supportColor fa-solid fa-pen-to-square fa-2xl ml-5 hover:cursor-pointer"></button>
+                                    <p class="dark:text-dark-supportColor/80 pt-[10px] ml-2 text-light-primaryColor/90">This person has no interests... Boring.</p>
                                 }
-                            </div>
-                            <p class="pt-[5px] font-bold text-lg dark:text-dark-supportColor/70 text-light-primaryColor/70">&#x40;@UserDetails?.UserName</p>
-
-                            <div class="bg-dark-primaryColor/70 rounded-md p-3 mt-3 max-w-[400px]">
-                                <p class=" dark:text-dark-supportColor/90 text-light-primaryColor/90">@(string.IsNullOrEmpty(UserDetails?.Bio) ? "Bio is looking empty..." : UserDetails?.Bio)</p>
+                                else
+                                {
+                                    for (int i = 0; i < 13; i++)
+                                    {
+                                        <div class="rounded-md bg-dark-primaryColor/70 ml-2 mt-[10px]">
+                                            <p class="p-[5px] font-bold text-light-primaryColor/70">Interesting</p>
+                                        </div>
+                                    }
+                                }
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
             <div class="w-[85%] max-w-[1000px] mt-5 mx-auto relative">
                 <p class="text-4xl font-bold dark:text-dark-supportColor text-light-supportColor">Recent Posts</p>
@@ -79,7 +103,6 @@
                         <EmptySVG Width="100" Height="100" Color="555555"></EmptySVG>
                     </div>
                     <p>man its empty in here, @(IsCurrentUser ? "just make a post already" : "this user hasn't posted yet")</p>
-
                 </div>
             </div>
             @if (ShowConfirmLogout)
@@ -92,7 +115,7 @@
             }
             @if (ShowUpdateImage)
             {
-                <UpdateImage UpdateOfImageType="UpdateImageType" Cancel="ToggleEditImage"/>
+                <UpdateImage UpdateOfImageType="UpdateImageType" Cancel="ToggleEditImage"/> 
             }
         </Authorized>
     </AuthorizeView>
