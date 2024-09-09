@@ -75,7 +75,13 @@
                             <p class="dark:text-dark-supportColor/90 text-light-primaryColor/90">@(string.IsNullOrEmpty(UserDetails?.Bio) ? "Bio is looking empty..." : UserDetails?.Bio)</p>
                         </div>
                         <div class="p-3 bg-dark-primaryColor/70 rounded-md min min-w-[200px] lg:max-w-[400px] md:max-w-[500px] mt-5 lg:mt-0 md:mx-auto ">
-                            <h3 class="text-2xl ml-2 font-semibold dark:text-dark-supportColor text-light-primaryColor">Interests</h3>
+                            <div class="flex">
+                                <h3 class="text-2xl ml-2 font-semibold dark:text-dark-supportColor text-light-primaryColor">Interests</h3>
+                                @if (IsCurrentUser)
+                                {
+                                    <button class="w-[100px] h-[25px] text-dark-secondaryColor font-bold rounded ml-auto">Edit</button>
+                                }
+                            </div>
                             <div class="flex flex-wrap w-[100%]">
                                 @if (false)
                                 {

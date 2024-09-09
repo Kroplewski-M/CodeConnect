@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using ApplicationLayer.ExtensionClasses;
 using DomainLayer.Constants;
+using DomainLayer.DbEnts;
 
 namespace ApplicationLayer.ClientServices;
 
