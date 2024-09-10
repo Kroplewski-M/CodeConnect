@@ -30,4 +30,9 @@ public class UserServiceClient(HttpClient httpClient,ILocalStorageService localS
         navigationManager.NavigateTo("UserNotFound");
         return null;
     }
+
+    public Task<UserInterests> GetUserInterests(string username)
+    {
+        throw new NotImplementedException();
+    }
 }

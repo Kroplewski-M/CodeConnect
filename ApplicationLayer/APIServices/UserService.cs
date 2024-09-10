@@ -1,13 +1,17 @@
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
+using DomainLayer.DbEnts;
 using DomainLayer.Entities;
 using DomainLayer.Entities.Auth;
+using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using UserInterests = ApplicationLayer.DTO_s.UserInterests;
 
 namespace ApplicationLayer.APIServices;
 
-public class UserService(UserManager<ApplicationUser>userManager) : IUserService
+public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbContext context) : IUserService
 {
     public async Task<ServiceResponse> UpdateUserDetails(EditProfileForm editProfileForm)
     {
@@ -36,5 +40,18 @@ public class UserService(UserManager<ApplicationUser>userManager) : IUserService
         return new UserDetails(user.FirstName ?? "", user.LastName ?? "", user.UserName ?? "", user.Email ?? "", user.ProfileImageUrl ?? "",
             user.BackgroundImageUrl ?? "", user.GithubLink ?? "",
             user.WebsiteLink ?? "", user.DOB, user.CreatedAt,user.Bio ?? "");
+    }
+
+    public async Task<UserInterests> GetUserInterests(string username)
+    {
+        var user = await userManager.FindByNameAsync(username);
+        if (user != null)
+        {
+            var interests = context.UserInterests.Include(x => x.TechInterest)
+                .Where(x => x.UserId == user.Id)
+                .Select(x=> x.TechInterest).ToList();
+            return new UserInterests(true, "user interests fetched successfully", interests.Any() ? interests : null);
+        }
+        return new UserInterests(false,"user not found", null);
     }
 }

@@ -77,4 +77,11 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
         }
         return BadRequest("User not found or image is null");
     }
+
+    [HttpPost("GetUserInterests")]
+    public async Task<IActionResult> GetUserInterests([FromBody]string username)
+    {
+        var interests = await userService.GetUserInterests(username);
+        return Ok(interests);
+    }
 }
