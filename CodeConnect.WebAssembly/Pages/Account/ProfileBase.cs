@@ -48,7 +48,8 @@ public class ProfileBase : ComponentBase
 
                 if (UserDetails != null)
                 {
-                    UserInterests = await UserService.GetUserInterests(UserDetails.UserName);
+                    var interests = await UserService.GetUserInterests(UserDetails.UserName);
+                    UserInterests = new UserInterestsDto(true,"",interests.Interests?? new List<TechInterestsDto>());
                     FoundUser = true;
                 }
                 StateHasChanged();

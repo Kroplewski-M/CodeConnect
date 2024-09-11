@@ -74,7 +74,7 @@
                             <h3 class="text-2xl font-semibold dark:text-dark-supportColor text-light-primaryColor">Bio</h3>
                             <p class="dark:text-dark-supportColor/90 text-light-primaryColor/90">@(string.IsNullOrEmpty(UserDetails?.Bio) ? "Bio is looking empty..." : UserDetails?.Bio)</p>
                         </div>
-                        <div class="p-3 bg-dark-primaryColor/70 rounded-md min min-w-[200px] lg:max-w-[400px] md:max-w-[500px] mt-5 lg:mt-0 md:mx-auto ">
+                        <div class="p-3 bg-dark-primaryColor/70 rounded-md min min-w-[300px] lg:max-w-[400px] md:max-w-[500px] mt-5 lg:mt-0 md:mx-auto ">
                             <div class="flex">
                                 <h3 class="text-2xl ml-2 font-semibold dark:text-dark-supportColor text-light-primaryColor">Interests</h3>
                                 @if (IsCurrentUser)
@@ -83,16 +83,16 @@
                                 }
                             </div>
                             <div class="flex flex-wrap w-[100%]">
-                                @if (UserInterests != null && UserInterests.Interests == null)
+                                @if (UserInterests == null || (!UserInterests.Interests.Any()))
                                 {
                                     <p class="dark:text-dark-supportColor/80 pt-[10px] text-light-primaryColor/90 ">This person has no interests... Boring.</p>
                                 }
                                 else
                                 {
-                                    for (int i = 0; i < 13; i++)
+                                    foreach(var interest in UserInterests.Interests)
                                     {
                                         <div class="rounded-md bg-dark-primaryColor/70 ml-2 mt-[10px]">
-                                            <p class="p-[5px] font-bold text-light-primaryColor/70">Interesting</p>
+                                            <p class="p-[5px] font-bold text-light-primaryColor/70">@interest.Name</p>
                                         </div>
                                     }
                                 }

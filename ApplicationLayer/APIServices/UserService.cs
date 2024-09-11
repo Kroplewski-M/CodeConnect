@@ -48,7 +48,9 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
         {
             var interests = context.UserInterests.Include(x => x.TechInterest)
                 .Where(x => x.UserId == user.Id)
-                .Select(x=> x.TechInterest).ToList();
+                .Select(x=> x.TechInterest).ToList()
+                .Select(x=> new TechInterestsDto(x.Id,x.InterestId,x.Name))
+                .ToList();
             return new UserInterestsDto(true, "user interests fetched successfully", interests.Any() ? interests : null);
         }
         return new UserInterestsDto(false,"user not found", null);

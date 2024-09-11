@@ -1,5 +1,5 @@
 /*
-! tailwindcss v3.4.10 | MIT License | https://tailwindcss.com
+! tailwindcss v3.4.11 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -663,6 +663,10 @@ video {
   margin-left: 10px;
 }
 
+.ml-auto {
+  margin-left: auto;
+}
+
 .mr-4 {
   margin-right: 1rem;
 }
@@ -703,10 +707,6 @@ video {
   margin-top: 10px;
 }
 
-.ml-auto {
-  margin-left: auto;
-}
-
 .block {
   display: block;
 }
@@ -743,16 +743,16 @@ video {
   height: 200px;
 }
 
+.h-\[25px\] {
+  height: 25px;
+}
+
 .h-\[300px\] {
   height: 300px;
 }
 
 .h-\[30px\] {
   height: 30px;
-}
-
-.h-\[35px\] {
-  height: 35px;
 }
 
 .h-\[55px\] {
@@ -769,10 +769,6 @@ video {
 
 .h-screen {
   height: 100vh;
-}
-
-.h-\[25px\] {
-  height: 25px;
 }
 
 .min-h-screen {
@@ -833,6 +829,10 @@ video {
 
 .min-w-\[200px\] {
   min-width: 200px;
+}
+
+.min-w-\[300px\] {
+  min-width: 300px;
 }
 
 .max-w-\[1000px\] {
@@ -1098,10 +1098,6 @@ video {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-}
-
-.bg-light-primaryColor\/70 {
-  background-color: rgb(248 249 250 / 0.7);
 }
 
 .object-cover {
@@ -1412,10 +1408,6 @@ video {
 
 .hover\:bg-transparent:hover {
   background-color: transparent;
-}
-
-.hover\:bg-light-primaryColor\/80:hover {
-  background-color: rgb(248 249 250 / 0.8);
 }
 
 .hover\:text-light-secondaryColor:hover {
