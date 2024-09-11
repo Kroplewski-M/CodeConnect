@@ -20,6 +20,8 @@ public class ProfileBase : ComponentBase
     protected bool IsCurrentUser = false;
     protected bool FoundUser = false;
     protected UserDetails? UserDetails = null;
+    protected UserInterestsDto? UserInterests { get; set; }
+
     [CascadingParameter]
     private Task<AuthenticationState>? AuthenticationState { get; set; }
 
@@ -43,8 +45,12 @@ public class ProfileBase : ComponentBase
                     IsCurrentUser = false;
                     UserDetails = await UserService.GetUserDetails(Username ?? "");
                 }
+
                 if (UserDetails != null)
+                {
+                    UserInterests = await UserService.GetUserInterests(UserDetails.UserName);
                     FoundUser = true;
+                }
                 StateHasChanged();
             }
         }

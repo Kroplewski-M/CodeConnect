@@ -7,7 +7,6 @@ using DomainLayer.Entities.Auth;
 using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using UserInterests = ApplicationLayer.DTO_s.UserInterests;
 
 namespace ApplicationLayer.APIServices;
 
@@ -42,7 +41,7 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
             user.WebsiteLink ?? "", user.DOB, user.CreatedAt,user.Bio ?? "");
     }
 
-    public async Task<UserInterests> GetUserInterests(string username)
+    public async Task<UserInterestsDto> GetUserInterests(string username)
     {
         var user = await userManager.FindByNameAsync(username);
         if (user != null)
@@ -50,8 +49,28 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
             var interests = context.UserInterests.Include(x => x.TechInterest)
                 .Where(x => x.UserId == user.Id)
                 .Select(x=> x.TechInterest).ToList();
-            return new UserInterests(true, "user interests fetched successfully", interests.Any() ? interests : null);
+            return new UserInterestsDto(true, "user interests fetched successfully", interests.Any() ? interests : null);
         }
-        return new UserInterests(false,"user not found", null);
+        return new UserInterestsDto(false,"user not found", null);
+    }
+
+    public async Task<ServiceResponse> UpdateUserInterests(string username, List<UserInterestsDto> userInterests)
+    {
+        var user = await userManager.FindByNameAsync(username);
+        if (user != null)
+        {
+            var interests = context.UserInterests.Include(x => x.TechInterest)
+                .Where(x => x.UserId == user.Id).ToList();
+            context.UserInterests.RemoveRange(interests);
+            var newInterests = interests.Select(x => new UserInterests
+            {
+                UserId = user.Id,
+                TechInterestId = x.TechInterestId,
+            });
+            context.UserInterests.AddRange(newInterests);
+            await context.SaveChangesAsync();
+            return new ServiceResponse(true, "Interests updated successfully");
+        }
+        return new ServiceResponse(false, "User not found");
     }
 }

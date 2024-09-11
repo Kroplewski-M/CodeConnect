@@ -2,6 +2,7 @@ using ApplicationLayer.APIServices;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
+using DomainLayer.DbEnts;
 using DomainLayer.Entities;
 using DomainLayer.Entities.Auth;
 using Microsoft.AspNetCore.Authorization;
@@ -81,7 +82,24 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
     [HttpPost("GetUserInterests")]
     public async Task<IActionResult> GetUserInterests([FromBody]string username)
     {
-        var interests = await userService.GetUserInterests(username);
-        return Ok(interests);
+        var response = await userService.GetUserInterests(username);
+        if(response.flag)
+            return Ok(new UserInterestsDto(response.flag, response.message, response.Interests));
+        return BadRequest(response);
+    }
+
+    [Authorize]
+    [HttpPost("UpdateUserInterests")]
+    public async Task<IActionResult> UpdateUserInterests(List<UserInterestsDto> interests)
+    {
+        var username = User.FindFirst(Constants.ClaimTypes.UserName)?.Value;
+        if (username != null)
+        {
+            var response = await userService.UpdateUserInterests(username, interests);
+            if(response.Flag)
+                return Ok(response);
+            return BadRequest(response);
+        }
+        return Unauthorized(new ServiceResponse(false,"User not found"));
     }
 }

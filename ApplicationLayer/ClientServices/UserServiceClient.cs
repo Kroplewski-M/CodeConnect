@@ -26,12 +26,25 @@ public class UserServiceClient(HttpClient httpClient,ILocalStorageService localS
     {
         var response = await httpClient.PostAsJsonAsync("/api/User/GetUserDetails", username);
         if(response.IsSuccessStatusCode)
-            return await response.Content.ReadFromJsonAsync<UserDetails>();
+            return await response.Content.ReadFromJsonAsync<UserDetails?>();
         navigationManager.NavigateTo("UserNotFound");
         return null;
     }
 
-    public Task<UserInterests> GetUserInterests(string username)
+    public async Task<UserInterestsDto> GetUserInterests(string username)
+    {
+        var response = await httpClient.PostAsJsonAsync("/api/User/GetUserInterests", username);
+        if (response.IsSuccessStatusCode)
+        {
+            var result = await response.Content.ReadFromJsonAsync<UserInterestsDto>();
+            if(result != null)
+                return result;
+            return new UserInterestsDto(false, "failed to fetch interests", null);
+        }
+        return new UserInterestsDto(false, "failed to fetch interests", null);
+    }
+
+    public Task<ServiceResponse> UpdateUserInterests(string username, List<UserInterestsDto> userInterests)
     {
         throw new NotImplementedException();
     }
