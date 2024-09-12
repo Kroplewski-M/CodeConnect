@@ -7,7 +7,7 @@ using FluentValidation.Results;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace CodeConnect.WebAssembly.Components;
+namespace CodeConnect.WebAssembly.Components.Profile;
 
 public class EditProfileBase : ComponentBase
 {

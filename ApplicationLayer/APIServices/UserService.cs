@@ -68,8 +68,11 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
             {
                 UserId = user.Id,
                 TechInterestId = x.TechInterestId,
-            });
-            context.UserInterests.AddRange(newInterests);
+            }).ToList();
+            if (newInterests.Any())
+            {
+                context.UserInterests.AddRange(newInterests);
+            }
             await context.SaveChangesAsync();
             return new ServiceResponse(true, "Interests updated successfully");
         }
