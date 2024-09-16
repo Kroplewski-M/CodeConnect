@@ -80,7 +80,7 @@
                                 <h3 class="text-2xl ml-2 font-semibold dark:text-dark-supportColor text-light-primaryColor">Interests</h3>
                                 @if (IsCurrentUser)
                                 {
-                                    <button class="w-[100px] h-[25px] text-dark-secondaryColor font-bold rounded ml-auto">Edit</button>
+                                    <button @onclick="ToggleEditUserInterests" class="w-[100px] h-[25px] text-dark-secondaryColor font-bold rounded ml-auto">Edit</button>
                                 }
                             </div>
                             <div class="flex flex-wrap w-[100%]">
@@ -93,7 +93,7 @@
                                     foreach(var interest in UserInterests.Interests)
                                     {
                                         <div class="rounded-md bg-dark-primaryColor/70 ml-2 mt-[10px]">
-                                            <p class="p-[5px] font-bold text-light-primaryColor/70">@interest.Name</p>
+                                            <p class="p-[5px] font-bold text-light-primaryColor/70">@interest.TechName</p>
                                         </div>
                                     }
                                 }
@@ -123,6 +123,10 @@
             @if (ShowUpdateImage)
             {
                 <UpdateImage UpdateOfImageType="UpdateImageType" Cancel="ToggleEditImage"/> 
+            }
+            @if (EditUserInterests)
+            {
+                <EditUserInterests Cancel="ToggleEditUserInterests" />
             }
         </Authorized>
     </AuthorizeView>

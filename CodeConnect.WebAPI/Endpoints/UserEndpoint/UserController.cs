@@ -102,4 +102,10 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
         }
         return Unauthorized(new ServiceResponse(false,"User not found"));
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllInterests()
+    {
+        return Ok();   
+    }
 }

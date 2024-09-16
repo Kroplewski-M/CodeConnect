@@ -79,4 +79,11 @@ public class ProfileBase : ComponentBase
     {
         ShowUpdateImage = !ShowUpdateImage;
     }
+
+    protected bool EditUserInterests = false;
+
+    protected void ToggleEditUserInterests()
+    {
+        EditUserInterests = !EditUserInterests;
+    }
 }
