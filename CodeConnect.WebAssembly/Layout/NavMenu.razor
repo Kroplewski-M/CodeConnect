@@ -86,6 +86,10 @@
                 _userDetails = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
                 await InvokeAsync(StateHasChanged);
             }
+            else
+            {
+                NavigationManager.NavigateTo("/");
+            }
         });
     }
     public void Dispose()

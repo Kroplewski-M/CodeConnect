@@ -1,15 +1,13 @@
 ﻿@using ApplicationLayer
 @using ApplicationLayer.Interfaces
-@using DomainLayer.Entities
 @using Blazored.LocalStorage;
-@using CodeConnect.WebAssembly.Components
 @using Notification = ApplicationLayer.Notification
+@using CodeConnect.WebAssembly.Components.Profile
 @inherits LayoutComponentBase
 @inject NavigationManager NavManager
 @inject NotificationsService NotificationsService
 @inject IJSRuntime Js
 @inject ILocalStorageService LocalStorageService
-@inject IAuthenticateServiceClient AuthenticateServiceClient
 
 <div class="bg-light-primaryColor dark:bg-dark-primaryColor min-h-screen flex @(!IsNonNavPage()?"flex-row":"flex-col") pb-7">
     @if (!IsNonNavPage())
@@ -27,7 +25,7 @@
     <main class="px-4 z-[200] flex-grow pt-6 mt-5">
         <span @onclick="() => SetDarkTheme(!_darkTheme)" class="fa-solid @(_darkTheme ? "fa-sun text-light-primaryColor" : "fa-moon text-dark-primaryColor") fixed top-[25px] right-5 cursor-pointer fa-xl"></span>
         <div class="absolute top-10 right-10 flex flex-col space-y-2 z-[500]">
-            @foreach (var notification in Notifications)
+            @foreach (var notification in _notifications)
             {
                 <Notification Notif="notification" />
             }
@@ -37,12 +35,12 @@
 </div>
 
 @code{
-    public List<Notification> Notifications = [];
+    private List<Notification> _notifications = [];
     private bool _darkTheme = false;
     protected override async Task OnInitializedAsync()
     {
         NotificationsService.OnChange += UpdateNotifications;
-        Notifications = NotificationsService.GetNotification();
+        _notifications = NotificationsService.GetNotification();
         
         var darkTheme = await LocalStorageService.GetItemAsync<bool>("DarkTheme");
         if (darkTheme)
@@ -59,7 +57,7 @@
 
     private void UpdateNotifications()
     {
-        Notifications = NotificationsService.GetNotification();
+        _notifications = NotificationsService.GetNotification();
         StateHasChanged();
     }
 
