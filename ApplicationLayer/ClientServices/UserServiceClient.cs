@@ -48,4 +48,9 @@ public class UserServiceClient(HttpClient httpClient,ILocalStorageService localS
     {
         throw new NotImplementedException();
     }
+
+    public Task<TechInterestsDto> GetAllInterests()
+    {
+        throw new NotImplementedException();
+    }
 }

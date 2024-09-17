@@ -1,6 +1,6 @@
 @using DomainLayer.Constants
 @inherits UpdateImageBase
-<div class="top-0 left-0 absolute z-[300] w-[100vw] h-[100vh] backdrop-blur-md grid place-content-center">
+<div class="top-0 left-0 fixed z-[300] w-[100vw] h-[100vh] backdrop-blur-md grid place-content-center">
     <div class="shadow-xl md:w-[500px] w-[90%]  mt-5 relative bg-dark-secondaryColor p-5 rounded-md -mt-16">
         <button @onclick="Cancel" class="rounded-md border-4 border-solid border-light-secondaryColor px-3 py-2 text-light-supportColor dark:text-dark-supportColor/90 hover:bg-dark-secondaryColor" ><i class="fa-solid fa-angles-left"></i> Back</button>
         <h3 class="font-bold dark:text-dark-supportColor text-light-primaryColor text-4xl mt-4 text-center"> Update @(UpdateOfImageType == Constants.ImageTypeOfUpdate.ProfileImage ? "Profile" : "Background") Image</h3>

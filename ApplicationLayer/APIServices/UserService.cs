@@ -46,10 +46,11 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
         var user = await userManager.FindByNameAsync(username);
         if (user != null)
         {
-            var interests = context.UserInterests.Include(x => x.TechInterest)
+            var interests = context.UserInterests.Where(x=> x.TechInterest != null)
+                .Include(x => x.TechInterest).Include(x=>x.TechInterest.Interest)
                 .Where(x => x.UserId == user.Id)
-                .Select(x=> x.TechInterest).ToList()
-                .Select(x=> new TechInterestsDto(x.Id,x.InterestId,x.Name))
+                .ToList()
+                .Select(x=> new TechInterestsDto(x.Id,x.TechInterest.Interest.Id,x.TechInterest.Interest.Name,x.TechInterest.Name))
                 .ToList();
             return new UserInterestsDto(true, "user interests fetched successfully", interests.Any() ? interests : null);
         }
@@ -77,5 +78,10 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
             return new ServiceResponse(true, "Interests updated successfully");
         }
         return new ServiceResponse(false, "User not found");
+    }
+
+    public Task<TechInterestsDto> GetAllInterests()
+    {
+        throw new NotImplementedException();
     }
 }
