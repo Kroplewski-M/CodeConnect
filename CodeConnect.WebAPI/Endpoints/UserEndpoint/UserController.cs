@@ -106,6 +106,9 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
     [HttpGet]
     public async Task<IActionResult> GetAllInterests()
     {
-        return Ok();   
+        var interests = await userService.GetAllInterests();
+        if (!interests.Any())
+            return BadRequest("Failed to fetch interests");
+        return Ok(await userService.GetAllInterests());   
     }
 }

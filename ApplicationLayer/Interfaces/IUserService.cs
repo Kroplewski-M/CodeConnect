@@ -9,6 +9,6 @@ public interface IUserService
     public Task<UserDetails?> GetUserDetails(string username);
     public Task<UserInterestsDto> GetUserInterests(string username);
     public Task<ServiceResponse> UpdateUserInterests(string username,List<UserInterestsDto> userInterests);
-    public Task<TechInterestsDto> GetAllInterests();
+    public Task<List<TechInterestsDto>> GetAllInterests();
 
 }

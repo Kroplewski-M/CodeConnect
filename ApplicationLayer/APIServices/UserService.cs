@@ -80,8 +80,14 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
         return new ServiceResponse(false, "User not found");
     }
 
-    public Task<TechInterestsDto> GetAllInterests()
+    public async Task<List<TechInterestsDto>> GetAllInterests()
     {
-        throw new NotImplementedException();
+        var interests = await context.TechInterests
+            .Include(x => x.Interest)
+            .ToListAsync();
+
+        return interests
+            .Select(x => new TechInterestsDto(x.Id, x.Interest.Id, x.Interest.Name, x.Name))
+            .ToList();
     }
 }

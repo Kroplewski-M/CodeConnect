@@ -49,7 +49,7 @@ public class UserServiceClient(HttpClient httpClient,ILocalStorageService localS
         throw new NotImplementedException();
     }
 
-    public Task<TechInterestsDto> GetAllInterests()
+    public Task<List<TechInterestsDto>> GetAllInterests()
     {
         throw new NotImplementedException();
     }
