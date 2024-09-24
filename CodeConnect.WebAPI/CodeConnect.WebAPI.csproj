@@ -27,8 +27,4 @@
       <ProjectReference Include="..\InfrastructureLayer\InfrastructureLayer.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <None Include="appsettings.json" />
-    </ItemGroup>
-
 </Project>

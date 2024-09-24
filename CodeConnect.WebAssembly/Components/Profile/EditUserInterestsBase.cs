@@ -2,19 +2,20 @@ using ApplicationLayer;
 using ApplicationLayer.APIServices;
 using ApplicationLayer.ClientServices;
 using ApplicationLayer.DTO_s;
+using ApplicationLayer.Interfaces;
 using Microsoft.AspNetCore.Components;
 
 namespace CodeConnect.WebAssembly.Components.Profile;
 
 public class EditUserInterestsBase : ComponentBase
 {
+    [Inject]
+    public IUserService UserService { get; set; }
     [Parameter]
     public EventCallback Cancel { get; set; } 
     [Parameter]
     public UserInterestsDto? CurrentUserInterests { get; set; }
     
-    [Inject]
-    public UserServiceClient UserService { get; set; }
     [Inject]
     public NotificationsService NotificationsService { get; set; }
     public List<TechInterestsDto> AllTechInterests { get; set; }
