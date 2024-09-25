@@ -1,9 +1,9 @@
 @CodeConnect.WebAPI_HostAddress = https://localhost:7124
 
-POST {{CodeConnect.WebAPI_HostAddress}}/api/user/getuserdetails
+GET https://localhost:7124/api/user/GetAllInterests
 Accept: application/json
 Content-Type: application/json
-Authorization: bearer 
+Authorization: "" 
 
 "MatK"
 ###

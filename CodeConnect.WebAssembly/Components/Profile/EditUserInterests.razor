@@ -4,6 +4,24 @@
     <div class="shadow-xl md:w-[500px] w-[90%]  mt-5 relative bg-dark-secondaryColor p-5 rounded-md">
         <button @onclick="Cancel" class="rounded-md border-4 border-solid border-light-secondaryColor px-3 py-2 text-light-supportColor dark:text-dark-supportColor/90 hover:bg-dark-secondaryColor" ><i class="fa-solid fa-angles-left"></i> Back</button>
         <h3 class="font-bold dark:text-dark-supportColor text-light-primaryColor text-4xl mt-4 text-center">Edit Interests</h3>
-
+        @if (fetchingInterests)
+        {
+            <p class="animate-pulse">loading...</p>
+        }
+        else
+        {
+            <div class="flex flex-row flex-nowrap overflow-y-scroll mt-[10px]">
+                @foreach (var interest in TechTypes)
+                {
+                    <div @onclick="()=>ChangeTechType(interest)" class="bg-light-primaryColor hover:cursor-pointer hover:bg-light-primaryColor/70 rounded-md p-[5px] flex mr-[5px]">
+                        <p class="font-semibold flex self-center">@interest</p>
+                    </div>
+                }
+            </div>
+            @foreach (var interest in AllTechInterests.Where(x => x.InterestType == SelectedTechType))
+            {
+                <p>@interest.TechName</p>
+            }
+        }
     </div>
 </div>

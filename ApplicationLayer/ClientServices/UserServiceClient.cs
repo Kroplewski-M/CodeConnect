@@ -49,8 +49,9 @@ public class UserServiceClient(HttpClient httpClient,ILocalStorageService localS
         throw new NotImplementedException();
     }
 
-    public Task<List<TechInterestsDto>> GetAllInterests()
+    public async Task<List<TechInterestsDto>> GetAllInterests()
     {
-        throw new NotImplementedException();
+        var response = await httpClient.GetFromJsonAsync<List<TechInterestsDto>>("api/User/GetAllInterests");
+        return response ?? new List<TechInterestsDto>();
     }
 }

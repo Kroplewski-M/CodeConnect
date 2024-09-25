@@ -103,7 +103,7 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
         return Unauthorized(new ServiceResponse(false,"User not found"));
     }
 
-    [HttpGet]
+    [HttpGet("GetAllInterests")]
     public async Task<IActionResult> GetAllInterests()
     {
         var interests = await userService.GetAllInterests();
