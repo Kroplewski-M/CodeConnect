@@ -7,10 +7,12 @@ using DomainLayer.Entities.Auth;
 using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace ApplicationLayer.APIServices;
 
-public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbContext context) : IUserService
+public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbContext context,
+    IMemoryCache memoryCache) : IUserService
 {
     public async Task<ServiceResponse> UpdateUserDetails(EditProfileForm editProfileForm)
     {
@@ -82,12 +84,17 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
 
     public async Task<List<TechInterestsDto>> GetAllInterests()
     {
-        var interests = await context.TechInterests
-            .Include(x => x.Interest)
-            .ToListAsync();
-
-        return interests
-            .Select(x => new TechInterestsDto(x.Id, x.Interest.Id, x.Interest.Name, x.Name))
-            .ToList();
+        var cacheKey = Constants.CacheKeys.AllInterests;
+        if (!memoryCache.TryGetValue(cacheKey, out List<TechInterestsDto> techInterests))
+        {
+            var interests = await context.TechInterests
+                .Include(x => x.Interest)
+                .ToListAsync();
+            techInterests = interests
+                .Select(x => new TechInterestsDto(x.Id, x.Interest.Id, x.Interest.Name, x.Name))
+                .ToList();
+            memoryCache.Set(cacheKey, techInterests, TimeSpan.FromHours(24));
+        }
+        return techInterests;
     }
 }

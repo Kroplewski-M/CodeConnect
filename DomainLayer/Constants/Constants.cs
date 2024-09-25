@@ -33,6 +33,11 @@ public static class Constants
         public const string ProfileImg = "images/profileImg.jpg";
         public const string BackgroundImg = "images/background.jpg";
     }
+
+    public static class CacheKeys
+    {
+        public const string AllInterests = "9ebeec5c-ba6d-4b03-AllInterests-4a94e2e2c15a";
+    }
     public enum ImageTypeOfUpdate
     {
         ProfileImage,
