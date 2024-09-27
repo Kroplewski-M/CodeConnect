@@ -1,3 +1,4 @@
+@using DomainLayer.DbEnts
 @inherits EditUserInterestsBase
 
 <div class="top-0 left-0 fixed z-[300] w-[100vw] h-[100vh] backdrop-blur-md grid place-content-center">
@@ -18,10 +19,30 @@
                     </div>
                 }
             </div>
-            @foreach (var interest in AllTechInterests.Where(x => x.InterestType == SelectedTechType))
-            {
-                <p>@interest.TechName</p>
-            }
+            <div>
+                <h3 class="font-bold text-light-primaryColor mt-5">Currently Selected (Max 10):</h3>
+                @if (!CurrentUserInterests!.Interests!.Any())
+                {
+                    <p class="text-light-primaryColor/60">none..</p>
+                }
+                else
+                {
+                    <div class="flex flex-wrap mt-[5px]">
+                        @foreach (var interest in CurrentUserInterests.Interests!)
+                        {
+                            <p @onclick="()=> RemoveInterest(interest)" class="p-[5px] mb-[5px] bg-light-primaryColor/80 hover:cursor-pointer hover:bg-light-primaryColor/90 rounded-md mr-[5px]">@interest.TechName</p>
+                        }
+                    </div>
+                }
+            </div>
+            <h3 class="font-bold text-light-primaryColor mt-5">@SelectedTechType</h3>
+            <div class="flex flex-wrap mt-[5px]">
+                @foreach (var interest in AllTechInterests.Where(x => x.InterestType == SelectedTechType && !CurrentUserInterests.Interests!.Contains(x)))
+                {
+                    <p @onclick="()=> AddInterest(interest)" class="p-[5px] mb-[5px] bg-light-primaryColor/80 hover:cursor-pointer hover:bg-light-primaryColor/90 rounded-md mr-[5px]">@interest.TechName</p>
+                }
+            </div>
+            <button type="submit" class="rounded-md px-3 py-2 text-light-supportColor dark:text-dark-supportColor/90 bg-green-700 hover:bg-green-800">Save</button>
         }
     </div>
 </div>

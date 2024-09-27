@@ -711,12 +711,16 @@ video {
   margin-top: 10px;
 }
 
-.block {
-  display: block;
+.mt-\[5px\] {
+  margin-top: 5px;
 }
 
-.inline-block {
-  display: inline-block;
+.mb-\[5px\] {
+  margin-bottom: 5px;
+}
+
+.block {
+  display: block;
 }
 
 .flex {
@@ -958,16 +962,8 @@ video {
   align-self: center;
 }
 
-.overflow-x-auto {
-  overflow-x: auto;
-}
-
 .overflow-y-auto {
   overflow-y: auto;
-}
-
-.overflow-x-scroll {
-  overflow-x: scroll;
 }
 
 .overflow-y-scroll {
@@ -1128,6 +1124,14 @@ video {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.bg-light-primaryColor\/70 {
+  background-color: rgb(248 249 250 / 0.7);
+}
+
+.bg-light-primaryColor\/80 {
+  background-color: rgb(248 249 250 / 0.8);
 }
 
 .object-cover {
@@ -1353,6 +1357,14 @@ video {
   color: rgb(153 27 27 / var(--tw-text-opacity));
 }
 
+.text-light-primaryColor\/50 {
+  color: rgb(248 249 250 / 0.5);
+}
+
+.text-light-primaryColor\/60 {
+  color: rgb(248 249 250 / 0.6);
+}
+
 .opacity-0 {
   opacity: 0;
 }
@@ -1431,6 +1443,10 @@ video {
   background-color: rgb(22 101 52 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-light-primaryColor\/70:hover {
+  background-color: rgb(248 249 250 / 0.7);
+}
+
 .hover\:bg-red-700:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(185 28 28 / var(--tw-bg-opacity));
@@ -1440,8 +1456,12 @@ video {
   background-color: transparent;
 }
 
-.hover\:bg-light-primaryColor\/70:hover {
-  background-color: rgb(248 249 250 / 0.7);
+.hover\:bg-light-primaryColor\/60:hover {
+  background-color: rgb(248 249 250 / 0.6);
+}
+
+.hover\:bg-light-primaryColor\/90:hover {
+  background-color: rgb(248 249 250 / 0.9);
 }
 
 .hover\:text-light-secondaryColor:hover {

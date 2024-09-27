@@ -13,9 +13,9 @@ public class EditUserInterestsBase : ComponentBase
     [Inject]
     public IUserService UserService { get; set; }
     [Parameter]
-    public EventCallback Cancel { get; set; } 
-    [Parameter]
-    public UserInterestsDto? CurrentUserInterests { get; set; }
+    public EventCallback Cancel { get; set; }
+
+    [Parameter] public UserInterestsDto CurrentUserInterests { get; set; }
     
     [Inject]
     public NotificationsService NotificationsService { get; set; }
@@ -48,9 +48,23 @@ public class EditUserInterestsBase : ComponentBase
         SelectedTechType = TechTypes.FirstOrDefault();
     }
 
+    protected void AddInterest(TechInterestsDto interest)
+    {
+        if (CurrentUserInterests.Interests.Count < 10)
+        {
+            CurrentUserInterests.Interests.Add(interest);
+            StateHasChanged();
+        }
+    }
     protected void ChangeTechType(string selectedTechType)
     {
         SelectedTechType = selectedTechType;
+        StateHasChanged();
+    }
+
+    protected void RemoveInterest(TechInterestsDto interest)
+    {
+        CurrentUserInterests.Interests.Remove(interest);
         StateHasChanged();
     }
 }
