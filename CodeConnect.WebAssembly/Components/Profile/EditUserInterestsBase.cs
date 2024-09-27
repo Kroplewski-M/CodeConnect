@@ -11,19 +11,20 @@ namespace CodeConnect.WebAssembly.Components.Profile;
 public class EditUserInterestsBase : ComponentBase
 {
     [Inject]
-    public IUserService UserService { get; set; }
+    public required IUserService UserService { get; set; }
     [Parameter]
     public EventCallback Cancel { get; set; }
 
-    [Parameter] public UserInterestsDto CurrentUserInterests { get; set; }
+    [Parameter] public UserInterestsDto CurrentUserInterests { get; set; } = null!;
     
     [Inject]
-    public NotificationsService NotificationsService { get; set; }
-    protected List<TechInterestsDto> AllTechInterests { get; set; }
-    protected List<string>TechTypes { get; set; } = new List<string>();
+    public required NotificationsService NotificationsService { get; set; }
+
+    protected List<TechInterestsDto> AllTechInterests { get; set; } = new List<TechInterestsDto>();
+    protected List<string> TechTypes { get; set; } = new List<string?>();
     
-    protected bool fetchingInterests = true;
-    protected string SelectedTechType { get; set; } = string.Empty;
+    protected bool FetchingInterests = true;
+    protected string? SelectedTechType { get; private set; } = string.Empty;
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
@@ -42,7 +43,7 @@ public class EditUserInterestsBase : ComponentBase
         }
         finally
         {
-            fetchingInterests = false;
+            FetchingInterests = false;
         }
         TechTypes = AllTechInterests.Select(x=>x.InterestType).Distinct().ToList();
         SelectedTechType = TechTypes.FirstOrDefault();
@@ -50,13 +51,13 @@ public class EditUserInterestsBase : ComponentBase
 
     protected void AddInterest(TechInterestsDto interest)
     {
-        if (CurrentUserInterests.Interests.Count < 10)
+        if (CurrentUserInterests.Interests != null && CurrentUserInterests.Interests.Count < 10)
         {
             CurrentUserInterests.Interests.Add(interest);
             StateHasChanged();
         }
     }
-    protected void ChangeTechType(string selectedTechType)
+    protected void ChangeTechType(string? selectedTechType)
     {
         SelectedTechType = selectedTechType;
         StateHasChanged();
@@ -64,7 +65,7 @@ public class EditUserInterestsBase : ComponentBase
 
     protected void RemoveInterest(TechInterestsDto interest)
     {
-        CurrentUserInterests.Interests.Remove(interest);
+        CurrentUserInterests.Interests?.Remove(interest);
         StateHasChanged();
     }
 }
