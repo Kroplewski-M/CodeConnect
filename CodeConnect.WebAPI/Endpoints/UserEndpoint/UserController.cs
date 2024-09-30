@@ -89,8 +89,8 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
     }
 
     [Authorize]
-    [HttpPost("UpdateUserInterests")]
-    public async Task<IActionResult> UpdateUserInterests(List<UserInterestsDto> interests)
+    [HttpPut("UpdateUserInterests")]
+    public async Task<IActionResult> UpdateUserInterests(List<TechInterestsDto> interests)
     {
         var username = User.FindFirst(Constants.ClaimTypes.UserName)?.Value;
         if (username != null)

@@ -3,6 +3,7 @@ using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using Blazored.LocalStorage;
 using DomainLayer.Constants;
+using DomainLayer.DbEnts;
 using DomainLayer.Entities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -44,9 +45,13 @@ public class UserServiceClient(HttpClient httpClient,ILocalStorageService localS
         return new UserInterestsDto(false, "failed to fetch interests", null);
     }
 
-    public Task<ServiceResponse> UpdateUserInterests(string username, List<UserInterestsDto> userInterests)
+    public async Task<ServiceResponse> UpdateUserInterests(string? username, List<TechInterestsDto> interests)
     {
-        throw new NotImplementedException();
+        var response = await httpClient.PutAsJsonAsync("api/User/UpdateUserInterests",interests);
+        var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
+        if (result != null)
+            return result;
+        return new ServiceResponse(false, "An error occured while updating the interests");
     }
 
     public async Task<List<TechInterestsDto>> GetAllInterests()

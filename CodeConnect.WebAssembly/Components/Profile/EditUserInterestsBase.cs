@@ -68,4 +68,20 @@ public class EditUserInterestsBase : ComponentBase
         CurrentUserInterests.Interests?.Remove(interest);
         StateHasChanged();
     }
+
+    protected async Task UpdateInterests()
+    {
+        NotificationsService.PushNotification(new ApplicationLayer.Notification("Updating interests", NotificationType.Info));
+        if (CurrentUserInterests.Interests != null)
+        {
+            var result = await UserService.UpdateUserInterests("", CurrentUserInterests.Interests);
+            if (result.Flag)
+            {
+                NotificationsService.PushNotification(new ApplicationLayer.Notification(result.Message, NotificationType.Success));
+                StateHasChanged();
+                return;
+            }
+            NotificationsService.PushNotification(new ApplicationLayer.Notification(result.Message, NotificationType.Error));
+        }
+    }
 }

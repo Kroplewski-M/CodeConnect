@@ -59,18 +59,18 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
         return new UserInterestsDto(false,"user not found", null);
     }
 
-    public async Task<ServiceResponse> UpdateUserInterests(string username, List<UserInterestsDto> userInterests)
+    public async Task<ServiceResponse> UpdateUserInterests(string? username, List<TechInterestsDto> userInterests)
     {
-        var user = await userManager.FindByNameAsync(username);
+        var user = await userManager.FindByNameAsync(username ?? "");
         if (user != null)
         {
             var interests = context.UserInterests.Include(x => x.TechInterest)
                 .Where(x => x.UserId == user.Id).ToList();
             context.UserInterests.RemoveRange(interests);
-            var newInterests = interests.Select(x => new UserInterests
+            var newInterests = userInterests.Select(x => new UserInterests
             {
                 UserId = user.Id,
-                TechInterestId = x.TechInterestId,
+                TechInterestId = x.Id,
             }).ToList();
             if (newInterests.Any())
             {
