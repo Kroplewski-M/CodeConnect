@@ -68,20 +68,38 @@ public class EditUserInterestsBase : ComponentBase
         CurrentUserInterests.Interests?.Remove(interest);
         StateHasChanged();
     }
-
+    protected bool Saving = false;
     protected async Task UpdateInterests()
     {
-        NotificationsService.PushNotification(new ApplicationLayer.Notification("Updating interests", NotificationType.Info));
-        if (CurrentUserInterests.Interests != null)
+        try
         {
-            var result = await UserService.UpdateUserInterests("", CurrentUserInterests.Interests);
-            if (result.Flag)
+            Saving = true;
+            NotificationsService.PushNotification(
+                new ApplicationLayer.Notification("Updating interests", NotificationType.Info));
+            if (CurrentUserInterests.Interests != null)
             {
-                NotificationsService.PushNotification(new ApplicationLayer.Notification(result.Message, NotificationType.Success));
-                StateHasChanged();
-                return;
+                var result = await UserService.UpdateUserInterests("", CurrentUserInterests.Interests);
+                if (result.Flag)
+                {
+                    NotificationsService.PushNotification(
+                        new ApplicationLayer.Notification(result.Message, NotificationType.Success));
+                    StateHasChanged();
+                    await Cancel.InvokeAsync(null);
+                    return;
+                }
+
+                NotificationsService.PushNotification(
+                    new ApplicationLayer.Notification(result.Message, NotificationType.Error));
             }
-            NotificationsService.PushNotification(new ApplicationLayer.Notification(result.Message, NotificationType.Error));
+        }
+        catch
+        {
+            NotificationsService.PushNotification(
+                new ApplicationLayer.Notification("An error occured please try again later.", NotificationType.Error));
+        }
+        finally
+        {
+            Saving = false;
         }
     }
 }
