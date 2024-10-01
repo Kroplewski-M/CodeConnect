@@ -52,7 +52,7 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
                 .Include(x => x.TechInterest).Include(x=>x.TechInterest.Interest)
                 .Where(x => x.UserId == user.Id)
                 .ToList()
-                .Select(x=> new TechInterestsDto(x.Id,x.TechInterest.Interest.Id,x.TechInterest.Interest.Name,x.TechInterest.Name))
+                .Select(x=> new TechInterestsDto(x.TechInterestId,x.TechInterest.Id,x.TechInterest.Interest.Name,x.TechInterest.Name))
                 .ToList();
             return new UserInterestsDto(true, "user interests fetched successfully", interests.Any() ? interests : null);
         }
