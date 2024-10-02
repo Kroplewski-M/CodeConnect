@@ -48,14 +48,19 @@ public class EditUserInterestsBase : ComponentBase
         TechTypes = AllTechInterests.Select(x=>x.InterestType).Distinct().ToList();
         SelectedTechType = TechTypes.FirstOrDefault();
     }
-
+    protected string InterestsErrorMessage { get; set; } = string.Empty;
     protected void AddInterest(TechInterestsDto interest)
     {
+        InterestsErrorMessage = string.Empty;
         if (CurrentUserInterests.Interests != null && CurrentUserInterests.Interests.Count < 10)
         {
             CurrentUserInterests.Interests.Add(interest);
-            StateHasChanged();
         }
+        else
+        {
+            InterestsErrorMessage = "Max amount of interests is reached!";
+        }
+        StateHasChanged();
     }
     protected void ChangeTechType(string? selectedTechType)
     {
@@ -65,6 +70,7 @@ public class EditUserInterestsBase : ComponentBase
 
     protected void RemoveInterest(TechInterestsDto interest)
     {
+        InterestsErrorMessage = string.Empty;
         CurrentUserInterests.Interests?.Remove(interest);
         StateHasChanged();
     }
