@@ -647,6 +647,10 @@ video {
   margin-bottom: 1.25rem;
 }
 
+.mb-\[5px\] {
+  margin-bottom: 5px;
+}
+
 .ml-2 {
   margin-left: 0.5rem;
 }
@@ -715,8 +719,8 @@ video {
   margin-top: 5px;
 }
 
-.mb-\[5px\] {
-  margin-bottom: 5px;
+.mt-16 {
+  margin-top: 4rem;
 }
 
 .block {
@@ -839,6 +843,10 @@ video {
   width: 95%;
 }
 
+.w-\[250px\] {
+  width: 250px;
+}
+
 .min-w-\[300px\] {
   min-width: 300px;
 }
@@ -940,6 +948,10 @@ video {
 
 .place-content-center {
   place-content: center;
+}
+
+.content-center {
+  align-content: center;
 }
 
 .items-center {
@@ -1102,6 +1114,10 @@ video {
   background-color: rgb(248 249 250 / var(--tw-bg-opacity));
 }
 
+.bg-light-primaryColor\/80 {
+  background-color: rgb(248 249 250 / 0.8);
+}
+
 .bg-light-secondaryColor {
   --tw-bg-opacity: 1;
   background-color: rgb(92 66 167 / var(--tw-bg-opacity));
@@ -1126,12 +1142,12 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.bg-light-primaryColor\/70 {
-  background-color: rgb(248 249 250 / 0.7);
+.bg-light-primaryColor\/20 {
+  background-color: rgb(248 249 250 / 0.2);
 }
 
-.bg-light-primaryColor\/80 {
-  background-color: rgb(248 249 250 / 0.8);
+.bg-light-primaryColor\/60 {
+  background-color: rgb(248 249 250 / 0.6);
 }
 
 .object-cover {
@@ -1326,6 +1342,10 @@ video {
   color: rgb(248 249 250 / var(--tw-text-opacity));
 }
 
+.text-light-primaryColor\/60 {
+  color: rgb(248 249 250 / 0.6);
+}
+
 .text-light-primaryColor\/70 {
   color: rgb(248 249 250 / 0.7);
 }
@@ -1355,14 +1375,6 @@ video {
 .text-red-800 {
   --tw-text-opacity: 1;
   color: rgb(153 27 27 / var(--tw-text-opacity));
-}
-
-.text-light-primaryColor\/50 {
-  color: rgb(248 249 250 / 0.5);
-}
-
-.text-light-primaryColor\/60 {
-  color: rgb(248 249 250 / 0.6);
 }
 
 .opacity-0 {
@@ -1447,6 +1459,10 @@ video {
   background-color: rgb(248 249 250 / 0.7);
 }
 
+.hover\:bg-light-primaryColor\/90:hover {
+  background-color: rgb(248 249 250 / 0.9);
+}
+
 .hover\:bg-red-700:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(185 28 28 / var(--tw-bg-opacity));
@@ -1454,14 +1470,6 @@ video {
 
 .hover\:bg-transparent:hover {
   background-color: transparent;
-}
-
-.hover\:bg-light-primaryColor\/60:hover {
-  background-color: rgb(248 249 250 / 0.6);
-}
-
-.hover\:bg-light-primaryColor\/90:hover {
-  background-color: rgb(248 249 250 / 0.9);
 }
 
 .hover\:text-light-secondaryColor:hover {
