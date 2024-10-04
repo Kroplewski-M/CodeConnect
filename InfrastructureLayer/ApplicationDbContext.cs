@@ -1,5 +1,6 @@
 using DomainLayer.DbEnts;
 using DomainLayer.Entities.Auth;
+using DomainLayer.Entities.Posts;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,11 +11,28 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext>options)
     public DbSet<Interest> Interests { get; set; }
     public DbSet<TechInterests> TechInterests { get; set; }
     public DbSet<UserInterests> UserInterests { get; set; }
+    
+    public DbSet<Post> Posts { get; set; }
+    public DbSet<PostLike> PostLikes { get; set; }
+    
+    public DbSet<Comment> Comments { get; set; }
+    public DbSet<CommentLike> CommentLikes { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
         SeedInterests(builder);
         SeedTechInterests(builder);
+        
+        // Post comments (one to many)
+        builder.Entity<Post>().HasMany(x=> x.Comments)
+            .WithOne(x => x.Post)
+            .HasForeignKey(x=>x.PostId)
+            .OnDelete(DeleteBehavior.Cascade);
+        //Post likes
+        builder.Entity<Post>().HasMany(x => x.Likes)
+            .WithOne(x => x.Post)
+            .HasForeignKey(x=>x.PostId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
     private void SeedInterests(ModelBuilder builder){
         builder.Entity<Interest>().HasData(

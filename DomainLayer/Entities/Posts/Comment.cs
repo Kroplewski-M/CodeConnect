@@ -11,4 +11,6 @@ public class Comment
     public DateTime CreatedAt { get; set; }
     public required string CreatedByUserId { get; set; }
     public ApplicationUser? CreatedByUser { get; set; }
+    
+    public ICollection<CommentLike> Likes { get; set; } = new List<CommentLike>();
 }
