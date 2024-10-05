@@ -23,6 +23,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext>options)
         SeedInterests(builder);
         SeedTechInterests(builder);
         
+        //Post user
+        builder.Entity<Post>().HasOne(x => x.CreatedByUser)
+            .WithMany()
+            .HasForeignKey(x=> x.CreatedByUserId)
+            .OnDelete(DeleteBehavior.NoAction);
         // Post comments (one to many)
         builder.Entity<Post>().HasMany(x=> x.Comments)
             .WithOne(x => x.Post)
@@ -33,6 +38,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext>options)
             .WithOne(x => x.Post)
             .HasForeignKey(x=>x.PostId)
             .OnDelete(DeleteBehavior.Cascade);
+        //comment likes
+        builder.Entity<Comment>().HasMany<CommentLike>(x=> x.Likes)
+            .WithOne(x=> x.Comment)
+            .HasForeignKey(x=> x.CommentId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
     private void SeedInterests(ModelBuilder builder){
         builder.Entity<Interest>().HasData(
