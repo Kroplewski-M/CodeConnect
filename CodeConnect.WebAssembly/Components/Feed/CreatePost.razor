@@ -1,3 +1,12 @@
 @inherits CreatePostBase
-<h3>CreatePost</h3>
 
+<div class="shadow-xl md:w-[550px] w-[90%] h-[80px] mx-auto relative bg-dark-secondaryColor p-5 rounded-md flex">
+    <img class="w-10 ms-3 h-10 rounded-full mb-3" src="@UserDetails?.ProfileImg" alt="Rounded avatar">
+    <div class="ml-[5px] mt-[5px]">
+        <EditForm Model="PostContent" OnSubmit="HandleValidSubmit" FormName="Post">
+            <InputTextArea @bind-Value="PostContent" id="post" placeholder="What have you been working on..."
+                       class="bg-transparent text-dark-supportColor border-dark-supportColor w-[90%] resize-none w-[400px] rounded-md font-bold mb-2 pl-[5px] outline-none">
+            </InputTextArea>
+        </EditForm>
+    </div>
+</div>
