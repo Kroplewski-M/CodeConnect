@@ -554,40 +554,6 @@ video {
   display: none;
 }
 
-.container {
-  width: 100%;
-}
-
-@media (min-width: 640px) {
-  .container {
-    max-width: 640px;
-  }
-}
-
-@media (min-width: 768px) {
-  .container {
-    max-width: 768px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .container {
-    max-width: 1024px;
-  }
-}
-
-@media (min-width: 1280px) {
-  .container {
-    max-width: 1280px;
-  }
-}
-
-@media (min-width: 1536px) {
-  .container {
-    max-width: 1536px;
-  }
-}
-
 .fixed {
   position: fixed;
 }
@@ -793,6 +759,10 @@ video {
   height: 100vh;
 }
 
+.h-\[130px\] {
+  height: 130px;
+}
+
 .h-\[200px\] {
   height: 200px;
 }
@@ -809,6 +779,10 @@ video {
   height: 30px;
 }
 
+.h-\[35px\] {
+  height: 35px;
+}
+
 .h-\[55px\] {
   height: 55px;
 }
@@ -823,22 +797,6 @@ video {
 
 .h-screen {
   height: 100vh;
-}
-
-.h-\[73px\] {
-  height: 73px;
-}
-
-.h-\[75px\] {
-  height: 75px;
-}
-
-.h-\[80px\] {
-  height: 80px;
-}
-
-.h-\[35px\] {
-  height: 35px;
 }
 
 .min-h-screen {
@@ -879,10 +837,6 @@ video {
 
 .w-\[300px\] {
   width: 300px;
-}
-
-.w-\[400px\] {
-  width: 400px;
 }
 
 .w-\[80\%\] {
@@ -1204,6 +1158,11 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+.bg-dark-supportColor {
+  --tw-bg-opacity: 1;
+  background-color: rgb(232 231 231 / var(--tw-bg-opacity));
+}
+
 .object-cover {
   -o-object-fit: cover;
      object-fit: cover;
@@ -1472,6 +1431,10 @@ video {
   cursor: pointer;
 }
 
+.hover\:border-4:hover {
+  border-width: 4px;
+}
+
 .hover\:border-light-secondaryColor:hover {
   --tw-border-opacity: 1;
   border-color: rgb(92 66 167 / var(--tw-border-opacity));
@@ -1524,6 +1487,10 @@ video {
 
 .hover\:bg-transparent:hover {
   background-color: transparent;
+}
+
+.hover\:bg-dark-supportColor\/70:hover {
+  background-color: rgb(232 231 231 / 0.7);
 }
 
 .hover\:text-light-secondaryColor:hover {
@@ -1646,6 +1613,10 @@ video {
     width: 300px;
   }
 
+  .md\:w-\[400px\] {
+    width: 400px;
+  }
+
   .md\:w-\[500px\] {
     width: 500px;
   }
@@ -1656,10 +1627,6 @@ video {
 
   .md\:w-\[700px\] {
     width: 700px;
-  }
-
-  .md\:w-\[400px\] {
-    width: 400px;
   }
 
   .md\:min-w-\[500px\] {

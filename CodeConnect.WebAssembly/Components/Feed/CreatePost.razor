@@ -1,6 +1,6 @@
 @inherits CreatePostBase
 
-<div id="post-container" class="shadow-xl md:w-[550px] w-[90%] h-[80px] mx-auto relative bg-dark-secondaryColor p-5 rounded-md flex" data-defaultHeight="80">
+<div id="post-container" class="shadow-xl md:w-[550px] w-[90%] h-[130px] mx-auto relative bg-dark-secondaryColor p-5 rounded-md flex" data-defaultHeight="140">
     <img class="w-10 ms-3 h-10 rounded-full mb-3" src="@UserDetails?.ProfileImg" alt="Rounded avatar">
     <div class="ml-[5px] mt-[5px]">
         <EditForm Model="PostContent" OnSubmit="HandleValidSubmit" FormName="Post">
@@ -8,6 +8,9 @@
                            class="bg-transparent text-dark-supportColor border-dark-supportColor w-[90%] resize-none h-[35px] md:w-[400px] rounded-md font-bold mb-2 pl-[5px] outline-none"
                            oninput="autoResizeTextAreaAndContainer(this,48)" data-resizeContainer="post-container">
             </InputTextArea>
+            <div class="mt-[5px]">
+                <button class="rounded-md border-solid hover:border-light-secondaryColor border-b-4 px-3 py-2 text-dark-supportColor/90 "><i class="fa-solid fa-paper-plane"></i> Post</button>
+            </div>
         </EditForm>
     </div>
 </div>

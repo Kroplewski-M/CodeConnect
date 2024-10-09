@@ -28,7 +28,7 @@ function autoResizeTextAreaAndContainer(textarea,defaultHeight) {
         const container = document.getElementById(containerId);
         //not changing height if textbox hasn't gained height
         if(defaultHeight < (textareaHeight)){
-            container.style.height = textarea.scrollHeight + 50 + 'px';
+            container.style.height = textarea.scrollHeight + 90 + 'px';
         }else{
             let containerDefault = container.getAttribute('data-defaultHeight');
             container.style.height = containerDefault + 'px';
