@@ -245,8 +245,26 @@ namespace InfrastructureLayer.Migrations
                         name: "FK_Comments_Posts_PostId",
                         column: x => x.PostId,
                         principalTable: "Posts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PostFiles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PostId = table.Column<int>(type: "int", nullable: false),
+                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PostFiles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PostFiles_Posts_PostId",
+                        column: x => x.PostId,
+                        principalTable: "Posts",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -272,8 +290,7 @@ namespace InfrastructureLayer.Migrations
                         name: "FK_PostLikes_Posts_PostId",
                         column: x => x.PostId,
                         principalTable: "Posts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -573,6 +590,11 @@ namespace InfrastructureLayer.Migrations
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PostFiles_PostId",
+                table: "PostFiles",
+                column: "PostId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PostLikes_LikedByUserId",
                 table: "PostLikes",
                 column: "LikedByUserId");
@@ -623,6 +645,9 @@ namespace InfrastructureLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "CommentLikes");
+
+            migrationBuilder.DropTable(
+                name: "PostFiles");
 
             migrationBuilder.DropTable(
                 name: "PostLikes");

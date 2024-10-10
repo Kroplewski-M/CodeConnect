@@ -4,7 +4,6 @@ using InfrastructureLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -12,11 +11,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InfrastructureLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241005114630_init")]
-    partial class init
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1290,6 +1287,28 @@ namespace InfrastructureLayer.Migrations
                     b.ToTable("Posts");
                 });
 
+            modelBuilder.Entity("DomainLayer.Entities.Posts.PostFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("PostFiles");
+                });
+
             modelBuilder.Entity("DomainLayer.Entities.Posts.PostLike", b =>
                 {
                     b.Property<int>("Id")
@@ -1489,7 +1508,7 @@ namespace InfrastructureLayer.Migrations
                     b.HasOne("DomainLayer.Entities.Posts.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("CreatedByUser");
@@ -1527,6 +1546,17 @@ namespace InfrastructureLayer.Migrations
                     b.Navigation("CreatedByUser");
                 });
 
+            modelBuilder.Entity("DomainLayer.Entities.Posts.PostFile", b =>
+                {
+                    b.HasOne("DomainLayer.Entities.Posts.Post", "Post")
+                        .WithMany("Files")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+                });
+
             modelBuilder.Entity("DomainLayer.Entities.Posts.PostLike", b =>
                 {
                     b.HasOne("DomainLayer.Entities.Auth.ApplicationUser", "LikedByUser")
@@ -1538,7 +1568,7 @@ namespace InfrastructureLayer.Migrations
                     b.HasOne("DomainLayer.Entities.Posts.Post", "Post")
                         .WithMany("Likes")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("LikedByUser");
@@ -1605,6 +1635,8 @@ namespace InfrastructureLayer.Migrations
             modelBuilder.Entity("DomainLayer.Entities.Posts.Post", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Files");
 
                     b.Navigation("Likes");
                 });

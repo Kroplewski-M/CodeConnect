@@ -14,6 +14,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext>options)
     
     public DbSet<Post> Posts { get; set; }
     public DbSet<PostLike> PostLikes { get; set; }
+    public DbSet<PostFile> PostFiles { get; set; }
     
     public DbSet<Comment> Comments { get; set; }
     public DbSet<CommentLike> CommentLikes { get; set; }
@@ -32,12 +33,17 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext>options)
         builder.Entity<Post>().HasMany(x=> x.Comments)
             .WithOne(x => x.Post)
             .HasForeignKey(x=>x.PostId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.NoAction);
         //Post likes
         builder.Entity<Post>().HasMany(x => x.Likes)
             .WithOne(x => x.Post)
             .HasForeignKey(x=>x.PostId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.NoAction);
+        //Post Files
+        builder.Entity<Post>().HasMany(x=> x.Files)
+            .WithOne(x=> x.Post)
+            .HasForeignKey(x=> x.PostId)
+            .OnDelete(DeleteBehavior.NoAction);
         //comment likes
         builder.Entity<Comment>().HasMany<CommentLike>(x=> x.Likes)
             .WithOne(x=> x.Comment)
