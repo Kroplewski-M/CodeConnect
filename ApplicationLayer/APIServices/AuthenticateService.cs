@@ -4,6 +4,8 @@ using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
 using DomainLayer.Entities.Auth;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Identity;
 
 namespace ApplicationLayer.APIServices;
@@ -35,7 +37,10 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
     public async Task<AuthResponse> LoginUser(LoginForm loginForm)
     {
         ApplicationUser? user = null;
-        if (loginForm.Email.Contains("@"))
+        var validator = new InlineValidator<string>();
+        validator.RuleFor(x=> x).EmailAddress();
+        ValidationResult isEmail = await validator.ValidateAsync(loginForm.Email);
+        if (isEmail.IsValid)
         {
             user = await userManager.FindByEmailAsync(loginForm.Email);
         }
