@@ -107,7 +107,7 @@
 }
 
 /*
-! tailwindcss v3.4.13 | MIT License | https://tailwindcss.com
+! tailwindcss v3.4.14 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -550,7 +550,7 @@ video {
 
 /* Make elements with the HTML hidden attribute stay hidden by default */
 
-[hidden] {
+[hidden]:where(:not([hidden="until-found"])) {
   display: none;
 }
 
@@ -727,6 +727,30 @@ video {
   margin-top: 5px;
 }
 
+.-ml-\[5px\] {
+  margin-left: -5px;
+}
+
+.-ml-5 {
+  margin-left: -1.25rem;
+}
+
+.-ml-10 {
+  margin-left: -2.5rem;
+}
+
+.-ml-16 {
+  margin-left: -4rem;
+}
+
+.-ml-\[30px\] {
+  margin-left: -30px;
+}
+
+.-ml-\[50px\] {
+  margin-left: -50px;
+}
+
 .block {
   display: block;
 }
@@ -797,6 +821,18 @@ video {
 
 .h-screen {
   height: 100vh;
+}
+
+.h-\[180px\] {
+  height: 180px;
+}
+
+.h-\[280px\] {
+  height: 280px;
+}
+
+.h-\[50px\] {
+  height: 50px;
 }
 
 .min-h-screen {
@@ -1158,11 +1194,6 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.bg-dark-supportColor {
-  --tw-bg-opacity: 1;
-  background-color: rgb(232 231 231 / var(--tw-bg-opacity));
-}
-
 .object-cover {
   -o-object-fit: cover;
      object-fit: cover;
@@ -1431,10 +1462,6 @@ video {
   cursor: pointer;
 }
 
-.hover\:border-4:hover {
-  border-width: 4px;
-}
-
 .hover\:border-light-secondaryColor:hover {
   --tw-border-opacity: 1;
   border-color: rgb(92 66 167 / var(--tw-border-opacity));
@@ -1489,8 +1516,9 @@ video {
   background-color: transparent;
 }
 
-.hover\:bg-dark-supportColor\/70:hover {
-  background-color: rgb(232 231 231 / 0.7);
+.hover\:bg-light-secondaryColor:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(92 66 167 / var(--tw-bg-opacity));
 }
 
 .hover\:text-light-secondaryColor:hover {
@@ -1599,6 +1627,14 @@ video {
 
   .md\:h-\[450px\] {
     height: 450px;
+  }
+
+  .md\:h-\[130px\] {
+    height: 130px;
+  }
+
+  .md\:h-\[35px\] {
+    height: 35px;
   }
 
   .md\:max-h-\[200px\] {

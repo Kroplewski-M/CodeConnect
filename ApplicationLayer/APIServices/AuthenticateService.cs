@@ -34,7 +34,15 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
 
     public async Task<AuthResponse> LoginUser(LoginForm loginForm)
     {
-        var user = await userManager.FindByEmailAsync(loginForm.Email);
+        ApplicationUser? user = null;
+        if (loginForm.Email.Contains("@"))
+        {
+            user = await userManager.FindByEmailAsync(loginForm.Email);
+        }
+        else
+        {
+            user = await userManager.FindByNameAsync(loginForm.Email);
+        }
         if (user != null)
         {
             var correctPassword = await userManager.CheckPasswordAsync(user, loginForm.Password);

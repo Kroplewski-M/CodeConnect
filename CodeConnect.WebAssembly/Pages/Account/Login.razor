@@ -1,6 +1,5 @@
 @page "/Account/Login"
 @using DomainLayer.Constants
-@using Microsoft.AspNetCore.Authorization
 @inherits LoginBase
 
 <div class="flex flex-col md:space-x-8  md:flex-row place-content-center">
@@ -9,7 +8,7 @@
         <EditForm FormName="Login" Model="LoginForm" OnSubmit="SubmitLogin">
             
             <div class="mt-5">
-                <InputText @bind-Value="LoginForm.Email" id="email" placeholder="Email"
+                <InputText @bind-Value="LoginForm.Email" id="email" placeholder="Email or username"
                            class="bg-transparent border-b-4 text-dark-supportColor border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
                 </InputText>
                 <div>
