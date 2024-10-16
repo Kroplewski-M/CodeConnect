@@ -631,6 +631,10 @@ video {
   margin-right: auto;
 }
 
+.-ml-\[50px\] {
+  margin-left: -50px;
+}
+
 .-mt-16 {
   margin-top: -4rem;
 }
@@ -727,28 +731,24 @@ video {
   margin-top: 5px;
 }
 
-.-ml-\[5px\] {
-  margin-left: -5px;
+.-ml-\[45px\] {
+  margin-left: -45px;
 }
 
-.-ml-5 {
-  margin-left: -1.25rem;
+.mt-\[7px\] {
+  margin-top: 7px;
 }
 
-.-ml-10 {
-  margin-left: -2.5rem;
+.mt-\[px\] {
+  margin-top: px;
 }
 
-.-ml-16 {
-  margin-left: -4rem;
+.mt-\[8px\] {
+  margin-top: 8px;
 }
 
-.-ml-\[30px\] {
-  margin-left: -30px;
-}
-
-.-ml-\[50px\] {
-  margin-left: -50px;
+.mt-\[9px\] {
+  margin-top: 9px;
 }
 
 .block {
@@ -783,8 +783,8 @@ video {
   height: 100vh;
 }
 
-.h-\[130px\] {
-  height: 130px;
+.h-\[180px\] {
+  height: 180px;
 }
 
 .h-\[200px\] {
@@ -803,8 +803,8 @@ video {
   height: 30px;
 }
 
-.h-\[35px\] {
-  height: 35px;
+.h-\[50px\] {
+  height: 50px;
 }
 
 .h-\[55px\] {
@@ -821,18 +821,6 @@ video {
 
 .h-screen {
   height: 100vh;
-}
-
-.h-\[180px\] {
-  height: 180px;
-}
-
-.h-\[280px\] {
-  height: 280px;
-}
-
-.h-\[50px\] {
-  height: 50px;
 }
 
 .min-h-screen {
@@ -1507,6 +1495,11 @@ video {
   background-color: rgb(248 249 250 / 0.9);
 }
 
+.hover\:bg-light-secondaryColor:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(92 66 167 / var(--tw-bg-opacity));
+}
+
 .hover\:bg-red-700:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(185 28 28 / var(--tw-bg-opacity));
@@ -1514,11 +1507,6 @@ video {
 
 .hover\:bg-transparent:hover {
   background-color: transparent;
-}
-
-.hover\:bg-light-secondaryColor:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(92 66 167 / var(--tw-bg-opacity));
 }
 
 .hover\:text-light-secondaryColor:hover {
@@ -1617,6 +1605,10 @@ video {
     margin-top: 1.25rem;
   }
 
+  .md\:h-\[130px\] {
+    height: 130px;
+  }
+
   .md\:h-\[150px\] {
     height: 150px;
   }
@@ -1625,16 +1617,12 @@ video {
     height: 200px;
   }
 
-  .md\:h-\[450px\] {
-    height: 450px;
-  }
-
-  .md\:h-\[130px\] {
-    height: 130px;
-  }
-
   .md\:h-\[35px\] {
     height: 35px;
+  }
+
+  .md\:h-\[450px\] {
+    height: 450px;
   }
 
   .md\:max-h-\[200px\] {

@@ -25,10 +25,12 @@ public class UpdateImageBase : ComponentBase
     protected bool DisableImg { get; set; } = false;
     protected IBrowserFile? SelectedImg { get; set; } = null;
 
+    protected readonly string InputId = "uploadImg";
+    protected readonly string ImagePreviewId = "uploadedImgPreview";
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if(firstRender)
-            await Js.InvokeVoidAsync("PreviewImg",SelectedImg);
+            await Js.InvokeVoidAsync("PreviewImg",InputId,ImagePreviewId);
     }
     protected void HandleFileSelection(InputFileChangeEventArgs e)
     {

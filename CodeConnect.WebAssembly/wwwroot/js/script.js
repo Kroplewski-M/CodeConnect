@@ -1,9 +1,9 @@
 window.toggleDarkMode = function(){
     document.body.classList.toggle('dark');
 }
-function PreviewImg(){
-    var uploadImg = document.querySelector("#uploadImg");
-    var uploadedImgPreview = document.querySelector("#uploadedImgPreview");
+function PreviewImg(inputId,previewId){
+    var uploadImg = document.querySelector("#{inputId}");
+    var uploadedImgPreview = document.querySelector("#{previewId}");
     uploadImg.addEventListener("change", (event) => {
         const file = event.target.files[0];
         if (file) {

@@ -3,6 +3,7 @@ using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace CodeConnect.WebAssembly.Components.Feed;
 

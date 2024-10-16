@@ -8,8 +8,16 @@
                            class="bg-transparent text-dark-supportColor border-dark-supportColor w-[90%] resize-none md:h-[35px] h-[50px] md:w-[400px] rounded-md font-bold mb-2 pl-[5px] outline-none"
                            oninput="autoResizeTextAreaAndContainer(this,48)" data-resizeContainer="post-container">
             </InputTextArea>
-            <div class="mt-[5px]">
-                <button class="-ml-[50px] rounded-md border-solid hover:bg-light-secondaryColor px-3 py-2 text-dark-supportColor/90 "><i class="fa-solid fa-paper-plane"></i> Post</button>
+            <div class="mt-[5px] flex -ml-[45px]" >
+                <div class="mt-[9px]">
+                    <label for="postFiles" class="block hover:cursor-pointer">
+                        <p class="fa-solid fa-image fa-xl text-dark-supportColor/90"></p>
+                    </label>
+                    <InputFile type="file" accept="image/*" name="postFiles" id="postFiles" class="hidden" />
+                </div>
+                <div class="ml-5">
+                    <button class=" rounded-md border-solid hover:bg-light-secondaryColor px-3 py-2 text-dark-supportColor/90 "><i class="fa-solid fa-paper-plane"></i> Post</button>
+                </div>
             </div>
         </EditForm>
     </div>
