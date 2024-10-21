@@ -1,24 +1,32 @@
 @inherits CreatePostBase
-
-<div id="post-container" class="shadow-xl md:w-[550px] w-[90vw] md:h-[130px] h-[180px] mx-auto relative bg-dark-secondaryColor p-5 rounded-md flex mt-5 md:mt-0" data-defaultHeight="140">
-    <img class="w-10 ms-3 h-10 rounded-full mb-3" src="@UserDetails?.ProfileImg" alt="Rounded avatar">
-    <div class="ml-[5px] mt-[5px]">
-        <EditForm Model="PostContent" OnSubmit="HandleValidSubmit" FormName="Post">
-            <InputTextArea @bind-Value="PostContent" id="post" placeholder="What have you been working on..."
-                           class="bg-transparent text-dark-supportColor border-dark-supportColor w-[90%] resize-none md:h-[35px] h-[50px] md:w-[400px] rounded-md font-bold mb-2 pl-[5px] outline-none"
-                           oninput="autoResizeTextAreaAndContainer(this,48)" data-resizeContainer="post-container">
-            </InputTextArea>
-            <div class="mt-[5px] flex -ml-[45px]" >
-                <div class="mt-[9px]">
-                    <label for="postFiles" class="block hover:cursor-pointer">
-                        <p class="fa-solid fa-image fa-xl text-dark-supportColor/90"></p>
-                    </label>
-                    <InputFile type="file" accept="image/*" name="postFiles" id="postFiles" class="hidden" />
+<div id="post-container" class="shadow-xl md:w-[550px] w-[90vw] md:min-h-[130px] min-h-[180px] mx-auto relative bg-dark-secondaryColor p-5 rounded-md mt-5 md:mt-0">
+    <div class="flex">
+        <img class="w-10 ms-3 h-10 rounded-full mb-3" src="@UserDetails?.ProfileImg" alt="Rounded avatar">
+        <div class="ml-[5px] mt-[5px]">
+            <EditForm Model="PostContent" OnSubmit="HandleValidSubmit" FormName="Post">
+                <InputTextArea @bind-Value="PostContent" id="post" placeholder="What have you been working on..."
+                               class="bg-transparent text-dark-supportColor border-dark-supportColor w-[90%] resize-none md:w-[400px] rounded-md font-bold mb-2 pl-[5px] outline-none"
+                               oninput="autoResizeTextAreaAndContainer(this)"
+                               onblur="postSizeOnBlur('post')"
+                               >
+                </InputTextArea>
+                <div class="mt-[5px] flex -ml-[45px]" >
+                    <div class="mt-[9px]">
+                        <label for="@InputId" class="block hover:cursor-pointer">
+                            <p class="fa-solid fa-image fa-xl text-dark-supportColor/90"></p>
+                        </label>
+                        <InputFile type="file" OnChange="HandleFileSelection" accept="image/*" name="postFiles" id="@(InputId)" class="opacity-0 absolute" />
+                    </div>
+                    <div class="ml-5">
+                        <button class=" rounded-md border-solid hover:bg-light-secondaryColor px-3 py-2 text-dark-supportColor/90 "><i class="fa-solid fa-paper-plane"></i> Post</button>
+                    </div>
                 </div>
-                <div class="ml-5">
-                    <button class=" rounded-md border-solid hover:bg-light-secondaryColor px-3 py-2 text-dark-supportColor/90 "><i class="fa-solid fa-paper-plane"></i> Post</button>
-                </div>
-            </div>
-        </EditForm>
+            </EditForm>
+        </div>
+    </div>
+    <div>
+        <div class="mt-5 mb-2">
+            <img id="@ImagePreviewId" class="rounded w-[90%] mx-auto @(!LoadedImg ? "hidden" : "")" src="" alt="preview">
+        </div>
     </div>
 </div>

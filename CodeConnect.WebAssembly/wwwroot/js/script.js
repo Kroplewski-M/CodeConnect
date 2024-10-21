@@ -2,8 +2,8 @@ window.toggleDarkMode = function(){
     document.body.classList.toggle('dark');
 }
 function PreviewImg(inputId,previewId){
-    var uploadImg = document.querySelector("#{inputId}");
-    var uploadedImgPreview = document.querySelector("#{previewId}");
+    var uploadImg = document.querySelector(`#${inputId}`);
+    var uploadedImgPreview = document.querySelector(`#${previewId}`);
     uploadImg.addEventListener("change", (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -15,23 +15,15 @@ function PreviewImg(inputId,previewId){
         }
     });
 }
-
-function autoResizeTextAreaAndContainer(textarea,defaultHeight) {
+let lastHeight = 0;
+let first = true;
+function autoResizeTextAreaAndContainer(textarea) {
     //set to auto so it shrinks straight away when clearing
     textarea.style.height = 'auto';
-    const textareaHeight = parseInt(textarea.scrollHeight);
-
-    textarea.style.height = textarea.scrollHeight + 'px';
-    
-    const containerId = textarea.getAttribute('data-resizeContainer');
-    if(containerId != null){
-        const container = document.getElementById(containerId);
-        //not changing height if textbox hasn't gained height
-        if(defaultHeight < (textareaHeight)){
-            container.style.height = textarea.scrollHeight + 90 + 'px';
-        }else{
-            let containerDefault = container.getAttribute('data-defaultHeight');
-            container.style.height = containerDefault + 'px';
-        }
-    }
+    textarea.style.height = textarea.scrollHeight === 0 ? lastHeight + 'px' : textarea.scrollHeight + 'px';
+    lastHeight = textarea.scrollHeight;
+}
+function postSizeOnBlur(elementId){
+    let post = document.getElementById(elementId);
+    post.style.minHeight = lastHeight + 'px'; // Maintain last height if empty
 }

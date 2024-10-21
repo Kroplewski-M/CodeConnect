@@ -4,6 +4,7 @@ using ApplicationLayer.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.JSInterop;
 
 namespace CodeConnect.WebAssembly.Components.Feed;
 
@@ -14,9 +15,11 @@ public class CreatePostBase : ComponentBase
     [Inject]
     IAuthenticateServiceClient AuthenticateServiceClient { get; set; } = null!;
     protected UserDetails? UserDetails = null;
-
+    [Inject]
+    public IJSRuntime Js { get; set; }
     protected string PostContent { get; set; } = string.Empty;
-
+    protected readonly string InputId = "uploadPostImg";
+    protected readonly string ImagePreviewId = "uploadedPostImgPreview";
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationState;
@@ -27,8 +30,22 @@ public class CreatePostBase : ComponentBase
             UserDetails = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
             await InvokeAsync(StateHasChanged);
         }
+    } 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Js.InvokeVoidAsync("PreviewImg",InputId,ImagePreviewId);
+            await Js.InvokeVoidAsync("postSizeOnBlur","post");
+        }
     }
-
+    protected bool LoadedImg = false;
+    protected IBrowserFile? SelectedImg { get; set; } = null;
+    protected void HandleFileSelection(InputFileChangeEventArgs e)
+    {
+        SelectedImg = e.GetMultipleFiles().FirstOrDefault();
+        LoadedImg = true;
+    }
     protected void HandleValidSubmit()
     {
         Console.WriteLine("HandleValidSubmit");
