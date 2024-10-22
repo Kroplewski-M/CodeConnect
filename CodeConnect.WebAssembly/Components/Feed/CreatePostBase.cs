@@ -30,12 +30,13 @@ public class CreatePostBase : ComponentBase
             UserDetails = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
             await InvokeAsync(StateHasChanged);
         }
-    } 
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        await Js.InvokeVoidAsync("PreviewImg",InputId,ImagePreviewId);
         if (firstRender)
         {
-            await Js.InvokeVoidAsync("PreviewImg",InputId,ImagePreviewId);
             await Js.InvokeVoidAsync("postSizeOnBlur","post");
         }
     }

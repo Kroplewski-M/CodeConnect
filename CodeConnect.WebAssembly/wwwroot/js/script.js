@@ -20,10 +20,10 @@ let first = true;
 function autoResizeTextAreaAndContainer(textarea) {
     //set to auto so it shrinks straight away when clearing
     textarea.style.height = 'auto';
-    textarea.style.height = textarea.scrollHeight === 0 ? lastHeight + 'px' : textarea.scrollHeight + 'px';
+    textarea.style.height = textarea.scrollHeight + 'px';
     lastHeight = textarea.scrollHeight;
 }
 function postSizeOnBlur(elementId){
     let post = document.getElementById(elementId);
-    post.style.minHeight = lastHeight + 'px'; // Maintain last height if empty
+    post.style.Height = lastHeight + 'px'; // Maintain last height if empty
 }
