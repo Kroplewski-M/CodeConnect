@@ -610,6 +610,18 @@ video {
   top: 25px;
 }
 
+.right-\[1px\] {
+  right: 1px;
+}
+
+.right-\[5px\] {
+  right: 5px;
+}
+
+.right-0 {
+  right: 0px;
+}
+
 .z-\[200\] {
   z-index: 200;
 }
@@ -789,10 +801,6 @@ video {
 
 .h-\[70px\] {
   height: 70px;
-}
-
-.h-auto {
-  height: auto;
 }
 
 .h-full {

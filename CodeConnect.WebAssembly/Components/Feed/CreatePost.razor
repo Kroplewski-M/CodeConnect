@@ -25,8 +25,11 @@
         </div>
     </div>
     <div>
-        <div class="mt-5 mb-2">
-            <img id="@ImagePreviewId" class="rounded w-[90%] mx-auto @(!LoadedImg ? "hidden" : "")" src="" alt="preview">
+        <div class="mt-5 mb-2 @(LoadedImg?"":"hidden")">
+            <div class="w-[90%] mx-auto relative">
+                <span class="fa-solid fa-circle-xmark hover:cursor-pointer fa-xl text-light-primaryColor absolute right-0" @onclick="RemoveFileSelected"></span>
+                <img id="@ImagePreviewId" class="rounded w-[100%]" src="" alt="preview">
+            </div>
         </div>
     </div>
 </div>

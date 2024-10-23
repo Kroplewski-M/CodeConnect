@@ -47,6 +47,11 @@ public class CreatePostBase : ComponentBase
         SelectedImg = e.GetMultipleFiles().FirstOrDefault();
         LoadedImg = true;
     }
+    protected void RemoveFileSelected()
+    {
+        SelectedImg = null;
+        LoadedImg = false;
+    }
     protected void HandleValidSubmit()
     {
         Console.WriteLine("HandleValidSubmit");
