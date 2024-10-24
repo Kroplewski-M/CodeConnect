@@ -30,5 +30,6 @@ builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<IUserService, UserServiceClient>();
 builder.Services.AddTransient<IUserImageService,UserImageServiceClient>();
 builder.Services.AddSingleton<NotificationsService>();
+builder.Services.AddSingleton<ImageConvertorServiceClient>();
 await builder.Build().RunAsync();
 

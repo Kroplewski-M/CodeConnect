@@ -15,7 +15,7 @@
                         <label for="@InputId" class="block hover:cursor-pointer">
                             <p class="fa-solid fa-image fa-xl text-dark-supportColor/90"></p>
                         </label>
-                        <InputFile type="file" OnChange="HandleFileSelection" accept="image/*" name="postFiles" id="@(InputId)" class="opacity-0 absolute" />
+                        <InputFile multiple type="file" OnChange="HandleFileSelection" accept="image/*" name="postFiles" id="@(InputId)" class="opacity-0 absolute" />
                     </div>
                     <div class="ml-5">
                         <button class=" rounded-md border-solid hover:bg-light-secondaryColor px-3 py-2 text-dark-supportColor/90 "><i class="fa-solid fa-paper-plane"></i> Post</button>
@@ -25,11 +25,26 @@
         </div>
     </div>
     <div>
-        <div class="mt-5 mb-2 @(LoadedImg?"":"hidden")">
-            <div class="w-[90%] mx-auto relative">
-                <span class="fa-solid fa-circle-xmark hover:cursor-pointer fa-xl text-light-primaryColor absolute right-0" @onclick="RemoveFileSelected"></span>
-                <img id="@ImagePreviewId" class="rounded w-[100%]" src="" alt="preview">
-            </div>
+        <div class="mt-5 mb-2">
+            @if (loadingImages)
+            {
+                <div class="w-5 mx-auto">
+                    <i class="fa-solid fa-spinner fa-spin fa-xl text-light-primaryColor"></i>
+                </div>
+            }
+            @if (Base64Images.Any() && loadingImages == false)
+            {
+                <div class="flex flex-wrap">
+                    @for (int i = 0; i < Base64Images.Count; i++)
+                    {
+                        var currentIndex = i;
+                        <div key="@currentIndex" class="@(i==0?"w-[90%] max-h-[400px] mx-auto":"w-[30%] h-[100px] mx-auto mt-[5px]") relative">
+                            <span class="fa-solid fa-circle-xmark hover:cursor-pointer fa-xl text-light-primaryColor absolute right-0 z-[10]" onclick="@(() => RemoveFileSelected(currentIndex))"></span>
+                            <img class="rounded-md w-[100%] h-[100%] object-cover relative" src="@Base64Images[currentIndex]" alt="preview">
+                        </div>
+                    }
+                </div>
+            }
         </div>
     </div>
 </div>

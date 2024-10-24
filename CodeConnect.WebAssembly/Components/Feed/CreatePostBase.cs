@@ -17,6 +17,8 @@ public class CreatePostBase : ComponentBase
     protected UserDetails? UserDetails = null;
     [Inject]
     public IJSRuntime Js { get; set; }
+    [Inject]
+    public ImageConvertorServiceClient ImageConvertor { get; set; } = null!;
     protected string PostContent { get; set; } = string.Empty;
     protected readonly string InputId = "uploadPostImg";
     protected readonly string ImagePreviewId = "uploadedPostImgPreview";
@@ -34,23 +36,28 @@ public class CreatePostBase : ComponentBase
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await Js.InvokeVoidAsync("PreviewImg",InputId,ImagePreviewId);
         if (firstRender)
         {
             await Js.InvokeVoidAsync("postSizeOnBlur","post");
         }
     }
-    protected bool LoadedImg = false;
-    protected IBrowserFile? SelectedImg { get; set; } = null;
-    protected void HandleFileSelection(InputFileChangeEventArgs e)
+    protected bool loadingImages = false;
+    protected List<string> Base64Images = new List<string>();
+    protected async Task HandleFileSelection(InputFileChangeEventArgs e)
     {
-        SelectedImg = e.GetMultipleFiles().FirstOrDefault();
-        LoadedImg = true;
+        loadingImages = true;
+        Base64Images.Clear();
+        foreach (var image in e.GetMultipleFiles().ToList())
+        {
+            Base64Images.Add(await ImageConvertor.ImageToBase64(image));
+        }
+        loadingImages = false;
+        StateHasChanged();
     }
-    protected void RemoveFileSelected()
+    protected void RemoveFileSelected(int index)
     {
-        SelectedImg = null;
-        LoadedImg = false;
+        Base64Images.RemoveAt(index);
+        StateHasChanged();
     }
     protected void HandleValidSubmit()
     {
