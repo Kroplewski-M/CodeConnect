@@ -17,6 +17,21 @@ public class ImageConvertorServiceClient
             }
         }
     }
+
+    public async Task<string> StreamToBase64(Stream streamData)
+    {
+        await using (var stream = streamData)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await stream.CopyToAsync(memoryStream);
+                byte[] imageBytes = memoryStream.ToArray();
+                string base64 = Convert.ToBase64String(imageBytes);
+                Console.WriteLine(base64);
+                return Base64ToImageData(base64);
+            }
+        }
+    }
     public string Base64ToImageData(string base64)
     {
         var imageType = base64.Split('/')[1];

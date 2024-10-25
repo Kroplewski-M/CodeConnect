@@ -1,5 +1,6 @@
 using System.Reflection.Metadata;
 using ApplicationLayer;
+using ApplicationLayer.ClientServices;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
 using DomainLayer.Entities;
@@ -16,26 +17,29 @@ public class UpdateImageBase : ComponentBase
 
     [Inject] public IUserImageService UserImageService { get; set; }
     [Inject] public NotificationsService NotificationsService { get; set; }
+    [Inject] public ImageConvertorServiceClient ImageConvertor { get; set; }
     [Parameter]
     public Constants.ImageTypeOfUpdate UpdateOfImageType { get; set; }
     [Parameter]
     public EventCallback Cancel { get; set; }
 
-    protected bool LoadedImg { get; set; } = false;
+    protected bool loading { get; set; } = false;
     protected bool DisableImg { get; set; } = false;
-    protected IBrowserFile? SelectedImg { get; set; } = null;
+    protected UpdateUserImageRequest SelectedImg { get; set; } = new UpdateUserImageRequest();
+    protected string ImagePreview = string.Empty;
+    protected async Task HandleFileSelection(InputFileChangeEventArgs e)
+    {
+        var img = e.GetMultipleFiles().FirstOrDefault();
+        if (img == null)
+            return;
+        loading = true;
+        SelectedImg.ImageStream = ImageConvertor.ImageToStream(img);
+        SelectedImg.ContentType = img.ContentType;
+        SelectedImg.FileName = img.Name;
+        SelectedImg.TypeOfImage = UpdateOfImageType;
 
-    protected readonly string InputId = "uploadImg";
-    protected readonly string ImagePreviewId = "uploadedImgPreview";
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if(firstRender)
-            await Js.InvokeVoidAsync("PreviewImg",InputId,ImagePreviewId);
-    }
-    protected void HandleFileSelection(InputFileChangeEventArgs e)
-    {
-        SelectedImg = e.GetMultipleFiles().FirstOrDefault();
-        LoadedImg = true;
+        ImagePreview = await ImageConvertor.ImageToBase64(img);
+        loading = false;
     }
 
     protected async Task SaveImg()
@@ -45,17 +49,8 @@ public class UpdateImageBase : ComponentBase
             try
             {
                 DisableImg = true;
-                var maxAllowedSize = 10 * 1024 * 1024; //10MB
-                var imageStream = SelectedImg.OpenReadStream(maxAllowedSize);
-                var updateUserImageRequest = new UpdateUserImageRequest
-                {
-                    TypeOfImage = UpdateOfImageType,
-                    ImageStream = imageStream,
-                    ContentType = SelectedImg.ContentType,
-                    FileName = SelectedImg.Name
-                };
                 NotificationsService.PushNotification(new ApplicationLayer.Notification("Updating please wait...", NotificationType.Info));
-                var result = await UserImageService.UpdateUserImage(updateUserImageRequest);
+                var result = await UserImageService.UpdateUserImage(SelectedImg);
                 if (result.Flag)
                 {
                     NotificationsService.PushNotification(new ApplicationLayer.Notification(result.Message, NotificationType.Success));
