@@ -1,3 +1,4 @@
+using DomainLayer.Constants;
 using Microsoft.AspNetCore.Components.Forms;
 
 namespace ApplicationLayer.ClientServices;
@@ -39,7 +40,7 @@ public class ImageConvertorServiceClient
     }
     public Stream ImageToStream(IBrowserFile browserFile)
     {
-        var maxAllowedSize = 10 * 1024 * 1024; //10MB
+        var maxAllowedSize = Constants.Base.MaxFileSize;
          return browserFile.OpenReadStream(maxAllowedSize);
     }
 }

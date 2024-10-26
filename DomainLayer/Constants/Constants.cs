@@ -5,6 +5,7 @@ public static class Constants
     public static class Base
     {
         public const string BaseUrl = "https://localhost:7124";
+        public const int MaxFileSize = 10 * 1024 * 1024; //10MB
     }
     public static class Tokens
     {
