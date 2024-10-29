@@ -12,12 +12,9 @@ namespace CodeConnect.WebAssembly.Components.Profile;
 
 public class UpdateImageBase : ComponentBase
 {
-    [Inject]
-    public IJSRuntime Js { get; set; }
-
-    [Inject] public IUserImageService UserImageService { get; set; }
-    [Inject] public NotificationsService NotificationsService { get; set; }
-    [Inject] public ImageConvertorServiceClient ImageConvertor { get; set; }
+    [Inject] public required IUserImageService UserImageService { get; set; }
+    [Inject] public required NotificationsService NotificationsService { get; set; }
+    [Inject] public required ImageConvertorServiceClient ImageConvertor { get; set; }
     [Parameter]
     public Constants.ImageTypeOfUpdate UpdateOfImageType { get; set; }
     [Parameter]

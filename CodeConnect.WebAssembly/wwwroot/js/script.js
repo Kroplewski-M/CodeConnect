@@ -3,11 +3,12 @@ window.toggleDarkMode = function(){
 }
 
 let lastHeight = 0;
-let first = true;
 function autoResizeTextAreaAndContainer(textarea) {
     //set to auto so it shrinks straight away when clearing
     textarea.style.height = 'auto';
-    textarea.style.height = textarea.scrollHeight + 'px';
+    if(textarea.scrollHeight > 50){
+        textarea.style.height = textarea.scrollHeight + 'px';
+    }
     lastHeight = textarea.scrollHeight;
 }
 function postSizeOnBlur(elementId){
