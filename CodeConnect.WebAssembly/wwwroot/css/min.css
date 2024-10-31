@@ -1178,6 +1178,11 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+.bg-red-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(185 28 28 / var(--tw-bg-opacity));
+}
+
 .object-cover {
   -o-object-fit: cover;
      object-fit: cover;
@@ -1223,12 +1228,26 @@ video {
   padding-bottom: 1rem;
 }
 
+.px-5 {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+.py-\[5px\] {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
 .pb-10 {
   padding-bottom: 2.5rem;
 }
 
 .pb-7 {
   padding-bottom: 1.75rem;
+}
+
+.pb-\[5px\] {
+  padding-bottom: 5px;
 }
 
 .pl-3 {
@@ -1261,14 +1280,6 @@ video {
 
 .pt-\[5px\] {
   padding-top: 5px;
-}
-
-.pb-0 {
-  padding-bottom: 0px;
-}
-
-.pb-\[5px\] {
-  padding-bottom: 5px;
 }
 
 .text-center {
@@ -1513,6 +1524,11 @@ video {
   background-color: transparent;
 }
 
+.hover\:bg-red-600:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(220 38 38 / var(--tw-bg-opacity));
+}
+
 .hover\:text-light-secondaryColor:hover {
   --tw-text-opacity: 1;
   color: rgb(92 66 167 / var(--tw-text-opacity));
@@ -1627,10 +1643,6 @@ video {
 
   .md\:min-h-\[130px\] {
     min-height: 130px;
-  }
-
-  .md\:min-h-\[110px\] {
-    min-height: 110px;
   }
 
   .md\:w-\[200px\] {
