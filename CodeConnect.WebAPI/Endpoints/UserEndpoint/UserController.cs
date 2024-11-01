@@ -111,4 +111,25 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
             return BadRequest("Failed to fetch interests");
         return Ok(await userService.GetAllInterests());   
     }
+
+    [Authorize]
+    [HttpPost("FollowUser")]
+    public async Task<IActionResult> FollowUser([FromForm] string currentUsername, [FromForm] string followUsername)
+    {
+        var username = User.FindFirst(Constants.ClaimTypes.UserName)?.Value;
+        if(username == null || username != currentUsername)
+            return Unauthorized();
+        //Follow user
+        return Ok();
+    }
+    [Authorize]
+    [HttpPost("UnFollowUser")]
+    public async Task<IActionResult> UnFollowUser([FromForm] string currentUsername, [FromForm] string followUsername)
+    {
+        var username = User.FindFirst(Constants.ClaimTypes.UserName)?.Value;
+        if(username == null || username != currentUsername)
+            return Unauthorized();
+        //UnFollow user
+        return Ok();
+    }
 }

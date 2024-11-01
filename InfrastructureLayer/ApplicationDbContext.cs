@@ -1,6 +1,7 @@
 using DomainLayer.DbEnts;
 using DomainLayer.Entities.Auth;
 using DomainLayer.Entities.Posts;
+using DomainLayer.Entities.User;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext>options)
     
     public DbSet<Comment> Comments { get; set; }
     public DbSet<CommentLike> CommentLikes { get; set; }
+    
+    public DbSet<Followers>FollowUsers { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
