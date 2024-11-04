@@ -132,4 +132,16 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
         //UnFollow user
         return Ok();
     }
+
+    [Authorize]
+    [HttpGet("UserFollowing")]
+    public async Task<IActionResult> GetUserFollowing()
+    {
+        var username = User.FindFirst(Constants.ClaimTypes.UserName)?.Value;
+        if(username == null)
+            return Unauthorized();
+        var user = await userManager.FindByNameAsync(username);
+        //Get Following from ID
+        return Ok();
+    }
 }
