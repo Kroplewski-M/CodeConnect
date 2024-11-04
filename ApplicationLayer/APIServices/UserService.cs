@@ -97,4 +97,13 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
         }
         return techInterests;
     }
+    public async Task<FollowerCount> GetUserFollowers(string userId)
+    {
+        var user = await userManager.FindByIdAsync(userId);
+        if(user == null)
+            throw new UnauthorizedAccessException($"User {userId} not found");
+        var following = context.FollowUsers.Count(x => x.FollowerUserId == user.Id);
+        var followers = context.FollowUsers.Count(x => x.FollowedUserId == user.Id);
+        return new FollowerCount(following, followers);
+    }
 }

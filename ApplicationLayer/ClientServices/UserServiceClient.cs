@@ -59,4 +59,12 @@ public class UserServiceClient(HttpClient httpClient,ILocalStorageService localS
         var response = await httpClient.GetFromJsonAsync<List<TechInterestsDto>>("api/User/GetAllInterests");
         return response ?? new List<TechInterestsDto>();
     }
+
+    public async Task<FollowerCount> GetUserFollowers(string userName)
+    {
+        var response = await httpClient.GetFromJsonAsync<FollowerCount>($"api/User/UserFollowing?username={userName}");
+        if(response == null)
+            throw new UnauthorizedAccessException();
+        return response;
+    }
 }

@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @inject NavigationManager NavigationManager
 @inject IAuthenticateServiceClient AuthenticateServiceClient
-
+@inject IUserService UserService
 <AuthorizeView>
     <Authorized>
         <div class="@(_openNav ? "left-[190px]" : "left-[10px]") xl:hidden translate-x-full xl:-translate-x-0 transition-transform fixed top-5 z-[300] hover:bg-gray-100/10 rounded-full">
@@ -50,8 +50,8 @@
                         <p class="font-bold ms-3  text-light-primaryColor dark:text-dark-supportColor">@_userDetails.FirstName</p>
                         <p class="font-bold ms-3 mb-2 text-light-primaryColor dark:text-dark-supportColor">@_userDetails.LastName</p>
                         <p class="font-bold ms-3 mb-2 text-light-primaryColor dark:text-dark-supportColor">&#x40;@_userDetails.UserName</p>
-                        <p class="text-[13px] ms-3 text-light-primaryColor/90 dark:text-dark-supportColor/90 ">Followers: <span class=" text-light-primaryColor dark:text-dark-supportColor font-bold">3000</span></p>
-                        <p class="text-[13px] ms-3 text-light-primaryColor/90 dark:text-dark-supportColor/90">Following: <span class=" text-light-primaryColor dark:text-dark-supportColor font-bold">1765</span></p>
+                        <p class="text-[13px] ms-3 text-light-primaryColor/90 dark:text-dark-supportColor/90 ">Followers: <span class=" text-light-primaryColor dark:text-dark-supportColor font-bold">@FollowerCount</span></p>
+                        <p class="text-[13px] ms-3 text-light-primaryColor/90 dark:text-dark-supportColor/90">Following: <span class=" text-light-primaryColor dark:text-dark-supportColor font-bold">@FollowingsCount</span></p>
                     </div>
                 }
             </div>
@@ -65,7 +65,9 @@
     private UserDetails? _userDetails = null;
     [CascadingParameter]
     private Task<AuthenticationState>? AuthenticationState { get; set; }
-    
+
+    private int FollowerCount { get; set; } = 0;
+    private int FollowingsCount { get; set; } = 0;
     
     protected override void OnInitialized()
     {
@@ -80,10 +82,13 @@
             if (AuthenticationState == null) return;
             var authState = await AuthenticationState;
             var user = authState?.User;
-
+            
             if (user?.Identity is not null && user.Identity.IsAuthenticated)
             {
                 _userDetails = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
+                var userFollowersAndFollowing = await UserService.GetUserFollowers(_userDetails.UserName);
+                FollowerCount = userFollowersAndFollowing.FollowersCount;
+                FollowingsCount = userFollowersAndFollowing.FollowingCount;
                 await InvokeAsync(StateHasChanged);
             }
             else
