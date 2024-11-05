@@ -140,6 +140,6 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
         var user = await userManager.FindByNameAsync(username);
         if(user == null || user.UserName != username)
             return Unauthorized();
-        return Ok(userService.GetUserFollowers(user.Id));
+        return Ok(await userService.GetUserFollowers(user.Id));
     }
 }
