@@ -25,6 +25,7 @@ public class ProfileBase : ComponentBase
     [CascadingParameter]
     private Task<AuthenticationState>? AuthenticationState { get; set; }
 
+    protected string? CurrentUsername { get; set; }
     protected override async Task OnInitializedAsync()
     {
         if (AuthenticationState is not null)
@@ -43,6 +44,7 @@ public class ProfileBase : ComponentBase
                 else
                 {
                     IsCurrentUser = false;
+                    CurrentUsername = currentUser.UserName;
                     UserDetails = await UserService.GetUserDetails(Username ?? "");
                 }
 

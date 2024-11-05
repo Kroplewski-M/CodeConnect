@@ -68,7 +68,7 @@
                                 </div>
                                 @if (!IsCurrentUser)
                                 {
-                                    <FollowUser />
+                                    <FollowUser CurrentUsername="@CurrentUsername" FollowUsername="@UserDetails?.UserName" />
                                 }
                             </div>
                         </div>

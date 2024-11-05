@@ -12,5 +12,7 @@ public interface IUserService
     public Task<ServiceResponse> UpdateUserInterests(string? username,List<TechInterestsDto>interests);
     public Task<List<TechInterestsDto>> GetAllInterests();
     public Task<FollowerCount> GetUserFollowers(string username);
+    public Task<ServiceResponse> FollowUser(FollowRequestDto followRequest);
+    public Task<ServiceResponse> UnfollowUser(FollowRequestDto unFollowRequest);
 
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InfrastructureLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241010184746_init")]
+    [Migration("20241104225404_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -1280,9 +1280,6 @@ namespace InfrastructureLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("FileId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedByUserId");
@@ -1337,6 +1334,31 @@ namespace InfrastructureLayer.Migrations
                     b.HasIndex("PostId");
 
                     b.ToTable("PostLikes");
+                });
+
+            modelBuilder.Entity("DomainLayer.Entities.User.Followers", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FollowedUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FollowerUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FollowedUserId");
+
+                    b.HasIndex("FollowerUserId");
+
+                    b.ToTable("FollowUsers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -1577,6 +1599,25 @@ namespace InfrastructureLayer.Migrations
                     b.Navigation("LikedByUser");
 
                     b.Navigation("Post");
+                });
+
+            modelBuilder.Entity("DomainLayer.Entities.User.Followers", b =>
+                {
+                    b.HasOne("DomainLayer.Entities.Auth.ApplicationUser", "Followed")
+                        .WithMany()
+                        .HasForeignKey("FollowedUserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("DomainLayer.Entities.Auth.ApplicationUser", "Follower")
+                        .WithMany()
+                        .HasForeignKey("FollowerUserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Followed");
+
+                    b.Navigation("Follower");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

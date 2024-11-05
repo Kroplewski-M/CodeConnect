@@ -1341,25 +1341,19 @@ namespace InfrastructureLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("FollowedId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("FollowedUserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FollowerId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FollowerUserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FollowedId");
+                    b.HasIndex("FollowedUserId");
 
-                    b.HasIndex("FollowerId");
+                    b.HasIndex("FollowerUserId");
 
                     b.ToTable("FollowUsers");
                 });
@@ -1608,11 +1602,15 @@ namespace InfrastructureLayer.Migrations
                 {
                     b.HasOne("DomainLayer.Entities.Auth.ApplicationUser", "Followed")
                         .WithMany()
-                        .HasForeignKey("FollowedId");
+                        .HasForeignKey("FollowedUserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("DomainLayer.Entities.Auth.ApplicationUser", "Follower")
                         .WithMany()
-                        .HasForeignKey("FollowerId");
+                        .HasForeignKey("FollowerUserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Followed");
 

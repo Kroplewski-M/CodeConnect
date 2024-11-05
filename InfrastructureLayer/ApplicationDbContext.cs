@@ -52,6 +52,17 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext>options)
             .WithOne(x=> x.Comment)
             .HasForeignKey(x=> x.CommentId)
             .OnDelete(DeleteBehavior.NoAction);
+        //Followers
+        builder.Entity<Followers>()
+            .HasOne(f => f.Follower)
+            .WithMany() 
+            .HasForeignKey(f => f.FollowerUserId)
+            .OnDelete(DeleteBehavior.NoAction);
+        builder.Entity<Followers>()
+            .HasOne(f => f.Followed)
+            .WithMany()
+            .HasForeignKey(f => f.FollowedUserId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
     private void SeedInterests(ModelBuilder builder){
         builder.Entity<Interest>().HasData(

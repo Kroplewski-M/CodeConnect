@@ -6,7 +6,7 @@ public class Followers
 {
     public int Id { get; set; }
     public required string FollowerUserId { get; set; }
-    public required ApplicationUser Follower { get; set; }
+    public ApplicationUser? Follower { get; init; }
     public required string FollowedUserId { get; set; }
-    public required ApplicationUser Followed { get; set; }
+    public ApplicationUser? Followed { get; init; }
 }

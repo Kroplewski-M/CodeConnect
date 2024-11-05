@@ -114,23 +114,23 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
 
     [Authorize]
     [HttpPost("FollowUser")]
-    public async Task<IActionResult> FollowUser([FromForm] string currentUsername, [FromForm] string followUsername)
+    public async Task<IActionResult> FollowUser(FollowRequestDto followRequest)
     {
         var username = User.FindFirst(Constants.ClaimTypes.UserName)?.Value;
-        if(username == null || username != currentUsername)
+        if(username == null || username != followRequest.CurrentUsername)
             return Unauthorized();
-        //Follow user
-        return Ok();
+        var response = await userService.FollowUser(followRequest);
+        return Ok(response);
     }
     [Authorize]
     [HttpPost("UnFollowUser")]
-    public async Task<IActionResult> UnFollowUser([FromForm] string currentUsername, [FromForm] string followUsername)
+    public async Task<IActionResult> UnFollowUser(FollowRequestDto unFollowRequest)
     {
         var username = User.FindFirst(Constants.ClaimTypes.UserName)?.Value;
-        if(username == null || username != currentUsername)
+        if(username == null || username != unFollowRequest.CurrentUsername)
             return Unauthorized();
-        //UnFollow user
-        return Ok();
+        var response = await userService.UnfollowUser(unFollowRequest);
+        return Ok(response);
     }
 
     [Authorize]

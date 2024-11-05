@@ -67,4 +67,20 @@ public class UserServiceClient(HttpClient httpClient,ILocalStorageService localS
             throw new UnauthorizedAccessException();
         return response;
     }
+
+    public async Task<ServiceResponse> FollowUser(FollowRequestDto followRequest)
+    {
+        var response = await httpClient.PostAsJsonAsync<FollowRequestDto>("api/User/FollowUser", followRequest);
+        if(response.IsSuccessStatusCode)
+            return (await response.Content.ReadFromJsonAsync<ServiceResponse>())!;
+        return new ServiceResponse(false, "Error Occured");
+    }
+
+    public async Task<ServiceResponse> UnfollowUser(FollowRequestDto unFollowRequest)
+    {
+        var response = await httpClient.PostAsJsonAsync<FollowRequestDto>("api/User/FollowUser",unFollowRequest);
+        if(response.IsSuccessStatusCode)
+            return (await response.Content.ReadFromJsonAsync<ServiceResponse>())!;
+        return new ServiceResponse(false, "Error Occured");
+    }
 }

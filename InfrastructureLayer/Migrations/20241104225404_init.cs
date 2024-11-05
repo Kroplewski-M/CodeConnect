@@ -181,13 +181,36 @@ namespace InfrastructureLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FollowUsers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FollowerUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FollowedUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FollowUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FollowUsers_AspNetUsers_FollowedUserId",
+                        column: x => x.FollowedUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_FollowUsers_AspNetUsers_FollowerUserId",
+                        column: x => x.FollowerUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Posts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FileId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedByUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -590,6 +613,16 @@ namespace InfrastructureLayer.Migrations
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_FollowUsers_FollowedUserId",
+                table: "FollowUsers",
+                column: "FollowedUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FollowUsers_FollowerUserId",
+                table: "FollowUsers",
+                column: "FollowerUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PostFiles_PostId",
                 table: "PostFiles",
                 column: "PostId");
@@ -645,6 +678,9 @@ namespace InfrastructureLayer.Migrations
 
             migrationBuilder.DropTable(
                 name: "CommentLikes");
+
+            migrationBuilder.DropTable(
+                name: "FollowUsers");
 
             migrationBuilder.DropTable(
                 name: "PostFiles");
