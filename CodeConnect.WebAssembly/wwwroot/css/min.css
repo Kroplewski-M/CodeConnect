@@ -803,6 +803,10 @@ video {
   height: 100vh;
 }
 
+.h-\[20px\] {
+  height: 20px;
+}
+
 .max-h-\[400px\] {
   max-height: 400px;
 }
@@ -1181,6 +1185,24 @@ video {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.bg-gray-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
+}
+
+.bg-gray-100\/10 {
+  background-color: rgb(243 244 246 / 0.1);
+}
+
+.bg-gray-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+}
+
+.bg-gray-100\/50 {
+  background-color: rgb(243 244 246 / 0.5);
 }
 
 .object-cover {
