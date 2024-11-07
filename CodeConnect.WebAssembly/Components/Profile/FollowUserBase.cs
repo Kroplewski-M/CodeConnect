@@ -11,6 +11,11 @@ public class FollowUserBase : ComponentBase
     [Parameter] public required string CurrentUsername { get; set; }
     [Parameter] public required string FollowUsername { get; set; }
 
+    protected override async Task OnInitializedAsync()
+    {
+        //FETCH IF CURRENT USER IS FOLLIWING THIS USER
+    }
+
     protected async Task ToggleFollow()
     {
         var request = new FollowRequestDto(CurrentUsername, FollowUsername);
