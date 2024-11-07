@@ -3,6 +3,7 @@
 @using CodeConnect.WebAssembly.Components.SVGs
 @using DomainLayer.Constants
 @using CodeConnect.WebAssembly.Components.Profile
+@using CodeConnect.WebAssembly.Components.General
 @inherits ProfileBase
 
 @if (FoundUser)
@@ -117,7 +118,7 @@
             </div>
             @if (ShowConfirmLogout)
             {
-                <LogoutConfirm ConfirmLogout="AuthenticateServiceClient.LogoutUser" CancelLogout="ToggleShowConfirmLogout"/>
+                <Confirm Description="Are you sure you want to logout?" ConfirmText="Logout"  ConfirmMethod="AuthenticateServiceClient.LogoutUser" CancelMethod="ToggleShowConfirmLogout"/>
             }
             @if (ShowEditProfile)
             {

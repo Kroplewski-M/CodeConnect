@@ -1,0 +1,15 @@
+<div class="top-0 left-0 fixed z-[500] w-[100vw] h-[100vh] backdrop-blur-md grid place-content-center">
+    <div class="w-[80%] border dark:border-dark-primaryColor border-light-primaryColor md:w-[300px] rounded-md h-[300px] dark:bg-dark-secondaryColor bg-light-secondaryColor">
+        <p class="font-bold dark:text-dark-supportColor text-light-secondaryColor text-2xl text-center mt-5">@Description</p>
+        <div class="w-[150px] h-[30px] mx-auto mt-5">
+            <button class="rounded-md bg-gray-200 w-[100%] h-[100%] font-bold hover:bg-gray-300" @onclick="CancelMethod">Cancel</button>
+            <button class="rounded-md border-red-800 bg-red-500 w-[100%] h-[100%] font-bold hover:bg-red-700 mt-5" @onclick="ConfirmMethod">@ConfirmText</button>
+        </div>
+    </div>
+</div>
+@code {
+    [Parameter] public string Description { get; set; } = "Are you sure?";
+    [Parameter] public string ConfirmText { get; set; } = "Confirm";
+    [Parameter] public required EventCallback ConfirmMethod { get; set; }
+    [Parameter] public required EventCallback CancelMethod { get; set; }
+}
