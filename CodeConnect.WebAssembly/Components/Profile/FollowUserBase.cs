@@ -6,7 +6,7 @@ namespace CodeConnect.WebAssembly.Components.Profile;
 
 public class FollowUserBase : ComponentBase
 {
-    [Inject] public required IUserService UserService { get; set; }
+    [Inject] public required IFollowingService FollowingService { get; set; }
     protected bool Following { get; set; } = false;
     [Parameter] public required string CurrentUsername { get; set; }
     [Parameter] public required string FollowUsername { get; set; }
@@ -21,7 +21,7 @@ public class FollowUserBase : ComponentBase
         var request = new FollowRequestDto(CurrentUsername, FollowUsername);
         if (!Following)
         {
-            await UserService.FollowUser(request);
+            await FollowingService.FollowUser(request);
         }
 
         Following = !Following;
@@ -35,7 +35,7 @@ public class FollowUserBase : ComponentBase
     protected async Task UnFollow()
     {
         var request = new FollowRequestDto(CurrentUsername, FollowUsername);
-        await UserService.FollowUser(request);
+        await FollowingService.FollowUser(request);
         Following = !Following;
         await InvokeAsync(StateHasChanged);
     }

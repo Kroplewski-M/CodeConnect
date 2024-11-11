@@ -59,28 +59,4 @@ public class UserServiceClient(HttpClient httpClient,ILocalStorageService localS
         var response = await httpClient.GetFromJsonAsync<List<TechInterestsDto>>("api/User/GetAllInterests");
         return response ?? new List<TechInterestsDto>();
     }
-
-    public async Task<FollowerCount> GetUserFollowers(string userName)
-    {
-        var response = await httpClient.GetFromJsonAsync<FollowerCount>($"api/User/UserFollowing?username={userName}");
-        if(response == null)
-            throw new UnauthorizedAccessException();
-        return response;
-    }
-
-    public async Task<ServiceResponse> FollowUser(FollowRequestDto followRequest)
-    {
-        var response = await httpClient.PostAsJsonAsync<FollowRequestDto>("api/User/FollowUser", followRequest);
-        if(response.IsSuccessStatusCode)
-            return (await response.Content.ReadFromJsonAsync<ServiceResponse>())!;
-        return new ServiceResponse(false, "Error Occured");
-    }
-
-    public async Task<ServiceResponse> UnfollowUser(FollowRequestDto unFollowRequest)
-    {
-        var response = await httpClient.PostAsJsonAsync<FollowRequestDto>("api/User/FollowUser",unFollowRequest);
-        if(response.IsSuccessStatusCode)
-            return (await response.Content.ReadFromJsonAsync<ServiceResponse>())!;
-        return new ServiceResponse(false, "Error Occured");
-    }
 }

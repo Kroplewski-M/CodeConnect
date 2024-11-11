@@ -31,5 +31,7 @@ builder.Services.AddScoped<IUserService, UserServiceClient>();
 builder.Services.AddTransient<IUserImageService,UserImageServiceClient>();
 builder.Services.AddSingleton<NotificationsService>();
 builder.Services.AddSingleton<ImageConvertorServiceClient>();
+builder.Services.AddScoped<IFollowingService, FollowingServiceClient>();
+
 await builder.Build().RunAsync();
 
