@@ -42,4 +42,12 @@ public class FollowingController(IFollowingService followingService, UserManager
             return Unauthorized();
         return Ok(await followingService.GetUserFollowers(user.Id));
     }
+
+    [Authorize]
+    [HttpGet("IsUserUnfollowing")]
+    public async Task<IActionResult> IsUserUnfollowing(string currentUsername, string targetUsername)
+    {
+        var request = new FollowRequestDto(currentUsername, targetUsername);
+        return Ok(await followingService.IsUserFollowing(request));
+    }
 }

@@ -29,4 +29,11 @@ public class FollowingServiceClient(HttpClient httpClient) : IFollowingService
             return (await response.Content.ReadFromJsonAsync<ServiceResponse>())!;
         return new ServiceResponse(false, "Error Occured");
     }
+
+    public async Task<bool> IsUserFollowing(FollowRequestDto request)
+    {
+        var response = await httpClient.GetFromJsonAsync<bool>(
+            $"api/Following/IsUserFollowing?currentUsername={request.CurrentUsername}&targetUsername={request.TargetUsername}");
+        return response;
+    }
 }

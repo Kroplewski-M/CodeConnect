@@ -50,4 +50,12 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
         return new ServiceResponse(true, "UnFollowed Successfully");
     }
 
+    public async Task<bool> IsUserFollowing(FollowRequestDto request)
+    {
+        var currentUser = await userManager.FindByNameAsync(request.CurrentUsername);
+        var targetUser = await userManager.FindByNameAsync(request.TargetUsername);
+        if(currentUser == null || targetUser == null)
+            return false;
+        return context.FollowUsers.Any(x=> x.FollowerUserId == currentUser.Id && x.FollowedUserId == targetUser.Id);
+    }
 }
