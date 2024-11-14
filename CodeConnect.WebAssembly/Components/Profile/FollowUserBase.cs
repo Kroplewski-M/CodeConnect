@@ -7,13 +7,13 @@ namespace CodeConnect.WebAssembly.Components.Profile;
 public class FollowUserBase : ComponentBase
 {
     [Inject] public required IFollowingService FollowingService { get; set; }
-    protected bool Following { get; set; } = false;
+    protected bool Following { get; set; }
     [Parameter] public required string CurrentUsername { get; set; }
     [Parameter] public required string FollowUsername { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        //FETCH IF CURRENT USER IS FOLLIWING THIS USER
+        Following = await FollowingService.IsUserFollowing(new FollowRequestDto(CurrentUsername, FollowUsername));
     }
 
     protected async Task ToggleFollow()
@@ -22,11 +22,11 @@ public class FollowUserBase : ComponentBase
         if (!Following)
         {
             await FollowingService.FollowUser(request);
+            Following = true;
         }
-
-        Following = !Following;
-        if (!Following)
+        else
             ConfirmUnFollow = true;
+        
         await InvokeAsync(StateHasChanged);
     }
 
@@ -35,12 +35,17 @@ public class FollowUserBase : ComponentBase
     protected async Task UnFollow()
     {
         var request = new FollowRequestDto(CurrentUsername, FollowUsername);
-        await FollowingService.FollowUser(request);
+        await FollowingService.UnfollowUser(request);
         Following = !Following;
+        ConfirmUnFollow = false;
         await InvokeAsync(StateHasChanged);
     }
 
-    protected void CancelUnFollow() => ConfirmUnFollow = false;
+    protected void CancelUnFollow()
+    {
+        ConfirmUnFollow = false;
+        StateHasChanged();
+    }
 }
     
     

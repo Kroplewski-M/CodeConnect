@@ -25,7 +25,7 @@ public class FollowingServiceClient(HttpClient httpClient, NotificationsService 
 
     public async Task<ServiceResponse> UnfollowUser(FollowRequestDto unFollowRequest)
     {
-        var response = await httpClient.PostAsJsonAsync<FollowRequestDto>("api/Following/FollowUser",unFollowRequest);
+        var response = await httpClient.PostAsJsonAsync<FollowRequestDto>("api/Following/UnFollowUser",unFollowRequest);
         if(response.IsSuccessStatusCode)
             return (await response.Content.ReadFromJsonAsync<ServiceResponse>())!;
         notificationsService.PushNotification(new Notification("An Error Occured when unfollowing user", NotificationType.Error));
@@ -35,7 +35,7 @@ public class FollowingServiceClient(HttpClient httpClient, NotificationsService 
     public async Task<bool> IsUserFollowing(FollowRequestDto request)
     {
         var response = await httpClient.GetFromJsonAsync<bool>(
-            $"api/Following/IsUserFollowing?currentUsername={request.CurrentUsername}&targetUsername={request.TargetUsername}");
+            $"api/Following/IsUserUnfollowing?currentUsername={request.CurrentUsername}&targetUsername={request.TargetUsername}");
         return response;
     }
 }

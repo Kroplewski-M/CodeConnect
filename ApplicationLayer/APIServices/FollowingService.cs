@@ -40,12 +40,10 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
         var targetUser = await userManager.FindByNameAsync(unFollowRequest.TargetUsername);
         if(currentUser == null || targetUser == null)
             return new ServiceResponse(false, "A user could not be found");
-        var unfollow = new Followers()
-        {
-            FollowerUserId = currentUser.Id,
-            FollowedUserId = targetUser.Id
-        };
-        context.Remove(unfollow);
+        var unfollow = context.FollowUsers.FirstOrDefault(x=> x.FollowerUserId == currentUser.Id && x.FollowedUserId == targetUser.Id);
+        if(unfollow == null)
+            return new ServiceResponse(false, "A user could not be found");
+        context.FollowUsers.Remove(unfollow);
         await context.SaveChangesAsync();
         return new ServiceResponse(true, "UnFollowed Successfully");
     }
