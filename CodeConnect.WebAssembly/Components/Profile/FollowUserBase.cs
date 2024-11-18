@@ -16,8 +16,10 @@ public class FollowUserBase : ComponentBase
         Following = await FollowingService.IsUserFollowing(new FollowRequestDto(CurrentUsername, FollowUsername));
     }
 
+    protected bool DisableFollow { get; set; } = false;
     protected async Task ToggleFollow()
     {
+        DisableFollow = true;
         var request = new FollowRequestDto(CurrentUsername, FollowUsername);
         if (!Following)
         {
@@ -26,7 +28,7 @@ public class FollowUserBase : ComponentBase
         }
         else
             ConfirmUnFollow = true;
-        
+        DisableFollow = false;
         await InvokeAsync(StateHasChanged);
     }
 
@@ -34,10 +36,12 @@ public class FollowUserBase : ComponentBase
 
     protected async Task UnFollow()
     {
+        DisableFollow = true;
         var request = new FollowRequestDto(CurrentUsername, FollowUsername);
         await FollowingService.UnfollowUser(request);
         Following = !Following;
         ConfirmUnFollow = false;
+        DisableFollow = false;
         await InvokeAsync(StateHasChanged);
     }
 

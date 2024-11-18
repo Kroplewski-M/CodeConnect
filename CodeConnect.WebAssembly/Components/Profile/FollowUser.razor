@@ -1,7 +1,7 @@
 @using CodeConnect.WebAssembly.Components.General
 @inherits FollowUserBase
 
-<button @onclick="ToggleFollow" class="dark:text-dark-supportColor text-light-supportColor hover:cursor-pointer bg-red-700 hover:bg-red-600 rounded-md px-5 py-[5px] mt-[10px]">
+<button @onclick="ToggleFollow" disabled="@DisableFollow" class="dark:text-dark-supportColor text-light-supportColor hover:cursor-pointer bg-red-700 hover:bg-red-600 rounded-md px-5 py-[5px] mt-[10px]">
     <i class="fa-solid fa-heart"></i> @(Following? "Following" : "Follow")
 </button>
 
