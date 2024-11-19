@@ -26,7 +26,7 @@ public class ProfileBase : ComponentBase
     private Task<AuthenticationState>? AuthenticationState { get; set; }
 
     protected string? CurrentUsername { get; set; }
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         if (AuthenticationState is not null)
         {
