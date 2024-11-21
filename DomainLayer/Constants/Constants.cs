@@ -44,4 +44,11 @@ public static class Constants
         ProfileImage,
         BackgroundImage
     }
+
+    public enum ProfileDetailsView
+    {
+        Posts,
+        Followers,
+        Following
+    }
 }
