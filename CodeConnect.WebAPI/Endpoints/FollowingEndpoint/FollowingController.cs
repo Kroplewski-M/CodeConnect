@@ -50,4 +50,21 @@ public class FollowingController(IFollowingService followingService, UserManager
         var request = new FollowRequestDto(currentUsername, targetUsername);
         return Ok(await followingService.IsUserFollowing(request));
     }
+
+    [Authorize]
+    [HttpGet("GetUserFollowers")]
+    public async Task<IActionResult> GetUserFollowers(string username)
+    {
+        if(string.IsNullOrEmpty(username))
+            return Unauthorized();
+        return Ok();
+    }
+    [Authorize]
+    [HttpGet("GetUserFollowing")]
+    public async Task<IActionResult> GetUserFollowing(string username)
+    {
+        if(string.IsNullOrEmpty(username))
+            return Unauthorized();
+        return Ok();
+    }
 }
