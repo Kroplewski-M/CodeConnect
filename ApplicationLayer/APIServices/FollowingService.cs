@@ -56,4 +56,14 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
             return false;
         return context.FollowUsers.Any(x=> x.FollowerUserId == currentUser.Id && x.FollowedUserId == targetUser.Id);
     }
+
+    public async Task<UserBasicDto> GetUserFollowersProfile(string username)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<UserBasicDto> GetUserFollowingProfile(string username)
+    {
+        throw new NotImplementedException();
+    }
 }

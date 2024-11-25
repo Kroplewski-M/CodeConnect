@@ -52,19 +52,19 @@ public class FollowingController(IFollowingService followingService, UserManager
     }
 
     [Authorize]
-    [HttpGet("GetUserFollowers")]
-    public async Task<IActionResult> GetUserFollowers(string username)
+    [HttpGet("GetUserFollowersProfile")]
+    public async Task<IActionResult> GetUserFollowersProfile(string username)
     {
         if(string.IsNullOrEmpty(username))
             return Unauthorized();
-        return Ok();
+        return Ok(await followingService.GetUserFollowingProfile(username));
     }
     [Authorize]
-    [HttpGet("GetUserFollowing")]
-    public async Task<IActionResult> GetUserFollowing(string username)
+    [HttpGet("GetUserFollowingProfile")]
+    public async Task<IActionResult> GetUserFollowingProfile(string username)
     {
         if(string.IsNullOrEmpty(username))
             return Unauthorized();
-        return Ok();
+        return Ok(await followingService.GetUserFollowingProfile(username));
     }
 }

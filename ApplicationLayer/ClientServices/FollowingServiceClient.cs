@@ -38,4 +38,14 @@ public class FollowingServiceClient(HttpClient httpClient, NotificationsService 
             $"api/Following/IsUserUnfollowing?currentUsername={request.CurrentUsername}&targetUsername={request.TargetUsername}");
         return response;
     }
+
+    public async Task<UserBasicDto> GetUserFollowersProfile(string username)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<UserBasicDto> GetUserFollowingProfile(string username)
+    {
+        throw new NotImplementedException();
+    }
 }

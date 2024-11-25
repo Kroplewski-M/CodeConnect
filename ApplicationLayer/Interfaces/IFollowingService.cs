@@ -8,4 +8,7 @@ public interface IFollowingService
     public Task<ServiceResponse> FollowUser(FollowRequestDto followRequest);
     public Task<ServiceResponse> UnfollowUser(FollowRequestDto unFollowRequest);
     public Task<bool> IsUserFollowing(FollowRequestDto request);
+    public Task<UserBasicDto> GetUserFollowersProfile(string username);
+    public Task<UserBasicDto> GetUserFollowingProfile(string username);
+
 }
