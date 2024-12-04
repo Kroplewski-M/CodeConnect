@@ -20,6 +20,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext>options)
     public DbSet<Comment> Comments { get; set; }
     public DbSet<CommentLike> CommentLikes { get; set; }
     
+    public DbSet<RefreshUserAuth>RefreshUserAuths { get; set; }
+    
     public DbSet<Followers>FollowUsers { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
