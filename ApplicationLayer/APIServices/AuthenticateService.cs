@@ -29,6 +29,9 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         if (result.Succeeded)
         {
             var userClaims = GetClaimsForUser(user);
+            var createdRefresh = await SaveRefreshToken(userClaims, user.Id);
+            if (createdRefresh == false)
+                return new AuthResponse(false,"","Error creating refresh token");
             return GenerateAuthResponse(userClaims);
         }
         string error = result.Errors.Select(x => x.Description).FirstOrDefault() ?? "";
@@ -55,19 +58,29 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
             if (correctPassword)
             {
                 var userClaims = GetClaimsForUser(user);
-                //Save refresh token in DB to re authenticate user
-                var refreshExpiresAt = DateTime.UtcNow.AddMinutes(Constants.Tokens.RefreshTokenMins);
-                var refreshToken = tokenGenerationService.GenerateJwtToken(userClaims,refreshExpiresAt);
-                if(string.IsNullOrWhiteSpace(refreshToken))
-                    return new AuthResponse(false, "","An error occured creating refresh token");
-                context.RefreshUserAuths.Add(new RefreshUserAuth { RefreshToken = refreshToken, UserId = user.Id});
-                await context.SaveChangesAsync();
+                var createdRefresh = await SaveRefreshToken(userClaims, user.Id);
+                if (createdRefresh == false)
+                    return new AuthResponse(false,"","Error creating refresh token");
                 return GenerateAuthResponse(userClaims);
             }
         }
         return new AuthResponse(false, "","Incorrect Email or Password");
     }
 
+    public async Task<bool> SaveRefreshToken(List<Claim> userClaims,string userId)
+    {
+        var existingToken = context.RefreshUserAuths.FirstOrDefault(x=> x.UserId == userId);
+        if (existingToken != null)
+            context.RefreshUserAuths.Remove(existingToken);
+        //Save refresh token in DB to re authenticate user
+        var refreshExpiresAt = DateTime.UtcNow.AddMinutes(Constants.Tokens.RefreshTokenMins);
+        var refreshToken = tokenGenerationService.GenerateJwtToken(userClaims,refreshExpiresAt);
+        if(string.IsNullOrWhiteSpace(refreshToken))
+            return false;
+        context.RefreshUserAuths.Add(new RefreshUserAuth { RefreshToken = refreshToken, UserId = userId});
+        await context.SaveChangesAsync();
+        return true;
+    }
     public Task<AuthResponse> LogoutUser()
     {
         throw new NotImplementedException();
