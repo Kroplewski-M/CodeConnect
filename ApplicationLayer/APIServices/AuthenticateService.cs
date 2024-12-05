@@ -6,12 +6,13 @@ using DomainLayer.Constants;
 using DomainLayer.Entities.Auth;
 using FluentValidation;
 using FluentValidation.Results;
+using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
 
 namespace ApplicationLayer.APIServices;
 
 public class AuthenticateService(UserManager<ApplicationUser>userManager,
-    TokenService tokenGenerationService) : IAuthenticateService
+    TokenService tokenGenerationService,  ApplicationDbContext context) : IAuthenticateService
 {
     public async Task<AuthResponse> CreateUser(RegisterForm registerForm)
     {
@@ -54,6 +55,13 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
             if (correctPassword)
             {
                 var userClaims = GetClaimsForUser(user);
+                //Save refresh token in DB to re authenticate user
+                var refreshExpiresAt = DateTime.UtcNow.AddMinutes(Constants.Tokens.RefreshTokenMins);
+                var refreshToken = tokenGenerationService.GenerateJwtToken(userClaims,refreshExpiresAt);
+                if(string.IsNullOrWhiteSpace(refreshToken))
+                    return new AuthResponse(false, "","An error occured creating refresh token");
+                context.RefreshUserAuths.Add(new RefreshUserAuth { RefreshToken = refreshToken, UserId = user.Id});
+                await context.SaveChangesAsync();
                 return GenerateAuthResponse(userClaims);
             }
         }
@@ -85,10 +93,8 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
 
     private AuthResponse GenerateAuthResponse(List<Claim> userClaims)
     {
-        var expiresAt = DateTime.UtcNow.AddMinutes(60);
+        var expiresAt = DateTime.UtcNow.AddMinutes(Constants.Tokens.AuthTokenMins);
         var token = tokenGenerationService.GenerateJwtToken(userClaims,expiresAt);
-        var refreshExpiresAt = DateTime.UtcNow.AddDays(30);
-        var refreshToken = tokenGenerationService.GenerateJwtToken(userClaims,refreshExpiresAt);
         return new AuthResponse(true, token, "Auth successful");
     }
 }

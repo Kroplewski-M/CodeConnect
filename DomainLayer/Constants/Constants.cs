@@ -12,6 +12,8 @@ public static class Constants
         public const string AuthToken = "AuthToken";
         public const string AuthType = "Jwt";
         public const string ApiAuthTokenName = "Bearer";
+        public const int AuthTokenMins = 30;
+        public const int RefreshTokenMins = 10080;
     }
     public static class ClaimTypes
     {
