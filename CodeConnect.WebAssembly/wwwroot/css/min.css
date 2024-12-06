@@ -107,7 +107,7 @@
 }
 
 /*
-! tailwindcss v3.4.15 | MIT License | https://tailwindcss.com
+! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -1090,7 +1090,7 @@ video {
 
 .border-light-secondaryColor {
   --tw-border-opacity: 1;
-  border-color: rgb(92 66 167 / var(--tw-border-opacity, 1));
+  border-color: rgb(105 61 153 / var(--tw-border-opacity, 1));
 }
 
 .border-light-supportColor {
@@ -1132,11 +1132,11 @@ video {
 
 .bg-dark-secondaryColor {
   --tw-bg-opacity: 1;
-  background-color: rgb(92 66 167 / var(--tw-bg-opacity, 1));
+  background-color: rgb(105 61 153 / var(--tw-bg-opacity, 1));
 }
 
 .bg-dark-secondaryColor\/50 {
-  background-color: rgb(92 66 167 / 0.5);
+  background-color: rgb(105 61 153 / 0.5);
 }
 
 .bg-gray-100 {
@@ -1178,7 +1178,7 @@ video {
 
 .bg-light-secondaryColor {
   --tw-bg-opacity: 1;
-  background-color: rgb(92 66 167 / var(--tw-bg-opacity, 1));
+  background-color: rgb(105 61 153 / var(--tw-bg-opacity, 1));
 }
 
 .bg-purple-600 {
@@ -1396,7 +1396,7 @@ video {
 
 .text-dark-secondaryColor {
   --tw-text-opacity: 1;
-  color: rgb(92 66 167 / var(--tw-text-opacity, 1));
+  color: rgb(105 61 153 / var(--tw-text-opacity, 1));
 }
 
 .text-dark-supportColor {
@@ -1437,7 +1437,7 @@ video {
 
 .text-light-secondaryColor {
   --tw-text-opacity: 1;
-  color: rgb(92 66 167 / var(--tw-text-opacity, 1));
+  color: rgb(105 61 153 / var(--tw-text-opacity, 1));
 }
 
 .text-light-supportColor {
@@ -1501,20 +1501,20 @@ video {
 
 .hover\:border-light-secondaryColor:hover {
   --tw-border-opacity: 1;
-  border-color: rgb(92 66 167 / var(--tw-border-opacity, 1));
+  border-color: rgb(105 61 153 / var(--tw-border-opacity, 1));
 }
 
 .hover\:bg-dark-secondaryColor:hover {
   --tw-bg-opacity: 1;
-  background-color: rgb(92 66 167 / var(--tw-bg-opacity, 1));
+  background-color: rgb(105 61 153 / var(--tw-bg-opacity, 1));
 }
 
 .hover\:bg-dark-secondaryColor\/50:hover {
-  background-color: rgb(92 66 167 / 0.5);
+  background-color: rgb(105 61 153 / 0.5);
 }
 
 .hover\:bg-dark-secondaryColor\/80:hover {
-  background-color: rgb(92 66 167 / 0.8);
+  background-color: rgb(105 61 153 / 0.8);
 }
 
 .hover\:bg-dark-supportColor:hover {
@@ -1546,7 +1546,7 @@ video {
 
 .hover\:bg-light-secondaryColor:hover {
   --tw-bg-opacity: 1;
-  background-color: rgb(92 66 167 / var(--tw-bg-opacity, 1));
+  background-color: rgb(105 61 153 / var(--tw-bg-opacity, 1));
 }
 
 .hover\:bg-red-600:hover {
@@ -1565,7 +1565,7 @@ video {
 
 .hover\:text-light-secondaryColor:hover {
   --tw-text-opacity: 1;
-  color: rgb(92 66 167 / var(--tw-text-opacity, 1));
+  color: rgb(105 61 153 / var(--tw-text-opacity, 1));
 }
 
 .hover\:opacity-100:hover {
@@ -1589,12 +1589,12 @@ video {
 
 .dark\:bg-dark-secondaryColor:is(.dark *) {
   --tw-bg-opacity: 1;
-  background-color: rgb(92 66 167 / var(--tw-bg-opacity, 1));
+  background-color: rgb(105 61 153 / var(--tw-bg-opacity, 1));
 }
 
 .dark\:text-dark-secondaryColor:is(.dark *) {
   --tw-text-opacity: 1;
-  color: rgb(92 66 167 / var(--tw-text-opacity, 1));
+  color: rgb(105 61 153 / var(--tw-text-opacity, 1));
 }
 
 .dark\:text-dark-supportColor:is(.dark *) {

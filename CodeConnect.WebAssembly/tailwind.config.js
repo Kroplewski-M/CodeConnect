@@ -7,12 +7,12 @@ module.exports = {
       colors:{
         light: {
           primaryColor: "#F8F9FA",
-          secondaryColor: "#5C42A7",
+          secondaryColor: "#693d99",
           supportColor: "#333333",
         },
         dark: {
           primaryColor: "#444444",
-          secondaryColor: "#5C42A7",
+          secondaryColor: "#693d99",
           supportColor: "#E8E7E7",
         }
       },
