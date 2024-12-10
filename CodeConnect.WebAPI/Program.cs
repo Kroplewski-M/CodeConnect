@@ -38,11 +38,22 @@ builder.Services.AddAuthentication(options =>
     {
         ValidateIssuer = true,
         ValidateAudience = true,
-        ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         ValidIssuer = jwtSettings?.Issuer ?? "",
         ValidAudience = jwtSettings?.Audience ?? "",
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings?.Key ?? ""))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings?.Key ?? "")),
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero, 
+        LifetimeValidator = (notBefore, expires, token, parameters) =>
+        {
+            if (expires != null)
+            {
+                const int gracePeriodMinutes = 1;
+                var expirationWithGrace = expires.Value.AddMinutes(gracePeriodMinutes);
+                return expirationWithGrace > DateTime.UtcNow;
+            }
+            return false;
+        }
     };
 });
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));

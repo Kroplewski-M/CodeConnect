@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -21,13 +22,21 @@ public class AuthHandler(ILocalStorageService localStorageService) : System.Net.
             request.Headers.Authorization = new AuthenticationHeaderValue(Constants.Tokens.ApiAuthTokenName, token);
         }
         var response = await base.SendAsync(request, cancellationToken);
-        if (response.IsSuccessStatusCode)
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var jwtToken = tokenHandler.ReadJwtToken(token);
+        var expClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Exp);
+        if (expClaim != null && long.TryParse(expClaim.Value, out var expUnix))
         {
-            var refreshRequest = new HttpRequestMessage(HttpMethod.Get, $"{Constants.Base.BaseUrl}/api/Authentication/RefreshToken");
-            refreshRequest.Headers.Authorization = new AuthenticationHeaderValue(Constants.Tokens.ApiAuthTokenName, token);
-            var tokenResponse = await base.SendAsync(refreshRequest, cancellationToken);
-            var refreshToken = await tokenResponse.Content.ReadAsStringAsync();
-            await localStorageService.SetItemAsync(Constants.Tokens.AuthToken,refreshToken); 
+            var expirationTime = DateTimeOffset.FromUnixTimeSeconds(expUnix).UtcDateTime;
+            var timeRemaining = expirationTime - DateTime.UtcNow;
+            if (timeRemaining.TotalMinutes < 10)
+            {
+                var refreshRequest = new HttpRequestMessage(HttpMethod.Get, $"{Constants.Base.BaseUrl}/api/Authentication/RefreshToken");
+                refreshRequest.Headers.Authorization = new AuthenticationHeaderValue(Constants.Tokens.ApiAuthTokenName, token);
+                var tokenResponse = await base.SendAsync(refreshRequest, cancellationToken);
+                var refreshToken = await tokenResponse.Content.ReadAsStringAsync(cancellationToken);
+                await localStorageService.SetItemAsync(Constants.Tokens.AuthToken,refreshToken,cancellationToken); 
+            }
         }
         return response;
     }
