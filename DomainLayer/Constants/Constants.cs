@@ -10,6 +10,7 @@ public static class Constants
     public static class Tokens
     {
         public const string AuthToken = "AuthToken";
+        public const string RefreshToken = "RefreshToken";
         public const string AuthType = "Jwt";
         public const string ApiAuthTokenName = "Bearer";
         public const int AuthTokenMins = 30;

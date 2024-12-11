@@ -1,3 +1,4 @@
+using System.Reflection.Metadata;
 using System.Security.Claims;
 using ApplicationLayer.APIServices;
 using ApplicationLayer.DTO_s;
@@ -5,6 +6,8 @@ using ApplicationLayer.Interfaces;
 using DomainLayer.Entities.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
+using Constants = DomainLayer.Constants.Constants;
 
 namespace CodeConnect.WebAPI.Endpoints.AuthenticationEndpoint;
 
@@ -42,9 +45,12 @@ public class AuthenticationController(IAuthenticateService authenticateService,
     [HttpGet("RefreshToken")]
     public IActionResult RefreshToken()
     {
-        var token = tokenService.GenerateJwtToken(User.Claims.ToList(), DateTime.UtcNow.AddMinutes(60));
-        if(!string.IsNullOrEmpty(token))
-            return Ok(tokenService.GenerateJwtToken(User.Claims.ToList(),DateTime.UtcNow.AddMinutes(60)));
-        return BadRequest("Could not create token!");
+        var token = tokenService.GenerateJwtToken(User.Claims.ToList(), DateTime.UtcNow.AddMinutes(Constants.Tokens.AuthTokenMins));
+        var refreshToken = tokenService.GenerateJwtToken(User.Claims.ToList(), DateTime.UtcNow.AddMinutes(Constants.Tokens.RefreshTokenMins));
+        if (!string.IsNullOrEmpty(token) && !string.IsNullOrEmpty(refreshToken))
+        {
+            return Ok(new AuthResponse(true, token, refreshToken, "success"));
+        }
+        return BadRequest(new AuthResponse(false,"","","Error occured"));
     }
 }

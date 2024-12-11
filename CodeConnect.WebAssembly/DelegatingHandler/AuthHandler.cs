@@ -16,26 +16,26 @@ public class AuthHandler(ILocalStorageService localStorageService) : System.Net.
     
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        var token = await localStorageService.GetItemAsync<string>(Constants.Tokens.AuthToken);
+        var token = await localStorageService.GetItemAsync<string>(Constants.Tokens.AuthToken, cancellationToken);
         if (!string.IsNullOrEmpty(token))
         {
             request.Headers.Authorization = new AuthenticationHeaderValue(Constants.Tokens.ApiAuthTokenName, token);
         }
         var response = await base.SendAsync(request, cancellationToken);
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var jwtToken = tokenHandler.ReadJwtToken(token);
-        var expClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Exp);
-        if (expClaim != null && long.TryParse(expClaim.Value, out var expUnix))
+        if (response.StatusCode == HttpStatusCode.Unauthorized)
         {
-            var expirationTime = DateTimeOffset.FromUnixTimeSeconds(expUnix).UtcDateTime;
-            var timeRemaining = expirationTime - DateTime.UtcNow;
-            if (timeRemaining.TotalMinutes < 10)
+            var refreshToken = await localStorageService.GetItemAsync<string>(Constants.Tokens.RefreshToken, cancellationToken);
+            var refreshRequest = new HttpRequestMessage(HttpMethod.Get, $"{Constants.Base.BaseUrl}/api/Authentication/RefreshToken");
+            refreshRequest.Headers.Authorization = new AuthenticationHeaderValue(Constants.Tokens.ApiAuthTokenName, refreshToken);
+            var tokenResponse = await base.SendAsync(refreshRequest, cancellationToken);
+            var newToken = await tokenResponse.Content.ReadFromJsonAsync<AuthResponse>(cancellationToken: cancellationToken);
+            if (newToken?.Flag == true)
             {
-                var refreshRequest = new HttpRequestMessage(HttpMethod.Get, $"{Constants.Base.BaseUrl}/api/Authentication/RefreshToken");
-                refreshRequest.Headers.Authorization = new AuthenticationHeaderValue(Constants.Tokens.ApiAuthTokenName, token);
-                var tokenResponse = await base.SendAsync(refreshRequest, cancellationToken);
-                var refreshToken = await tokenResponse.Content.ReadAsStringAsync(cancellationToken);
-                await localStorageService.SetItemAsync(Constants.Tokens.AuthToken,refreshToken,cancellationToken); 
+                await localStorageService.SetItemAsync(Constants.Tokens.AuthToken,newToken.Token,cancellationToken);
+                await localStorageService.SetItemAsync(Constants.Tokens.RefreshToken,newToken.RefreshToken,cancellationToken);
+                request.Headers.Authorization = new AuthenticationHeaderValue(Constants.Tokens.ApiAuthTokenName, newToken.Token);
+                var retry = await base.SendAsync(request, cancellationToken);
+                return retry;
             }
         }
         return response;

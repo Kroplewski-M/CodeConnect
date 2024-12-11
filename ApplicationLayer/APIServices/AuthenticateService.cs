@@ -31,11 +31,11 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
             var userClaims = GetClaimsForUser(user);
             var createdRefresh = await SaveRefreshToken(userClaims, user.Id);
             if (createdRefresh == false)
-                return new AuthResponse(false,"","Error creating refresh token");
+                return new AuthResponse(false,"","","Error creating refresh token");
             return GenerateAuthResponse(userClaims);
         }
         string error = result.Errors.Select(x => x.Description).FirstOrDefault() ?? "";
-        return new AuthResponse(false,"",error);
+        return new AuthResponse(false,"","",error);
     }
 
     public async Task<AuthResponse> LoginUser(LoginForm loginForm)
@@ -60,11 +60,11 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
                 var userClaims = GetClaimsForUser(user);
                 var createdRefresh = await SaveRefreshToken(userClaims, user.Id);
                 if (createdRefresh == false)
-                    return new AuthResponse(false,"","Error creating refresh token");
+                    return new AuthResponse(false,"","","Error creating refresh token");
                 return GenerateAuthResponse(userClaims);
             }
         }
-        return new AuthResponse(false, "","Incorrect Email or Password");
+        return new AuthResponse(false, "","","Incorrect Email or Password");
     }
 
     public async Task<bool> SaveRefreshToken(List<Claim> userClaims,string userId)
@@ -108,6 +108,9 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
     {
         var expiresAt = DateTime.UtcNow.AddMinutes(Constants.Tokens.AuthTokenMins);
         var token = tokenGenerationService.GenerateJwtToken(userClaims,expiresAt);
-        return new AuthResponse(true, token, "Auth successful");
+        var refreshExiresAt = DateTime.UtcNow.AddMinutes(Constants.Tokens.RefreshTokenMins);
+        var refreshToken = tokenGenerationService.GenerateJwtToken(userClaims,refreshExiresAt);
+        
+        return new AuthResponse(true, token, refreshToken,"Auth successful");
     }
 }
