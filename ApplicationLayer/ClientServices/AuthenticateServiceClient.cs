@@ -51,7 +51,7 @@ public class AuthenticateServiceClient(
             if (authResponse != null && authResponse.Flag)
             {
                 await localStorageService.SetItemAsync(Constants.Tokens.AuthToken, authResponse.Token);
-                await localStorageService.SetItemAsync(Constants.Tokens.RefreshToken, authResponse.Token);
+                await localStorageService.SetItemAsync(Constants.Tokens.RefreshToken, authResponse.RefreshToken);
                 ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
                 NotifyStateChanged();
                 return authResponse;

@@ -30,9 +30,9 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         {
             var userClaims = GetClaimsForUser(user);
             var createdRefresh = await SaveRefreshToken(userClaims, user.Id);
-            if (createdRefresh == false)
+            if (!string.IsNullOrWhiteSpace(createdRefresh))
                 return new AuthResponse(false,"","","Error creating refresh token");
-            return GenerateAuthResponse(userClaims);
+            return GenerateAuthResponse(userClaims,createdRefresh);
         }
         string error = result.Errors.Select(x => x.Description).FirstOrDefault() ?? "";
         return new AuthResponse(false,"","",error);
@@ -59,15 +59,15 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
             {
                 var userClaims = GetClaimsForUser(user);
                 var createdRefresh = await SaveRefreshToken(userClaims, user.Id);
-                if (createdRefresh == false)
+                if (string.IsNullOrWhiteSpace(createdRefresh))
                     return new AuthResponse(false,"","","Error creating refresh token");
-                return GenerateAuthResponse(userClaims);
+                return GenerateAuthResponse(userClaims,createdRefresh);
             }
         }
         return new AuthResponse(false, "","","Incorrect Email or Password");
     }
 
-    public async Task<bool> SaveRefreshToken(List<Claim> userClaims,string userId)
+    public async Task<string> SaveRefreshToken(List<Claim> userClaims,string userId)
     {
         var existingToken = context.RefreshUserAuths.FirstOrDefault(x=> x.UserId == userId);
         if (existingToken != null)
@@ -76,10 +76,10 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         var refreshExpiresAt = DateTime.UtcNow.AddMinutes(Constants.Tokens.RefreshTokenMins);
         var refreshToken = tokenGenerationService.GenerateJwtToken(userClaims,refreshExpiresAt);
         if(string.IsNullOrWhiteSpace(refreshToken))
-            return false;
+            return "";
         context.RefreshUserAuths.Add(new RefreshUserAuth { RefreshToken = refreshToken, UserId = userId});
         await context.SaveChangesAsync();
-        return true;
+        return refreshToken;
     }
     public Task<AuthResponse> LogoutUser()
     {
@@ -104,12 +104,10 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         ];
     }
 
-    private AuthResponse GenerateAuthResponse(List<Claim> userClaims)
+    private AuthResponse GenerateAuthResponse(List<Claim> userClaims,string refreshToken)
     {
         var expiresAt = DateTime.UtcNow.AddMinutes(Constants.Tokens.AuthTokenMins);
         var token = tokenGenerationService.GenerateJwtToken(userClaims,expiresAt);
-        var refreshExiresAt = DateTime.UtcNow.AddMinutes(Constants.Tokens.RefreshTokenMins);
-        var refreshToken = tokenGenerationService.GenerateJwtToken(userClaims,refreshExiresAt);
         
         return new AuthResponse(true, token, refreshToken,"Auth successful");
     }
