@@ -1,13 +1,18 @@
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using ApplicationLayer.DTO_s;
+using DomainLayer.Constants;
 using DomainLayer.Entities.APIClasses;
+using DomainLayer.Entities.Auth;
+using InfrastructureLayer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 namespace ApplicationLayer.APIServices;
 
-public class TokenService(IOptions<JwtSettings> jwtSettings)
+public class TokenService(IOptions<JwtSettings> jwtSettings,ApplicationDbContext context,UserManager<ApplicationUser>userManager)
 {
     public string? GenerateJwtToken(IEnumerable<Claim> claims, DateTime expireAt)
     {
@@ -46,5 +51,36 @@ public class TokenService(IOptions<JwtSettings> jwtSettings)
             return new ClaimsPrincipalResponse(false, new ClaimsPrincipal());
         }
     }
-    
+
+    public async Task<AuthResponse> RefreshUserTokens(string userName, string refreshToken)
+    {
+        var user = await userManager.FindByNameAsync(userName);
+        if (user == null)
+            return new AuthResponse(false,"","","Couldn't find user when refreshing token");
+        var refresh = context.RefreshUserAuths.FirstOrDefault(x => x.UserId == user.Id);
+        if (refresh != null && refresh?.RefreshToken == refreshToken)
+        {
+            List<Claim>userClaims = new List<Claim>()
+            {
+                new Claim(Constants.ClaimTypes.FirstName, user?.FirstName ?? ""),
+                new Claim(Constants.ClaimTypes.LastName, user?.LastName ?? ""),
+                new Claim(Constants.ClaimTypes.UserName, user?.UserName ?? ""),
+                new Claim(Constants.ClaimTypes.Bio, user?.Bio ?? ""),
+                new Claim(Constants.ClaimTypes.Email, user?.Email ?? ""),
+                new Claim(Constants.ClaimTypes.Dob, user.DOB.ToString(CultureInfo.InvariantCulture)),
+                new Claim(Constants.ClaimTypes.CreatedAt, user.CreatedAt.ToString(CultureInfo.InvariantCulture)),
+                new Claim(Constants.ClaimTypes.ProfileImg, user?.ProfileImageUrl ?? ""),
+                new Claim(Constants.ClaimTypes.BackgroundImg, user?.BackgroundImageUrl ?? ""),
+                new Claim(Constants.ClaimTypes.GithubLink, user?.GithubLink ?? ""),
+                new Claim(Constants.ClaimTypes.WebsiteLink, user?.WebsiteLink ?? ""),
+            };
+            var token = GenerateJwtToken(userClaims, DateTime.UtcNow.AddMinutes(Constants.Tokens.AuthTokenMins));
+            var newRefreshToken = GenerateJwtToken(userClaims, DateTime.UtcNow.AddMinutes(Constants.Tokens.RefreshTokenMins));
+            if (!string.IsNullOrEmpty(token) && !string.IsNullOrEmpty(refreshToken))
+            {
+                return new AuthResponse(true, token, refreshToken, "success");
+            }
+        }
+        return new AuthResponse(false,"","","Error occurred authenticating refresh token");
+    }
 }

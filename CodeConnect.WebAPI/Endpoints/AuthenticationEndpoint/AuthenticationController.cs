@@ -43,14 +43,18 @@ public class AuthenticationController(IAuthenticateService authenticateService,
     }
     [Authorize]
     [HttpGet("RefreshToken")]
-    public IActionResult RefreshToken()
+    public async Task<IActionResult> RefreshToken()
     {
-        var token = tokenService.GenerateJwtToken(User.Claims.ToList(), DateTime.UtcNow.AddMinutes(Constants.Tokens.AuthTokenMins));
-        var refreshToken = tokenService.GenerateJwtToken(User.Claims.ToList(), DateTime.UtcNow.AddMinutes(Constants.Tokens.RefreshTokenMins));
-        if (!string.IsNullOrEmpty(token) && !string.IsNullOrEmpty(refreshToken))
+        var authorizationHeader = Request.Headers["Authorization"].ToString();
+        var token = "";
+        if (!string.IsNullOrEmpty(authorizationHeader) && authorizationHeader.StartsWith("Bearer "))
         {
-            return Ok(new AuthResponse(true, token, refreshToken, "success"));
+            token = authorizationHeader.Substring("Bearer ".Length).Trim();
         }
-        return BadRequest(new AuthResponse(false,"","","Error occured"));
+        var response = await tokenService.RefreshUserTokens(User.Identity.Name,token);
+        if(response.Flag)
+            return Ok(response);
+        return BadRequest(response);
+
     }
 }
