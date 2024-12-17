@@ -36,9 +36,9 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
         if (user == null)
             return null;
         if (string.IsNullOrEmpty(user.ProfileImageUrl))
-            user.ProfileImageUrl = Constants.ProfileDefaults.ProfileImg;
+            user.ProfileImageUrl = Consts.ProfileDefaults.ProfileImg;
         if (string.IsNullOrEmpty(user.BackgroundImageUrl))
-            user.BackgroundImageUrl = Constants.ProfileDefaults.BackgroundImg;
+            user.BackgroundImageUrl = Consts.ProfileDefaults.BackgroundImg;
         return new UserDetails(user.FirstName ?? "", user.LastName ?? "", user.UserName ?? "", user.Email ?? "", user.ProfileImageUrl ?? "",
             user.BackgroundImageUrl ?? "", user.GithubLink ?? "",
             user.WebsiteLink ?? "", user.DOB, user.CreatedAt,user.Bio ?? "");
@@ -85,7 +85,7 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
 
     public async Task<List<TechInterestsDto>> GetAllInterests()
     {
-        var cacheKey = Constants.CacheKeys.AllInterests;
+        var cacheKey = Consts.CacheKeys.AllInterests;
         if (!memoryCache.TryGetValue(cacheKey, out List<TechInterestsDto> techInterests))
         {
             var interests = await context.TechInterests

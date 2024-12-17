@@ -68,9 +68,9 @@ public class ProfileBase : ComponentBase
         ShowEditProfile = !ShowEditProfile;
         StateHasChanged();
     }
-    public Constants.ImageTypeOfUpdate UpdateImageType { get; set; }
+    public Consts.ImageTypeOfUpdate UpdateImageType { get; set; }
     protected bool ShowUpdateImage { get; set; }
-    protected void UpdateImage(Constants.ImageTypeOfUpdate imageImageType)
+    protected void UpdateImage(Consts.ImageTypeOfUpdate imageImageType)
     {
         UpdateImageType = imageImageType;
         ShowUpdateImage = true;

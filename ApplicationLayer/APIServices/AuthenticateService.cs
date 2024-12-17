@@ -4,6 +4,7 @@ using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
 using DomainLayer.Entities.Auth;
+using DomainLayer.Generics;
 using FluentValidation;
 using FluentValidation.Results;
 using InfrastructureLayer;
@@ -28,7 +29,7 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         var result = await userManager.CreateAsync(user, registerForm.Password);
         if (result.Succeeded)
         {
-            var userClaims = GetClaimsForUser(user);
+            var userClaims = Generics.GetClaimsForUser(user);;
             var createdRefresh = await SaveRefreshToken(userClaims, user.Id);
             if (!string.IsNullOrWhiteSpace(createdRefresh))
                 return new AuthResponse(false,"","","Error creating refresh token");
@@ -57,7 +58,7 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
             var correctPassword = await userManager.CheckPasswordAsync(user, loginForm.Password);
             if (correctPassword)
             {
-                var userClaims = GetClaimsForUser(user);
+                var userClaims = Generics.GetClaimsForUser(user);
                 var createdRefresh = await SaveRefreshToken(userClaims, user.Id);
                 if (string.IsNullOrWhiteSpace(createdRefresh))
                     return new AuthResponse(false,"","","Error creating refresh token");
@@ -73,7 +74,7 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         if (existingToken != null)
             context.RefreshUserAuths.Remove(existingToken);
         //Save refresh token in DB to re authenticate user
-        var refreshExpiresAt = DateTime.UtcNow.AddMinutes(Constants.Tokens.RefreshTokenMins);
+        var refreshExpiresAt = DateTime.UtcNow.AddMinutes(Consts.Tokens.RefreshTokenMins);
         var refreshToken = tokenGenerationService.GenerateJwtToken(userClaims,refreshExpiresAt);
         if(string.IsNullOrWhiteSpace(refreshToken))
             return "";
@@ -81,32 +82,14 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         await context.SaveChangesAsync();
         return refreshToken;
     }
+
     public Task<AuthResponse> LogoutUser()
     {
         throw new NotImplementedException();
     }
-
-    public List<Claim> GetClaimsForUser(ApplicationUser user)
-    {
-        return
-        [
-            new Claim(Constants.ClaimTypes.FirstName, user.FirstName ?? ""),
-            new Claim(Constants.ClaimTypes.LastName, user.LastName ?? ""),
-            new Claim(Constants.ClaimTypes.UserName, user.UserName ?? ""),
-            new Claim(Constants.ClaimTypes.Bio, user.Bio ?? ""),
-            new Claim(Constants.ClaimTypes.Email, user.Email ?? ""),
-            new Claim(Constants.ClaimTypes.Dob, user.DOB.ToString(CultureInfo.InvariantCulture)),
-            new Claim(Constants.ClaimTypes.CreatedAt, user.CreatedAt.ToString(CultureInfo.InvariantCulture)),
-            new Claim(Constants.ClaimTypes.ProfileImg, user.ProfileImageUrl ?? ""),
-            new Claim(Constants.ClaimTypes.BackgroundImg, user.BackgroundImageUrl ?? ""),
-            new Claim(Constants.ClaimTypes.GithubLink, user.GithubLink ?? ""),
-            new Claim(Constants.ClaimTypes.WebsiteLink, user.WebsiteLink ?? ""),
-        ];
-    }
-
     private AuthResponse GenerateAuthResponse(List<Claim> userClaims,string refreshToken)
     {
-        var expiresAt = DateTime.UtcNow.AddMinutes(Constants.Tokens.AuthTokenMins);
+        var expiresAt = DateTime.UtcNow.AddMinutes(Consts.Tokens.AuthTokenMins);
         var token = tokenGenerationService.GenerateJwtToken(userClaims,expiresAt);
         
         return new AuthResponse(true, token, refreshToken,"Auth successful");

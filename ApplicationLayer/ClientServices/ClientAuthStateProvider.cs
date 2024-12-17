@@ -17,7 +17,7 @@ public class ClientAuthStateProvider(HttpClient httpClient,
     {
         try
         {
-            var token = await localStorageService.GetItemAsync<string>(Constants.Tokens.AuthToken);
+            var token = await localStorageService.GetItemAsync<string>(Consts.Tokens.AuthToken);
             var isValid = await IsTokenValid(token);
             if (isValid)
             {
@@ -59,7 +59,7 @@ public class ClientAuthStateProvider(HttpClient httpClient,
             claims.Add(new Claim(claim.Type, claim.Value));
         }
 
-        var identity = new ClaimsIdentity(claims, Constants.Tokens.AuthType);
+        var identity = new ClaimsIdentity(claims, Consts.Tokens.AuthType);
         return new ClaimsPrincipal(identity);
     }
 }

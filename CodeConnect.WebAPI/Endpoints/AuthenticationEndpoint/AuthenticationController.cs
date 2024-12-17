@@ -7,7 +7,6 @@ using DomainLayer.Entities.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
-using Constants = DomainLayer.Constants.Constants;
 
 namespace CodeConnect.WebAPI.Endpoints.AuthenticationEndpoint;
 

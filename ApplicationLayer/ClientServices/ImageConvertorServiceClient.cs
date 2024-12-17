@@ -40,7 +40,7 @@ public class ImageConvertorServiceClient
     }
     public Stream ImageToStream(IBrowserFile browserFile)
     {
-        var maxAllowedSize = Constants.Base.MaxFileSize;
+        var maxAllowedSize = Consts.Base.MaxFileSize;
          return browserFile.OpenReadStream(maxAllowedSize);
     }
 }

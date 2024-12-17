@@ -2,26 +2,26 @@
 @inherits ProfileDetailsBase
 
 <div class="w-[90vw] max-w-[1100px] mx-auto flex pl-[10px] mt-6">
-    <div class="p-[10px] rounded-t-lg hover:cursor-pointer @(ProfileDetailsView == Constants.ProfileDetailsView.Posts ?"bg-dark-secondaryColor":"bg-dark-secondaryColor/50")" @onclick="() => SetProfileDetails(Constants.ProfileDetailsView.Posts)">
+    <div class="p-[10px] rounded-t-lg hover:cursor-pointer @(ProfileDetailsView == Consts.ProfileDetailsView.Posts ?"bg-dark-secondaryColor":"bg-dark-secondaryColor/50")" @onclick="() => SetProfileDetails(Consts.ProfileDetailsView.Posts)">
         <p class="text-light-primaryColor">Posts</p>
     </div>
-    <div class="bg-dark-secondaryColor p-[10px] rounded-t-lg ml-2 hover:cursor-pointer @(ProfileDetailsView == Constants.ProfileDetailsView.Followers ?"bg-dark-secondaryColor":"bg-dark-secondaryColor/50")" @onclick="() => SetProfileDetails(Constants.ProfileDetailsView.Followers)">
+    <div class="bg-dark-secondaryColor p-[10px] rounded-t-lg ml-2 hover:cursor-pointer @(ProfileDetailsView == Consts.ProfileDetailsView.Followers ?"bg-dark-secondaryColor":"bg-dark-secondaryColor/50")" @onclick="() => SetProfileDetails(Consts.ProfileDetailsView.Followers)">
         <p class="text-light-primaryColor">Followers</p>
     </div>
-    <div class="bg-dark-secondaryColor p-[10px] rounded-t-lg ml-2 hover:cursor-pointer @(ProfileDetailsView == Constants.ProfileDetailsView.Following ?"bg-dark-secondaryColor":"bg-dark-secondaryColor/50")" @onclick="() => SetProfileDetails(Constants.ProfileDetailsView.Following)">
+    <div class="bg-dark-secondaryColor p-[10px] rounded-t-lg ml-2 hover:cursor-pointer @(ProfileDetailsView == Consts.ProfileDetailsView.Following ?"bg-dark-secondaryColor":"bg-dark-secondaryColor/50")" @onclick="() => SetProfileDetails(Consts.ProfileDetailsView.Following)">
         <p class="text-light-primaryColor">Following</p>
     </div>
 </div>
 <div class="w-[90vw] max-w-[1100px] bg-dark-secondaryColor rounded-md mx-auto pb-10 px-5 pt-10">
-    @if (ProfileDetailsView == Constants.ProfileDetailsView.Posts)
+    @if (ProfileDetailsView == Consts.ProfileDetailsView.Posts)
     {
         <UserPosts/>
     }
-    @if (ProfileDetailsView == Constants.ProfileDetailsView.Followers)
+    @if (ProfileDetailsView == Consts.ProfileDetailsView.Followers)
     {
         <UserFollowers/>
     }
-    @if (ProfileDetailsView == Constants.ProfileDetailsView.Following)
+    @if (ProfileDetailsView == Consts.ProfileDetailsView.Following)
     {
         <UserFollowing/>
     }

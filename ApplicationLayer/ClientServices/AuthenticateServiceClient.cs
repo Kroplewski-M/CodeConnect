@@ -31,8 +31,8 @@ public class AuthenticateServiceClient(
         {
             if (authResponse != null && authResponse.Flag)
             {
-                await localStorageService.SetItemAsync(Constants.Tokens.AuthToken, authResponse.Token);
-                await localStorageService.SetItemAsync(Constants.Tokens.RefreshToken, authResponse.Token);
+                await localStorageService.SetItemAsync(Consts.Tokens.AuthToken, authResponse.Token);
+                await localStorageService.SetItemAsync(Consts.Tokens.RefreshToken, authResponse.Token);
 
                 ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
                 NotifyStateChanged();
@@ -50,8 +50,8 @@ public class AuthenticateServiceClient(
         {
             if (authResponse != null && authResponse.Flag)
             {
-                await localStorageService.SetItemAsync(Constants.Tokens.AuthToken, authResponse.Token);
-                await localStorageService.SetItemAsync(Constants.Tokens.RefreshToken, authResponse.RefreshToken);
+                await localStorageService.SetItemAsync(Consts.Tokens.AuthToken, authResponse.Token);
+                await localStorageService.SetItemAsync(Consts.Tokens.RefreshToken, authResponse.RefreshToken);
                 ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
                 NotifyStateChanged();
                 return authResponse;
@@ -62,35 +62,35 @@ public class AuthenticateServiceClient(
 
     public UserDetails GetUserFromFromAuthState(AuthenticationState? authState)
     {
-        var dob = authState.GetUserInfo(Constants.ClaimTypes.Dob).Trim() ?? null;
-        var createdAt = authState.GetUserInfo(Constants.ClaimTypes.CreatedAt).Trim() ?? null;
+        var dob = authState.GetUserInfo(Consts.ClaimTypes.Dob).Trim() ?? null;
+        var createdAt = authState.GetUserInfo(Consts.ClaimTypes.CreatedAt).Trim() ?? null;
         string format = "MM/dd/yyyy";
-        var profileImg = authState.GetUserInfo(Constants.ClaimTypes.ProfileImg);
-        var backgroundImg = authState.GetUserInfo(Constants.ClaimTypes.BackgroundImg);
+        var profileImg = authState.GetUserInfo(Consts.ClaimTypes.ProfileImg);
+        var backgroundImg = authState.GetUserInfo(Consts.ClaimTypes.BackgroundImg);
 
         if (string.IsNullOrEmpty(profileImg))
-            profileImg = Constants.ProfileDefaults.ProfileImg;
+            profileImg = Consts.ProfileDefaults.ProfileImg;
         if (string.IsNullOrEmpty(backgroundImg))
-            backgroundImg = Constants.ProfileDefaults.BackgroundImg;
+            backgroundImg = Consts.ProfileDefaults.BackgroundImg;
 
         return new UserDetails(
-            FirstName: authState.GetUserInfo(Constants.ClaimTypes.FirstName),
-            LastName: authState.GetUserInfo(Constants.ClaimTypes.LastName),
-            Email: authState.GetUserInfo(Constants.ClaimTypes.Email),
-            UserName: authState.GetUserInfo(Constants.ClaimTypes.UserName),
+            FirstName: authState.GetUserInfo(Consts.ClaimTypes.FirstName),
+            LastName: authState.GetUserInfo(Consts.ClaimTypes.LastName),
+            Email: authState.GetUserInfo(Consts.ClaimTypes.Email),
+            UserName: authState.GetUserInfo(Consts.ClaimTypes.UserName),
             ProfileImg: profileImg,
             BackgroundImg: backgroundImg,
-            GithubLink: authState.GetUserInfo(Constants.ClaimTypes.GithubLink),
-            WebsiteLink: authState.GetUserInfo(Constants.ClaimTypes.WebsiteLink),
+            GithubLink: authState.GetUserInfo(Consts.ClaimTypes.GithubLink),
+            WebsiteLink: authState.GetUserInfo(Consts.ClaimTypes.WebsiteLink),
             Dob: DateOnly.ParseExact(dob ?? "", format, CultureInfo.InvariantCulture), 
             CreatedAt:DateOnly.ParseExact(createdAt ?? "", format, CultureInfo.InvariantCulture),
-            Bio:authState.GetUserInfo(Constants.ClaimTypes.Bio)
+            Bio:authState.GetUserInfo(Consts.ClaimTypes.Bio)
             );
     }
     public async Task<AuthResponse> LogoutUser()
     {
-        await localStorageService.RemoveItemAsync(Constants.Tokens.AuthToken);
-        await localStorageService.RemoveItemAsync(Constants.Tokens.RefreshToken);
+        await localStorageService.RemoveItemAsync(Consts.Tokens.AuthToken);
+        await localStorageService.RemoveItemAsync(Consts.Tokens.RefreshToken);
         ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
         NotifyStateChanged();
         navigationManager.NavigateTo("/");

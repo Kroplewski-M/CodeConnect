@@ -5,9 +5,9 @@ namespace CodeConnect.WebAssembly.Components.Profile;
 
 public class ProfileDetailsBase : ComponentBase
 {
-    public Constants.ProfileDetailsView ProfileDetailsView { get; set; } = Constants.ProfileDetailsView.Posts;
+    public Consts.ProfileDetailsView ProfileDetailsView { get; set; } = Consts.ProfileDetailsView.Posts;
 
-    public void SetProfileDetails(Constants.ProfileDetailsView option)
+    public void SetProfileDetails(Consts.ProfileDetailsView option)
     {
         ProfileDetailsView = option;
         StateHasChanged();

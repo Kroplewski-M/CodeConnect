@@ -16,7 +16,7 @@ public class FollowingController(IFollowingService followingService, UserManager
     [HttpPost("FollowUser")]
     public async Task<IActionResult> FollowUser(FollowRequestDto followRequest)
     {
-        var username = User.FindFirst(Constants.ClaimTypes.UserName)?.Value;
+        var username = User.FindFirst(Consts.ClaimTypes.UserName)?.Value;
         if(username == null || username != followRequest.CurrentUsername)
             return Unauthorized();
         var response = await followingService.FollowUser(followRequest);
@@ -26,7 +26,7 @@ public class FollowingController(IFollowingService followingService, UserManager
     [HttpPost("UnFollowUser")]
     public async Task<IActionResult> UnFollowUser(FollowRequestDto unFollowRequest)
     {
-        var username = User.FindFirst(Constants.ClaimTypes.UserName)?.Value;
+        var username = User.FindFirst(Consts.ClaimTypes.UserName)?.Value;
         if(username == null || username != unFollowRequest.CurrentUsername)
             return Unauthorized();
         var response = await followingService.UnfollowUser(unFollowRequest);

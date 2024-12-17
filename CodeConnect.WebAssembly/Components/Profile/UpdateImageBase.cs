@@ -16,7 +16,7 @@ public class UpdateImageBase : ComponentBase
     [Inject] public required NotificationsService NotificationsService { get; set; }
     [Inject] public required ImageConvertorServiceClient ImageConvertor { get; set; }
     [Parameter]
-    public Constants.ImageTypeOfUpdate UpdateOfImageType { get; set; }
+    public Consts.ImageTypeOfUpdate UpdateOfImageType { get; set; }
     [Parameter]
     public EventCallback Cancel { get; set; }
 

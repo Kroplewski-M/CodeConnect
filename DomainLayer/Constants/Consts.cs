@@ -1,6 +1,6 @@
 namespace DomainLayer.Constants;
 
-public static class Constants
+public static class Consts
 {
     public static class Base
     {

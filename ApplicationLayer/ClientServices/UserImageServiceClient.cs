@@ -25,7 +25,7 @@ public class UserImageServiceClient(HttpClient httpClient,ILocalStorageService l
         var result = await response.Content.ReadFromJsonAsync<TokenResponse>();
         if (!string.IsNullOrEmpty(result?.Key))
         {
-            await localStorageService.SetItemAsync(Constants.Tokens.AuthToken, result.Key);
+            await localStorageService.SetItemAsync(Consts.Tokens.AuthToken, result.Key);
             ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
             authenticateServiceClient.NotifyStateChanged();
             return new ServiceResponse(true, "User image updated");

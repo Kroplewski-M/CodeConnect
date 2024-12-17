@@ -21,7 +21,7 @@ builder.Services.AddTransient<AuthHandler>();
 builder.Services.AddHttpClient("DefaultClient",
     client =>
     {
-        client.BaseAddress = new Uri(Constants.Base.BaseUrl);
+        client.BaseAddress = new Uri(Consts.Base.BaseUrl);
     }).AddHttpMessageHandler<AuthHandler>();
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("DefaultClient"));
 builder.Services.AddScoped<AuthenticationStateProvider,ClientAuthStateProvider>();

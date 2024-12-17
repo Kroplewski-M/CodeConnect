@@ -5,6 +5,7 @@ using DomainLayer.Constants;
 using DomainLayer.DbEnts;
 using DomainLayer.Entities;
 using DomainLayer.Entities.Auth;
+using DomainLayer.Generics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
@@ -19,14 +20,14 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
 {
     private TokenResponse GenerateNewToken(ApplicationUser user)
     {
-        var claims = authenticateService.GetClaimsForUser(user);
+        var claims = Generics.GetClaimsForUser(user);
         return new TokenResponse(tokenService.GenerateJwtToken(claims.AsEnumerable(),DateTime.Now.AddHours(1)));
     }
     [Authorize]
     [HttpPost("EditUserDetails")]
     public async Task<IActionResult> EditUserDetails([FromBody] EditProfileForm editProfileForm)
     {
-        var username = User.FindFirst(Constants.ClaimTypes.UserName)?.Value;
+        var username = User.FindFirst(Consts.ClaimTypes.UserName)?.Value;
         if (username != editProfileForm.Username)
             return Unauthorized();
         await userService.UpdateUserDetails(editProfileForm);
@@ -54,7 +55,7 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
     [HttpPost("UpdateUserImage")]
     public async Task<IActionResult> UpdateUserImage([FromForm]IFormFile image, [FromForm] int typeOfImage)
     {
-        var username = User.FindFirst(Constants.ClaimTypes.UserName)?.Value;
+        var username = User.FindFirst(Consts.ClaimTypes.UserName)?.Value;
         if (!string.IsNullOrEmpty(username))
         {
             var updateUserImageRequest = new UpdateUserImageRequest
@@ -62,7 +63,7 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
                 ImageStream = image.OpenReadStream(),
                 ContentType = image.ContentType,
                 FileName = image.FileName,
-                TypeOfImage = (Constants.ImageTypeOfUpdate)typeOfImage,
+                TypeOfImage = (Consts.ImageTypeOfUpdate)typeOfImage,
                 Username = username
             };
 
@@ -92,7 +93,7 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
     [HttpPut("UpdateUserInterests")]
     public async Task<IActionResult> UpdateUserInterests(List<TechInterestsDto> interests)
     {
-        var username = User.FindFirst(Constants.ClaimTypes.UserName)?.Value;
+        var username = User.FindFirst(Consts.ClaimTypes.UserName)?.Value;
         if (username != null)
         {
             var response = await userService.UpdateUserInterests(username, interests);

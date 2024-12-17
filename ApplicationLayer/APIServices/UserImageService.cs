@@ -20,7 +20,7 @@ public class UserImageService(IOptions<AzureSettings>azureSettings, UserManager<
         
         //SETUP AZURE CLIENT
         var blobServiceClient = new BlobServiceClient(azureSettings.Value.ConnectionString);
-        var containerClient = updateUserImageRequest.TypeOfImage == Constants.ImageTypeOfUpdate.ProfileImage
+        var containerClient = updateUserImageRequest.TypeOfImage == Consts.ImageTypeOfUpdate.ProfileImage
             ? blobServiceClient.GetBlobContainerClient(azureSettings.Value.ProfileImgContainer)
             : blobServiceClient.GetBlobContainerClient(azureSettings.Value.BackgroundImgContainer);
         
@@ -42,9 +42,9 @@ public class UserImageService(IOptions<AzureSettings>azureSettings, UserManager<
         return new ServiceResponse(true, "Image updated successfully");
     }
 
-    private async Task RemoveIfOldImageExists(ApplicationUser user, Constants.ImageTypeOfUpdate imageType, BlobContainerClient containerClient)
+    private async Task RemoveIfOldImageExists(ApplicationUser user, Consts.ImageTypeOfUpdate imageType, BlobContainerClient containerClient)
     {
-            var imageUrl = imageType == Constants.ImageTypeOfUpdate.ProfileImage
+            var imageUrl = imageType == Consts.ImageTypeOfUpdate.ProfileImage
                 ? user.ProfileImageUrl
                 : user.BackgroundImageUrl;
             var fileName = Path.GetFileName(imageUrl);
@@ -55,11 +55,11 @@ public class UserImageService(IOptions<AzureSettings>azureSettings, UserManager<
             }
     }
 
-    private async Task UpdateUserImage(ApplicationUser user, Constants.ImageTypeOfUpdate imageType, string url)
+    private async Task UpdateUserImage(ApplicationUser user, Consts.ImageTypeOfUpdate imageType, string url)
     {
-        if(imageType == Constants.ImageTypeOfUpdate.ProfileImage)
+        if(imageType == Consts.ImageTypeOfUpdate.ProfileImage)
             user.ProfileImageUrl = url;
-        if(imageType == Constants.ImageTypeOfUpdate.BackgroundImage)
+        if(imageType == Consts.ImageTypeOfUpdate.BackgroundImage)
             user.BackgroundImageUrl = url;
         await userManager.UpdateAsync(user);
     }
