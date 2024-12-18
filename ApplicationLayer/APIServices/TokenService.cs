@@ -64,8 +64,17 @@ public class TokenService(IOptions<JwtSettings> jwtSettings,ApplicationDbContext
             var userClaims = Generics.GetClaimsForUser(user);
             var token = GenerateJwtToken(userClaims, DateTime.UtcNow.AddMinutes(Consts.Tokens.AuthTokenMins));
             var newRefreshToken = GenerateJwtToken(userClaims, DateTime.UtcNow.AddMinutes(Consts.Tokens.RefreshTokenMins));
-            if (!string.IsNullOrEmpty(token) && !string.IsNullOrEmpty(refreshToken))
+            if (!string.IsNullOrWhiteSpace(token) && !string.IsNullOrWhiteSpace(refreshToken) && !string.IsNullOrWhiteSpace(newRefreshToken))
             {
+                try
+                {
+                    refresh.RefreshToken = newRefreshToken;
+                    await context.SaveChangesAsync();
+                }
+                catch
+                {
+                    return new AuthResponse(false,"","","Error occurred authenticating refresh token");
+                }
                 return new AuthResponse(true, token, refreshToken, "success");
             }
         }

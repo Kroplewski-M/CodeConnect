@@ -50,7 +50,9 @@ public class AuthenticationController(IAuthenticateService authenticateService,
         {
             token = authorizationHeader.Substring("Bearer ".Length).Trim();
         }
-        var response = await tokenService.RefreshUserTokens(User.Identity.Name,token);
+
+        var name = User?.Identity?.Name;
+        var response = await tokenService.RefreshUserTokens(name,token);
         if(response.Flag)
             return Ok(response);
         return BadRequest(response);
