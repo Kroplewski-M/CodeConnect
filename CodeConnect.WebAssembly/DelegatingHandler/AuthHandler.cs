@@ -22,7 +22,7 @@ public class AuthHandler(ILocalStorageService localStorageService) : System.Net.
         {
             request.Headers.Authorization = new AuthenticationHeaderValue(Consts.Tokens.ApiAuthTokenName, token);
         }
-        else if(request.RequestUri?.AbsolutePath != "/api/Authentication/RegisterUser" && request.RequestUri?.AbsolutePath != "/api/Authentication/LoginUser")
+        else if(request.RequestUri?.AbsolutePath != Consts.Base.RegisterEndpoint && request.RequestUri?.AbsolutePath != Consts.Base.LoginEndpoint)
         {
             await RefreshTokenAndRetry(request, cancellationToken);
         }
