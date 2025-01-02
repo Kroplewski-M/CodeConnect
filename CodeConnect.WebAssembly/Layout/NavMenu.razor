@@ -99,7 +99,7 @@
             if (user?.Identity is not null && user.Identity.IsAuthenticated)
             {
                 _userDetails = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
-                var userFollowersAndFollowing = await FollowingService.GetUserFollowers(_userDetails.UserName);
+                var userFollowersAndFollowing = await FollowingService.GetUserFollowersCount(_userDetails.UserName);
                 FollowerCount = userFollowersAndFollowing.FollowersCount;
                 FollowingsCount = userFollowersAndFollowing.FollowingCount;
                 LoadingUserDetails = false;

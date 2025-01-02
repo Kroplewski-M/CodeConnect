@@ -4,11 +4,11 @@ namespace ApplicationLayer.Interfaces;
 
 public interface IFollowingService
 {
-    public Task<FollowerCount> GetUserFollowers(string username);
+    public Task<FollowerCount> GetUserFollowersCount(string username);
     public Task<ServiceResponse> FollowUser(FollowRequestDto followRequest);
     public Task<ServiceResponse> UnfollowUser(FollowRequestDto unFollowRequest);
     public Task<bool> IsUserFollowing(FollowRequestDto request);
-    public Task<UserBasicDto> GetUserFollowersProfile(string username);
-    public Task<UserBasicDto> GetUserFollowingProfile(string username);
+    public Task<List<UserBasicDto>> GetUserFollowers(string username);
+    public Task<List<UserBasicDto>> GetUserFollowing(string username);
 
 }

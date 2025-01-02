@@ -9,7 +9,7 @@ namespace ApplicationLayer.APIServices;
 
 public class FollowingService(UserManager<ApplicationUser>userManager, ApplicationDbContext context): IFollowingService
 {
-    public async Task<FollowerCount> GetUserFollowers(string userId)
+    public async Task<FollowerCount> GetUserFollowersCount(string userId)
     {
         var user = await userManager.FindByIdAsync(userId);
         if(user == null)
@@ -57,12 +57,12 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
         return context.FollowUsers.Any(x=> x.FollowerUserId == currentUser.Id && x.FollowedUserId == targetUser.Id);
     }
 
-    public async Task<UserBasicDto> GetUserFollowersProfile(string username)
+    public async Task<List<UserBasicDto>> GetUserFollowers(string username)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<UserBasicDto> GetUserFollowingProfile(string username)
+    public async Task<List<UserBasicDto>> GetUserFollowing(string username)
     {
         throw new NotImplementedException();
     }

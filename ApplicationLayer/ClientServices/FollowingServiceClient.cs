@@ -6,9 +6,9 @@ namespace ApplicationLayer.ClientServices;
 
 public class FollowingServiceClient(HttpClient httpClient, NotificationsService notificationsService) : IFollowingService
 {
-    public async Task<FollowerCount> GetUserFollowers(string userName)
+    public async Task<FollowerCount> GetUserFollowersCount(string userName)
     {
-        var response = await httpClient.GetFromJsonAsync<FollowerCount>($"api/Following/UserFollowing?username={userName}");
+        var response = await httpClient.GetFromJsonAsync<FollowerCount>($"api/Following/UserFollowersCount?username={userName}");
         if(response == null)
             notificationsService.PushNotification(new Notification("An Error Occured when fetching followers", NotificationType.Error));
         return response;
@@ -39,13 +39,15 @@ public class FollowingServiceClient(HttpClient httpClient, NotificationsService 
         return response;
     }
 
-    public async Task<UserBasicDto> GetUserFollowersProfile(string username)
+    public async Task<List<UserBasicDto>> GetUserFollowers(string username)
     {
-        throw new NotImplementedException();
+        var response = await httpClient.GetFromJsonAsync<List<UserBasicDto>>($"api/Following/UserFollowers");
+        return response ?? new List<UserBasicDto>();
     }
 
-    public async Task<UserBasicDto> GetUserFollowingProfile(string username)
+    public async Task<List<UserBasicDto>> GetUserFollowing(string username)
     {
-        throw new NotImplementedException();
+        var response = await httpClient.GetFromJsonAsync<List<UserBasicDto>>($"api/Following/UserFollowing");
+        return response ?? new List<UserBasicDto>();
     }
 }
