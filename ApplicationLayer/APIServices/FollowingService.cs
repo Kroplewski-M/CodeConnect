@@ -4,6 +4,7 @@ using DomainLayer.Entities.Auth;
 using DomainLayer.Entities.User;
 using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApplicationLayer.APIServices;
 
@@ -59,7 +60,16 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
 
     public async Task<List<UserBasicDto>> GetUserFollowers(string username)
     {
-        throw new NotImplementedException();
+        var user = await userManager.FindByNameAsync(username);
+        if(user == null)
+            return new List<UserBasicDto>();
+        var users = context.FollowUsers.Where(x => x.FollowedUserId == user.Id)
+            .Include(x=> x.Follower)
+            .ToList()
+            .Where(x => x.Follower is { UserName: not null, Bio: not null, ProfileImageUrl: not null })
+            .Select(x=> new UserBasicDto(x.Follower!.UserName!,x.Follower.Bio!,x.Follower.ProfileImageUrl! ))
+            .ToList();
+        return users;
     }
 
     public async Task<List<UserBasicDto>> GetUserFollowing(string username)

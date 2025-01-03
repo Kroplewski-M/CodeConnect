@@ -41,13 +41,13 @@ public class FollowingServiceClient(HttpClient httpClient, NotificationsService 
 
     public async Task<List<UserBasicDto>> GetUserFollowers(string username)
     {
-        var response = await httpClient.GetFromJsonAsync<List<UserBasicDto>>($"api/Following/UserFollowers");
+        var response = await httpClient.GetFromJsonAsync<List<UserBasicDto>>($"api/Following/UserFollowers?username={username}");
         return response ?? new List<UserBasicDto>();
     }
 
     public async Task<List<UserBasicDto>> GetUserFollowing(string username)
     {
-        var response = await httpClient.GetFromJsonAsync<List<UserBasicDto>>($"api/Following/UserFollowing");
+        var response = await httpClient.GetFromJsonAsync<List<UserBasicDto>>($"api/Following/UserFollowing?username={username}");
         return response ?? new List<UserBasicDto>();
     }
 }
