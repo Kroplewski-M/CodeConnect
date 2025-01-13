@@ -57,7 +57,6 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
             return false;
         return context.FollowUsers.Any(x=> x.FollowerUserId == currentUser.Id && x.FollowedUserId == targetUser.Id);
     }
-
     public async Task<List<UserBasicDto>> GetUserFollowers(string username)
     {
         var user = await userManager.FindByNameAsync(username);
