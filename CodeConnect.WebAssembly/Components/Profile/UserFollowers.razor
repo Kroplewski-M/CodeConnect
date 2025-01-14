@@ -1,3 +1,8 @@
 @inherits UserFollowersBase
 <h3>Followers</h3>
 
+<p>@Followers.Count</p>
+@foreach (var user in Followers)
+{
+    <p>@user.Username</p>
+}

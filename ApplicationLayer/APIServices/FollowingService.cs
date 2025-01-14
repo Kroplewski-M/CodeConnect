@@ -65,7 +65,7 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
         var users = context.FollowUsers.Where(x => x.FollowedUserId == user.Id)
             .Include(x=> x.Follower)
             .ToList()
-            .Where(x => x.Follower is { UserName: not null, Bio: not null, ProfileImageUrl: not null })
+            .Where(x => x.Follower is { UserName: not null })
             .Select(x=> new UserBasicDto(x.Follower!.UserName!,x.Follower.Bio!,x.Follower.ProfileImageUrl! ))
             .ToList();
         return users;
