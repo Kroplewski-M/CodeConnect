@@ -1,0 +1,9 @@
+@using ApplicationLayer.DTO_s
+<div class="md:w-[400px] w-[80%] h-[100px] rounded-md dark:bg-dark-primaryColor bg-light-primaryColor">
+    <p>@User.Username</p>
+</div>
+
+@code {
+    [Parameter]
+    public required UserBasicDto User { get; set; } 
+}

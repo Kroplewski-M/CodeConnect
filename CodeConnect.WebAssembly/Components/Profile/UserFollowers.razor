@@ -1,8 +1,21 @@
+@using CodeConnect.WebAssembly.Components.Users
 @inherits UserFollowersBase
-<h3>Followers</h3>
 
-<p>@Followers.Count</p>
-@foreach (var user in Followers)
+@if (Loading)
 {
-    <p>@user.Username</p>
+    <p>loading followers...</p>
+}
+else
+{
+    if (Followers.Any())
+    {
+        foreach (var user in Followers)
+        {
+            <UserBasic User="user" />
+        }
+    }
+    else
+    {
+        <p>You have no followers...loser</p>
+    }
 }
