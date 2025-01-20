@@ -9,10 +9,12 @@ else
 {
     if (Followers.Any())
     {
-        foreach (var user in Followers)
-        {
-            <UserBasic User="user" />
-        }
+        <div class="flex">
+            @foreach (var user in Followers)
+            {
+                <UserBasic User="user" />
+            }
+        </div>
     }
     else
     {

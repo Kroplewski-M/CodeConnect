@@ -1,9 +1,23 @@
 @using ApplicationLayer.DTO_s
+@using DomainLayer.Constants
 <div class="md:w-[400px] w-[80%] h-[100px] rounded-md dark:bg-dark-primaryColor bg-light-primaryColor">
-    <p>@User.Username</p>
+    <div class="flex">
+        <img src="@ImgUrl" alt="">
+        <div>
+            <p>@User.Username</p>
+            <p>@User.Bio</p>
+        </div>
+    </div>
 </div>
 
 @code {
     [Parameter]
-    public required UserBasicDto User { get; set; } 
+    public required UserBasicDto User { get; set; }
+
+    private string ImgUrl { get; set; } = "";
+    protected override void OnParametersSet()
+    {
+        ImgUrl = !string.IsNullOrWhiteSpace(User.ProfileImgUrl) ? User.ProfileImgUrl : Consts.ProfileDefaults.ProfileImg;
+    }
+
 }
