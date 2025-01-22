@@ -53,12 +53,9 @@ public class FollowingController(IFollowingService followingService, UserManager
 
     [Authorize]
     [HttpGet("GetUserFollowers")]
-    public async Task<IActionResult> GetUserFollowers(string? username)
+    public async Task<IActionResult> GetUserFollowers(string username)
     {
-        var userName = User.FindFirst(Consts.ClaimTypes.UserName)?.Value;
-        if(userName == null)
-            return Unauthorized();
-        return Ok(await followingService.GetUserFollowers(userName));
+        return Ok(await followingService.GetUserFollowers(username));
     }
     [Authorize]
     [HttpGet("GetUserFollowing")]

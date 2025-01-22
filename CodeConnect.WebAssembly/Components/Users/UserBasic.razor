@@ -1,14 +1,19 @@
 @using ApplicationLayer.DTO_s
 @using DomainLayer.Constants
-<div class="md:w-[400px] w-[80%] h-[100px] rounded-md dark:bg-dark-primaryColor bg-light-primaryColor">
-    <div class="flex">
-        <img src="@ImgUrl" alt="">
-        <div>
-            <p>@User.Username</p>
-            <p>@User.Bio</p>
+@inject NavigationManager NavigationManager
+
+<div class="md:w-[400px] w-[80%] h-[100px] rounded-md dark:bg-dark-primaryColor bg-light-primaryColor hover:cursor-pointer" @onclick="()=> Redirect(User.Username)">
+    <div class="flex mt-[15px]">
+        <div class="w-[50px] h-[50px] ml-[10px]">
+            <img src="@ImgUrl" alt="" class="rounded-full w-[100%] h-[100%]"/>
+        </div>
+        <div class="ml-4">
+            <p class="font-bold text-light-primaryColor light:bg-dark-primaryColor">@User.Username</p>
+            <p class="text-gray-400">@(string.IsNullOrWhiteSpace(User.Bio) ? "No description..." : User.Bio)</p>
         </div>
     </div>
 </div>
+
 
 @code {
     [Parameter]
@@ -20,4 +25,8 @@
         ImgUrl = !string.IsNullOrWhiteSpace(User.ProfileImgUrl) ? User.ProfileImgUrl : Consts.ProfileDefaults.ProfileImg;
     }
 
+    private void Redirect(string username)
+    {
+        NavigationManager.NavigateTo($"Profile/{username}");
+    }
 }
