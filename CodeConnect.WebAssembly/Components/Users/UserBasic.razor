@@ -20,7 +20,7 @@
     public required UserBasicDto User { get; set; }
 
     private string ImgUrl { get; set; } = "";
-    protected override void OnParametersSet()
+    protected override void OnInitialized()
     {
         ImgUrl = !string.IsNullOrWhiteSpace(User.ProfileImgUrl) ? User.ProfileImgUrl : Consts.ProfileDefaults.ProfileImg;
     }

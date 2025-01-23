@@ -1,17 +1,27 @@
 using DomainLayer.Constants;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Routing;
 
 namespace CodeConnect.WebAssembly.Components.Profile;
 
 public class ProfileDetailsBase : ComponentBase
 {
-    public Consts.ProfileDetailsView ProfileDetailsView { get; set; } = Consts.ProfileDetailsView.Posts;
-    
-
+    protected Consts.ProfileDetailsView ProfileDetailsView { get; set; } = Consts.ProfileDetailsView.Posts;
+    [Inject]
+    NavigationManager NavigationManager { get; set; } 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+    private async void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        ProfileDetailsView = Consts.ProfileDetailsView.Posts;
+        StateHasChanged();
+    }
     public void SetProfileDetails(Consts.ProfileDetailsView option)
     {
         ProfileDetailsView = option;
         StateHasChanged();
     }
-    
 }
