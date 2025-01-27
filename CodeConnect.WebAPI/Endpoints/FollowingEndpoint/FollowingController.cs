@@ -55,6 +55,8 @@ public class FollowingController(IFollowingService followingService, UserManager
     [HttpGet("GetUserFollowers")]
     public async Task<IActionResult> GetUserFollowers(string username)
     {
+        if(string.IsNullOrEmpty(username))
+            return Unauthorized();
         return Ok(await followingService.GetUserFollowers(username));
     }
     [Authorize]

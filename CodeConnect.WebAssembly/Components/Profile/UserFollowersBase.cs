@@ -1,3 +1,4 @@
+using ApplicationLayer;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using Microsoft.AspNetCore.Components;
@@ -10,6 +11,8 @@ public class UserFollowersBase() : ComponentBase
     public required IFollowingService FollowingService { get; set; }
     [Inject]
     public required NavigationManager NavigationManager { get; set; }
+    [Inject]
+    public required NotificationsService NotificationsService { get; set; }
     public List<UserBasicDto> Followers { get; set; } = new List<UserBasicDto>();
 
     public bool Loading { get; set; } = true;
@@ -19,7 +22,14 @@ public class UserFollowersBase() : ComponentBase
         var uri = NavigationManager.Uri;
         var segments = new Uri(uri).Segments;
         var username = segments.LastOrDefault();
-        Followers = await FollowingService.GetUserFollowers(username);
+        if (username != null)
+        {
+            Followers = await FollowingService.GetUserFollowers(username);
+        }
+        else
+        {
+            NotificationsService.PushNotification(new ApplicationLayer.Notification("Error occured during fetching users", NotificationType.Error));
+        }
         Loading = false;
         StateHasChanged();
     }
