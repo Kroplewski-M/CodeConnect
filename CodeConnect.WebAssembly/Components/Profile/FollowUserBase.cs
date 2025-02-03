@@ -11,7 +11,7 @@ public class FollowUserBase : ComponentBase
     [Parameter] public required string CurrentUsername { get; set; }
     [Parameter] public required string FollowUsername { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         Following = await FollowingService.IsUserFollowing(new FollowRequestDto(CurrentUsername, FollowUsername));
     }
