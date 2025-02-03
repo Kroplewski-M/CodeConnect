@@ -1,2 +1,25 @@
+@using CodeConnect.WebAssembly.Components.Users
 @inherits UserFollowingBase
-<h3>Following</h3>
+
+
+@if (Loading)
+{
+    <p>loading followers...</p>
+}
+else
+{
+    if (Followers.Any())
+    {
+        <div class="flex">
+            @foreach (var user in Followers)
+            {
+                <UserBasic User="user" />
+            }
+        </div>
+    }
+    else
+    {
+        <p>You follow nobody...loser</p>
+    }
+}
+
