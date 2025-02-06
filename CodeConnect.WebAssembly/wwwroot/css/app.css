@@ -1,5 +1,13 @@
 @import "tailwindcss";
-@config "../../tailwind.config.js";
+
 * {
     transition: background-color 0.3s ease;
 }
+
+@custom-variant dark (&:where(.dark, .dark *));
+@theme{
+    --color-light-primaryColor: #F8F9FA;
+    --color-light-secondaryColor: #693d99;
+    --color-dark-primaryColor: #444444;
+}
+
