@@ -8,6 +8,32 @@
 @theme{
     --color-light-primaryColor: #F8F9FA;
     --color-light-secondaryColor: #693d99;
+    --color-light-supportColor: #333333;
+    
     --color-dark-primaryColor: #444444;
+    --color-dark-secondaryColor: #693d99;
+    --color-dark-supportColor: #E8E7E7;
+    
+    --animate-fadeIn: fadeIn 1s ease-in;
+    --animate-rotateLong: rotateLong 1.1s ease-in forwards;
+    @keyframes fadeIn {
+        0% {
+            opacity: 0; 
+            transform: translateY(-10%); 
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    @keyframes rotateLong {
+        0%{
+            transform: rotate(0deg);
+        }
+        100%{
+            transform: rotate(-17deg);
+        }
+    }
 }
+
 

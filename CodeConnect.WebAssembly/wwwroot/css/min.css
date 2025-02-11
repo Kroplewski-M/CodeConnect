@@ -379,7 +379,12 @@
     );
     --color-light-primaryColor: #F8F9FA;
     --color-light-secondaryColor: #693d99;
+    --color-light-supportColor: #333333;
     --color-dark-primaryColor: #444444;
+    --color-dark-secondaryColor: #693d99;
+    --color-dark-supportColor: #E8E7E7;
+    --animate-fadeIn: fadeIn 1s ease-in;
+    --animate-rotateLong: rotateLong 1.1s ease-in forwards;
   }
 }
 @layer base {
@@ -572,6 +577,9 @@
   .z-\[10\] {
     z-index: 10;
   }
+  .z-\[50\] {
+    z-index: 50;
+  }
   .z-\[200\] {
     z-index: 200;
   }
@@ -580,9 +588,6 @@
   }
   .z-\[500\] {
     z-index: 500;
-  }
-  .z-\[50\] {
-    z-index: 50;
   }
   .mx-auto {
     margin-inline: auto;
@@ -686,12 +691,6 @@
   .h-10 {
     height: calc(var(--spacing) * 10);
   }
-  .h-\[20px\] {
-    height: 20px;
-  }
-  .h-\[25px\] {
-    height: 25px;
-  }
   .h-\[100\%\] {
     height: 100%;
   }
@@ -703,6 +702,12 @@
   }
   .h-\[200px\] {
     height: 200px;
+  }
+  .h-\[20px\] {
+    height: 20px;
+  }
+  .h-\[25px\] {
+    height: 25px;
   }
   .h-\[300px\] {
     height: 300px;
@@ -808,8 +813,14 @@
   .transform {
     transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
   }
+  .animate-fadeIn {
+    animation: var(--animate-fadeIn);
+  }
   .animate-pulse {
     animation: var(--animate-pulse);
+  }
+  .animate-rotateLong {
+    animation: var(--animate-rotateLong);
   }
   .cursor-pointer {
     cursor: pointer;
@@ -906,6 +917,9 @@
   .border-blue-800 {
     border-color: var(--color-blue-800);
   }
+  .border-dark-supportColor {
+    border-color: var(--color-dark-supportColor);
+  }
   .border-green-800 {
     border-color: var(--color-green-800);
   }
@@ -914,6 +928,9 @@
   }
   .border-light-secondaryColor {
     border-color: var(--color-light-secondaryColor);
+  }
+  .border-light-supportColor {
+    border-color: var(--color-light-supportColor);
   }
   .border-red-800 {
     border-color: var(--color-red-800);
@@ -938,6 +955,12 @@
   }
   .bg-dark-primaryColor\/90 {
     background-color: color-mix(in oklab, var(--color-dark-primaryColor) 90%, transparent);
+  }
+  .bg-dark-secondaryColor {
+    background-color: var(--color-dark-secondaryColor);
+  }
+  .bg-dark-secondaryColor\/50 {
+    background-color: color-mix(in oklab, var(--color-dark-secondaryColor) 50%, transparent);
   }
   .bg-gray-100 {
     background-color: var(--color-gray-100);
@@ -1032,14 +1055,14 @@
   .pt-\[5px\] {
     padding-top: 5px;
   }
+  .pt-\[20px\] {
+    padding-top: 20px;
+  }
   .pt-\[100px\] {
     padding-top: 100px;
   }
   .pt-\[10px\] {
     padding-top: 10px;
-  }
-  .pt-\[20px\] {
-    padding-top: 20px;
   }
   .pb-7 {
     padding-bottom: calc(var(--spacing) * 7);
@@ -1119,6 +1142,15 @@
   .text-dark-primaryColor {
     color: var(--color-dark-primaryColor);
   }
+  .text-dark-secondaryColor {
+    color: var(--color-dark-secondaryColor);
+  }
+  .text-dark-supportColor {
+    color: var(--color-dark-supportColor);
+  }
+  .text-dark-supportColor\/90 {
+    color: color-mix(in oklab, var(--color-dark-supportColor) 90%, transparent);
+  }
   .text-gray-200 {
     color: var(--color-gray-200);
   }
@@ -1142,6 +1174,15 @@
   }
   .text-light-secondaryColor {
     color: var(--color-light-secondaryColor);
+  }
+  .text-light-supportColor {
+    color: var(--color-light-supportColor);
+  }
+  .text-light-supportColor\/80 {
+    color: color-mix(in oklab, var(--color-light-supportColor) 80%, transparent);
+  }
+  .text-light-supportColor\/90 {
+    color: color-mix(in oklab, var(--color-light-supportColor) 90%, transparent);
   }
   .text-red-800 {
     color: var(--color-red-800);
@@ -1186,6 +1227,34 @@
     &:hover {
       @media (hover: hover) {
         border-color: var(--color-light-secondaryColor);
+      }
+    }
+  }
+  .hover\:bg-dark-secondaryColor {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-dark-secondaryColor);
+      }
+    }
+  }
+  .hover\:bg-dark-secondaryColor\/50 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: color-mix(in oklab, var(--color-dark-secondaryColor) 50%, transparent);
+      }
+    }
+  }
+  .hover\:bg-dark-secondaryColor\/80 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: color-mix(in oklab, var(--color-dark-secondaryColor) 80%, transparent);
+      }
+    }
+  }
+  .hover\:bg-dark-supportColor {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-dark-supportColor);
       }
     }
   }
@@ -1463,9 +1532,44 @@
       border-color: var(--color-dark-primaryColor);
     }
   }
+  .dark\:border-dark-supportColor {
+    &:where(.dark, .dark *) {
+      border-color: var(--color-dark-supportColor);
+    }
+  }
   .dark\:bg-dark-primaryColor {
     &:where(.dark, .dark *) {
       background-color: var(--color-dark-primaryColor);
+    }
+  }
+  .dark\:bg-dark-secondaryColor {
+    &:where(.dark, .dark *) {
+      background-color: var(--color-dark-secondaryColor);
+    }
+  }
+  .dark\:text-dark-secondaryColor {
+    &:where(.dark, .dark *) {
+      color: var(--color-dark-secondaryColor);
+    }
+  }
+  .dark\:text-dark-supportColor {
+    &:where(.dark, .dark *) {
+      color: var(--color-dark-supportColor);
+    }
+  }
+  .dark\:text-dark-supportColor\/70 {
+    &:where(.dark, .dark *) {
+      color: color-mix(in oklab, var(--color-dark-supportColor) 70%, transparent);
+    }
+  }
+  .dark\:text-dark-supportColor\/80 {
+    &:where(.dark, .dark *) {
+      color: color-mix(in oklab, var(--color-dark-supportColor) 80%, transparent);
+    }
+  }
+  .dark\:text-dark-supportColor\/90 {
+    &:where(.dark, .dark *) {
+      color: color-mix(in oklab, var(--color-dark-supportColor) 90%, transparent);
     }
   }
   .dark\:text-white {
@@ -1501,6 +1605,24 @@
   50% {
     transform: none;
     animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes rotateLong {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-17deg);
   }
 }
 @property --tw-translate-x {
