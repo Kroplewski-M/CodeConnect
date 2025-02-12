@@ -380,8 +380,8 @@
     --color-light-primaryColor: #F8F9FA;
     --color-light-secondaryColor: #693d99;
     --color-light-supportColor: #333333;
-    --color-dark-primaryColor: #444444;
-    --color-dark-secondaryColor: #693d99;
+    --color-dark-primaryColor: #333333;
+    --color-dark-secondaryColor: #6c4997;
     --color-dark-supportColor: #E8E7E7;
     --animate-fadeIn: fadeIn 1s ease-in;
     --animate-rotateLong: rotateLong 1.1s ease-in forwards;
@@ -1187,6 +1187,9 @@
   .text-red-800 {
     color: var(--color-red-800);
   }
+  .accent-light-primaryColor {
+    accent-color: var(--color-light-primaryColor);
+  }
   .opacity-0 {
     opacity: 0%;
   }
@@ -1207,10 +1210,6 @@
     transition-property: transform, translate, scale, rotate;
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
     transition-duration: var(--tw-duration, var(--default-transition-duration));
-  }
-  .ease-in {
-    --tw-ease: var(--ease-in);
-    transition-timing-function: var(--ease-in);
   }
   .outline-none {
     --tw-outline-style: none;
@@ -1772,10 +1771,6 @@
   inherits: false;
 }
 @property --tw-backdrop-sepia {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-ease {
   syntax: "*";
   inherits: false;
 }
