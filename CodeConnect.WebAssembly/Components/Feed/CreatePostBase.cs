@@ -59,7 +59,7 @@ public class CreatePostBase : ComponentBase
         Base64Images.RemoveAt(index);
         StateHasChanged();
     }
-    protected void HandleValidSubmit()
+    protected async Task HandleValidSubmit()
     {
         Console.WriteLine("HandleValidSubmit");
     }
