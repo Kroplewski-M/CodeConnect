@@ -62,5 +62,7 @@ public class CreatePostBase : ComponentBase
     protected async Task HandleValidSubmit()
     {
         Console.WriteLine("HandleValidSubmit");
+        var post = new PostDTO(PostContent, Base64Images);
+        Console.WriteLine("Content:" + post.Content);
     }
 }
