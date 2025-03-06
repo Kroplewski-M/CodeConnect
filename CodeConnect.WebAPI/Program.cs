@@ -65,6 +65,7 @@ builder.Services.AddTransient<IUserImageService,UserImageService>();
 builder.Services.AddScoped<IAuthenticateService,AuthenticateService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IFollowingService, FollowingService>();
+builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 builder.Services.AddControllers().AddJsonOptions(x =>

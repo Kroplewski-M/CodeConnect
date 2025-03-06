@@ -1,3 +1,4 @@
+using ApplicationLayer.DTO_s;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ public class PostController
 {
     [HttpPost("CreatePost")]
     [Authorize]
-    public async Task<IActionResult> CreatePost()
+    public async Task<IActionResult> CreatePost([FromBody]PostDTO post)
     {
         return null;
     }

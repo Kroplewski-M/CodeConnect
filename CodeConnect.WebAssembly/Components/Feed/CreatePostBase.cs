@@ -19,6 +19,8 @@ public class CreatePostBase : ComponentBase
     public IJSRuntime Js { get; set; }
     [Inject]
     public ImageConvertorServiceClient ImageConvertor { get; set; } = null!;
+    [Inject]
+    public IPostService PostService { get; set; } = null!;  
     protected string PostContent { get; set; } = string.Empty;
     protected readonly string InputId = "uploadPostImg";
     protected readonly string ImagePreviewId = "uploadedPostImgPreview";
@@ -61,8 +63,7 @@ public class CreatePostBase : ComponentBase
     }
     protected async Task HandleValidSubmit()
     {
-        Console.WriteLine("HandleValidSubmit");
         var post = new PostDTO(PostContent, Base64Images);
-        Console.WriteLine("Content:" + post.Content);
+        await PostService.CreatePost(post);
     }
 }

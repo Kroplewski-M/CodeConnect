@@ -1,3 +1,4 @@
+using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Entities.Posts;
 
@@ -5,7 +6,7 @@ namespace ApplicationLayer.APIServices;
 
 public class PostService : IPostService
 {
-    public Task CreatePost(Post post)
+    public Task CreatePost(PostDTO post)
     {
         throw new NotImplementedException();
     }
