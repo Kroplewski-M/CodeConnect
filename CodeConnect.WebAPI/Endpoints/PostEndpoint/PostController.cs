@@ -1,18 +1,24 @@
 using ApplicationLayer.DTO_s;
+using ApplicationLayer.Interfaces;
+using DomainLayer.Constants;
+using DomainLayer.Entities.Auth;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodeConnect.WebAPI.Endpoints.PostEndpoint;
 [Route("api/[controller]")]
 [ApiController]
-public class PostController
+public class PostController(UserManager<ApplicationUser>userManager, IPostService postService) : ControllerBase
 {
     [HttpPost("CreatePost")]
     [Authorize]
-    public async Task<IActionResult> CreatePost([FromBody]PostDTO post)
+    public async Task<ServiceResponse> CreatePost([FromBody]PostDTO post)
     {
-        return null;
+        if(User.FindFirst(Consts.ClaimTypes.UserName)?.Value != post.CreatedByUser)
+            return new ServiceResponse(false, "Error Creating Post");
+        var response = await postService.CreatePost(post);
+        return response;
     }
 
     [HttpPut("UpdatePost")]

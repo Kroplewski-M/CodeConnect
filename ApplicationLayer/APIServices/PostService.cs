@@ -1,14 +1,25 @@
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Entities.Posts;
+using InfrastructureLayer;
 
 namespace ApplicationLayer.APIServices;
 
-public class PostService : IPostService
+public class PostService(ApplicationDbContext context) : IPostService
 {
-    public Task CreatePost(PostDTO post)
+    public async Task<ServiceResponse> CreatePost(PostDTO post)
     {
-        throw new NotImplementedException();
+        var user = context.Users.FirstOrDefault(u => u.UserName == post.CreatedByUser)
+                   ?? throw new NullReferenceException("User does not exist");
+        var newPost  = new Post()
+        {
+            Content = post.Content,
+            CreatedByUserId = user.Id,
+            CreatedAt = DateTime.UtcNow,
+        };
+        context.Posts.Add(newPost);
+        await context.SaveChangesAsync();
+        return new ServiceResponse(true,"Post created successfully");
     }
 
     public Task<Post> GetPostById(int id)

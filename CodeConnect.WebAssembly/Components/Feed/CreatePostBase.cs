@@ -63,7 +63,7 @@ public class CreatePostBase : ComponentBase
     }
     protected async Task HandleValidSubmit()
     {
-        var post = new PostDTO(PostContent, Base64Images);
+        var post = new PostDTO(PostContent, Base64Images, UserDetails?.UserName ?? "");
         await PostService.CreatePost(post);
     }
 }

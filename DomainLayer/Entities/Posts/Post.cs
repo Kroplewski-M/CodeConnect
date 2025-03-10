@@ -8,7 +8,7 @@ public class Post
     public required string Content { get; set; }
     public DateTime CreatedAt { get; set; }
     public required string CreatedByUserId { get; set; }
-    public required ApplicationUser CreatedByUser { get; set; }
+    public ApplicationUser? CreatedByUser { get; set; }
     
     public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     public ICollection<PostLike> Likes { get; set; } = new List<PostLike>();
