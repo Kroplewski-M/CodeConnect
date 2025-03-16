@@ -31,7 +31,7 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         {
             var userClaims = Generics.GetClaimsForUser(user);;
             var createdRefresh = await SaveRefreshToken(userClaims, user.Id);
-            if (!string.IsNullOrWhiteSpace(createdRefresh))
+            if (string.IsNullOrWhiteSpace(createdRefresh))
                 return new AuthResponse(false,"","","Error creating refresh token");
             return GenerateAuthResponse(userClaims,createdRefresh);
         }
