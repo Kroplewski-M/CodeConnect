@@ -1,15 +1,13 @@
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
-using DomainLayer.Entities.Auth;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodeConnect.WebAPI.Endpoints.PostEndpoint;
 [Route("api/[controller]")]
 [ApiController]
-public class PostController(UserManager<ApplicationUser>userManager, IPostService postService) : ControllerBase
+public class PostController(IPostService postService) : ControllerBase
 {
     [HttpPost("CreatePost")]
     [Authorize]
@@ -21,17 +19,17 @@ public class PostController(UserManager<ApplicationUser>userManager, IPostServic
         return response;
     }
 
-    [HttpPut("UpdatePost")]
-    [Authorize]
-    public async Task<IActionResult> UpdatePost()
-    {
-        return null;
-    }
-
-    [HttpDelete("DeletePost")]
-    [Authorize]
-    public async Task<IActionResult> DeletePost()
-    {
-        return null;
-    }
+    // [HttpPut("UpdatePost")]
+    // [Authorize]
+    // public async Task<IActionResult> UpdatePost()
+    // {
+    //     return null;
+    // }
+    //
+    // [HttpDelete("DeletePost")]
+    // [Authorize]
+    // public async Task<IActionResult> DeletePost()
+    // {
+    //     return null;
+    // }
 }

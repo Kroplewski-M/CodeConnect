@@ -52,6 +52,8 @@ public class AuthenticationController(IAuthenticateService authenticateService,
         }
 
         var name = User?.Identity?.Name;
+        if(name == null)
+            return Unauthorized("Could not retrieve user");
         var response = await tokenService.RefreshUserTokens(name,token);
         if(response.Flag)
             return Ok(response);

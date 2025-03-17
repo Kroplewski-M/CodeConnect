@@ -2,12 +2,10 @@ using ApplicationLayer.APIServices;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
-using DomainLayer.DbEnts;
 using DomainLayer.Entities;
 using DomainLayer.Entities.Auth;
 using DomainLayer.Generics;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +14,7 @@ namespace CodeConnect.WebAPI.Endpoints.UserEndpoint;
 [Route("api/[controller]")]
 [ApiController]
 public class UserController(IUserService userService, UserManager<ApplicationUser>userManager,TokenService tokenService,
-    IAuthenticateService authenticateService,IUserImageService userImageService) : ControllerBase
+    IUserImageService userImageService) : ControllerBase
 {
     private TokenResponse GenerateNewToken(ApplicationUser user)
     {
