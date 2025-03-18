@@ -46,8 +46,8 @@ public class UserImageService(IOptions<AzureSettings>azureSettings, UserManager<
     private async Task RemoveIfOldImageExists(ApplicationUser user, Consts.ImageType imageType, BlobContainerClient containerClient)
     {
             var imageUrl = imageType == Consts.ImageType.ProfileImages
-                ? user.ProfileImageUrl
-                : user.BackgroundImageUrl;
+                ? user.ProfileImage
+                : user.BackgroundImage;
             var fileName = Path.GetFileName(imageUrl);
             if (!string.IsNullOrEmpty(imageUrl))
             {
@@ -59,9 +59,9 @@ public class UserImageService(IOptions<AzureSettings>azureSettings, UserManager<
     private async Task UpdateUserImage(ApplicationUser user, Consts.ImageType imageType, string url)
     {
         if(imageType == Consts.ImageType.ProfileImages)
-            user.ProfileImageUrl = url;
+            user.ProfileImage = url;
         if(imageType == Consts.ImageType.BackgroundImages)
-            user.BackgroundImageUrl = url;
+            user.BackgroundImage = url;
         await userManager.UpdateAsync(user);
     }
 }

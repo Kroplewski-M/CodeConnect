@@ -66,7 +66,7 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
             .Include(x=> x.Follower)
             .ToList()
             .Where(x => x.Follower is { UserName: not null })
-            .Select(x=> new UserBasicDto(x.Follower!.UserName!,x.Follower.Bio!,x.Follower.ProfileImageUrl! ))
+            .Select(x=> new UserBasicDto(x.Follower!.UserName!,x.Follower.Bio!,x.Follower.ProfileImage! ))
             .ToList();
         return users;
     }
@@ -80,7 +80,7 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
             .Include(x=> x.Followed)
             .ToList()
             .Where(x => x.Followed is { UserName: not null })
-            .Select(x=> new UserBasicDto(x.Followed!.UserName!,x.Followed.Bio!,x.Followed.ProfileImageUrl! ))
+            .Select(x=> new UserBasicDto(x.Followed!.UserName!,x.Followed.Bio!,x.Followed.ProfileImage! ))
             .ToList();
         return users;
     }
