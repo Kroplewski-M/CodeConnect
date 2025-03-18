@@ -20,9 +20,9 @@ public class UserImageService(IOptions<AzureSettings>azureSettings, UserManager<
         
         //SETUP AZURE CLIENT
         var blobServiceClient = new BlobServiceClient(azureSettings.Value.ConnectionString);
-        var containerClient = updateUserImageRequest.TypeOfImage == Consts.ImageTypeOfUpdate.ProfileImage
-            ? blobServiceClient.GetBlobContainerClient(azureSettings.Value.ProfileImgContainer)
-            : blobServiceClient.GetBlobContainerClient(azureSettings.Value.BackgroundImgContainer);
+        var containerClient = updateUserImageRequest.TypeOfImage == Consts.ImageType.ProfileImages
+            ? blobServiceClient.GetBlobContainerClient(Consts.ImageType.ProfileImages.ToString().ToLower())
+            : blobServiceClient.GetBlobContainerClient(Consts.ImageType.BackgroundImages.ToString().ToLower());
         
         await containerClient.CreateIfNotExistsAsync();
         
@@ -32,19 +32,20 @@ public class UserImageService(IOptions<AzureSettings>azureSettings, UserManager<
         //Upload To Azure
         var fileExtension = Path.GetExtension(updateUserImageRequest.FileName)?.ToLower();
         var guid = Guid.NewGuid();
-        var blobClient = containerClient.GetBlobClient($"{updateUserImageRequest.Username}-{guid}{fileExtension}");
+        var userImgName = $"{updateUserImageRequest.Username}-{guid}{fileExtension}";
+        var blobClient = containerClient.GetBlobClient(userImgName);
 
         await blobClient.UploadAsync(updateUserImageRequest.ImageStream, overwrite: true);
 
         //Update User in DB
-        await UpdateUserImage(user, updateUserImageRequest.TypeOfImage, blobClient.Uri.ToString());
+        await UpdateUserImage(user, updateUserImageRequest.TypeOfImage, userImgName);
         
         return new ServiceResponse(true, "Image updated successfully");
     }
 
-    private async Task RemoveIfOldImageExists(ApplicationUser user, Consts.ImageTypeOfUpdate imageType, BlobContainerClient containerClient)
+    private async Task RemoveIfOldImageExists(ApplicationUser user, Consts.ImageType imageType, BlobContainerClient containerClient)
     {
-            var imageUrl = imageType == Consts.ImageTypeOfUpdate.ProfileImage
+            var imageUrl = imageType == Consts.ImageType.ProfileImages
                 ? user.ProfileImageUrl
                 : user.BackgroundImageUrl;
             var fileName = Path.GetFileName(imageUrl);
@@ -55,11 +56,11 @@ public class UserImageService(IOptions<AzureSettings>azureSettings, UserManager<
             }
     }
 
-    private async Task UpdateUserImage(ApplicationUser user, Consts.ImageTypeOfUpdate imageType, string url)
+    private async Task UpdateUserImage(ApplicationUser user, Consts.ImageType imageType, string url)
     {
-        if(imageType == Consts.ImageTypeOfUpdate.ProfileImage)
+        if(imageType == Consts.ImageType.ProfileImages)
             user.ProfileImageUrl = url;
-        if(imageType == Consts.ImageTypeOfUpdate.BackgroundImage)
+        if(imageType == Consts.ImageType.BackgroundImages)
             user.BackgroundImageUrl = url;
         await userManager.UpdateAsync(user);
     }

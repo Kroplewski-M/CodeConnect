@@ -45,16 +45,16 @@ public static class Consts
     {
         public const string AllInterests = "9ebeec5c-ba6d-4b03-AllInterests-4a94e2e2c15a";
     }
-    public enum ImageTypeOfUpdate
+    public enum ImageType
     {
-        ProfileImage,
-        BackgroundImage
+        ProfileImages,
+        BackgroundImages
     }
-
     public enum ProfileDetailsView
     {
         Posts,
         Followers,
         Following
     }
+    public static readonly string AzureBlobEndpoint = "https://codeconnectblobs.blob.core.windows.net";
 }

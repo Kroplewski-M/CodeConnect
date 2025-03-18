@@ -15,7 +15,7 @@
                     <div class="w-[100%] relative">
                         @if (IsCurrentUser)
                         {
-                            <div class="absolute w-[100%] md:h-[450px] h-[200px] rounded-md hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex" @onclick="() => UpdateImage(Consts.ImageTypeOfUpdate.BackgroundImage)"><i class="fa-solid fa-pen-to-square fa-2xl text-gray-200 mx-auto self-center"></i></div>
+                            <div class="absolute w-[100%] md:h-[450px] h-[200px] rounded-md hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex" @onclick="() => UpdateImage(Consts.ImageType.BackgroundImages)"><i class="fa-solid fa-pen-to-square fa-2xl text-gray-200 mx-auto self-center"></i></div>
                         }
                         <img src="@UserDetails?.BackgroundImg" class="w-[100%] md:h-[450px] h-[200px] rounded-md mx-auto object-cover" alt=""/>
                     </div>
@@ -26,7 +26,7 @@
                                     <div class="absolute md:w-[200px] md:h-[200px] w-[100px] h-[100px] -top-[50px] md:left-[30px] left-[10px] rounded-full">
                                         @if (IsCurrentUser)
                                         {
-                                            <div class="absolute md:w-[200px] md:h-[200px] w-[100px] h-[100px] hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex" @onclick="() => UpdateImage(Consts.ImageTypeOfUpdate.ProfileImage)"><i class="fa-solid fa-pen-to-square fa-2xl text-gray-200 mx-auto self-center"></i></div>
+                                            <div class="absolute md:w-[200px] md:h-[200px] w-[100px] h-[100px] hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex" @onclick="() => UpdateImage(Consts.ImageType.ProfileImages)"><i class="fa-solid fa-pen-to-square fa-2xl text-gray-200 mx-auto self-center"></i></div>
                                         }
                                         <div class="md:w-[200px] md:h-[200px] w-[100px] h-[100px]">
                                             <img src="@UserDetails?.ProfileImg" class="w-[100%] h-[100%] rounded-full object-cover" alt="profile image"/>

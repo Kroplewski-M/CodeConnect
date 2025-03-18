@@ -61,7 +61,7 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
                 ImageStream = image.OpenReadStream(),
                 ContentType = image.ContentType,
                 FileName = image.FileName,
-                TypeOfImage = (Consts.ImageTypeOfUpdate)typeOfImage,
+                TypeOfImage = (Consts.ImageType)typeOfImage,
                 Username = username
             };
 

@@ -5,6 +5,7 @@ using DomainLayer.DbEnts;
 using DomainLayer.Entities;
 using DomainLayer.Entities.Auth;
 using DomainLayer.Entities.User;
+using DomainLayer.Helpers;
 using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -39,8 +40,8 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
             user.ProfileImageUrl = Consts.ProfileDefaults.ProfileImg;
         if (string.IsNullOrEmpty(user.BackgroundImageUrl))
             user.BackgroundImageUrl = Consts.ProfileDefaults.BackgroundImg;
-        return new UserDetails(user.FirstName ?? "", user.LastName ?? "", user.UserName ?? "", user.Email ?? "", user.ProfileImageUrl ?? "",
-            user.BackgroundImageUrl ?? "", user.GithubLink ?? "",
+        return new UserDetails(user.FirstName ?? "", user.LastName ?? "", user.UserName ?? "", user.Email ?? "", Helpers.GetAzureImgUrl(Consts.ImageType.ProfileImages,user.ProfileImageUrl ?? ""),
+            Helpers.GetAzureImgUrl(Consts.ImageType.BackgroundImages,user.BackgroundImageUrl ?? ""), user.GithubLink ?? "",
             user.WebsiteLink ?? "", user.DOB, user.CreatedAt,user.Bio ?? "");
     }
 

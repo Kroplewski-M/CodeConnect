@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using ApplicationLayer.ExtensionClasses;
 using DomainLayer.Constants;
 using DomainLayer.DbEnts;
+using DomainLayer.Helpers;
 
 namespace ApplicationLayer.ClientServices;
 
@@ -78,8 +79,8 @@ public class AuthenticateServiceClient(
             LastName: authState.GetUserInfo(Consts.ClaimTypes.LastName),
             Email: authState.GetUserInfo(Consts.ClaimTypes.Email),
             UserName: authState.GetUserInfo(Consts.ClaimTypes.UserName),
-            ProfileImg: profileImg,
-            BackgroundImg: backgroundImg,
+            ProfileImg: Helpers.GetAzureImgUrl(Consts.ImageType.ProfileImages,profileImg),
+            BackgroundImg: Helpers.GetAzureImgUrl(Consts.ImageType.BackgroundImages,backgroundImg),
             GithubLink: authState.GetUserInfo(Consts.ClaimTypes.GithubLink),
             WebsiteLink: authState.GetUserInfo(Consts.ClaimTypes.WebsiteLink),
             Dob: DateOnly.ParseExact(dob ?? "", format, CultureInfo.InvariantCulture), 
