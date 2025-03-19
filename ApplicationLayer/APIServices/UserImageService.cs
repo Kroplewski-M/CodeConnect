@@ -1,6 +1,8 @@
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
+using Azure;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using DomainLayer.Constants;
 using DomainLayer.Entities;
 using DomainLayer.Entities.APIClasses;
@@ -35,16 +37,19 @@ public class UserImageService(IOptions<AzureSettings>azureSettings, UserManager<
         var userImgName = $"{updateUserImageRequest.Username}-{guid}{fileExtension}";
         var blobClient = containerClient.GetBlobClient(userImgName);
 
-        // Remove metadata if present (e.g., "data:image/png;base64,")
+        // Remove metadata 
         var base64Data = updateUserImageRequest.ImgBase64.Contains(',') ? updateUserImageRequest.ImgBase64.Split(',')[1] : updateUserImageRequest.ImgBase64;
 
         // Convert Base64 string to byte array
         byte[] imageBytes = Convert.FromBase64String(base64Data);
+        Response<BlobContentInfo>? response;
         using (MemoryStream stream = new MemoryStream(imageBytes))
         {
             // Upload the stream to Azure Blob Storage
-            await blobClient.UploadAsync(stream, overwrite: true);
+            response = await blobClient.UploadAsync(stream, overwrite: true);
         }
+        if(response == null)
+            return new ServiceResponse(false, "Upload Failed");
         //Update User in DB
         await UpdateUserImage(user, updateUserImageRequest.TypeOfImage, userImgName);
         
