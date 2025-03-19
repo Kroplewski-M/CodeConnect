@@ -35,8 +35,16 @@ public class UserImageService(IOptions<AzureSettings>azureSettings, UserManager<
         var userImgName = $"{updateUserImageRequest.Username}-{guid}{fileExtension}";
         var blobClient = containerClient.GetBlobClient(userImgName);
 
-        await blobClient.UploadAsync(updateUserImageRequest.ImageStream, overwrite: true);
+        // Remove metadata if present (e.g., "data:image/png;base64,")
+        var base64Data = updateUserImageRequest.ImgBase64.Contains(',') ? updateUserImageRequest.ImgBase64.Split(',')[1] : updateUserImageRequest.ImgBase64;
 
+        // Convert Base64 string to byte array
+        byte[] imageBytes = Convert.FromBase64String(base64Data);
+        using (MemoryStream stream = new MemoryStream(imageBytes))
+        {
+            // Upload the stream to Azure Blob Storage
+            await blobClient.UploadAsync(stream, overwrite: true);
+        }
         //Update User in DB
         await UpdateUserImage(user, updateUserImageRequest.TypeOfImage, userImgName);
         

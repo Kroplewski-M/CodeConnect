@@ -22,26 +22,22 @@ public class UpdateImageBase : ComponentBase
 
     protected bool loading { get; set; } = false;
     protected bool DisableImg { get; set; } = false;
-    protected UpdateUserImageRequest SelectedImg { get; set; } = new UpdateUserImageRequest();
-    protected string ImagePreview = string.Empty;
+    public UpdateUserImageRequest SelectedImg { get; set; } = new UpdateUserImageRequest();
     protected async Task HandleFileSelection(InputFileChangeEventArgs e)
     {
         var img = e.GetMultipleFiles().FirstOrDefault();
         if (img == null)
             return;
         loading = true;
-        SelectedImg.ImageStream = ImageConvertor.ImageToStream(img);
-        SelectedImg.ContentType = img.ContentType;
+        SelectedImg.ImgBase64 = await ImageConvertor.ImageToBase64(img);
         SelectedImg.FileName = img.Name;
         SelectedImg.TypeOfImage = UpdateOfImageType;
-
-        ImagePreview = await ImageConvertor.ImageToBase64(img);
         loading = false;
     }
 
     protected async Task SaveImg()
     {
-        if (SelectedImg != null)
+        if (!string.IsNullOrWhiteSpace(SelectedImg.ImgBase64))
         {
             try
             {

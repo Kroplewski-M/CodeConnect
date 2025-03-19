@@ -14,13 +14,7 @@ public class UserImageServiceClient(HttpClient httpClient,ILocalStorageService l
 {
     public async Task<ServiceResponse> UpdateUserImage(UpdateUserImageRequest updateUserImageRequest)
     {
-        using var content = new MultipartFormDataContent();
-        
-        var fileContent = new StreamContent(updateUserImageRequest.ImageStream);
-        fileContent.Headers.ContentType = new MediaTypeHeaderValue(updateUserImageRequest.ContentType);
-        content.Add(fileContent, "image", updateUserImageRequest.FileName);
-        content.Add(new StringContent(((int)updateUserImageRequest.TypeOfImage).ToString()), "typeOfImage");
-        var response = await httpClient.PostAsync("/api/User/UpdateUserImage", content);
+        var response = await httpClient.PostAsJsonAsync("/api/User/UpdateUserImage", updateUserImageRequest);
         response.EnsureSuccessStatusCode();
         var result = await response.Content.ReadFromJsonAsync<TokenResponse>();
         if (!string.IsNullOrEmpty(result?.Key))

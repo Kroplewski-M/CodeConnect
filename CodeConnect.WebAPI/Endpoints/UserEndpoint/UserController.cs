@@ -51,20 +51,12 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
 
     [Authorize]
     [HttpPost("UpdateUserImage")]
-    public async Task<IActionResult> UpdateUserImage([FromForm]IFormFile image, [FromForm] int typeOfImage)
+    public async Task<IActionResult> UpdateUserImage(UpdateUserImageRequest updateUserImageRequest)
     {
         var username = User.FindFirst(Consts.ClaimTypes.UserName)?.Value;
         if (!string.IsNullOrEmpty(username))
         {
-            var updateUserImageRequest = new UpdateUserImageRequest
-            {
-                ImageStream = image.OpenReadStream(),
-                ContentType = image.ContentType,
-                FileName = image.FileName,
-                TypeOfImage = (Consts.ImageType)typeOfImage,
-                Username = username
-            };
-
+            updateUserImageRequest.Username = username;
             var response = await userImageService.UpdateUserImage(updateUserImageRequest);
             if (!response.Flag)
                 return BadRequest(response.Message);
