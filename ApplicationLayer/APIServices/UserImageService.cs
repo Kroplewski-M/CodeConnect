@@ -12,48 +12,39 @@ using Microsoft.Extensions.Options;
 
 namespace ApplicationLayer.APIServices;
 
-public class UserImageService(IOptions<AzureSettings>azureSettings, UserManager<ApplicationUser>userManager) : IUserImageService
+public class UserImageService(IOptions<AzureSettings>azureSettings, UserManager<ApplicationUser>userManager, AzureService azureService) : IUserImageService
 {
     public async Task<ServiceResponse> UpdateUserImage(UpdateUserImageRequest updateUserImageRequest)
     {
         var user = await userManager.FindByNameAsync(updateUserImageRequest.Username);
         if (user == null)
             return new ServiceResponse(false, "The user could not be found");
-        
+
         //SETUP AZURE CLIENT
         var blobServiceClient = new BlobServiceClient(azureSettings.Value.ConnectionString);
         var containerClient = updateUserImageRequest.TypeOfImage == Consts.ImageType.ProfileImages
             ? blobServiceClient.GetBlobContainerClient(Consts.ImageType.ProfileImages.ToString().ToLower())
             : blobServiceClient.GetBlobContainerClient(Consts.ImageType.BackgroundImages.ToString().ToLower());
         
-        await containerClient.CreateIfNotExistsAsync();
+        //await containerClient.CreateIfNotExistsAsync();
         
         //CHECK IF USER ALREADY HAS AN IMAGE
         await RemoveIfOldImageExists(user,updateUserImageRequest.TypeOfImage, containerClient);
         
         //Upload To Azure
         var fileExtension = Path.GetExtension(updateUserImageRequest.FileName)?.ToLower();
+        if(string.IsNullOrEmpty(fileExtension))
+            return new ServiceResponse(false, "issue occured getting file extension");
         var guid = Guid.NewGuid();
-        var userImgName = $"{updateUserImageRequest.Username}-{guid}{fileExtension}";
-        var blobClient = containerClient.GetBlobClient(userImgName);
-
-        // Remove metadata 
-        var base64Data = updateUserImageRequest.ImgBase64.Contains(',') ? updateUserImageRequest.ImgBase64.Split(',')[1] : updateUserImageRequest.ImgBase64;
-
-        // Convert Base64 string to byte array
-        byte[] imageBytes = Convert.FromBase64String(base64Data);
-        Response<BlobContentInfo>? response;
-        using (MemoryStream stream = new MemoryStream(imageBytes))
-        {
-            // Upload the stream to Azure Blob Storage
-            response = await blobClient.UploadAsync(stream, overwrite: true);
-        }
-        if(response == null)
-            return new ServiceResponse(false, "Upload Failed");
+        var userImgName = $"{updateUserImageRequest.Username}-{guid}";
+        
+        var response = await azureService.UploadImage(updateUserImageRequest.TypeOfImage,updateUserImageRequest.ImgBase64,userImgName,fileExtension);
+        
+        if(!response.Flag)
+            return response;
         //Update User in DB
         await UpdateUserImage(user, updateUserImageRequest.TypeOfImage, userImgName);
-        
-        return new ServiceResponse(true, "Image updated successfully");
+        return response;
     }
 
     private async Task RemoveIfOldImageExists(ApplicationUser user, Consts.ImageType imageType, BlobContainerClient containerClient)
