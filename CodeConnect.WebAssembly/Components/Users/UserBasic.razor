@@ -1,5 +1,6 @@
 @using ApplicationLayer.DTO_s
 @using DomainLayer.Constants
+@using DomainLayer.Helpers
 @inject NavigationManager NavigationManager
 
 <div class="md:w-[400px] w-[80%] h-[100px] rounded-md dark:bg-dark-primaryColor bg-light-primaryColor hover:cursor-pointer" @onclick="()=> Redirect(User.Username)">
@@ -22,7 +23,7 @@
     private string ImgUrl { get; set; } = "";
     protected override void OnInitialized()
     {
-        ImgUrl = !string.IsNullOrWhiteSpace(User.ProfileImgUrl) ? User.ProfileImgUrl : Consts.ProfileDefaults.ProfileImg;
+        ImgUrl = !string.IsNullOrWhiteSpace(User.ProfileImgUrl) ? Helpers.GetAzureImgUrl(Consts.ImageType.ProfileImages,User.ProfileImgUrl) : Consts.ProfileDefaults.ProfileImg;
     }
 
     private void Redirect(string username)
