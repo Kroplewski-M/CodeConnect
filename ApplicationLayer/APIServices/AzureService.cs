@@ -12,7 +12,7 @@ public class AzureService(IOptions<AzureSettings> azureSettings)
 {
     private readonly BlobServiceClient _blobServiceClient = new(azureSettings.Value.ConnectionString);
 
-    public async Task<ServiceResponse> UploadImage(Consts.ImageType imageType,string base64Image, string imageName,string imageExt)
+    public async Task<AzureImageDto> UploadImage(Consts.ImageType imageType,string base64Image, string imageName,string imageExt)
     {
         var blobContainerClient = imageType == Consts.ImageType.ProfileImages
             ? _blobServiceClient.GetBlobContainerClient(Consts.ImageType.ProfileImages.ToString().ToLower())
@@ -32,7 +32,18 @@ public class AzureService(IOptions<AzureSettings> azureSettings)
             response = await blobClient.UploadAsync(stream, overwrite: true);
         }
         if(response == null)
-            return new ServiceResponse(false, "Upload Failed");
-        return new ServiceResponse(true, "Image updated successfully");
+            return new AzureImageDto(false, "","Upload Failed");
+        return new AzureImageDto(true, fullImgName,"Image updated successfully");
+    }
+
+    public async Task<ServiceResponse> RemoveImage(string imageName, Consts.ImageType imageType)
+    {
+        var blobContainerClient = imageType == Consts.ImageType.ProfileImages
+            ? _blobServiceClient.GetBlobContainerClient(Consts.ImageType.ProfileImages.ToString().ToLower())
+            : _blobServiceClient.GetBlobContainerClient(Consts.ImageType.BackgroundImages.ToString().ToLower());
+        var existingBlobClient = blobContainerClient.GetBlobClient(imageName);
+        var result = await existingBlobClient.DeleteIfExistsAsync();
+        return result == true ? new ServiceResponse(true, "Image deleted successfully") 
+                                 : new ServiceResponse(false, "Image could not be deleted");
     }
 }
