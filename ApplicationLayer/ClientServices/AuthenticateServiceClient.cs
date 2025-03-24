@@ -69,18 +69,18 @@ public class AuthenticateServiceClient(
         var profileImg = authState.GetUserInfo(Consts.ClaimTypes.ProfileImg);
         var backgroundImg = authState.GetUserInfo(Consts.ClaimTypes.BackgroundImg);
 
-        if (string.IsNullOrEmpty(profileImg))
-            profileImg = Consts.ProfileDefaults.ProfileImg;
-        if (string.IsNullOrEmpty(backgroundImg))
-            backgroundImg = Consts.ProfileDefaults.BackgroundImg;
+        profileImg = string.IsNullOrEmpty(profileImg) ? Consts.ProfileDefaults.ProfileImg 
+                     : Helpers.GetAzureImgUrl(Consts.ImageType.ProfileImages, profileImg);
+        backgroundImg = string.IsNullOrEmpty(backgroundImg) ? Consts.ProfileDefaults.BackgroundImg 
+                        : Helpers.GetAzureImgUrl(Consts.ImageType.BackgroundImages, backgroundImg);
 
         return new UserDetails(
             FirstName: authState.GetUserInfo(Consts.ClaimTypes.FirstName),
             LastName: authState.GetUserInfo(Consts.ClaimTypes.LastName),
             Email: authState.GetUserInfo(Consts.ClaimTypes.Email),
             UserName: authState.GetUserInfo(Consts.ClaimTypes.UserName),
-            ProfileImg: Helpers.GetAzureImgUrl(Consts.ImageType.ProfileImages,profileImg),
-            BackgroundImg: Helpers.GetAzureImgUrl(Consts.ImageType.BackgroundImages,backgroundImg),
+            ProfileImg: profileImg,
+            BackgroundImg: backgroundImg,
             GithubLink: authState.GetUserInfo(Consts.ClaimTypes.GithubLink),
             WebsiteLink: authState.GetUserInfo(Consts.ClaimTypes.WebsiteLink),
             Dob: DateOnly.ParseExact(dob ?? "", format, CultureInfo.InvariantCulture), 
