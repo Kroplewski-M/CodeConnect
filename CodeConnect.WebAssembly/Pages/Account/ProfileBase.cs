@@ -20,7 +20,7 @@ public class ProfileBase : ComponentBase
     protected bool IsCurrentUser = false;
     protected bool FoundUser = false;
     protected UserDetails? UserDetails = null;
-    protected UserInterestsDto? UserInterests { get; set; }
+    protected List<TechInterestsDto>? UserInterests { get; set; }
 
     [CascadingParameter]
     private Task<AuthenticationState>? AuthenticationState { get; set; }
@@ -51,7 +51,7 @@ public class ProfileBase : ComponentBase
                 if (UserDetails != null)
                 {
                     var interests = await UserService.GetUserInterests(UserDetails.UserName);
-                    UserInterests = new UserInterestsDto(true,"",interests.Interests?? new List<TechInterestsDto>());
+                    UserInterests = interests.Interests;
                     FoundUser = true;
                 }
                 StateHasChanged();

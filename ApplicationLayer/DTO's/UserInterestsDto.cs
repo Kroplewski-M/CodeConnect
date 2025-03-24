@@ -2,4 +2,4 @@ using DomainLayer.DbEnts;
 
 namespace ApplicationLayer.DTO_s;
 
-public record UserInterestsDto(bool flag, string message,List<TechInterestsDto>? Interests);
+public record UserInterestsDto(bool Flag, string Message,List<TechInterestsDto>? Interests);

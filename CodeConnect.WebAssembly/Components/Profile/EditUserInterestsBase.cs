@@ -15,7 +15,7 @@ public class EditUserInterestsBase : ComponentBase
     [Parameter]
     public EventCallback Cancel { get; set; }
 
-    [Parameter] public UserInterestsDto CurrentUserInterests { get; set; } = null!;
+    [Parameter] public List<TechInterestsDto>? CurrentUserInterests { get; set; }
     
     [Inject]
     public required NotificationsService NotificationsService { get; set; }
@@ -28,6 +28,8 @@ public class EditUserInterestsBase : ComponentBase
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
+        if (CurrentUserInterests == null)
+            CurrentUserInterests = new List<TechInterestsDto>();
         try
         {
             AllTechInterests = await UserService.GetAllInterests();
@@ -45,16 +47,16 @@ public class EditUserInterestsBase : ComponentBase
         {
             FetchingInterests = false;
         }
-        TechTypes = AllTechInterests.Select(x=>x.InterestType).Distinct().ToList();
+        TechTypes = AllTechInterests.Select(x=>x.InterestType).Distinct().ToList(); 
         SelectedTechType = TechTypes.FirstOrDefault();
     }
     protected string InterestsErrorMessage { get; set; } = string.Empty;
     protected void AddInterest(TechInterestsDto interest)
     {
         InterestsErrorMessage = string.Empty;
-        if (CurrentUserInterests.Interests != null && CurrentUserInterests.Interests.Count < 10)
+        if (CurrentUserInterests != null && CurrentUserInterests.Count < 10)
         {
-            CurrentUserInterests.Interests.Add(interest);
+            CurrentUserInterests.Add(interest);
         }
         else
         {
@@ -71,7 +73,7 @@ public class EditUserInterestsBase : ComponentBase
     protected void RemoveInterest(TechInterestsDto interest)
     {
         InterestsErrorMessage = string.Empty;
-        CurrentUserInterests.Interests?.Remove(interest);
+        CurrentUserInterests?.Remove(interest);
         StateHasChanged();
     }
     protected bool Saving = false;
@@ -82,15 +84,14 @@ public class EditUserInterestsBase : ComponentBase
             Saving = true;
             NotificationsService.PushNotification(
                 new ApplicationLayer.Notification("Updating interests", NotificationType.Info));
-            if (CurrentUserInterests.Interests != null)
+            if (CurrentUserInterests != null)
             {
-                var result = await UserService.UpdateUserInterests("", CurrentUserInterests.Interests);
+                var result = await UserService.UpdateUserInterests("", CurrentUserInterests);
                 if (result.Flag)
                 {
                     NotificationsService.PushNotification(
                         new ApplicationLayer.Notification(result.Message, NotificationType.Success));
                     StateHasChanged();
-                    await Cancel.InvokeAsync(null);
                     return;
                 }
 

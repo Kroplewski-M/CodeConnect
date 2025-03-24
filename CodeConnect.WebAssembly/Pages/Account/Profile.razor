@@ -88,13 +88,13 @@
                                 }
                             </div>
                             <div class="flex flex-wrap w-[100%]">
-                                @if (UserInterests == null || (!UserInterests.Interests.Any()))
+                                @if (UserInterests == null)
                                 {
                                     <p class="dark:text-dark-supportColor/80 pt-[10px] text-light-primaryColor/90 ">This person has no interests... <br/> Boring.</p>
                                 }
                                 else
                                 {
-                                    foreach(var interest in UserInterests.Interests)
+                                    foreach(var interest in UserInterests)
                                     {
                                         <div class="rounded-md bg-dark-primaryColor/70 ml-2 mt-[10px]">
                                             <p class="p-[5px] font-bold text-light-primaryColor/70">@interest.TechName</p>

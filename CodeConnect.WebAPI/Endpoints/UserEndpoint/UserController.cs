@@ -74,8 +74,8 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
     public async Task<IActionResult> GetUserInterests([FromBody]string username)
     {
         var response = await userService.GetUserInterests(username);
-        if(response.flag)
-            return Ok(new UserInterestsDto(response.flag, response.message, response.Interests));
+        if(response.Flag)
+            return Ok(new UserInterestsDto(response.Flag, response.Message, response.Interests));
         return BadRequest(response);
     }
 

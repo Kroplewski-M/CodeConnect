@@ -22,14 +22,14 @@
             <div class="mt-5">
                 <p class="text-red-800 font-bold">@InterestsErrorMessage</p>
                 <h3 class="font-bold text-light-primaryColor">Currently Selected (Max 10):</h3>
-                @if (!CurrentUserInterests!.Interests!.Any())
+                @if (CurrentUserInterests == null || (!CurrentUserInterests?.Any() ?? false))
                 {
                     <p class="text-light-primaryColor/60">none..</p>
                 }
-                else
+                @if(CurrentUserInterests != null)
                 {
                     <div class="flex flex-wrap mt-[5px]">
-                        @foreach (var interest in CurrentUserInterests.Interests!)
+                        @foreach (var interest in CurrentUserInterests)
                         {
                             <p @onclick="() => RemoveInterest(interest)" class="p-[5px] mb-[5px] bg-light-primaryColor/80 hover:cursor-pointer hover:bg-light-primaryColor/90 rounded-md mr-[5px]">@interest.TechName</p>
                         }
@@ -38,7 +38,7 @@
             </div>
             <h3 class="font-bold text-light-primaryColor mt-5">@SelectedTechType</h3>
             <div class="flex flex-wrap mt-[5px]">
-                @foreach (var interest in AllTechInterests.Where(x => x.InterestType == SelectedTechType && !CurrentUserInterests.Interests!.Contains(x)))
+                @foreach (var interest in AllTechInterests.Where(x => x.InterestType == SelectedTechType && (!CurrentUserInterests?.Contains(x) ?? true)))
                 {
                     <p @onclick="()=> AddInterest(interest)" class="p-[5px] mb-[5px] bg-light-primaryColor/80 hover:cursor-pointer hover:bg-light-primaryColor/90 rounded-md mr-[5px]">@interest.TechName</p>
                 }
