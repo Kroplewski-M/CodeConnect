@@ -48,7 +48,8 @@ public static class Consts
     public enum ImageType
     {
         ProfileImages,
-        BackgroundImages
+        BackgroundImages,
+        PostImages,
     }
     public enum ProfileDetailsView
     {

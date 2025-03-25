@@ -16,8 +16,9 @@ public class UserImageService(UserManager<ApplicationUser>userManager, AzureServ
             return new ServiceResponse(false, "The user could not be found");
         
         //CHECK IF USER ALREADY HAS AN IMAGE
-        await RemoveIfOldImageExists(user,updateUserImageRequest.TypeOfImage);
-        
+        var removeImageResponse = await RemoveIfOldImageExists(user,updateUserImageRequest.TypeOfImage);
+        if (!removeImageResponse.Flag)
+            return removeImageResponse;
         //Upload To Azure
         var fileExtension = Path.GetExtension(updateUserImageRequest.FileName).ToLower();
         if(string.IsNullOrEmpty(fileExtension))
@@ -35,15 +36,16 @@ public class UserImageService(UserManager<ApplicationUser>userManager, AzureServ
         return new ServiceResponse(response.Flag,response.Message);
     }
 
-    private async Task RemoveIfOldImageExists(ApplicationUser user, Consts.ImageType imageType)
+    private async Task<ServiceResponse> RemoveIfOldImageExists(ApplicationUser user, Consts.ImageType imageType)
     {
             var imageUrl = imageType == Consts.ImageType.ProfileImages
                 ? user.ProfileImage
                 : user.BackgroundImage;
             if (!string.IsNullOrEmpty(imageUrl))
             {
-                await azureService.RemoveImage(imageUrl, imageType);
+                return await azureService.RemoveImage(imageUrl, imageType);
             }
+            return new ServiceResponse(true, "No image is needing deletion");
     }
 
     private async Task UpdateUserImage(ApplicationUser user, Consts.ImageType imageType, string url)

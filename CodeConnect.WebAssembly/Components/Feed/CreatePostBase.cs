@@ -23,16 +23,18 @@ public class CreatePostBase : ComponentBase
     public IPostService PostService { get; set; } = null!;  
     protected string PostContent { get; set; } = string.Empty;
     protected readonly string InputId = "uploadPostImg";
-    protected readonly string ImagePreviewId = "uploadedPostImgPreview";
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationState;
-        var user = authState?.User;
-
-        if (user?.Identity is not null && user.Identity.IsAuthenticated)
+        if (AuthenticationState != null)
         {
-            UserDetails = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
-            await InvokeAsync(StateHasChanged);
+            var authState = await AuthenticationState;
+            var user = authState?.User;
+
+            if (user?.Identity is not null && user.Identity.IsAuthenticated)
+            {
+                UserDetails = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
+                await InvokeAsync(StateHasChanged);
+            }
         }
     }
 
@@ -43,17 +45,17 @@ public class CreatePostBase : ComponentBase
             await Js.InvokeVoidAsync("postSizeOnBlur","post");
         }
     }
-    protected bool loadingImages = false;
+    protected bool LoadingImages = false;
     protected List<string> Base64Images = new List<string>();
     protected async Task HandleFileSelection(InputFileChangeEventArgs e)
     {
-        loadingImages = true;
+        LoadingImages = true;
         Base64Images.Clear();
         foreach (var image in e.GetMultipleFiles().ToList())
         {
             Base64Images.Add(await ImageConvertor.ImageToBase64(image));
         }
-        loadingImages = false;
+        LoadingImages = false;
         StateHasChanged();
     }
     protected void RemoveFileSelected(int index)

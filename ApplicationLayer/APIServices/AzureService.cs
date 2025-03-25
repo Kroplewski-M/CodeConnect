@@ -14,9 +14,10 @@ public class AzureService(IOptions<AzureSettings> azureSettings)
 
     public async Task<AzureImageDto> UploadImage(Consts.ImageType imageType,string base64Image, string imageName,string imageExt)
     {
-        var blobContainerClient = imageType == Consts.ImageType.ProfileImages
-            ? _blobServiceClient.GetBlobContainerClient(Consts.ImageType.ProfileImages.ToString().ToLower())
-            : _blobServiceClient.GetBlobContainerClient(Consts.ImageType.BackgroundImages.ToString().ToLower());
+        var blobContainerClient = GetBlobContainerClient(imageType);
+        if(blobContainerClient == null)
+            return new AzureImageDto(false, "","Upload Failed");
+        
         await blobContainerClient.CreateIfNotExistsAsync();
         var fullImgName = $"{imageName}{imageExt}";
         var blobClient = blobContainerClient.GetBlobClient(fullImgName);
@@ -45,5 +46,22 @@ public class AzureService(IOptions<AzureSettings> azureSettings)
         var result = await existingBlobClient.DeleteIfExistsAsync();
         return result == true ? new ServiceResponse(true, "Image deleted successfully") 
                                  : new ServiceResponse(false, "Image could not be deleted");
+    }
+
+    private BlobContainerClient? GetBlobContainerClient(Consts.ImageType imageType)
+    {
+        return imageType switch
+        {
+            Consts.ImageType.ProfileImages => _blobServiceClient.GetBlobContainerClient(Consts.ImageType.ProfileImages
+                .ToString()
+                .ToLower()),
+            Consts.ImageType.BackgroundImages => _blobServiceClient.GetBlobContainerClient(Consts.ImageType
+                .BackgroundImages.ToString()
+                .ToLower()),
+            Consts.ImageType.PostImages => _blobServiceClient.GetBlobContainerClient(Consts.ImageType.PostImages
+                .ToString()
+                .ToLower()),
+            _ => null
+        };
     }
 }

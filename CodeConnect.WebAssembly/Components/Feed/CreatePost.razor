@@ -26,13 +26,13 @@
     </div>
     <div>
         <div class="mt-5 mb-2">
-            @if (loadingImages)
+            @if (LoadingImages)
             {
                 <div class="w-5 mx-auto">
                     <i class="fa-solid fa-spinner fa-spin fa-xl text-light-primaryColor"></i>
                 </div>
             }
-            @if (Base64Images.Any() && loadingImages == false)
+            @if (Base64Images.Any() && LoadingImages == false)
             {
                 <div class="flex flex-wrap">
                     @for (int i = 0; i < Base64Images.Count; i++)

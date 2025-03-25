@@ -5,7 +5,7 @@ using InfrastructureLayer;
 
 namespace ApplicationLayer.APIServices;
 
-public class PostService(ApplicationDbContext context) : IPostService
+public class PostService(ApplicationDbContext context,AzureService azureService) : IPostService
 {
     public async Task<ServiceResponse> CreatePost(PostDTO post)
     {
@@ -17,6 +17,10 @@ public class PostService(ApplicationDbContext context) : IPostService
             CreatedByUserId = user.Id,
             CreatedAt = DateTime.UtcNow,
         };
+        if (post?.Images?.Count > 0)
+        {
+            
+        }
         context.Posts.Add(newPost);
         await context.SaveChangesAsync();
         return new ServiceResponse(true,"Post created successfully");
