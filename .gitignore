@@ -29,3 +29,4 @@ CodeConnect.WebAPI/appsettings.Development.json
 **/obj/
 /node_modules
 .config/
+CodeConnect.WebAssembly/node_modules/
