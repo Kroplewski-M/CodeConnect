@@ -1,3 +1,4 @@
+using ApplicationLayer;
 using ApplicationLayer.ClientServices;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
@@ -21,6 +22,8 @@ public class CreatePostBase : ComponentBase
     public ImageConvertorServiceClient ImageConvertor { get; set; } = null!;
     [Inject]
     public IPostService PostService { get; set; } = null!;  
+    [Inject]
+    public required NotificationsService NotificationsService { get; set; }
     protected string PostContent { get; set; } = string.Empty;
     protected readonly string InputId = "uploadPostImg";
     protected override async Task OnInitializedAsync()
@@ -46,14 +49,14 @@ public class CreatePostBase : ComponentBase
         }
     }
     protected bool LoadingImages = false;
-    protected List<string> Base64Images = new List<string>();
+    protected List<Base64Dto> Base64Images = new List<Base64Dto>();
     protected async Task HandleFileSelection(InputFileChangeEventArgs e)
     {
         LoadingImages = true;
         Base64Images.Clear();
         foreach (var image in e.GetMultipleFiles().ToList())
         {
-            Base64Images.Add(await ImageConvertor.ImageToBase64(image));
+            Base64Images.Add(new Base64Dto(await ImageConvertor.ImageToBase64(image), Path.GetExtension(image.Name)));
         }
         LoadingImages = false;
         StateHasChanged();
@@ -65,7 +68,12 @@ public class CreatePostBase : ComponentBase
     }
     protected async Task HandleValidSubmit()
     {
-        var post = new PostDTO(PostContent, Base64Images, UserDetails?.UserName ?? "");
-        await PostService.CreatePost(post);
+        var post = new PostDto(PostContent, Base64Images, UserDetails?.UserName ?? "");
+        var postResponse = await PostService.CreatePost(post);
+        if(postResponse.Flag)
+            NotificationsService.PushNotification(new Notification(postResponse.Message, NotificationType.Success));
+        else
+            NotificationsService.PushNotification(new Notification(postResponse.Message, NotificationType.Error));
+            
     }
 }

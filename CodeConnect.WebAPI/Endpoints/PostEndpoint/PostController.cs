@@ -11,7 +11,7 @@ public class PostController(IPostService postService) : ControllerBase
 {
     [HttpPost("CreatePost")]
     [Authorize]
-    public async Task<ServiceResponse> CreatePost([FromBody]PostDTO post)
+    public async Task<ServiceResponse> CreatePost([FromBody]PostDto post)
     {
         if(User.FindFirst(Consts.ClaimTypes.UserName)?.Value != post.CreatedByUser)
             return new ServiceResponse(false, "Error Creating Post");

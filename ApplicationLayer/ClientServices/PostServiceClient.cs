@@ -7,7 +7,7 @@ namespace ApplicationLayer.ClientServices;
 
 public class PostServiceClient(HttpClient httpClient) : IPostService
 {
-    public async Task<ServiceResponse> CreatePost(PostDTO post)
+    public async Task<ServiceResponse> CreatePost(PostDto post)
     {
         var response = await httpClient.PostAsJsonAsync("api/Post/CreatePost", post);
         return await response.Content.ReadFromJsonAsync<ServiceResponse>() 

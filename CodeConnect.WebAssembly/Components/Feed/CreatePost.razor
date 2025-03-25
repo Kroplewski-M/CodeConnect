@@ -40,7 +40,7 @@
                         var currentIndex = i;
                         <div key="@currentIndex" class="@(i==0?"w-[90%] max-h-[400px] mx-auto":"w-[30%] h-[100px] mx-auto mt-[5px]") relative">
                             <span class="fa-solid fa-circle-xmark hover:cursor-pointer fa-xl text-light-primaryColor absolute right-0 z-[10]" onclick="@(() => RemoveFileSelected(currentIndex))"></span>
-                            <img class="rounded-md w-[100%] h-[100%] object-cover relative" src="@Base64Images[currentIndex]" alt="preview">
+                            <img class="rounded-md w-[100%] h-[100%] object-cover relative" src="@Base64Images[currentIndex].Base64String" alt="preview">
                         </div>
                     }
                 </div>
