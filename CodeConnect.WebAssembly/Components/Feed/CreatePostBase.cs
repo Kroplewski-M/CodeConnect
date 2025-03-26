@@ -66,14 +66,22 @@ public class CreatePostBase : ComponentBase
         Base64Images.RemoveAt(index);
         StateHasChanged();
     }
+    protected bool Loading { get; set; } = false;
     protected async Task HandleValidSubmit()
     {
+        Loading = true;
+        NotificationsService.PushNotification(new Notification("Creating Post", NotificationType.Info));
         var post = new PostDto(PostContent, Base64Images, UserDetails?.UserName ?? "");
         var postResponse = await PostService.CreatePost(post);
-        if(postResponse.Flag)
+        if (postResponse.Flag)
+        {
             NotificationsService.PushNotification(new Notification(postResponse.Message, NotificationType.Success));
+            Base64Images.Clear();
+            PostContent = string.Empty;
+            StateHasChanged();
+        }
         else
             NotificationsService.PushNotification(new Notification(postResponse.Message, NotificationType.Error));
-            
+        Loading = false;
     }
 }
