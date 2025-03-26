@@ -20,7 +20,7 @@ public class UpdateImageBase : ComponentBase
     [Parameter]
     public EventCallback Cancel { get; set; }
 
-    protected bool loading { get; set; } = false;
+    protected bool Loading { get; set; } = false;
     protected bool DisableImg { get; set; } = false;
     public UpdateUserImageRequest SelectedImg { get; set; } = new UpdateUserImageRequest();
     protected async Task HandleFileSelection(InputFileChangeEventArgs e)
@@ -28,11 +28,11 @@ public class UpdateImageBase : ComponentBase
         var img = e.GetMultipleFiles().FirstOrDefault();
         if (img == null)
             return;
-        loading = true;
+        Loading = true;
         SelectedImg.ImgBase64 = await ImageConvertor.ImageToBase64(img);
         SelectedImg.FileName = img.Name;
         SelectedImg.TypeOfImage = UpdateOfImageType;
-        loading = false;
+        Loading = false;
     }
 
     protected async Task SaveImg()

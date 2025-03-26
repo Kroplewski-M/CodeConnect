@@ -8,13 +8,13 @@ public class ProfileDetailsBase : ComponentBase
 {
     protected Consts.ProfileDetailsView ProfileDetailsView { get; set; } = Consts.ProfileDetailsView.Posts;
     [Inject]
-    NavigationManager NavigationManager { get; set; } 
+     NavigationManager NavigationManager { get; set; } = null!;
     protected override void OnInitialized()
     {
         base.OnInitialized();
         NavigationManager.LocationChanged += OnLocationChanged;
     }
-    private async void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
     {
         ProfileDetailsView = Consts.ProfileDetailsView.Posts;
         StateHasChanged();

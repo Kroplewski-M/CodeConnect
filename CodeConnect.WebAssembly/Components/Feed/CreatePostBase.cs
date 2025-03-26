@@ -17,7 +17,7 @@ public class CreatePostBase : ComponentBase
     IAuthenticateServiceClient AuthenticateServiceClient { get; set; } = null!;
     protected UserDetails? UserDetails = null;
     [Inject]
-    public IJSRuntime Js { get; set; }
+    public required IJSRuntime Js { get; set; }
     [Inject]
     public ImageConvertorServiceClient ImageConvertor { get; set; } = null!;
     [Inject]

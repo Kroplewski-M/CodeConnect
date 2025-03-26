@@ -51,10 +51,11 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
         if (user != null)
         {
             var interests = context.UserInterests.Where(x=> x.TechInterest != null)
-                .Include(x => x.TechInterest).Include(x=>x.TechInterest.Interest)
+                .Include(x => x.TechInterest)
+                .Include(x=>x.TechInterest!.Interest)
                 .Where(x => x.UserId == user.Id)
                 .ToList()
-                .Select(x=> new TechInterestsDto(x.TechInterestId,x.TechInterest.Id,x.TechInterest.Interest.Name,x.TechInterest.Name))
+                .Select(x=> new TechInterestsDto(x.TechInterestId,x.TechInterest!.Id,x.TechInterest.Interest!.Name,x.TechInterest.Name))
                 .ToList();
             return new UserInterestsDto(true, "user interests fetched successfully", interests.Any() ? interests : null);
         }
@@ -87,16 +88,17 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
     public async Task<List<TechInterestsDto>> GetAllInterests()
     {
         var cacheKey = Consts.CacheKeys.AllInterests;
-        if (!memoryCache.TryGetValue(cacheKey, out List<TechInterestsDto> techInterests))
+        if (!memoryCache.TryGetValue(cacheKey, out List<TechInterestsDto>? techInterests))
         {
             var interests = await context.TechInterests
                 .Include(x => x.Interest)
                 .ToListAsync();
-            techInterests = interests
-                .Select(x => new TechInterestsDto(x.Id, x.Interest.Id, x.Interest.Name, x.Name))
+            
+            techInterests = interests.Where(x=> x.Interest != null)
+                .Select(x => new TechInterestsDto(x.Id, x.Interest!.Id, x.Interest.Name, x.Name))
                 .ToList();
             memoryCache.Set(cacheKey, techInterests, TimeSpan.FromHours(24));
         }
-        return techInterests;
+        return techInterests ?? new List<TechInterestsDto>();
     }
 }

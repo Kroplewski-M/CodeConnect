@@ -7,13 +7,13 @@
         <div class="w-[300px] mx-auto">
             <InputFile OnChange="HandleFileSelection" accept="image/*" class="w-[100%] rounded-md px-4 h-10 cursor-pointer bg-white border border-black/10 dark:border-dark-supportColor shadow-sm mr-4 mt-5 grid place-content-center"></InputFile>
         </div>
-        @if (!loading && !string.IsNullOrEmpty(SelectedImg.ImgBase64))
+        @if (!Loading && !string.IsNullOrEmpty(SelectedImg.ImgBase64))
         {
             <div class="mt-5 mb-2">
                 <img class="rounded w-[90%] mx-auto" src="@SelectedImg.ImgBase64" alt="preview">
             </div>
         }
-        @if(loading)
+        @if(Loading)
         {
             <div class="w-5 mx-auto mt-5">
                 <i class="fa-solid fa-spinner fa-spin fa-xl text-light-primaryColor"></i>

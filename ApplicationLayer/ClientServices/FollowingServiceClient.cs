@@ -11,7 +11,7 @@ public class FollowingServiceClient(HttpClient httpClient, NotificationsService 
         var response = await httpClient.GetFromJsonAsync<FollowerCount>($"api/Following/UserFollowersCount?username={userName}");
         if(response == null)
             notificationsService.PushNotification(new Notification("An Error Occured when fetching followers", NotificationType.Error));
-        return response;
+        return response ?? new FollowerCount(0,0);
     }
 
     public async Task<ServiceResponse> FollowUser(FollowRequestDto followRequest)

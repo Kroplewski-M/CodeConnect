@@ -21,7 +21,7 @@ public class EditUserInterestsBase : ComponentBase
     public required NotificationsService NotificationsService { get; set; }
 
     protected List<TechInterestsDto> AllTechInterests { get; set; } = new List<TechInterestsDto>();
-    protected List<string> TechTypes { get; set; } = new List<string?>();
+    protected List<string> TechTypes { get; set; } = new();
     
     protected bool FetchingInterests = true;
     protected string? SelectedTechType { get; private set; } = string.Empty;
