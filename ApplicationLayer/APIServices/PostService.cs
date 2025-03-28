@@ -8,22 +8,22 @@ namespace ApplicationLayer.APIServices;
 
 public class PostService(ApplicationDbContext context,AzureService azureService) : IPostService
 {
-    public async Task<ServiceResponse> CreatePost(PostDto post)
+    public async Task<ServiceResponse> CreatePost(CreatePostDto createPost)
     {
-        var user = context.Users.FirstOrDefault(u => u.UserName == post.CreatedByUser)
+        var user = context.Users.FirstOrDefault(u => u.UserName == createPost.CreatedByUser)
                    ?? throw new NullReferenceException("User does not exist");
         var newPost  = new Post()
         {
-            Content = post.Content,
+            Content = createPost.Content,
             CreatedByUserId = user.Id,
             CreatedAt = DateTime.UtcNow,
         };
         context.Posts.Add(newPost);
         await context.SaveChangesAsync();
-        if (post?.Images?.Count > 0)
+        if (createPost?.Images?.Count > 0)
         {
             List<AzureImageDto> imageResults = new List<AzureImageDto>();
-            foreach (var image in post.Images)
+            foreach (var image in createPost.Images)
             {
                 imageResults.Add(await azureService.UploadImage(Consts.ImageType.PostImages,image.Base64String,Guid.NewGuid().ToString(),image.Extenstion));
             }

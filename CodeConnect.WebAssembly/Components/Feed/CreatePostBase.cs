@@ -71,7 +71,7 @@ public class CreatePostBase : ComponentBase
     {
         Loading = true;
         NotificationsService.PushNotification(new Notification("Creating Post", NotificationType.Info));
-        var post = new PostDto(PostContent, Base64Images, UserDetails?.UserName ?? "");
+        var post = new CreatePostDto(PostContent, Base64Images, UserDetails?.UserName ?? "");
         var postResponse = await PostService.CreatePost(post);
         if (postResponse.Flag)
         {

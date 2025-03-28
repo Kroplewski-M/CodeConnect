@@ -11,12 +11,20 @@ public class PostController(IPostService postService) : ControllerBase
 {
     [HttpPost("CreatePost")]
     [Authorize]
-    public async Task<ServiceResponse> CreatePost([FromBody]PostDto post)
+    public async Task<ServiceResponse> CreatePost([FromBody]CreatePostDto createPost)
     {
-        if(User.FindFirst(Consts.ClaimTypes.UserName)?.Value != post.CreatedByUser)
+        if(User.FindFirst(Consts.ClaimTypes.UserName)?.Value != createPost.CreatedByUser)
             return new ServiceResponse(false, "Error Creating Post");
-        var response = await postService.CreatePost(post);
+        var response = await postService.CreatePost(createPost);
         return response;
+    }
+
+    [HttpGet("GetPosts")]
+    [Authorize]
+    public List<PostDto> GetPosts()
+    {
+        
+        return new List<PostDto>();
     }
 
     // [HttpPut("UpdatePost")]
