@@ -4,6 +4,7 @@ using ApplicationLayer.APIServices;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Entities.Auth;
+using DomainLayer.Entities.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
@@ -13,11 +14,15 @@ namespace CodeConnect.WebAPI.Endpoints.AuthenticationEndpoint;
 [Route("api/[controller]")]
 [ApiController]
 public class AuthenticationController(IAuthenticateService authenticateService, 
-    TokenService tokenService) : ControllerBase
+    ITokenService tokenService) : ControllerBase
 {
     [HttpPost("RegisterUser")]
     public async Task<IActionResult> RegisterUser([FromBody]RegisterForm registerForm)
     {
+        RegisterFormValidator registerFormValidator = new RegisterFormValidator();
+        var validate = await registerFormValidator.ValidateAsync(registerForm);
+        if (!validate.IsValid)
+            return BadRequest("Invalid Register Form");
         var result = await authenticateService.CreateUser(registerForm);
         if (result.Flag)
             return Ok(result);

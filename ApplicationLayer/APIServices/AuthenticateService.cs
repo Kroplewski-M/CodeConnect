@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Identity;
 namespace ApplicationLayer.APIServices;
 
 public class AuthenticateService(UserManager<ApplicationUser>userManager,
-    TokenService tokenGenerationService,  ApplicationDbContext context) : IAuthenticateService
+    ITokenService tokenGenerationService,  ApplicationDbContext context) : IAuthenticateService
 {
     public async Task<AuthResponse> CreateUser(RegisterForm registerForm)
     {

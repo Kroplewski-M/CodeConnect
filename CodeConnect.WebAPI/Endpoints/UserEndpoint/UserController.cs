@@ -13,7 +13,7 @@ namespace CodeConnect.WebAPI.Endpoints.UserEndpoint;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UserController(IUserService userService, UserManager<ApplicationUser>userManager,TokenService tokenService,
+public class UserController(IUserService userService, UserManager<ApplicationUser>userManager,ITokenService tokenService,
     IUserImageService userImageService) : ControllerBase
 {
     private TokenResponse GenerateNewToken(ApplicationUser user)

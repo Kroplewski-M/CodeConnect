@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using ApplicationLayer.DTO_s;
+using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
 using DomainLayer.Entities.APIClasses;
 using DomainLayer.Entities.Auth;
@@ -13,7 +14,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 namespace ApplicationLayer.APIServices;
 
-public class TokenService(IOptions<JwtSettings> jwtSettings,ApplicationDbContext context,UserManager<ApplicationUser>userManager)
+public class TokenService(IOptions<JwtSettings> jwtSettings,ApplicationDbContext context,UserManager<ApplicationUser>userManager) : ITokenService
 {
     public string? GenerateJwtToken(IEnumerable<Claim> claims, DateTime expireAt)
     {
