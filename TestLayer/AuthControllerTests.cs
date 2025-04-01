@@ -40,6 +40,7 @@ public class AuthControllerTests
         // Assert
         Assert.NotNull(okResult);
         Assert.Equal((int)HttpStatusCode.OK, okResult.StatusCode);
+        _authenticateServiceMock.Verify(x => x.CreateUser(registerForm), Times.Once);
     }
     [Fact]
     public async Task RegisterUser_ShouldReturnFalse()
@@ -56,6 +57,7 @@ public class AuthControllerTests
         // Assert
         Assert.NotNull(badResult);
         Assert.Equal((int)HttpStatusCode.BadRequest, badResult.StatusCode);
+        _authenticateServiceMock.Verify(x => x.CreateUser(registerForm), Times.Never);
     }
 
     [Fact]
@@ -73,6 +75,7 @@ public class AuthControllerTests
         //Assert
         Assert.NotNull(okResult);
         Assert.Equal((int)HttpStatusCode.OK, okResult.StatusCode);
+        _authenticateServiceMock.Verify(x => x.LoginUser(loginForm), Times.Once);
     }
 
     [Fact]
@@ -90,6 +93,7 @@ public class AuthControllerTests
         //Assert
         Assert.NotNull(badResult);
         Assert.Equal((int)HttpStatusCode.BadRequest, badResult.StatusCode);
+        _authenticateServiceMock.Verify(x => x.LoginUser(loginForm), Times.Once);
     }
 
     [Fact]
@@ -107,6 +111,7 @@ public class AuthControllerTests
         //Assert
         Assert.NotNull(okResult);
         Assert.Equal((int)HttpStatusCode.OK, okResult.StatusCode);
+        _tokenServiceMock.Verify(x => x.ValidateToken(token), Times.Once);
     }
 
     [Fact]
@@ -124,5 +129,6 @@ public class AuthControllerTests
         //Assert
         Assert.NotNull(unauthorizedResult);
         Assert.Equal((int)HttpStatusCode.Unauthorized, unauthorizedResult.StatusCode);
+        _tokenServiceMock.Verify(x => x.ValidateToken(token), Times.Once);
     }
 }
