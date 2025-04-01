@@ -1,5 +1,6 @@
 using System.ClientModel.Primitives;
 using System.Net;
+using System.Security.Claims;
 using ApplicationLayer.APIServices;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
@@ -55,5 +56,73 @@ public class AuthControllerTests
         // Assert
         Assert.NotNull(badResult);
         Assert.Equal((int)HttpStatusCode.BadRequest, badResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task LoginUser_ShouldReturnOk()
+    {
+        //Arrange
+        var loginForm = new LoginForm() { Email = "test@example.com", Password = "password" };
+        var expectedResult = new AuthResponse( true, "", "", "User logged in");
+        _authenticateServiceMock.Setup(x => x.LoginUser(loginForm)).ReturnsAsync(expectedResult); 
+        
+        //Act 
+        var result = await _authController.LoginUser(loginForm);
+        var okResult = result as OkObjectResult;
+        
+        //Assert
+        Assert.NotNull(okResult);
+        Assert.Equal((int)HttpStatusCode.OK, okResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task LoginUser_ShouldReturnFalse()
+    {
+        //Arrange
+        var loginForm = new LoginForm() { Email = "test@example.com", Password = "" };
+        var expectedResult = new AuthResponse( false, "", "", "Login failed");
+        _authenticateServiceMock.Setup(x => x.LoginUser(loginForm)).ReturnsAsync(expectedResult); 
+        
+        //Act 
+        var result = await _authController.LoginUser(loginForm);
+        var badResult = result as BadRequestObjectResult;
+
+        //Assert
+        Assert.NotNull(badResult);
+        Assert.Equal((int)HttpStatusCode.BadRequest, badResult.StatusCode);
+    }
+
+    [Fact]
+    public void ValidateToken_ShouldReturnOk()
+    {
+        //Arrange
+        var token = "TestToken";
+        var expectedResult = new ClaimsPrincipalResponse(true, new ClaimsPrincipal());
+        _tokenServiceMock.Setup(x => x.ValidateToken(token)).Returns(expectedResult);
+        
+        //Act
+        var result = _authController.ValidateToken(token);
+        var okResult = result as OkObjectResult;
+        
+        //Assert
+        Assert.NotNull(okResult);
+        Assert.Equal((int)HttpStatusCode.OK, okResult.StatusCode);
+    }
+
+    [Fact]
+    public void ValidateToken_ShouldReturnUnauthorised()
+    {
+        //Arrange
+        var token = "TestToken";
+        var expectedResult = new ClaimsPrincipalResponse(false, new ClaimsPrincipal());
+        _tokenServiceMock.Setup(x => x.ValidateToken(token)).Returns(expectedResult);
+        
+        //Act
+        var result = _authController.ValidateToken(token);
+        var unauthorizedResult = result as UnauthorizedObjectResult;
+        
+        //Assert
+        Assert.NotNull(unauthorizedResult);
+        Assert.Equal((int)HttpStatusCode.Unauthorized, unauthorizedResult.StatusCode);
     }
 }
