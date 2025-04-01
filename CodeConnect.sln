@@ -12,7 +12,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainLayer", "DomainLayer\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfrastructureLayer", "InfrastructureLayer\InfrastructureLayer.csproj", "{BBE395AC-8831-448F-A138-6C9232C7F658}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestLayer", "TestLayer\TestLayer.csproj", "{7A14E943-041F-4EF7-A9EF-5E81637AFE5B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiTestLayer", "ApiTestLayer\ApiTestLayer.csproj", "{7A14E943-041F-4EF7-A9EF-5E81637AFE5B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8DD488CE-A33D-4A9F-9DBC-D033C92BE0EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,6 +24,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{C0359684-A5C0-40F1-A5B1-A6C0FD31B26B} = {83752F4E-6043-4FCC-9384-9F01C0C77539}
 		{55787C12-0423-4D36-A6F0-33B78CAC9FDD} = {83752F4E-6043-4FCC-9384-9F01C0C77539}
+		{7A14E943-041F-4EF7-A9EF-5E81637AFE5B} = {8DD488CE-A33D-4A9F-9DBC-D033C92BE0EB}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{C0359684-A5C0-40F1-A5B1-A6C0FD31B26B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
