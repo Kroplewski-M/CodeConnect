@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -21,34 +20,8 @@ jobs:
 
     - name: Restore dependencies
       run: dotnet restore
-
-    - name: Build WebAssembly
+      
+    - name: Build and Test Solution
       run: |
-        cd CodeConnect.WebAssembly
-        dotnet build --no-restore
-
-    - name: Build Web API
-      run: |
-        cd CodeConnect.WebAPI
-        dotnet build --no-restore
-        
-    - name: Build ApplicationLayer
-      run: |
-        cd ApplicationLayer
-        dotnet build --no-restore
-        
-    - name: Build DomainLayer
-      run: |
-        cd ./DomainLayer
-        dotnet build --no-restore
-    
-    - name: Build InfrastructureLayer
-      run: |
-        cd ./InfrastructureLayer
-        dotnet build --no-restore
-
-    - name: Build and Test Test Project
-      run: |
-        cd TestLayer
         dotnet build --no-restore
         dotnet test --no-build --verbosity normal
