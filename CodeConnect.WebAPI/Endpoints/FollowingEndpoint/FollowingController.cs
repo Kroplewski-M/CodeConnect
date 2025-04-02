@@ -17,7 +17,7 @@ public class FollowingController(IFollowingService followingService, UserManager
     public async Task<IActionResult> FollowUser(FollowRequestDto followRequest)
     {
         var username = User.FindFirst(Consts.ClaimTypes.UserName)?.Value;
-        if(username == null || username != followRequest.CurrentUsername)
+        if(string.IsNullOrWhiteSpace(username)  || username != followRequest.CurrentUsername)
             return Unauthorized();
         var response = await followingService.FollowUser(followRequest);
         return Ok(response);
