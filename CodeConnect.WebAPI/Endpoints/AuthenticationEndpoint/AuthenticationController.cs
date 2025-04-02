@@ -50,6 +50,8 @@ public class AuthenticationController(IAuthenticateService authenticateService,
     public async Task<IActionResult> RefreshToken()
     {
         var authorizationHeader = Request.Headers["Authorization"].ToString();
+        if(string.IsNullOrWhiteSpace(authorizationHeader))
+            return Unauthorized("No refresh token");
         var token = "";
         if (!string.IsNullOrEmpty(authorizationHeader) && authorizationHeader.StartsWith("Bearer "))
         {

@@ -6,6 +6,7 @@ using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using CodeConnect.WebAPI.Endpoints.AuthenticationEndpoint;
 using DomainLayer.Entities.Auth;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -16,13 +17,20 @@ public class AuthControllerTests
     private readonly Mock<IAuthenticateService> _authenticateServiceMock;
     private readonly Mock<ITokenService> _tokenServiceMock;
     private readonly AuthenticationController _authController;
-    
-    
+    private readonly Mock<IHttpContextAccessor> _httpContextMock; 
+
     public AuthControllerTests()
     {
         _authenticateServiceMock = new Mock<IAuthenticateService>();
         _tokenServiceMock = new Mock<ITokenService>();
-        _authController = new AuthenticationController(_authenticateServiceMock.Object, _tokenServiceMock.Object);
+        _httpContextMock = new Mock<IHttpContextAccessor>();
+        
+        var context = new DefaultHttpContext();
+        _httpContextMock.Setup(x => x.HttpContext).Returns(context);
+        _authController = new AuthenticationController(_authenticateServiceMock.Object, _tokenServiceMock.Object)
+        {
+            ControllerContext = new ControllerContext() { HttpContext = context.HttpContext }
+        };
     }
 
     [Fact]
@@ -131,4 +139,74 @@ public class AuthControllerTests
         Assert.Equal((int)HttpStatusCode.Unauthorized, unauthorizedResult.StatusCode);
         _tokenServiceMock.Verify(x => x.ValidateToken(token), Times.Once);
     }
+
+    [Fact]
+    public async Task RefreshToken_NoAuthorizedHeader_ShouldReturnUnauthorised()
+    {
+        //Act
+        //Do nothing
+        
+        //Arrange
+        var result = await _authController.RefreshToken();
+        
+        //Assert
+        var unauthedResult = result as UnauthorizedObjectResult;
+        Assert.NotNull(unauthedResult);
+        Assert.Equal((int)HttpStatusCode.Unauthorized, unauthedResult.StatusCode);
+        _tokenServiceMock.Verify(x => x.RefreshUserTokens(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task RefreshToken_ValidRequest_noUser_ShouldReturnUnauthorised()
+    {
+        //Arrange 
+        const string token = "refreshToken";
+        var httpContext = new DefaultHttpContext();
+        httpContext.Request.Headers.Authorization = $"Bearer {token}";
+        _httpContextMock.Setup(x => x.HttpContext).Returns(httpContext);
+        var authControllerWithContext = new AuthenticationController(_authenticateServiceMock.Object, _tokenServiceMock.Object)
+        {
+            ControllerContext = new ControllerContext { HttpContext = httpContext }
+        };
+        //Act
+        var result = await _authController.RefreshToken();
+        
+        //Assert
+        var unauthedResult = result as UnauthorizedObjectResult;
+        Assert.NotNull(unauthedResult);
+        Assert.Equal((int)HttpStatusCode.Unauthorized, unauthedResult.StatusCode);
+        _tokenServiceMock.Verify(x => x.RefreshUserTokens(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+    }
+    [Fact]
+    public async Task RefreshToken_ValidRequest_TokenServiceSuccess_ShouldReturnOk()
+    {
+        // Arrange
+        const string token = "refreshToken";
+        const string username = "testuser";
+        var httpContext = new DefaultHttpContext();
+        httpContext.Request.Headers.Authorization = $"Bearer {token}";
+        var claims = new Claim[] { new Claim(ClaimTypes.Name, username) };
+        var identity = new ClaimsIdentity(claims, "TestAuthentication");
+        var claimsPrincipal = new ClaimsPrincipal(identity);
+        httpContext.User = claimsPrincipal;
+        _httpContextMock.Setup(x => x.HttpContext).Returns(httpContext);
+        var authControllerWithContext = new AuthenticationController(_authenticateServiceMock.Object, _tokenServiceMock.Object)
+        {
+            ControllerContext = new ControllerContext { HttpContext = httpContext }
+        };
+
+        var expectedResponse = new AuthResponse(true, "","","");
+        _tokenServiceMock.Setup(x => x.RefreshUserTokens(username, token)).ReturnsAsync(expectedResponse);
+
+        // Act
+        var result = await authControllerWithContext.RefreshToken();
+
+        // Assert
+        var okResult = result as OkObjectResult;
+        Assert.NotNull(okResult);
+        Assert.Equal((int)HttpStatusCode.OK, okResult.StatusCode);
+        Assert.Equal(expectedResponse, okResult.Value);
+        _tokenServiceMock.Verify(x => x.RefreshUserTokens(username, token), Times.Once);
+    }
+
 }
