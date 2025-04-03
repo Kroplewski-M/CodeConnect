@@ -947,9 +947,6 @@
   .bg-dark-primaryColor {
     background-color: var(--color-dark-primaryColor);
   }
-  .bg-dark-primaryColor\/70 {
-    background-color: color-mix(in oklab, var(--color-dark-primaryColor) 70%, transparent);
-  }
   .bg-dark-primaryColor\/90 {
     background-color: color-mix(in oklab, var(--color-dark-primaryColor) 90%, transparent);
   }
@@ -1144,6 +1141,9 @@
   }
   .text-dark-supportColor {
     color: var(--color-dark-supportColor);
+  }
+  .text-dark-supportColor\/70 {
+    color: color-mix(in oklab, var(--color-dark-supportColor) 70%, transparent);
   }
   .text-dark-supportColor\/90 {
     color: color-mix(in oklab, var(--color-dark-supportColor) 90%, transparent);
@@ -1548,11 +1548,6 @@
   .dark\:text-dark-supportColor {
     &:where(.dark, .dark *) {
       color: var(--color-dark-supportColor);
-    }
-  }
-  .dark\:text-dark-supportColor\/70 {
-    &:where(.dark, .dark *) {
-      color: color-mix(in oklab, var(--color-dark-supportColor) 70%, transparent);
     }
   }
   .dark\:text-dark-supportColor\/80 {
