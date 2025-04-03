@@ -42,13 +42,13 @@
                                     <button class="cursor-pointer rounded-md border-red-800 bg-red-500 w-[150px] h-[30px] font-bold hover:bg-red-700" @onclick="ToggleShowConfirmLogout">Logout</button>
                                 }
                                 <div class="flex pt-[20px]">
-                                    <div>
+                                    <div class="flex">
                                         <p class="font-bold md:text-4xl text-2xl text-dark-supportColor">@UserDetails?.FirstName @UserDetails?.LastName</p>
+                                        @if (IsCurrentUser)
+                                        {
+                                            <button @onclick="ToggleEditProfile" class="text-dark-supportColor text-[10px] ml-5 hover:cursor-pointer"><i class="fa-solid fa-pen-to-square"></i> Edit Profile</button>
+                                        }
                                     </div>
-                                    @if (IsCurrentUser)
-                                    {
-                                        <button @onclick="ToggleEditProfile" class="text-dark-supportColor fa-solid fa-pen-to-square md:fa-2xl fa-xl ml-5 hover:cursor-pointer"></button>
-                                    }
                                 </div>
                                 <div class="flex">
                                     <p class="pt-[5px] font-bold text-lg text-dark-supportColor/70">&#x40;@UserDetails?.UserName</p>
@@ -84,7 +84,7 @@
                                 <h3 class="text-2xl ml-2 font-semibold dark:text-dark-supportColor text-light-primaryColor">Interests</h3>
                                 @if (IsCurrentUser)
                                 {
-                                    <button @onclick="ToggleEditUserInterests" class="w-[100px] h-[25px] text-dark-secondaryColor font-bold rounded ml-auto cursor:pointer">Edit</button>
+                                    <button @onclick="ToggleEditUserInterests" class="w-[100px] h-[25px] text-dark-secondaryColor font-bold rounded ml-auto cursor-pointer">Edit</button>
                                 }
                             </div>
                             <div class="flex flex-wrap w-[100%]">

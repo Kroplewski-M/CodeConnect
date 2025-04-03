@@ -3,7 +3,7 @@
 
 <div class="top-0 left-0 fixed z-[300] w-[100vw] h-[100vh] backdrop-blur-md grid place-content-center">
     <div class="shadow-xl md:w-[500px] w-[90%]  mt-5 relative bg-dark-secondaryColor p-5 rounded-md">
-        <button @onclick="Cancel" class="rounded-md border-4 border-solid border-light-secondaryColor px-3 py-2 text-light-supportColor dark:text-dark-supportColor/90 hover:bg-dark-secondaryColor" ><i class="fa-solid fa-angles-left"></i> Back</button>
+        <button @onclick="Cancel" class="cursor-pointer rounded-md border-4 border-solid border-light-secondaryColor px-3 py-2 text-light-supportColor dark:text-dark-supportColor/90 hover:bg-dark-secondaryColor" ><i class="fa-solid fa-angles-left"></i> Back</button>
         <h3 class="font-bold dark:text-dark-supportColor text-light-primaryColor text-4xl mt-4 text-center">Edit Interests</h3>
         @if (FetchingInterests)
         {
@@ -43,7 +43,7 @@
                     <p @onclick="()=> AddInterest(interest)" class="p-[5px] mb-[5px] bg-light-primaryColor/80 hover:cursor-pointer hover:bg-light-primaryColor/90 rounded-md mr-[5px]">@interest.TechName</p>
                 }
             </div>
-            <button disabled="@Saving" @onclick="UpdateInterests" class="rounded-md px-3 py-2 text-light-supportColor dark:text-dark-supportColor/90 bg-green-700 hover:bg-green-800">Save</button>
+            <button disabled="@Saving" @onclick="UpdateInterests" class="cursor-pointer rounded-md px-3 py-2 text-light-supportColor dark:text-dark-supportColor/90 bg-green-700 hover:bg-green-800">Save</button>
         }
     </div>
 </div>

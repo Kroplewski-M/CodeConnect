@@ -1103,6 +1103,9 @@
     font-size: var(--text-xl);
     line-height: var(--tw-leading, var(--text-xl--line-height));
   }
+  .text-\[10px\] {
+    font-size: 10px;
+  }
   .text-\[13px\] {
     font-size: 13px;
   }
@@ -1111,6 +1114,10 @@
   }
   .text-\[30px\] {
     font-size: 30px;
+  }
+  .font-\[10px\] {
+    --tw-font-weight: 10px;
+    font-weight: 10px;
   }
   .font-bold {
     --tw-font-weight: var(--font-weight-bold);
@@ -1220,6 +1227,13 @@
     &:hover {
       @media (hover: hover) {
         border-color: var(--color-light-secondaryColor);
+      }
+    }
+  }
+  .hover\:bg-dark-primaryColor\/80 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: color-mix(in oklab, var(--color-dark-primaryColor) 80%, transparent);
       }
     }
   }
