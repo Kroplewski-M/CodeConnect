@@ -60,7 +60,7 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
     public async Task<List<UserBasicDto>> GetUserFollowers(string username)
     {
         var user = await userManager.FindByNameAsync(username);
-        if(user == null)
+        if(user == null || user?.UserName != username)
             return new List<UserBasicDto>();
         var users = context.FollowUsers.Where(x => x.FollowedUserId == user.Id)
             .Include(x=> x.Follower)
@@ -74,7 +74,7 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
     public async Task<List<UserBasicDto>> GetUserFollowing(string username)
     {
         var user = await userManager.FindByNameAsync(username);
-        if(user == null)
+        if(user == null|| user?.UserName != username)
             return new List<UserBasicDto>();
         var users = context.FollowUsers.Where(x => x.FollowerUserId == user.Id)
             .Include(x=> x.Followed)

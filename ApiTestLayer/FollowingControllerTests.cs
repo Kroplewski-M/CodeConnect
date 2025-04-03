@@ -286,4 +286,115 @@ public class FollowingControllerTests
         Assert.Equal((int)System.Net.HttpStatusCode.OK, okRequestResult.StatusCode);
         _followServiceMock.Verify(x => x.IsUserFollowing(It.IsAny<FollowRequestDto>()), Times.Once);
     }
+
+    [Fact]
+    public async Task GetUserFollowers_EmptyUsername_ShouldReturnBadRequest()
+    {
+        //Arrange 
+        var username = "";
+        
+        //Act
+        var result = await _followingController.GetUserFollowers(username);
+        var badRequestResult = result as BadRequestResult;
+        
+        //Assert
+        Assert.NotNull(badRequestResult);
+        Assert.Equal((int)System.Net.HttpStatusCode.BadRequest, badRequestResult.StatusCode);
+        _followServiceMock.Verify(x => x.GetUserFollowers(It.IsAny<string>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task GetUserFollowers_UsernameFilled_ButCantFindUser_ShouldReturnEmptyList()
+    {
+        //Arrange
+        var username = "testUsername";
+        _userManagerMock.Setup(x => x.FindByNameAsync(username)).ReturnsAsync(new ApplicationUser() {UserName = "testUsername2"});
+        _followServiceMock.Setup(x => x.GetUserFollowers(It.IsAny<string>())).ReturnsAsync(new List<UserBasicDto>());
+        //Act
+        var result = await _followingController.GetUserFollowers(username);
+        var okRequestResult = result as OkObjectResult;
+        
+        //Assert
+        Assert.NotNull(okRequestResult);
+        var followers = okRequestResult.Value as List<UserBasicDto>;
+        Assert.NotNull(followers);
+        Assert.Equal((int)System.Net.HttpStatusCode.OK, okRequestResult.StatusCode);
+        _followServiceMock.Verify(x => x.GetUserFollowers(It.IsAny<string>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task GetUserFollowers_UsernameFilled_CanFindUser_ShouldReturnList()
+    {
+        //Arrange
+        var username = "testUsername";
+        _userManagerMock.Setup(x => x.FindByNameAsync(username)).ReturnsAsync(new ApplicationUser() {UserName = "testUsername"});
+        var expectedResult = new List<UserBasicDto>() { new UserBasicDto("Username2", "", "") };
+        _followServiceMock.Setup(x => x.GetUserFollowers(It.IsAny<string>())).ReturnsAsync(expectedResult);
+        //Act
+        var result = await _followingController.GetUserFollowers(username);
+        var okRequestResult = result as OkObjectResult;
+        
+        //Assert
+        Assert.NotNull(okRequestResult);
+        var followers = okRequestResult.Value as List<UserBasicDto>;
+        Assert.NotNull(followers);
+        Assert.Single(followers);
+        Assert.Equal((int)System.Net.HttpStatusCode.OK, okRequestResult.StatusCode);
+        _followServiceMock.Verify(x => x.GetUserFollowers(It.IsAny<string>()), Times.Once);
+    }
+        [Fact]
+    public async Task GetUserFollowing_EmptyUsername_ShouldReturnBadRequest()
+    {
+        //Arrange 
+        var username = "";
+        
+        //Act
+        var result = await _followingController.GetUserFollowing(username);
+        var badRequestResult = result as BadRequestResult;
+        
+        //Assert
+        Assert.NotNull(badRequestResult);
+        Assert.Equal((int)System.Net.HttpStatusCode.BadRequest, badRequestResult.StatusCode);
+        _followServiceMock.Verify(x => x.GetUserFollowing(It.IsAny<string>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task GetUserFollowing_UsernameFilled_ButCantFindUser_ShouldReturnEmptyList()
+    {
+        //Arrange
+        var username = "testUsername";
+        _userManagerMock.Setup(x => x.FindByNameAsync(username)).ReturnsAsync(new ApplicationUser() {UserName = "testUsername2"});
+        _followServiceMock.Setup(x => x.GetUserFollowing(It.IsAny<string>())).ReturnsAsync(new List<UserBasicDto>());
+        //Act
+        var result = await _followingController.GetUserFollowing(username);
+        var okRequestResult = result as OkObjectResult;
+        
+        //Assert
+        Assert.NotNull(okRequestResult);
+        var followers = okRequestResult.Value as List<UserBasicDto>;
+        Assert.NotNull(followers);
+        Assert.Equal((int)System.Net.HttpStatusCode.OK, okRequestResult.StatusCode);
+        _followServiceMock.Verify(x => x.GetUserFollowing(It.IsAny<string>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task GetUserFollowing_UsernameFilled_CanFindUser_ShouldReturnList()
+    {
+        //Arrange
+        var username = "testUsername";
+        _userManagerMock.Setup(x => x.FindByNameAsync(username)).ReturnsAsync(new ApplicationUser() {UserName = "testUsername"});
+        var expectedResult = new List<UserBasicDto>() { new UserBasicDto("Username2", "", "") };
+        _followServiceMock.Setup(x => x.GetUserFollowing(It.IsAny<string>())).ReturnsAsync(expectedResult);
+        //Act
+        var result = await _followingController.GetUserFollowing(username);
+        var okRequestResult = result as OkObjectResult;
+        
+        //Assert
+        Assert.NotNull(okRequestResult);
+        var followers = okRequestResult.Value as List<UserBasicDto>;
+        Assert.NotNull(followers);
+        Assert.Single(followers);
+        Assert.Equal((int)System.Net.HttpStatusCode.OK, okRequestResult.StatusCode);
+        _followServiceMock.Verify(x => x.GetUserFollowing(It.IsAny<string>()), Times.Once);
+    }
 }

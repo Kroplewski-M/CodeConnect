@@ -72,7 +72,7 @@ public class FollowingController(IFollowingService followingService, UserManager
     public async Task<IActionResult> GetUserFollowers(string username)
     {
         if(string.IsNullOrEmpty(username))
-            return Unauthorized();
+            return BadRequest();
         return Ok(await followingService.GetUserFollowers(username));
     }
     [Authorize]
@@ -80,7 +80,7 @@ public class FollowingController(IFollowingService followingService, UserManager
     public async Task<IActionResult> GetUserFollowing(string username)
     {
         if(string.IsNullOrEmpty(username))
-            return Unauthorized();
+            return BadRequest();
         return Ok(await followingService.GetUserFollowing(username));
     }
     
