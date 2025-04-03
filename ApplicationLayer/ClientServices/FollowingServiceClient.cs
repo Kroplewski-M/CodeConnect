@@ -35,7 +35,7 @@ public class FollowingServiceClient(HttpClient httpClient, NotificationsService 
     public async Task<bool> IsUserFollowing(FollowRequestDto request)
     {
         var response = await httpClient.GetFromJsonAsync<bool>(
-            $"api/Following/IsUserUnfollowing?currentUsername={request.CurrentUsername}&targetUsername={request.TargetUsername}");
+            $"api/Following/IsUserFollowing?currentUsername={request.CurrentUsername}&targetUsername={request.TargetUsername}");
         return response;
     }
 

@@ -16,9 +16,14 @@ public class FollowingController(IFollowingService followingService, UserManager
     [HttpPost("FollowUser")]
     public async Task<IActionResult> FollowUser(FollowRequestDto followRequest)
     {
+        if(string.IsNullOrWhiteSpace(followRequest.CurrentUsername) || string.IsNullOrWhiteSpace(followRequest.TargetUsername))
+            return BadRequest();
+        
         var username = User.FindFirst(Consts.ClaimTypes.UserName)?.Value;
+        
         if(string.IsNullOrWhiteSpace(username)  || username != followRequest.CurrentUsername)
-            return Unauthorized();
+            return BadRequest();
+        
         var response = await followingService.FollowUser(followRequest);
         return Ok(response);
     }
@@ -26,9 +31,14 @@ public class FollowingController(IFollowingService followingService, UserManager
     [HttpPost("UnFollowUser")]
     public async Task<IActionResult> UnFollowUser(FollowRequestDto unFollowRequest)
     {
+        if(string.IsNullOrWhiteSpace(unFollowRequest.CurrentUsername) || string.IsNullOrWhiteSpace(unFollowRequest.TargetUsername))
+            return BadRequest();
+        
         var username = User.FindFirst(Consts.ClaimTypes.UserName)?.Value;
-        if(username == null || username != unFollowRequest.CurrentUsername)
-            return Unauthorized();
+        
+        if(string.IsNullOrWhiteSpace(username) || username != unFollowRequest.CurrentUsername)
+            return BadRequest();
+        
         var response = await followingService.UnfollowUser(unFollowRequest);
         return Ok(response);
     }
@@ -37,16 +47,22 @@ public class FollowingController(IFollowingService followingService, UserManager
     [HttpGet("UserFollowersCount")]
     public async Task<IActionResult> UserFollowersCount(string username)
     {
+        if(string.IsNullOrWhiteSpace(username))
+            return BadRequest();
+        
         var user = await userManager.FindByNameAsync(username);
+        
         if(user == null || user.UserName != username)
-            return Unauthorized();
+            return BadRequest();
         return Ok(await followingService.GetUserFollowersCount(user.Id));
     }
 
     [Authorize]
-    [HttpGet("IsUserUnfollowing")]
-    public async Task<IActionResult> IsUserUnfollowing(string currentUsername, string targetUsername)
+    [HttpGet("IsUserFollowing")]
+    public async Task<IActionResult> IsUserFollowing(string currentUsername, string targetUsername)
     {
+        if (string.IsNullOrWhiteSpace(currentUsername) || string.IsNullOrWhiteSpace(targetUsername))
+            return BadRequest();
         var request = new FollowRequestDto(currentUsername, targetUsername);
         return Ok(await followingService.IsUserFollowing(request));
     }
