@@ -25,16 +25,22 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
     [HttpPost("EditUserDetails")]
     public async Task<IActionResult> EditUserDetails([FromBody] EditProfileForm editProfileForm)
     {
-        var username = User.FindFirst(Consts.ClaimTypes.UserName)?.Value;
-        if (username != editProfileForm.Username)
-            return Unauthorized();
-        await userService.UpdateUserDetails(editProfileForm);
-        var updatedUser = await userManager.FindByNameAsync(editProfileForm.Username);
-        if (updatedUser != null)
+        if (string.IsNullOrWhiteSpace(editProfileForm.Username))
+            return BadRequest("No username provided");
+        
+        var loggedInUser = User.FindFirst(Consts.ClaimTypes.UserName)?.Value;
+        var updateUser = await userManager.FindByNameAsync(editProfileForm.Username);
+        
+        if (loggedInUser != updateUser?.UserName)
+            return Unauthorized("Cannot find user");
+        if (updateUser != null)
         {
-            return Ok(GenerateNewToken(updatedUser));
+            var result = await userService.UpdateUserDetails(editProfileForm);
+            if(result.Flag)
+                return Ok(GenerateNewToken(updateUser));
+            return BadRequest(result.Message);
         }
-        return Unauthorized();
+        return Unauthorized("Cannot find user");
     }
 
     [Authorize]
