@@ -47,11 +47,11 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
     [HttpPost("GetUserDetails")]
     public async Task<IActionResult> GetUserDetails([FromBody] string username)
     {
+        if(string.IsNullOrWhiteSpace(username))
+            return BadRequest("No username provided");
         var user = await userService.GetUserDetails(username);
         if (user == null)
-        {
             return NotFound("User does not exist");
-        }
         return Ok(user);
     }
 
