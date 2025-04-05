@@ -114,4 +114,38 @@ public class UserControllerTests
         Assert.Equal(okRequestResult.StatusCode, (int)HttpStatusCode.OK);
         _userServiceMock.Verify(x=> x.UpdateUserDetails(It.IsAny<EditProfileForm>()), Times.Once);
     }
+
+    [Fact]
+    public async Task GetUserDetails_NoUsername_ShouldReturnBadRequest()
+    {
+        //Arrange
+        var username = "";
+        
+        //Act
+        var result = await _userController.GetUserDetails(username);
+        var badRequestResult = result as BadRequestObjectResult;
+        
+        //Assert
+        Assert.NotNull(badRequestResult);
+        Assert.Equal((int)HttpStatusCode.BadRequest,badRequestResult.StatusCode);
+        _userServiceMock.Verify(x=> x.GetUserDetails(It.IsAny<string>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task GetUserDetails_CorrectUsername_ShouldReturnOk()
+    {
+        //Arrange
+        var username = "testUsername";
+        var expectedResult = new UserDetails("","","testUsername","","","","","",null,null,"");
+        _userServiceMock.Setup(x => x.GetUserDetails(username)).ReturnsAsync(expectedResult);
+        
+        //Act
+        var result = await _userController.GetUserDetails(username);
+        var okRequestResult = result as OkObjectResult;
+        
+        //Assert
+        Assert.NotNull(okRequestResult);
+        Assert.Equal(okRequestResult.StatusCode, (int)HttpStatusCode.OK);
+        _userServiceMock.Verify(x=> x.GetUserDetails(It.IsAny<string>()), Times.Once);
+    }
 }
