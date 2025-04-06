@@ -8,15 +8,15 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using CodeConnect.WebAssembly;
 using CodeConnect.WebAssembly.DelegatingHandler;
 using DomainLayer.Constants;
-using DomainLayer.Entities;
 using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddOptions();
-builder.Services.AddCascadingAuthenticationState();
+
 builder.Services.AddAuthorizationCore();
+builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddTransient<AuthHandler>();
 builder.Services.AddHttpClient("DefaultClient",
     client =>
@@ -25,9 +25,8 @@ builder.Services.AddHttpClient("DefaultClient",
     }).AddHttpMessageHandler<AuthHandler>();
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("DefaultClient"));
 builder.Services.AddScoped<AuthenticationStateProvider,ClientAuthStateProvider>();
-builder.Services.AddScoped<IAuthenticateServiceClient, AuthenticateServiceClient>();
+builder.Services.AddScoped<ClientAuthStateProvider>();
 builder.Services.AddBlazoredLocalStorage();
-builder.Services.AddScoped<IUserService, UserServiceClient>();
 builder.Services.AddTransient<IUserImageService,UserImageServiceClient>();
 builder.Services.AddSingleton<NotificationsService>();
 builder.Services.AddSingleton<ImageConvertorServiceClient>();

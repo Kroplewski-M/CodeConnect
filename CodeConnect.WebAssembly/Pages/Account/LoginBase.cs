@@ -1,5 +1,6 @@
 using System.Net.Http;
 using ApplicationLayer;
+using ApplicationLayer.ClientServices;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Entities;
 using DomainLayer.Entities.Auth;
@@ -18,7 +19,7 @@ public class LoginBase : ComponentBase
     public required NavigationManager NavigationManager { get; set; }
 
     [Inject]
-    public required IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
+    public required ClientAuthStateProvider AuthenticateServiceClient { get; set; }
 
     public LoginForm LoginForm = new LoginForm();
     public List<ValidationFailure> LoginErrors = new List<ValidationFailure>();

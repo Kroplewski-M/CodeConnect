@@ -1,3 +1,4 @@
+using ApplicationLayer.ClientServices;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using CodeConnect.WebAssembly.Components;
@@ -10,9 +11,8 @@ namespace CodeConnect.WebAssembly.Pages.Account;
 public class ProfileBase : ComponentBase
 {
     [Inject]
-    public required  IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
-    [Inject]
-    public required IUserService UserService { get; set; }
+    public required  ClientAuthStateProvider AuthenticateServiceClient { get; set; }
+
     [Parameter]
     public string? Username { get; set; }
     protected bool ShowConfirmLogout = false;
@@ -45,12 +45,12 @@ public class ProfileBase : ComponentBase
                 {
                     IsCurrentUser = false;
                     CurrentUsername = currentUser.UserName;
-                    UserDetails = await UserService.GetUserDetails(Username ?? "");
+                    UserDetails = await AuthenticateServiceClient.GetUserDetails(Username ?? "");
                 }
 
                 if (UserDetails != null)
                 {
-                    var interests = await UserService.GetUserInterests(UserDetails.UserName);
+                    var interests = await AuthenticateServiceClient.GetUserInterests(UserDetails.UserName);
                     UserInterests = interests.Interests;
                     FoundUser = true;
                 }

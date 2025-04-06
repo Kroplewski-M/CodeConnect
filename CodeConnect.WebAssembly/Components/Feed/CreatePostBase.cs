@@ -14,7 +14,7 @@ public class CreatePostBase : ComponentBase
     [CascadingParameter]
     private Task<AuthenticationState>? AuthenticationState { get; set; }
     [Inject]
-    IAuthenticateServiceClient AuthenticateServiceClient { get; set; } = null!;
+    ClientAuthStateProvider AuthenticateServiceClient { get; set; } = null!;
     protected UserDetails? UserDetails = null;
     [Inject]
     public required IJSRuntime Js { get; set; }

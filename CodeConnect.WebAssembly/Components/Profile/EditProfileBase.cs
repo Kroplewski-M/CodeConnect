@@ -1,4 +1,5 @@
 using ApplicationLayer;
+using ApplicationLayer.ClientServices;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Entities;
@@ -12,11 +13,9 @@ namespace CodeConnect.WebAssembly.Components.Profile;
 public class EditProfileBase : ComponentBase
 {
     [Inject]
-    public required  IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
+    public required  ClientAuthStateProvider AuthenticateServiceClient { get; set; }
     [Inject]
     public required NotificationsService NotificationsService { get; set; }
-    [Inject]
-    public required IUserService UserService { get; set; }
     
     [Parameter]
     public EventCallback Cancel { get; set; }
@@ -70,7 +69,7 @@ public class EditProfileBase : ComponentBase
             DisableEdit = true;
             NotificationsService.PushNotification(new ApplicationLayer.Notification("Updating Profile...",
                 NotificationType.Info));
-            await UserService.UpdateUserDetails(EditProfileForm);
+            await AuthenticateServiceClient.UpdateUserDetails(EditProfileForm);
             NotificationsService.PushNotification(new ApplicationLayer.Notification("Updated Profile Successfully!",
                 NotificationType.Success));
         }

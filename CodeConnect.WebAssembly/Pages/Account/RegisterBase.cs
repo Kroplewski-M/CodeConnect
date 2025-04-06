@@ -21,7 +21,7 @@ public class RegisterBase
     public required NavigationManager NavigationManager { get; set; }
 
     [Inject]
-    public required IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
+    public required ClientAuthStateProvider AuthenticateServiceClient { get; set; }
 
     public RegisterForm RegisterForm = new RegisterForm();
     protected List<ValidationFailure> RegisterErrors = [];

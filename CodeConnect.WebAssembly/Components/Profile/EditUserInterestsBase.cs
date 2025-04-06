@@ -11,7 +11,7 @@ namespace CodeConnect.WebAssembly.Components.Profile;
 public class EditUserInterestsBase : ComponentBase
 {
     [Inject]
-    public required IUserService UserService { get; set; }
+    public required  ClientAuthStateProvider AuthenticateServiceClient { get; set; }
     [Parameter]
     public EventCallback Cancel { get; set; }
 
@@ -32,7 +32,7 @@ public class EditUserInterestsBase : ComponentBase
             CurrentUserInterests = new List<TechInterestsDto>();
         try
         {
-            AllTechInterests = await UserService.GetAllInterests();
+            AllTechInterests = await AuthenticateServiceClient.GetAllInterests();
             if (!AllTechInterests.Any())
             {
                 throw new RequestFailedException("Failed to fetch tech interests");
@@ -86,7 +86,7 @@ public class EditUserInterestsBase : ComponentBase
                 new ApplicationLayer.Notification("Updating interests", NotificationType.Info));
             if (CurrentUserInterests != null)
             {
-                var result = await UserService.UpdateUserInterests("", CurrentUserInterests);
+                var result = await AuthenticateServiceClient.UpdateUserInterests("", CurrentUserInterests);
                 if (result.Flag)
                 {
                     NotificationsService.PushNotification(
