@@ -49,10 +49,10 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
     {
         if(string.IsNullOrWhiteSpace(username))
             return BadRequest("No username provided");
-        var user = await userService.GetUserDetails(username);
-        if (user == null)
+        var userDetails = await userService.GetUserDetails(username);
+        if (userDetails == null)
             return NotFound("User does not exist");
-        return Ok(user);
+        return Ok(userDetails);
     }
 
     [Authorize]
@@ -83,6 +83,8 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
     [HttpPost("GetUserInterests")]
     public async Task<IActionResult> GetUserInterests([FromBody]string username)
     {
+        if(string.IsNullOrWhiteSpace(username))
+            return BadRequest("No username provided");
         var response = await userService.GetUserInterests(username);
         if(response.Flag)
             return Ok(new UserInterestsDto(response.Flag, response.Message, response.Interests));

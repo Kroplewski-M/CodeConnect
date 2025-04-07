@@ -234,4 +234,37 @@ public class UserControllerTests
         Assert.Equal((int)HttpStatusCode.OK,okRequestResult.StatusCode);
         _userImageServiceMock.Verify(x=> x.UpdateUserImage(It.IsAny<UpdateUserImageRequest>()), Times.Once);
     }
+
+    [Fact]
+    public async Task GetUserInterests_NoUsername_ShouldReturnBadRequest()
+    {
+        //Arrange
+        var username = "";
+        
+        //Act
+        var result = await _userController.GetUserInterests(username);
+        var badRequestResult = result as BadRequestObjectResult;
+        
+        //Assert
+        Assert.NotNull(badRequestResult);
+        Assert.Equal((int)HttpStatusCode.BadRequest,badRequestResult.StatusCode);
+        _userServiceMock.Verify(x=> x.GetUserInterests(It.IsAny<string>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task GetUserInterests_UsernameProvided_ShouldReturnOk()
+    {
+        //Arrange
+        var username = "someUsername";
+        _userServiceMock.Setup(x=> x.GetUserInterests(username)).ReturnsAsync(new UserInterestsDto(true,"",new List<TechInterestsDto>()));
+        
+        //Act
+        var result = await _userController.GetUserInterests(username);
+        var okRequestResult = result as OkObjectResult;
+        
+        //Assert
+        Assert.NotNull(okRequestResult);
+        Assert.Equal((int)HttpStatusCode.OK,okRequestResult.StatusCode);
+        _userServiceMock.Verify(x=> x.GetUserInterests(It.IsAny<string>()), Times.Once);
+    }
 }
