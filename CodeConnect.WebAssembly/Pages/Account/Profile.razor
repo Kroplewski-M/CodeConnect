@@ -35,19 +35,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="md:mt-5 md:pl-[80px]">
+                        <div class="md:mt-[5px] md:pl-[80px]">
                             <div>
-                                @if (IsCurrentUser)
-                                {
-                                    <button class="cursor-pointer rounded-md border-red-800 bg-red-500 w-[150px] h-[30px] font-bold hover:bg-red-700" @onclick="ToggleShowConfirmLogout">Logout</button>
-                                }
-                                <div class="flex pt-[20px]">
+                                <div class="flex pt-[5px]">
                                     <div class="flex">
                                         <p class="font-bold md:text-4xl text-2xl text-dark-supportColor">@UserDetails?.FirstName @UserDetails?.LastName</p>
-                                        @if (IsCurrentUser)
-                                        {
-                                            <button @onclick="ToggleEditProfile" class="text-dark-supportColor text-[10px] ml-5 hover:cursor-pointer"><i class="fa-solid fa-pen-to-square"></i> Edit Profile</button>
-                                        }
+                                        @* @if (IsCurrentUser) *@
+                                        @* { *@
+                                        @*     <button @onclick="ToggleEditProfile" class="text-dark-supportColor text-[10px] ml-5 hover:cursor-pointer"><i class="fa-solid fa-pen-to-square"></i> Edit Profile</button> *@
+                                        @* } *@
                                     </div>
                                 </div>
                                 <div class="flex">
@@ -56,18 +52,25 @@
                                         @if (!string.IsNullOrEmpty(UserDetails?.GithubLink))
                                         {
                                             <div class="md:ml-5">
-                                                <a href="@UserDetails?.GithubLink" target="_blank"><GithubSVG Width="30" Height="30" Color="#FFFFFF"/></a>
+                                                <a href="@UserDetails?.GithubLink" target="_blank"><GithubSVG Width="20" Height="20" Color="#FFFFFF"/></a>
                                             </div>
                                         }
                                         @if (!string.IsNullOrEmpty(UserDetails?.WebsiteLink))
                                         {
                                             <div class="ml-2">
-                                                <a href="@UserDetails?.WebsiteLink" target="_blank"><WebsiteSVG Width="30" Height="30" Color="#FFFFFF"/></a>
+                                                <a href="@UserDetails?.WebsiteLink" target="_blank"><WebsiteSVG Width="20" Height="20" Color="#FFFFFF"/></a>
                                             </div>
                                         }
                                     </div>
                                 </div>
-                                @if (!IsCurrentUser)
+                                @if (IsCurrentUser)
+                                {
+                                    <div class="mt-[10px] flex">
+                                        <button @onclick="ToggleEditProfile" class="cursor-pointer rounded-md bg-gray-200 w-[150px] h-[30px] font-bold hover:bg-gray-400"><i class="fa-solid fa-pen-to-square"></i> Edit Profile</button>
+                                        <button class="cursor-pointer rounded-md border-red-800 bg-red-500 w-[150px] h-[30px] font-bold hover:bg-red-700 ml-[5px]" @onclick="ToggleShowConfirmLogout"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+                                    </div>
+                                }
+                                else
                                 {
                                     <FollowUser CurrentUsername="@CurrentUsername" FollowUsername="@UserDetails?.UserName" />
                                 }

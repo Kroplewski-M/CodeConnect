@@ -1115,10 +1115,6 @@
   .text-\[30px\] {
     font-size: 30px;
   }
-  .font-\[10px\] {
-    --tw-font-weight: 10px;
-    font-weight: 10px;
-  }
   .font-bold {
     --tw-font-weight: var(--font-weight-bold);
     font-weight: var(--font-weight-bold);
@@ -1279,6 +1275,13 @@
       }
     }
   }
+  .hover\:bg-gray-400 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-gray-400);
+      }
+    }
+  }
   .hover\:bg-green-800 {
     &:hover {
       @media (hover: hover) {
@@ -1370,6 +1373,11 @@
   .md\:mt-5 {
     @media (width >= 48rem) {
       margin-top: calc(var(--spacing) * 5);
+    }
+  }
+  .md\:mt-\[5px\] {
+    @media (width >= 48rem) {
+      margin-top: 5px;
     }
   }
   .md\:ml-5 {
