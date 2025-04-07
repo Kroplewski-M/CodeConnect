@@ -95,7 +95,7 @@
             if (AuthenticationState == null) return;
             var authState = await AuthenticationState;
             var user = authState?.User;
-            
+ 
             if (user?.Identity is not null && user.Identity.IsAuthenticated)
             {
                 _userDetails = AuthenticateServiceClient.GetUserFromFromAuthState(authState);

@@ -148,4 +148,90 @@ public class UserControllerTests
         Assert.Equal(okRequestResult.StatusCode, (int)HttpStatusCode.OK);
         _userServiceMock.Verify(x=> x.GetUserDetails(It.IsAny<string>()), Times.Once);
     }
+
+    [Fact]
+    public async Task UpdateUserImage_WrongUsername_ShouldReturnUnauthorized()
+    {
+        //Arrange
+        var editUserImg = new UpdateUserImageRequest()
+        {
+            FileName = "",
+            ImgBase64 = "",
+            TypeOfImage = Consts.ImageType.ProfileImages,
+            Username = "WrongUsername"
+        };
+        //Act
+        var result = await _userController.UpdateUserImage(editUserImg);
+        var unAuthorizedRequestResult = result as UnauthorizedObjectResult;
+        
+        //Assert
+        Assert.NotNull(unAuthorizedRequestResult);
+        Assert.Equal((int)HttpStatusCode.Unauthorized,unAuthorizedRequestResult.StatusCode);
+        _userImageServiceMock.Verify(x=> x.UpdateUserImage(It.IsAny<UpdateUserImageRequest>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task UpdateUserImage_CorrectUsername_NoImage_ShouldReturnBadRequest()
+    {
+        //Arrange
+        var editUserImg = new UpdateUserImageRequest()
+        {
+            FileName = "",
+            ImgBase64 = "",
+            TypeOfImage = Consts.ImageType.ProfileImages,
+            Username = "testUsername"
+        };
+        //Act
+        var result = await _userController.UpdateUserImage(editUserImg);
+        var badRequestResult = result as BadRequestObjectResult;
+        
+        //Assert
+        Assert.NotNull(badRequestResult);
+        Assert.Equal((int)HttpStatusCode.BadRequest,badRequestResult.StatusCode);
+        _userImageServiceMock.Verify(x=> x.UpdateUserImage(It.IsAny<UpdateUserImageRequest>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task UpdateUserImage_CorrectUsername_ImagePopulated_NoFileName_ShouldReturnBadRequest()
+    {
+        //Arrange
+        var editUserImg = new UpdateUserImageRequest()
+        {
+            FileName = "",
+            ImgBase64 = "randomImage",
+            TypeOfImage = Consts.ImageType.ProfileImages,
+            Username = "testUsername"
+        };
+        //Act
+        var result = await _userController.UpdateUserImage(editUserImg);
+        var badRequestResult = result as BadRequestObjectResult;
+        
+        //Assert
+        Assert.NotNull(badRequestResult);
+        Assert.Equal((int)HttpStatusCode.BadRequest,badRequestResult.StatusCode);
+        _userImageServiceMock.Verify(x=> x.UpdateUserImage(It.IsAny<UpdateUserImageRequest>()), Times.Never);
+    }
+    [Fact]
+    public async Task UpdateUserImage_AllDataPopulated_ShouldReturnOk()
+    {
+        //Arrange
+        var editUserImg = new UpdateUserImageRequest()
+        {
+            FileName = "randomFileName",
+            ImgBase64 = "randomImage",
+            TypeOfImage = Consts.ImageType.ProfileImages,
+            Username = "testUsername"
+        };
+        var expectedResponse = new ServiceResponse(true,"");
+        _userImageServiceMock.Setup(x=> x.UpdateUserImage(editUserImg)).ReturnsAsync(expectedResponse);
+        _userManagerMock.Setup(x=> x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser(){UserName = "testUsername"});
+        //Act
+        var result = await _userController.UpdateUserImage(editUserImg);
+        var okRequestResult = result as OkObjectResult;
+        
+        //Assert
+        Assert.NotNull(okRequestResult);
+        Assert.Equal((int)HttpStatusCode.OK,okRequestResult.StatusCode);
+        _userImageServiceMock.Verify(x=> x.UpdateUserImage(It.IsAny<UpdateUserImageRequest>()), Times.Once);
+    }
 }
