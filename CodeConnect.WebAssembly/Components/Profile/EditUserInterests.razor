@@ -21,7 +21,7 @@
             </div>
             <div class="mt-5">
                 <p class="text-red-800 font-bold">@InterestsErrorMessage</p>
-                <h3 class="font-bold text-light-primaryColor">Currently Selected (Max 10):</h3>
+                <h3 class="font-bold text-light-primaryColor">@CurrentUserInterests?.Count Currently Selected (Max 10):</h3>
                 @if (CurrentUserInterests == null || (!CurrentUserInterests?.Any() ?? false))
                 {
                     <p class="text-light-primaryColor/60">none..</p>
