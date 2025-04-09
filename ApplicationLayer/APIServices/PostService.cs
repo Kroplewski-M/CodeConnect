@@ -10,7 +10,7 @@ public class PostService(ApplicationDbContext context,AzureService azureService)
 {
     public async Task<ServiceResponse> CreatePost(CreatePostDto createPost)
     {
-        var user = context.Users.FirstOrDefault(u => u.UserName == createPost.CreatedByUser)
+        var user = context.Users.FirstOrDefault(u => u.UserName == createPost.CreatedByUserName)
                    ?? throw new NullReferenceException("User does not exist");
         var newPost  = new Post()
         {

@@ -3,7 +3,6 @@ using ApplicationLayer;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Entities;
 using DomainLayer.Entities.Auth;
-using DomainLayer.Entities.Validators;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Components;
 

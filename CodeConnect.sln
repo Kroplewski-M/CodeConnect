@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainLayer", "DomainLayer\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfrastructureLayer", "InfrastructureLayer\InfrastructureLayer.csproj", "{BBE395AC-8831-448F-A138-6C9232C7F658}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiTestLayer", "ApiTestLayer\ApiTestLayer.csproj", "{7A14E943-041F-4EF7-A9EF-5E81637AFE5B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControllersTestLayer", "ControllersTestLayer\ControllersTestLayer.csproj", "{7A14E943-041F-4EF7-A9EF-5E81637AFE5B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8DD488CE-A33D-4A9F-9DBC-D033C92BE0EB}"
 EndProject

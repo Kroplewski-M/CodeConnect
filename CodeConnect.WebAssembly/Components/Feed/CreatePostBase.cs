@@ -69,9 +69,16 @@ public class CreatePostBase : ComponentBase
     protected bool Loading { get; set; } = false;
     protected async Task HandleValidSubmit()
     {
+        var post = new CreatePostDto(PostContent, Base64Images, UserDetails?.UserName ?? "");
+        var postValidator = new CreatePostDtoValidator();
+        var validate = await postValidator.ValidateAsync(post);
+        if (!validate.IsValid)
+        {
+            NotificationsService.PushNotification(new Notification("Error creating post", NotificationType.Error));
+            return;
+        }
         Loading = true;
         NotificationsService.PushNotification(new Notification("Creating Post", NotificationType.Info));
-        var post = new CreatePostDto(PostContent, Base64Images, UserDetails?.UserName ?? "");
         var postResponse = await PostService.CreatePost(post);
         if (postResponse.Flag)
         {
