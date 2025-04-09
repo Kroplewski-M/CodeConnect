@@ -11,17 +11,19 @@ public class PostController(IPostService postService) : ControllerBase
 {
     [HttpPost("CreatePost")]
     [Authorize]
-    public async Task<ServiceResponse> CreatePost([FromBody]CreatePostDto createPost)
+    public async Task<ActionResult<ServiceResponse>> CreatePost([FromBody]CreatePostDto createPost)
     {
         var postValidator = new CreatePostDtoValidator();
         var validate = await postValidator.ValidateAsync(createPost);
         if(!validate.IsValid)
-            return new ServiceResponse(false, "Error Creating Post");
+            return  BadRequest(new ServiceResponse(false, "Error Creating Post"));
         if(User.FindFirst(Consts.ClaimTypes.UserName)?.Value != createPost.CreatedByUserName)
-            return new ServiceResponse(false, "Error Creating Post");
+            return BadRequest(new ServiceResponse(false, "Error Creating Post"));
         
         var response = await postService.CreatePost(createPost);
-        return response;
+        if(!response.Flag)
+            return BadRequest(response);
+        return Ok(response);
     }
 
     [HttpGet("GetPosts")]
