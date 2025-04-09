@@ -4,6 +4,7 @@ using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using CodeConnect.WebAPI.Endpoints.UserEndpoint;
 using DomainLayer.Constants;
+using DomainLayer.DbEnts;
 using DomainLayer.Entities;
 using DomainLayer.Entities.Auth;
 using Microsoft.AspNetCore.Http;
@@ -266,5 +267,36 @@ public class UserControllerTests
         Assert.NotNull(okRequestResult);
         Assert.Equal((int)HttpStatusCode.OK,okRequestResult.StatusCode);
         _userServiceMock.Verify(x=> x.GetUserInterests(It.IsAny<string>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task GetAllInterests_ShouldReturnOk()
+    {
+        //Arrange
+        var interest = new TechInterestsDto(1,1,"type","name");
+        _userServiceMock.Setup(x=> x.GetAllInterests()).ReturnsAsync(new List<TechInterestsDto>() { interest });
+        
+        //Act
+        var result = await _userController.GetAllInterests();
+        var okRequestResult = result as OkObjectResult;
+        
+        //Assert
+        Assert.NotNull(okRequestResult);
+        Assert.Equal((int)HttpStatusCode.OK,okRequestResult.StatusCode);
+        _userServiceMock.Verify(x=> x.GetAllInterests(), Times.Once);
+    }
+    [Fact]
+    public async Task GetAllInterests_ReturnsEmpty_ShouldReturnServiceUnavailable()
+    {
+        //Arrange
+        _userServiceMock.Setup(x=> x.GetAllInterests()).ReturnsAsync(new List<TechInterestsDto>());
+        
+        //Act
+        var result = await _userController.GetAllInterests();
+
+        //Assert
+        var objectResult = Assert.IsType<ObjectResult>(result);
+        Assert.Equal((int)HttpStatusCode.ServiceUnavailable, objectResult.StatusCode);
+        _userServiceMock.Verify(x=> x.GetAllInterests(), Times.Once);
     }
 }

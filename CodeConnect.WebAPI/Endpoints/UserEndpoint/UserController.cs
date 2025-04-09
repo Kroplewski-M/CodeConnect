@@ -110,8 +110,8 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
     public async Task<IActionResult> GetAllInterests()
     {
         var interests = await userService.GetAllInterests();
-        if (!interests.Any())
-            return BadRequest("Failed to fetch interests");
+        if (interests.Count == 0)
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, "Service is unavailable. Please try again later.");
         return Ok(interests);   
     }
 }
