@@ -17,6 +17,10 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
 {
     public async Task<AuthResponse> CreateUser(RegisterForm registerForm)
     {
+        RegisterFormValidator registerFormValidator = new RegisterFormValidator();
+        var validate = await registerFormValidator.ValidateAsync(registerForm);
+        if (!validate.IsValid)
+            return new AuthResponse(false,"","", "Error creating user");
         var user = new ApplicationUser
         {
             UserName = registerForm.UserName,
@@ -29,7 +33,7 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         var result = await userManager.CreateAsync(user, registerForm.Password);
         if (result.Succeeded)
         {
-            var userClaims = Generics.GetClaimsForUser(user);;
+            var userClaims = Generics.GetClaimsForUser(user);
             var createdRefresh = await SaveRefreshToken(userClaims, user.Id);
             if (string.IsNullOrWhiteSpace(createdRefresh))
                 return new AuthResponse(false,"","","Error creating refresh token");

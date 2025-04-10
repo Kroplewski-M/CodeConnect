@@ -65,7 +65,7 @@ public class AuthControllerTests
         // Assert
         Assert.NotNull(badResult);
         Assert.Equal((int)HttpStatusCode.BadRequest, badResult.StatusCode);
-        _authenticateServiceMock.Verify(x => x.CreateUser(registerForm), Times.Never);
+        _authenticateServiceMock.Verify(x => x.CreateUser(registerForm), Times.Once);
     }
 
     [Fact]

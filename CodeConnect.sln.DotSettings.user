@@ -19,7 +19,12 @@
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ATestInvoker_00601_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002Econfig_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003F3b786e27d69b4ddf96abec2578075c2040420_003Fd0_003F079ffe0d_003FTestInvoker_00601_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AType_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002Econfig_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003Fd15de8ed93064806a163b97c7155b882d19c00_003F69_003F44380640_003FType_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=75b24dbc_002D0d06_002D478d_002Dba5e_002D434e98950613/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="GetAuthenticationState_ShouldReturnClaims" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;Project Location="/home/mateuszk/Repos/DotNet/CodeConnect/ControllersTestLayer" Presentation="&amp;lt;Tests&amp;gt;\&amp;lt;ControllersTestLayer&amp;gt;" /&gt;
+  &lt;Or&gt;
+    &lt;Project Location="/home/mateuszk/Repos/DotNet/CodeConnect/ControllersTestLayer" Presentation="&amp;lt;Tests&amp;gt;\&amp;lt;ControllersTestLayer&amp;gt;" /&gt;
+    &lt;TestAncestor&gt;
+      &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.AuthServiceTests.CreateUser_ShouldReturnSuccessResponse_WhenRegistrationIsValid&lt;/TestId&gt;
+    &lt;/TestAncestor&gt;
+  &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String>
 	
 	</wpf:ResourceDictionary>

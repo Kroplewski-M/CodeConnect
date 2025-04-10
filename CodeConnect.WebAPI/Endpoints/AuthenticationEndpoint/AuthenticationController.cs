@@ -18,10 +18,6 @@ public class AuthenticationController(IAuthenticateService authenticateService,
     [HttpPost("RegisterUser")]
     public async Task<IActionResult> RegisterUser([FromBody]RegisterForm registerForm)
     {
-        RegisterFormValidator registerFormValidator = new RegisterFormValidator();
-        var validate = await registerFormValidator.ValidateAsync(registerForm);
-        if (!validate.IsValid)
-            return BadRequest("Invalid Register Form");
         var result = await authenticateService.CreateUser(registerForm);
         if (result.Flag)
             return Ok(result);
