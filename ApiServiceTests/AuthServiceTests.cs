@@ -61,6 +61,152 @@ public class AuthServiceTests
         Assert.True(result.Flag);
         Assert.Equal("dummy-refresh-token", result.RefreshToken);
         Assert.Equal("dummy-refresh-token", result.Token);
+        _userManagerMock.Verify(um => um.CreateAsync(It.IsAny<ApplicationUser>(), registerForm.Password), Times.Once);
+        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>()), Times.Exactly(2));
 
+    }
+    [Fact]
+    public async Task CreateUser_NoUsername_ShouldReturnBadRequestResponse()
+    {
+        //Arrange
+        var context = GetInMemoryDbContext();
+        var registerForm = new RegisterForm
+        {
+            UserName = "",
+            FirstName = "Test",
+            LastName = "User",
+            Email = "test@example.com",
+            Dob = DateOnly.Parse("1990-01-01"),
+            Password = "TestPassword123!"
+        };
+        
+        var service = new AuthenticateService(_userManagerMock.Object, _tokenServiceMock.Object, context);
+        //Act
+        var result = await service.CreateUser(registerForm);
+        //Assert
+        Assert.NotNull(result);
+        Assert.False(result.Flag);
+        _userManagerMock.Verify(um => um.CreateAsync(It.IsAny<ApplicationUser>(), registerForm.Password), Times.Never);
+        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>()), Times.Never);
+    }
+    [Fact]
+    public async Task CreateUser_NoFirstName_ShouldReturnBadRequestResponse()
+    {
+        //Arrange
+        var context = GetInMemoryDbContext();
+        var registerForm = new RegisterForm
+        {
+            UserName = "testUsername",
+            FirstName = "",
+            LastName = "User",
+            Email = "test@example.com",
+            Dob = DateOnly.Parse("1990-01-01"),
+            Password = "TestPassword123!"
+        };
+        
+        var service = new AuthenticateService(_userManagerMock.Object, _tokenServiceMock.Object, context);
+        //Act
+        var result = await service.CreateUser(registerForm);
+        //Assert
+        Assert.NotNull(result);
+        Assert.False(result.Flag);
+        _userManagerMock.Verify(um => um.CreateAsync(It.IsAny<ApplicationUser>(), registerForm.Password), Times.Never);
+        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>()), Times.Never);
+    }
+    [Fact]
+    public async Task CreateUser_NoLastName_ShouldReturnBadRequestResponse()
+    {
+        //Arrange
+        var context = GetInMemoryDbContext();
+        var registerForm = new RegisterForm
+        {
+            UserName = "testUsername",
+            FirstName = "User",
+            LastName = "",
+            Email = "test@example.com",
+            Dob = DateOnly.Parse("1990-01-01"),
+            Password = "TestPassword123!"
+        };
+        
+        var service = new AuthenticateService(_userManagerMock.Object, _tokenServiceMock.Object, context);
+        //Act
+        var result = await service.CreateUser(registerForm);
+        //Assert
+        Assert.NotNull(result);
+        Assert.False(result.Flag);
+        _userManagerMock.Verify(um => um.CreateAsync(It.IsAny<ApplicationUser>(), registerForm.Password), Times.Never);
+        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>()), Times.Never);
+    }
+    [Fact]
+    public async Task CreateUser_NoEmail_ShouldReturnBadRequestResponse()
+    {
+        //Arrange
+        var context = GetInMemoryDbContext();
+        var registerForm = new RegisterForm
+        {
+            UserName = "testUsername",
+            FirstName = "User",
+            LastName = "User",
+            Email = "",
+            Dob = DateOnly.Parse("1990-01-01"),
+            Password = "TestPassword123!"
+        };
+        
+        var service = new AuthenticateService(_userManagerMock.Object, _tokenServiceMock.Object, context);
+        //Act
+        var result = await service.CreateUser(registerForm);
+        //Assert
+        Assert.NotNull(result);
+        Assert.False(result.Flag);
+        _userManagerMock.Verify(um => um.CreateAsync(It.IsAny<ApplicationUser>(), registerForm.Password), Times.Never);
+        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>()), Times.Never);
+    }
+    [Fact]
+    public async Task CreateUser_NoPassword_ShouldReturnBadRequestResponse()
+    {
+        //Arrange
+        var context = GetInMemoryDbContext();
+        var registerForm = new RegisterForm
+        {
+            UserName = "testUsername",
+            FirstName = "User",
+            LastName = "User",
+            Email = "test@example.com",
+            Dob = DateOnly.Parse("1990-01-01"),
+            Password = ""
+        };
+        
+        var service = new AuthenticateService(_userManagerMock.Object, _tokenServiceMock.Object, context);
+        //Act
+        var result = await service.CreateUser(registerForm);
+        //Assert
+        Assert.NotNull(result);
+        Assert.False(result.Flag);
+        _userManagerMock.Verify(um => um.CreateAsync(It.IsAny<ApplicationUser>(), registerForm.Password), Times.Never);
+        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>()), Times.Never);
+    }
+    [Fact]
+    public async Task CreateUser_PasswordUnderMinLength_ShouldReturnBadRequestResponse()
+    {
+        //Arrange
+        var context = GetInMemoryDbContext();
+        var registerForm = new RegisterForm
+        {
+            UserName = "testUsername",
+            FirstName = "User",
+            LastName = "User",
+            Email = "test@example.com",
+            Dob = DateOnly.Parse("1990-01-01"),
+            Password = "thisIsN"
+        };
+        
+        var service = new AuthenticateService(_userManagerMock.Object, _tokenServiceMock.Object, context);
+        //Act
+        var result = await service.CreateUser(registerForm);
+        //Assert
+        Assert.NotNull(result);
+        Assert.False(result.Flag);
+        _userManagerMock.Verify(um => um.CreateAsync(It.IsAny<ApplicationUser>(), registerForm.Password), Times.Never);
+        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>()), Times.Never);
     }
 }

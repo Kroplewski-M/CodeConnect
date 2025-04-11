@@ -23,7 +23,14 @@
     &lt;Project Location="/home/mateuszk/Repos/DotNet/CodeConnect/ControllersTestLayer" Presentation="&amp;lt;Tests&amp;gt;\&amp;lt;ControllersTestLayer&amp;gt;" /&gt;
     &lt;TestAncestor&gt;
       &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.AuthServiceTests.CreateUser_ShouldReturnSuccessResponse_WhenRegistrationIsValid&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.AuthServiceTests.CreateUser_NoUsername_ShouldReturnBadRequestResponse&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.AuthServiceTests.CreateUser_NoFirstName_ShouldReturnBadRequestResponse&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.AuthServiceTests.CreateUser_NoLastName_ShouldReturnBadRequestResponse&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.AuthServiceTests.CreateUser_NoEmail_ShouldReturnBadRequestResponse&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.AuthServiceTests.CreateUser_NoPassword_ShouldReturnBadRequestResponse&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.AuthServiceTests.CreateUser_PasswordUnderMinLength_ShouldReturnBadRequestResponse&lt;/TestId&gt;
     &lt;/TestAncestor&gt;
+    &lt;Project Location="/home/mateuszk/Repos/DotNet/CodeConnect/ApiServiceTests" Presentation="&amp;lt;Tests&amp;gt;\&amp;lt;ApiServiceTests&amp;gt;" /&gt;
   &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String>
 	
