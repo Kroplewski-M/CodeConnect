@@ -209,4 +209,28 @@ public class AuthServiceTests
         _userManagerMock.Verify(um => um.CreateAsync(It.IsAny<ApplicationUser>(), registerForm.Password), Times.Never);
         _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>()), Times.Never);
     }
+
+    // [Fact]
+    // public async Task LoginUser_WithEmail_ShouldCallFindByEmail_ShouldReturnOkResponse()
+    // {
+    //     //Arrange 
+    //     var context = GetInMemoryDbContext();
+    //     var loginForm = new LoginForm()
+    //     {
+    //         Email = "testUsername@gmail.com",
+    //         Password = "TestPassword123!",
+    //     };
+    //     var service = new AuthenticateService(_userManagerMock.Object, _tokenServiceMock.Object, context);
+    //     _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser() {Email = loginForm.Email});
+    //     _userManagerMock.Setup(x => x.CheckPasswordAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).ReturnsAsync(true);
+    //     //Act
+    //     var result = await service.LoginUser(loginForm);
+    //     
+    //     //Assert
+    //     Assert.NotNull(result);
+    //     Assert.True(result.Flag);
+    //     _userManagerMock.Verify(um => um.FindByEmailAsync(It.IsAny<string>()), Times.Once);
+    //     _userManagerMock.Verify(um => um.FindByNameAsync(It.IsAny<string>()), Times.Never);
+    //     
+    // }
 }
