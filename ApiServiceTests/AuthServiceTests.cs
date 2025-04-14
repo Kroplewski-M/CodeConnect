@@ -10,11 +10,27 @@ using Moq;
 
 namespace ApiServiceTests;
 
+
 public class AuthServiceTests
 {
     private readonly Mock<UserManager<ApplicationUser>> _userManagerMock;
     private readonly Mock<ITokenService> _tokenServiceMock;
     private readonly Mock<IAuthenticateService> _authServiceMock;
+
+    private class TestableAuth(
+        UserManager<ApplicationUser> userManager,
+        ITokenService tokenService,
+        ApplicationDbContext context,
+        string token)
+        : AuthenticateService(userManager, tokenService, context)
+    {
+        public int SaveRefreshCount { get; private set; } = 0;
+        protected override  Task<string> SaveRefreshToken(List<Claim> claims, string userId)
+        {
+            SaveRefreshCount++;
+            return Task.FromResult(tokenService.GenerateJwtToken(new List<Claim> { new Claim(ClaimTypes.Name, userId) }, DateTime.UtcNow))!;
+        }
+    }
     private ApplicationDbContext GetInMemoryDbContext()
     {
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
@@ -208,5 +224,31 @@ public class AuthServiceTests
         Assert.False(result.Flag);
         _userManagerMock.Verify(um => um.CreateAsync(It.IsAny<ApplicationUser>(), registerForm.Password), Times.Never);
         _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task LoginUser_WithEmail_ShouldCallFindByEmail_ShouldReturnOkResponse()
+    {
+        //Arrange 
+        var context = GetInMemoryDbContext();
+        var loginForm = new LoginForm()
+        {
+            Email = "testUsername@gmail.com",
+            Password = "TestPassword123!",
+        };
+        var service = new TestableAuth(_userManagerMock.Object, _tokenServiceMock.Object, context, "token");
+        _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser() {Email = loginForm.Email});
+        _userManagerMock.Setup(x => x.CheckPasswordAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).ReturnsAsync(true);
+        _tokenServiceMock.Setup(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>())).Returns("token");
+        //Act
+        var result = await service.LoginUser(loginForm);
+        
+        //Assert
+        Assert.NotNull(result);
+        Assert.True(result.Flag);
+        _userManagerMock.Verify(um => um.FindByEmailAsync(It.IsAny<string>()), Times.Once);
+        _userManagerMock.Verify(um => um.FindByNameAsync(It.IsAny<string>()), Times.Never);
+        Assert.Equal(1, service.SaveRefreshCount);
+        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>()), Times.Exactly(2));
     }
 }

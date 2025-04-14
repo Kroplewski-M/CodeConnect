@@ -72,7 +72,7 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         return new AuthResponse(false, "","","Incorrect Email or Password");
     }
 
-    private async Task<string> SaveRefreshToken(List<Claim> userClaims,string userId)
+    protected virtual async Task<string> SaveRefreshToken(List<Claim> userClaims,string userId)
     {
         var existingToken = context.RefreshUserAuths.FirstOrDefault(x=> x.UserId == userId);
         if (existingToken != null)
