@@ -45,6 +45,10 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
 
     public async Task<AuthResponse> LoginUser(LoginForm loginForm)
     {
+        var validate = new LoginFormValidator();
+        var validateResult = await validate.ValidateAsync(loginForm);
+        if (!validateResult.IsValid)
+            return new AuthResponse(false, "", "", "Login form is invalid");
         ApplicationUser? user = null;
         var validator = new InlineValidator<string>();
         validator.RuleFor(x=> x).EmailAddress();
