@@ -301,4 +301,25 @@ public class AuthServiceTests
         _userManagerMock.Verify(x => x.FindByNameAsync(It.IsAny<string>()), Times.Never);
         _tokenServiceMock.Verify(x => x.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>()), Times.Never);
     }
+
+    [Fact]
+    public async Task LoginUser_NoEmail_ShouldReturnBadRequestResponse()
+    { 
+        //Arrange
+        var context = GetInMemoryDbContext();
+        var loginForm = new LoginForm()
+        {
+            Email = "",
+            Password = "Password123!"
+        }; 
+        
+        //Act 
+        var service = new TestableAuth(_userManagerMock.Object, _tokenServiceMock.Object, context, "token");
+        var result = await service.LoginUser(loginForm);
+        
+        //Assert
+        Assert.NotNull(result);
+        Assert.False(result.Flag); 
+        _userManagerMock.Verify(x => x.FindByNameAsync(It.IsAny<string>()), Times.Never);
+    }
 }
