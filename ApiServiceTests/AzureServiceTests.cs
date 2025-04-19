@@ -1,5 +1,6 @@
 using System.Security.Authentication.ExtendedProtection;
 using ApplicationLayer.APIServices;
+using ApplicationLayer.Interfaces;
 using DomainLayer.Entities.APIClasses;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -16,7 +17,7 @@ public class AzureServiceTests
     private readonly Mock<BlobServiceClient> _blobServiceClient;
     private readonly Mock<BlobContainerClient> _blobContainerClient;
     private readonly Mock<BlobClient> _blobClient;
-    private readonly AzureService _azureService;
+    private AzureService _azureService;
 
     public AzureServiceTests()
     {
@@ -27,20 +28,21 @@ public class AzureServiceTests
         _azureService = new AzureService(_azureSettingsMock.Object);
     }
 
-    [Fact]
-    public async Task UploadImage_ShouldReturnSuccess_WhenImageUploaded()
-    {
-        // //Arrange
-        // var imageType = Consts.ImageType.ProfileImages;
-        // var base64Image = "base64Image";
-        // var imageName = "imageName";
-        // var imageExt = ".png";
-        // // Act
-        // var result = await _azureService.UploadImage(imageType, base64Image, imageName, imageExt);
-        // //have to set up the private method
-        // // Assert
-        // Assert.True(result.Flag);
-        // Assert.Equal("testimage.png", result.ImageName);
-        // Assert.Equal("Image updated successfully", result.Message);
-    }
+    // [Fact]
+    // public async Task UploadImage_ShouldReturnSuccess_WhenImageUploaded()
+    // {
+    //     //Arrange
+    //     var imageType = Consts.ImageType.ProfileImages;
+    //     var base64Image = "base64Image";
+    //     var imageName = "imageName";
+    //     var imageExt = ".png";
+    //     // Act
+    //     
+    //     //var result = await _azureService.UploadImage(imageType, base64Image, imageName, imageExt);
+    //     
+    //     // Assert
+    //     // Assert.True(result.Flag);
+    //     // Assert.Equal("testimage.png", result.ImageName);
+    //     // Assert.Equal("Image updated successfully", result.Message);
+    // }
 }

@@ -1,4 +1,5 @@
 using ApplicationLayer.DTO_s;
+using ApplicationLayer.Interfaces;
 using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
@@ -8,7 +9,7 @@ using Microsoft.Extensions.Options;
 
 namespace ApplicationLayer.APIServices;
 
-public class AzureService(IOptions<AzureSettings> azureSettings)
+public class AzureService(IOptions<AzureSettings> azureSettings) : IAzureService
 {
     private readonly BlobServiceClient _blobServiceClient = new(azureSettings.Value.ConnectionString);
 
@@ -48,7 +49,7 @@ public class AzureService(IOptions<AzureSettings> azureSettings)
                                  : new ServiceResponse(false, "Image could not be deleted");
     }
 
-    private BlobContainerClient? GetBlobContainerClient(Consts.ImageType imageType)
+    public BlobContainerClient? GetBlobContainerClient(Consts.ImageType imageType)
     {
         return imageType switch
         {

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ApplicationLayer.APIServices;
 
-public class UserImageService(UserManager<ApplicationUser>userManager, AzureService azureService) : IUserImageService
+public class UserImageService(UserManager<ApplicationUser>userManager, IAzureService azureService) : IUserImageService
 {
     public async Task<ServiceResponse> UpdateUserImage(UpdateUserImageRequest updateUserImageRequest)
     {

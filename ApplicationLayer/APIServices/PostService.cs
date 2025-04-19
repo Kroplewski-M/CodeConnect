@@ -6,7 +6,7 @@ using InfrastructureLayer;
 
 namespace ApplicationLayer.APIServices;
 
-public class PostService(ApplicationDbContext context,AzureService azureService) : IPostService
+public class PostService(ApplicationDbContext context,IAzureService azureService) : IPostService
 {
     public async Task<ServiceResponse> CreatePost(CreatePostDto createPost)
     {
