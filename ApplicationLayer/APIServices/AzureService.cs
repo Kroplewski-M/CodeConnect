@@ -9,9 +9,8 @@ using Microsoft.Extensions.Options;
 
 namespace ApplicationLayer.APIServices;
 
-public class AzureService(IOptions<AzureSettings> azureSettings) : IAzureService
+public class AzureService(BlobServiceClient blobServiceClient) : IAzureService
 {
-    private readonly BlobServiceClient _blobServiceClient = new(azureSettings.Value.ConnectionString);
 
     public async Task<AzureImageDto> UploadImage(Consts.ImageType imageType,string base64Image, string imageName,string imageExt)
     {
@@ -41,8 +40,8 @@ public class AzureService(IOptions<AzureSettings> azureSettings) : IAzureService
     public async Task<ServiceResponse> RemoveImage(string imageName, Consts.ImageType imageType)
     {
         var blobContainerClient = imageType == Consts.ImageType.ProfileImages
-            ? _blobServiceClient.GetBlobContainerClient(Consts.ImageType.ProfileImages.ToString().ToLower())
-            : _blobServiceClient.GetBlobContainerClient(Consts.ImageType.BackgroundImages.ToString().ToLower());
+            ? blobServiceClient.GetBlobContainerClient(Consts.ImageType.ProfileImages.ToString().ToLower())
+            : blobServiceClient.GetBlobContainerClient(Consts.ImageType.BackgroundImages.ToString().ToLower());
         var existingBlobClient = blobContainerClient.GetBlobClient(imageName);
         var result = await existingBlobClient.DeleteIfExistsAsync();
         return result == true ? new ServiceResponse(true, "Image deleted successfully") 
@@ -53,13 +52,13 @@ public class AzureService(IOptions<AzureSettings> azureSettings) : IAzureService
     {
         return imageType switch
         {
-            Consts.ImageType.ProfileImages => _blobServiceClient.GetBlobContainerClient(Consts.ImageType.ProfileImages
+            Consts.ImageType.ProfileImages => blobServiceClient.GetBlobContainerClient(Consts.ImageType.ProfileImages
                 .ToString()
                 .ToLower()),
-            Consts.ImageType.BackgroundImages => _blobServiceClient.GetBlobContainerClient(Consts.ImageType
+            Consts.ImageType.BackgroundImages => blobServiceClient.GetBlobContainerClient(Consts.ImageType
                 .BackgroundImages.ToString()
                 .ToLower()),
-            Consts.ImageType.PostImages => _blobServiceClient.GetBlobContainerClient(Consts.ImageType.PostImages
+            Consts.ImageType.PostImages => blobServiceClient.GetBlobContainerClient(Consts.ImageType.PostImages
                 .ToString()
                 .ToLower()),
             _ => null

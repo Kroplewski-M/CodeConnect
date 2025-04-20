@@ -2,12 +2,14 @@ using System.Text;
 using System.Text.Json.Serialization;
 using ApplicationLayer.APIServices;
 using ApplicationLayer.Interfaces;
+using Azure.Storage.Blobs;
 using DomainLayer.Entities.APIClasses;
 using DomainLayer.Entities.Auth;
 using InfrastructureLayer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
@@ -66,6 +68,11 @@ builder.Services.AddScoped<IAuthenticateService,AuthenticateService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IFollowingService, FollowingService>();
 builder.Services.AddScoped<IPostService, PostService>();
+builder.Services.AddSingleton<BlobServiceClient>(x =>
+{
+    var azureSettings = x.GetRequiredService<IOptions<AzureSettings>>().Value;
+    return new BlobServiceClient(azureSettings.ConnectionString);
+});
 builder.Services.AddTransient<IAzureService,AzureService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();

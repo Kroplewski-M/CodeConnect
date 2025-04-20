@@ -25,7 +25,7 @@ public class AzureServiceTests
         _blobServiceClient = new Mock<BlobServiceClient>();
         _blobContainerClient = new Mock<BlobContainerClient>();
         _blobClient = new Mock<BlobClient>();
-        _azureService = new AzureService(_azureSettingsMock.Object);
+        _azureService = new AzureService(_blobServiceClient.Object);
     }
 
     // [Fact]
