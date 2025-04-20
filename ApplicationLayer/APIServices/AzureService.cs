@@ -17,7 +17,7 @@ public class AzureService(BlobServiceClient blobServiceClient) : IAzureService
     {
         var base64Data = base64Image.Contains(',') ? base64Image.Split(',')[1] : base64Image;
 
-        if(!Helpers.IsBase64(base64Data))
+        if(!Helpers.IsBase64(base64Data) || string.IsNullOrWhiteSpace(imageName) || string.IsNullOrWhiteSpace(imageExt))
             return new AzureImageDto(false, "","Upload Failed");
         var blobContainerClient = GetBlobContainerClient(imageType);
         if(blobContainerClient == null)
