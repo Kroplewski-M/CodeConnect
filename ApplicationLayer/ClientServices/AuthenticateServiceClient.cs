@@ -28,19 +28,14 @@ public class AuthenticateServiceClient(
     {
         var response = await httpClient.PostAsJsonAsync("/api/Authentication/RegisterUser", registerForm);
         var authResponse = await response.Content.ReadFromJsonAsync<AuthResponse>();
-        if (response.IsSuccessStatusCode)
-        {
-            if (authResponse != null && authResponse.Flag)
-            {
-                await localStorageService.SetItemAsync(Consts.Tokens.AuthToken, authResponse.Token);
-                await localStorageService.SetItemAsync(Consts.Tokens.RefreshToken, authResponse.Token);
+        if (!response.IsSuccessStatusCode || authResponse == null || !authResponse.Flag)
+            return new AuthResponse(false, "", "", authResponse?.Message ?? "An error occured please try again later");
+        await localStorageService.SetItemAsync(Consts.Tokens.AuthToken, authResponse.Token);
+        await localStorageService.SetItemAsync(Consts.Tokens.RefreshToken, authResponse.Token);
 
-                ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
-                NotifyStateChanged();
-                return authResponse;
-            }
-        }
-        return new AuthResponse(false, "","", authResponse?.Message ?? "An error occured please try again later");
+        ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
+        NotifyStateChanged();
+        return authResponse;
     }
 
     public async Task<AuthResponse> LoginUser(LoginForm loginForm)
@@ -65,7 +60,6 @@ public class AuthenticateServiceClient(
     {
         var dob = authState.GetUserInfo(Consts.ClaimTypes.Dob).Trim() ?? null;
         var createdAt = authState.GetUserInfo(Consts.ClaimTypes.CreatedAt).Trim() ?? null;
-        string format = "MM/dd/yyyy";
         var profileImg = authState.GetUserInfo(Consts.ClaimTypes.ProfileImg);
         var backgroundImg = authState.GetUserInfo(Consts.ClaimTypes.BackgroundImg);
 
@@ -83,8 +77,8 @@ public class AuthenticateServiceClient(
             BackgroundImg: backgroundImg,
             GithubLink: authState.GetUserInfo(Consts.ClaimTypes.GithubLink),
             WebsiteLink: authState.GetUserInfo(Consts.ClaimTypes.WebsiteLink),
-            Dob: DateOnly.ParseExact(dob ?? "", format, CultureInfo.InvariantCulture), 
-            CreatedAt:DateOnly.ParseExact(createdAt ?? "", format, CultureInfo.InvariantCulture),
+            Dob: DateOnly.ParseExact(dob ?? "", Consts.Base.DateFormat, CultureInfo.InvariantCulture), 
+            CreatedAt:DateOnly.ParseExact(createdAt ?? "", Consts.Base.DateFormat, CultureInfo.InvariantCulture),
             Bio:authState.GetUserInfo(Consts.ClaimTypes.Bio)
             );
     }
@@ -92,9 +86,8 @@ public class AuthenticateServiceClient(
     public async Task<string> GetUsersUsername()
     {
         var authState = await authenticationStateProvider?.GetAuthenticationStateAsync()!;
-        if(authState.User.Identity != null)
-            return authState.GetUserInfo(Consts.ClaimTypes.UserName);
-        return "";
+        return authState.User.Identity != null ? authState.GetUserInfo(Consts.ClaimTypes.UserName) 
+                                               : "";
     }
     public async Task<AuthResponse> LogoutUser()
     {

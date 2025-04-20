@@ -13,7 +13,6 @@ namespace ApiServiceTests;
 
 public class AzureServiceTests
 {
-    private readonly Mock<IOptions<AzureSettings>> _azureSettingsMock;
     private readonly Mock<BlobServiceClient> _blobServiceClient;
     private readonly Mock<BlobContainerClient> _blobContainerClient;
     private readonly Mock<BlobClient> _blobClient;
@@ -21,28 +20,35 @@ public class AzureServiceTests
 
     public AzureServiceTests()
     {
-        _azureSettingsMock = new Mock<IOptions<AzureSettings>>();
         _blobServiceClient = new Mock<BlobServiceClient>();
         _blobContainerClient = new Mock<BlobContainerClient>();
         _blobClient = new Mock<BlobClient>();
+        
+        _blobServiceClient.Setup(x => x.GetBlobContainerClient(It.IsAny<string>())).Returns(_blobContainerClient.Object);
+        _blobContainerClient.Setup(x => x.GetBlobClient(It.IsAny<string>())).Returns(_blobClient.Object); 
+        _blobContainerClient.Setup(x => x.CreateIfNotExistsAsync(It.IsAny<PublicAccessType>(),null,null,CancellationToken.None))
+            .ReturnsAsync(Mock.Of<Response<BlobContainerInfo>>());
+        _blobClient.Setup(x => x.UploadAsync(It.IsAny<Stream>(), true, CancellationToken.None))
+            .ReturnsAsync(Mock.Of<Response<BlobContentInfo>>());
         _azureService = new AzureService(_blobServiceClient.Object);
     }
 
-    // [Fact]
-    // public async Task UploadImage_ShouldReturnSuccess_WhenImageUploaded()
-    // {
-    //     //Arrange
-    //     var imageType = Consts.ImageType.ProfileImages;
-    //     var base64Image = "base64Image";
-    //     var imageName = "imageName";
-    //     var imageExt = ".png";
-    //     // Act
-    //     
-    //     //var result = await _azureService.UploadImage(imageType, base64Image, imageName, imageExt);
-    //     
-    //     // Assert
-    //     // Assert.True(result.Flag);
-    //     // Assert.Equal("testimage.png", result.ImageName);
-    //     // Assert.Equal("Image updated successfully", result.Message);
-    // }
+    [Fact]
+    public async Task UploadImage_ShouldReturnSuccess_WhenImageUploaded()
+    {
+        // Arrange
+        var imageType = Consts.ImageType.ProfileImages;
+        var base64Image = Convert.ToBase64String(new byte[] { 1, 2, 3, 4 }); // valid base64
+        var imageName = "testimage";
+        var imageExt = ".png";
+        var expectedFullName = "testimage.png";
+
+        // Act
+        var result = await _azureService.UploadImage(imageType, base64Image, imageName, imageExt);
+
+        // Assert
+        Assert.True(result.Flag);
+        Assert.Equal(expectedFullName, result.ImageName);
+        Assert.Equal("Image updated successfully", result.Message);
+    }
 }
