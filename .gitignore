@@ -30,3 +30,5 @@ CodeConnect.WebAPI/appsettings.Development.json
 /node_modules
 .config/
 CodeConnect.WebAssembly/node_modules/
+TestResults/
+coverage-report
