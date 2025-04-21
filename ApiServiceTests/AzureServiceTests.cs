@@ -93,4 +93,35 @@ public class AzureServiceTests
         Assert.False(result.Flag);
         Assert.Equal("Upload Failed", result.Message);
     }
+
+    [Fact]
+    public async Task DeleteImage_ShouldReturnSuccess_WhenImageDeleted()
+    {
+        //Arrange
+        var imageName = "TestName";
+        _blobContainerClient.Setup(x => x.GetBlobClient(imageName)).Returns(_blobClient.Object);
+        _blobClient
+            .Setup(x => x.DeleteIfExistsAsync(It.IsAny<DeleteSnapshotsOption>(), It.IsAny<BlobRequestConditions>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Response.FromValue(true, Mock.Of<Response>()));
+        
+        //Act
+        var result = await _azureService.RemoveImage(imageName, Consts.ImageType.ProfileImages);
+        //Assert
+        Assert.True(result.Flag);
+        Assert.Equal("Image deleted successfully", result.Message);
+    }
+    [Fact]
+    public async Task RemoveImage_ShouldReturnFailure_WhenImageDoesNotExist()
+    {
+        //Arrange
+        _blobClient
+            .Setup(x => x.DeleteIfExistsAsync(It.IsAny<DeleteSnapshotsOption>(), It.IsAny<BlobRequestConditions>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Response.FromValue(false, Mock.Of<Response>()));
+        //Act
+        var result = await _azureService.RemoveImage("nonexistent.png", Consts.ImageType.ProfileImages);
+        //Assert
+        Assert.False(result.Flag);
+        Assert.Equal("Image could not be deleted", result.Message);
+    }
 }
