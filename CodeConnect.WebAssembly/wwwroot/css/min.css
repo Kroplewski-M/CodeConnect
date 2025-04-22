@@ -920,9 +920,6 @@
   .border-green-800 {
     border-color: var(--color-green-800);
   }
-  .border-light-primaryColor {
-    border-color: var(--color-light-primaryColor);
-  }
   .border-light-secondaryColor {
     border-color: var(--color-light-secondaryColor);
   }
@@ -1054,9 +1051,6 @@
   }
   .pt-\[10px\] {
     padding-top: 10px;
-  }
-  .pt-\[20px\] {
-    padding-top: 20px;
   }
   .pb-7 {
     padding-bottom: calc(var(--spacing) * 7);
@@ -1540,11 +1534,6 @@
     @media (width >= 80rem) {
       --tw-translate-x: calc(var(--spacing) * 0);
       translate: var(--tw-translate-x) var(--tw-translate-y);
-    }
-  }
-  .dark\:border-dark-primaryColor {
-    &:where(.dark, .dark *) {
-      border-color: var(--color-dark-primaryColor);
     }
   }
   .dark\:border-dark-supportColor {
