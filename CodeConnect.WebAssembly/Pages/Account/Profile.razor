@@ -63,6 +63,13 @@
                                         }
                                     </div>
                                 </div>
+                                @if (FollowerCount != null)
+                                {
+                                    <div class="flex text-dark-supportColor/70">
+                                        <p>Following @FollowerCount.FollowingCount</p>
+                                        <p class="ml-2">Followers @FollowerCount.FollowersCount</p>
+                                    </div>
+                                }
                                 @if (IsCurrentUser)
                                 {
                                     <div class="mt-[10px] flex">

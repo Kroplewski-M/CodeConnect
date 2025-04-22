@@ -17,7 +17,7 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
             throw new UnauthorizedAccessException($"User {userId} not found");
         var following = context.FollowUsers.Count(x => x.FollowerUserId == user.Id);
         var followers = context.FollowUsers.Count(x => x.FollowedUserId == user.Id);
-        return new FollowerCount(following, followers);
+        return new FollowerCount(followers,following);
     }
     public async Task<ServiceResponse> FollowUser(FollowRequestDto followRequest)
     {

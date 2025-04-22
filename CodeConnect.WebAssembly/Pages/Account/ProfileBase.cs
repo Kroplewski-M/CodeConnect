@@ -9,21 +9,19 @@ namespace CodeConnect.WebAssembly.Pages.Account;
 
 public class ProfileBase : ComponentBase
 {
-    [Inject]
-    public required  IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
-    [Inject]
-    public required IUserService UserService { get; set; }
-    [Parameter]
-    public string? Username { get; set; }
+    [Inject] public required  IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
+    [Inject] public required IUserService UserService { get; set; }
+    [Inject] public required IFollowingService FollowingService { get; set; }
+    [Parameter] public string? Username { get; set; }
     protected bool ShowConfirmLogout = false;
     protected bool ShowEditProfile = false;
     protected bool IsCurrentUser = false;
     protected bool FoundUser = false;
     protected UserDetails? UserDetails = null;
+    protected FollowerCount? FollowerCount = null;
     protected List<TechInterestsDto>? UserInterests { get; set; }
 
-    [CascadingParameter]
-    private Task<AuthenticationState>? AuthenticationState { get; set; }
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationState { get; set; }
 
     protected string? CurrentUsername { get; set; }
     protected override async Task OnParametersSetAsync()
@@ -52,6 +50,7 @@ public class ProfileBase : ComponentBase
                 {
                     var interests = await UserService.GetUserInterests(UserDetails.UserName);
                     UserInterests = interests.Interests;
+                    FollowerCount = await FollowingService.GetUserFollowersCount(UserDetails.UserName);
                     FoundUser = true;
                 }
                 StateHasChanged();
