@@ -5,12 +5,19 @@
 
 <div class="md:w-[400px] w-[80%] h-[100px] rounded-md bg-dark-primaryColor hover:bg-dark-primaryColor/80 cursor-pointer" @onclick="()=> Redirect(User.Username)">
     <div class="flex mt-[15px]">
-        <div class="w-[50px] h-[50px] ml-[10px]">
+        <div class="w-[50px] min-w-[50px] h-[50px] ml-[10px]">
             <img src="@ImgUrl" alt="" class="rounded-full w-[100%] h-[100%]"/>
         </div>
         <div class="ml-4">
             <p class="font-bold text-light-primaryColor light:bg-dark-primaryColor">@User.Username</p>
-            <p class="text-gray-400">@(string.IsNullOrWhiteSpace(User.Bio) ? "No description..." : User.Bio)</p>
+            @if (string.IsNullOrWhiteSpace(User.Bio))
+            {
+                <p class="text-gray-400">No description...</p>
+            }
+            else
+            {
+                <p class="text-gray-400">@(User.Bio.Length > 80 ? $"{User.Bio[..80]}..." : User.Bio)</p>
+            }
         </div>
     </div>
 </div>

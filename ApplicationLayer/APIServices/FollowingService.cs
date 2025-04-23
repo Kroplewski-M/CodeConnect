@@ -21,6 +21,9 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
     }
     public async Task<ServiceResponse> FollowUser(FollowRequestDto followRequest)
     {
+        if (string.IsNullOrWhiteSpace(followRequest.CurrentUsername) ||
+            string.IsNullOrWhiteSpace(followRequest.TargetUsername))
+            return new ServiceResponse(false, "Error occured while following user");
         var currentUser = await userManager.FindByNameAsync(followRequest.CurrentUsername);
         var targetUser = await userManager.FindByNameAsync(followRequest.TargetUsername);
         if(currentUser == null || targetUser == null)
@@ -37,6 +40,10 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
 
     public async Task<ServiceResponse> UnfollowUser(FollowRequestDto unFollowRequest)
     {
+        if (string.IsNullOrWhiteSpace(unFollowRequest.CurrentUsername) ||
+            string.IsNullOrWhiteSpace(unFollowRequest.TargetUsername))
+            return new ServiceResponse(false, "Error occured while unfollowing user");
+        
         var currentUser = await userManager.FindByNameAsync(unFollowRequest.CurrentUsername);
         var targetUser = await userManager.FindByNameAsync(unFollowRequest.TargetUsername);
         if(currentUser == null || targetUser == null)
@@ -51,6 +58,9 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
 
     public async Task<bool> IsUserFollowing(FollowRequestDto request)
     {
+        if (string.IsNullOrWhiteSpace(request.CurrentUsername) ||
+            string.IsNullOrWhiteSpace(request.TargetUsername))
+            return false;
         var currentUser = await userManager.FindByNameAsync(request.CurrentUsername);
         var targetUser = await userManager.FindByNameAsync(request.TargetUsername);
         if(currentUser == null || targetUser == null)
