@@ -28,6 +28,11 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
         var targetUser = await userManager.FindByNameAsync(followRequest.TargetUsername);
         if(currentUser == null || targetUser == null)
             return new ServiceResponse(false, "A user could not be found");
+        var alreadyFollowing = context.FollowUsers.Any(x =>
+            x.FollowerUserId == currentUser.Id && x.FollowedUserId == targetUser.Id);
+        if (alreadyFollowing)
+            return new ServiceResponse(false, "User already followed");
+        
         var newFollow = new Followers()
         {
             FollowerUserId = currentUser.Id,

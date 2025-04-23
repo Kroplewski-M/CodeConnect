@@ -11,21 +11,19 @@ namespace ApiServiceTests;
 
 public class FollowingServiceTests
 {
-    private readonly FollowingService _followingService;
-    private readonly Mock<ApplicationDbContext> _dbContext;
     private readonly Mock<UserManager<ApplicationUser>> _userManager;
     
     public FollowingServiceTests()
     {
         var userStoreMock = new Mock<IUserStore<ApplicationUser>>();
-        _userManager = new Mock<UserManager<ApplicationUser>>(userStoreMock.Object, null, null, null, null, null, null, null, null);
+        _userManager = new Mock<UserManager<ApplicationUser>>(userStoreMock.Object, null!, null!, null!, null!, null!, null!, null!, null!);
     }
     [Fact]
     public async Task GetUserFollowersCount_ReturnsCorrectCounts()
     {
         // Arrange
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: "TestDb")
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
 
         await using var context = new ApplicationDbContext(options);
@@ -57,7 +55,7 @@ public class FollowingServiceTests
     {
         //Arrange
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: "TestDb")
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
 
         await using var context = new ApplicationDbContext(options);
@@ -77,7 +75,7 @@ public class FollowingServiceTests
     {
         //Arrange
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: "TestDb")
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
 
         await using var context = new ApplicationDbContext(options);
@@ -98,7 +96,7 @@ public class FollowingServiceTests
     {
         //Arrange
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: "TestDb")
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
 
         await using var context = new ApplicationDbContext(options);
@@ -120,7 +118,7 @@ public class FollowingServiceTests
     {
         //Arrange
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: "TestDb")
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
         var currentUser = new ApplicationUser { UserName = "Alice", Id = "1" };
         var targetUser = new ApplicationUser { UserName = "Bob", Id = "2" };
@@ -142,11 +140,41 @@ public class FollowingServiceTests
         Assert.NotNull(followEntry);
     }
     [Fact]
+    public async Task FollowUser_GoodData_UserAlreadyFollowed_ShouldReturnBadServiceResponse()
+    {
+        //Arrange
+        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
+        var currentUser = new ApplicationUser { UserName = "Alice", Id = "1" };
+        var targetUser = new ApplicationUser { UserName = "Bob", Id = "2" };
+        await using var context = new ApplicationDbContext(options);
+        
+        context.FollowUsers.Add(new Followers() { Id = 1, FollowerUserId = "1", FollowedUserId = "2" });
+        await context.SaveChangesAsync();
+        
+        var request = new FollowRequestDto(currentUser.UserName, targetUser.UserName);
+        _userManager.Setup(x => x.FindByNameAsync("Alice")).ReturnsAsync(currentUser);
+        _userManager.Setup(x => x.FindByNameAsync("Bob")).ReturnsAsync(targetUser);
+        
+        var service = new FollowingService(_userManager.Object, context);
+        //Act 
+        var result = await service.FollowUser(request);
+        
+        //Assert
+        Assert.NotNull(result);
+        Assert.False(result.Flag);
+        _userManager.Verify(m => m.FindByNameAsync(It.IsAny<string>()), Times.Exactly(2));
+        var followEntry = await context.FollowUsers
+            .FirstOrDefaultAsync(f => f.FollowerUserId == "1" && f.FollowedUserId == "2");
+        Assert.NotNull(followEntry);
+    }
+    [Fact]
     public async Task UnFollowUser_EmptyCurrentUsername_ShouldReturnBadServiceResponse()
     {
         //Arrange
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: "TestDb")
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
 
         await using var context = new ApplicationDbContext(options);
@@ -166,7 +194,7 @@ public class FollowingServiceTests
     {
         //Arrange
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: "TestDb")
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
 
         await using var context = new ApplicationDbContext(options);
@@ -186,7 +214,7 @@ public class FollowingServiceTests
     {
         //Arrange
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: "TestDb")
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
 
         await using var context = new ApplicationDbContext(options);
@@ -207,7 +235,7 @@ public class FollowingServiceTests
     {
         //Arrange
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: "TestDb")
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
         var currentUser = new ApplicationUser { UserName = "Alice", Id = "1" };
         var targetUser = new ApplicationUser { UserName = "Bob", Id = "2" };
