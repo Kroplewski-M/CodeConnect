@@ -1,17 +1,24 @@
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
+using DomainLayer.Entities.Auth;
 using DomainLayer.Entities.Posts;
 using InfrastructureLayer;
+using Microsoft.AspNetCore.Identity;
 
 namespace ApplicationLayer.APIServices;
 
-public class PostService(ApplicationDbContext context,IAzureService azureService) : IPostService
+public class PostService(ApplicationDbContext context,IAzureService azureService, UserManager<ApplicationUser>UserManager) : IPostService
 {
     public async Task<ServiceResponse> CreatePost(CreatePostDto createPost)
     {
-        var user = context.Users.FirstOrDefault(u => u.UserName == createPost.CreatedByUserName)
-                   ?? throw new NullReferenceException("User does not exist");
+        var validator = new CreatePostDtoValidator();
+        var validationResult = await validator.ValidateAsync(createPost);
+        if(!validationResult.IsValid)
+            return new ServiceResponse(false, "Error creating post");
+        var user = await UserManager.FindByNameAsync(createPost.CreatedByUserName);
+        if(user == null)
+            return new ServiceResponse(false, "User not found");
         var newPost  = new Post()
         {
             Content = createPost.Content,
