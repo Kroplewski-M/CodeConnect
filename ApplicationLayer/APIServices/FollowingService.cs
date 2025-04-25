@@ -90,6 +90,8 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
 
     public async Task<List<UserBasicDto>> GetUserFollowing(string username)
     {
+        if (string.IsNullOrWhiteSpace(username))
+            return new List<UserBasicDto>();
         var user = await userManager.FindByNameAsync(username);
         if(user == null|| user?.UserName != username)
             return new List<UserBasicDto>();
