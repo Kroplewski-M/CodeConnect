@@ -8,264 +8,212 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 
 namespace ApiServiceTests;
-
+[Collection("DatabaseCollection")]
 public class FollowingServiceTests
 {
     private readonly Mock<UserManager<ApplicationUser>> _userManager;
-
-    public FollowingServiceTests()
+    private readonly ApplicationDbContext _context;
+    private readonly FollowingService _followingService;
+    public FollowingServiceTests(DatabaseFixture databaseFixture)
     {
         var userStoreMock = new Mock<IUserStore<ApplicationUser>>();
         _userManager = new Mock<UserManager<ApplicationUser>>(userStoreMock.Object, null!, null!, null!, null!, null!,
             null!, null!, null!);
+        _context = databaseFixture.Context;
+         _followingService = new FollowingService(_userManager.Object, _context);
     }
 
     [Fact]
     public async Task GetUserFollowersCount_ReturnsCorrectCounts()
     {
         // Arrange
-        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
-
-        await using var context = new ApplicationDbContext(options);
-
-        var userId = "user-1";
+        var userId = "user-5";
         var user = new ApplicationUser { Id = userId };
 
-        context.FollowUsers.AddRange(
-            new Followers { FollowerUserId = userId, FollowedUserId = "user-2" },
-            new Followers { FollowerUserId = "user-3", FollowedUserId = userId },
-            new Followers { FollowerUserId = "user-4", FollowedUserId = userId }
+        _context.FollowUsers.AddRange(
+            new Followers { FollowerUserId = userId, FollowedUserId = "user-6" },
+            new Followers { FollowerUserId = "user-7", FollowedUserId = userId },
+            new Followers { FollowerUserId = "user-8", FollowedUserId = userId }
         );
-        await context.SaveChangesAsync();
-
+        await _context.SaveChangesAsync();
         _userManager.Setup(m => m.FindByIdAsync(userId)).ReturnsAsync(user);
-
-        var service = new FollowingService(_userManager.Object, context);
-
         // Act
-        var result = await service.GetUserFollowersCount(userId);
+        var result = await _followingService.GetUserFollowersCount(userId);
 
         // Assert
         Assert.Equal(2, result.FollowersCount);
         Assert.Equal(1, result.FollowingCount);
+        _context.ChangeTracker.Clear();
     }
 
     [Fact]
     public async Task FollowUser_EmptyCurrentUsername_ShouldReturnBadServiceResponse()
     {
         //Arrange
-        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
-
-        await using var context = new ApplicationDbContext(options);
         var request = new FollowRequestDto("", "SomeUsername");
-        var service = new FollowingService(_userManager.Object, context);
 
         //Act 
-        var result = await service.FollowUser(request);
+        var result = await _followingService.FollowUser(request);
 
         //Assert 
         Assert.NotNull(result);
         Assert.False(result.Flag);
         _userManager.Verify(m => m.FindByIdAsync(It.IsAny<string>()), Times.Never);
+        _context.ChangeTracker.Clear();
     }
 
     [Fact]
     public async Task FollowUser_EmptyTargetUsername_ShouldReturnBadServiceResponse()
     {
         //Arrange
-        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
-
-        await using var context = new ApplicationDbContext(options);
         var request = new FollowRequestDto("SomeUsername", "");
-        var service = new FollowingService(_userManager.Object, context);
 
         //Act 
-        var result = await service.FollowUser(request);
+        var result = await _followingService.FollowUser(request);
 
         //Assert 
         Assert.NotNull(result);
         Assert.False(result.Flag);
         _userManager.Verify(m => m.FindByIdAsync(It.IsAny<string>()), Times.Never);
+        _context.ChangeTracker.Clear();
     }
 
     [Fact]
     public async Task FollowUser_CannotFindUser_ShouldReturnBadServiceResponse()
     {
         //Arrange
-        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
-
-        await using var context = new ApplicationDbContext(options);
         var request = new FollowRequestDto("SomeUsername", "SomeOtherUsername");
-        var service = new FollowingService(_userManager.Object, context);
         _userManager.Setup(x => x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(null as ApplicationUser);
 
         //Act
-        var result = await service.FollowUser(request);
+        var result = await _followingService.FollowUser(request);
 
         //Assert
         Assert.NotNull(result);
         Assert.False(result.Flag);
         _userManager.Verify(m => m.FindByNameAsync(It.IsAny<string>()), Times.Exactly(2));
+        _context.ChangeTracker.Clear();
     }
 
     [Fact]
     public async Task FollowUser_GoodData_UserExists_ShouldReturnOk()
     {
         //Arrange
-        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
-        var currentUser = new ApplicationUser { UserName = "Alice", Id = "1" };
-        var targetUser = new ApplicationUser { UserName = "Bob", Id = "2" };
-        await using var context = new ApplicationDbContext(options);
+        var currentUser = new ApplicationUser { UserName = "Alice", Id = "3" };
+        var targetUser = new ApplicationUser { UserName = "Bob", Id = "4" };
         var request = new FollowRequestDto(currentUser.UserName, targetUser.UserName);
         _userManager.Setup(x => x.FindByNameAsync("Alice")).ReturnsAsync(currentUser);
         _userManager.Setup(x => x.FindByNameAsync("Bob")).ReturnsAsync(targetUser);
-
-        var service = new FollowingService(_userManager.Object, context);
         //Act 
-        var result = await service.FollowUser(request);
+        var result = await _followingService.FollowUser(request);
 
         //Assert
         Assert.NotNull(result);
         Assert.True(result.Flag);
         _userManager.Verify(m => m.FindByNameAsync(It.IsAny<string>()), Times.Exactly(2));
-        var followEntry = await context.FollowUsers
-            .FirstOrDefaultAsync(f => f.FollowerUserId == "1" && f.FollowedUserId == "2");
+        var followEntry = await _context.FollowUsers
+            .FirstOrDefaultAsync(f => f.FollowerUserId == "3" && f.FollowedUserId == "4");
         Assert.NotNull(followEntry);
+        _context.ChangeTracker.Clear();
     }
 
     [Fact]
     public async Task FollowUser_GoodData_UserAlreadyFollowed_ShouldReturnBadServiceResponse()
     {
         //Arrange
-        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
         var currentUser = new ApplicationUser { UserName = "Alice", Id = "1" };
         var targetUser = new ApplicationUser { UserName = "Bob", Id = "2" };
-        await using var context = new ApplicationDbContext(options);
 
-        context.FollowUsers.Add(new Followers() { Id = 1, FollowerUserId = "1", FollowedUserId = "2" });
-        await context.SaveChangesAsync();
+        _context.FollowUsers.Add(new Followers() { Id = 1, FollowerUserId = "1", FollowedUserId = "2" });
+        await _context.SaveChangesAsync();
 
         var request = new FollowRequestDto(currentUser.UserName, targetUser.UserName);
         _userManager.Setup(x => x.FindByNameAsync("Alice")).ReturnsAsync(currentUser);
         _userManager.Setup(x => x.FindByNameAsync("Bob")).ReturnsAsync(targetUser);
-
-        var service = new FollowingService(_userManager.Object, context);
         //Act 
-        var result = await service.FollowUser(request);
+        var result = await _followingService.FollowUser(request);
 
         //Assert
         Assert.NotNull(result);
         Assert.False(result.Flag);
         _userManager.Verify(m => m.FindByNameAsync(It.IsAny<string>()), Times.Exactly(2));
-        var followEntry = await context.FollowUsers
+        var followEntry = await _context.FollowUsers
             .FirstOrDefaultAsync(f => f.FollowerUserId == "1" && f.FollowedUserId == "2");
         Assert.NotNull(followEntry);
+        _context.ChangeTracker.Clear();
     }
 
     [Fact]
     public async Task UnFollowUser_EmptyCurrentUsername_ShouldReturnBadServiceResponse()
     {
         //Arrange
-        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
-
-        await using var context = new ApplicationDbContext(options);
         var request = new FollowRequestDto("", "SomeUsername");
-        var service = new FollowingService(_userManager.Object, context);
-
         //Act 
-        var result = await service.UnfollowUser(request);
+        var result = await _followingService.UnfollowUser(request);
 
         //Assert 
         Assert.NotNull(result);
         Assert.False(result.Flag);
         _userManager.Verify(m => m.FindByIdAsync(It.IsAny<string>()), Times.Never);
+        _context.ChangeTracker.Clear();
     }
 
     [Fact]
     public async Task UnFollowUser_EmptyTargetUsername_ShouldReturnBadServiceResponse()
     {
         //Arrange
-        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
-
-        await using var context = new ApplicationDbContext(options);
         var request = new FollowRequestDto("SomeUsername", "");
-        var service = new FollowingService(_userManager.Object, context);
 
         //Act 
-        var result = await service.UnfollowUser(request);
+        var result = await _followingService.UnfollowUser(request);
 
         //Assert 
         Assert.NotNull(result);
         Assert.False(result.Flag);
         _userManager.Verify(m => m.FindByIdAsync(It.IsAny<string>()), Times.Never);
+        _context.ChangeTracker.Clear();
     }
 
     [Fact]
     public async Task UnFollowUser_CannotFindUser_ShouldReturnBadServiceResponse()
     {
         //Arrange
-        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
-
-        await using var context = new ApplicationDbContext(options);
         var request = new FollowRequestDto("SomeUsername", "SomeOtherUsername");
-        var service = new FollowingService(_userManager.Object, context);
         _userManager.Setup(x => x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(null as ApplicationUser);
 
         //Act
-        var result = await service.UnfollowUser(request);
+        var result = await _followingService.UnfollowUser(request);
 
         //Assert
         Assert.NotNull(result);
         Assert.False(result.Flag);
         _userManager.Verify(m => m.FindByNameAsync(It.IsAny<string>()), Times.Exactly(2));
+        _context.ChangeTracker.Clear();
     }
 
     [Fact]
     public async Task UnFollowUser_GoodData_UserExists_ShouldReturnOk()
     {
         //Arrange
-        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
-        var currentUser = new ApplicationUser { UserName = "Alice", Id = "1" };
-        var targetUser = new ApplicationUser { UserName = "Bob", Id = "2" };
-        await using var context = new ApplicationDbContext(options);
+        var currentUser = new ApplicationUser { UserName = "Alice", Id = "17" };
+        var targetUser = new ApplicationUser { UserName = "Bob", Id = "22" };
 
-        context.FollowUsers.Add(new Followers() { Id = 1, FollowerUserId = "1", FollowedUserId = "2" });
-        await context.SaveChangesAsync();
+        _context.FollowUsers.Add(new Followers() { Id = 12, FollowerUserId = "17", FollowedUserId = "22" });
+        await _context.SaveChangesAsync();
         var request = new FollowRequestDto(currentUser.UserName, targetUser.UserName);
         _userManager.Setup(x => x.FindByNameAsync("Alice")).ReturnsAsync(currentUser);
         _userManager.Setup(x => x.FindByNameAsync("Bob")).ReturnsAsync(targetUser);
-
-        var service = new FollowingService(_userManager.Object, context);
         //Act 
-        var result = await service.UnfollowUser(request);
+        var result = await _followingService.UnfollowUser(request);
 
         //Assert
         Assert.NotNull(result);
         Assert.True(result.Flag);
         _userManager.Verify(m => m.FindByNameAsync(It.IsAny<string>()), Times.Exactly(2));
-        var followEntry = await context.FollowUsers
-            .FirstOrDefaultAsync(f => f.FollowerUserId == "1" && f.FollowedUserId == "2");
+        var followEntry = await _context.FollowUsers
+            .FirstOrDefaultAsync(f => f.FollowerUserId == "17" && f.FollowedUserId == "22");
         Assert.Null(followEntry);
+        _context.ChangeTracker.Clear();
     }
 
     [Fact]
@@ -273,36 +221,27 @@ public class FollowingServiceTests
     {
         //Arrange
         var request = new FollowRequestDto("", "SomeOtherUsername");
-        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
-        await using var context = new ApplicationDbContext(options);
 
-        var service = new FollowingService(_userManager.Object, context);
         //Act
-        var result = await service.IsUserFollowing(request);
+        var result = await _followingService.IsUserFollowing(request);
 
         //Assert
         Assert.False(result);
         _userManager.Verify(m => m.FindByNameAsync(It.IsAny<string>()), Times.Never);
+        _context.ChangeTracker.Clear();
     }
     [Fact]
     public async Task IsUserFollowing_NoTargetUser_ShouldReturnFalse()
     {
         //Arrange
         var request = new FollowRequestDto("SomeUsername", "");
-        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
-        await using var context = new ApplicationDbContext(options);
-
-        var service = new FollowingService(_userManager.Object, context);
         //Act
-        var result = await service.IsUserFollowing(request);
+        var result = await _followingService.IsUserFollowing(request);
 
         //Assert
         Assert.False(result);
         _userManager.Verify(m => m.FindByNameAsync(It.IsAny<string>()), Times.Never);
+        _context.ChangeTracker.Clear();
     }
 
     [Fact]
@@ -310,18 +249,15 @@ public class FollowingServiceTests
     {
         //Arrange
         var request = new FollowRequestDto("SomeUsername", "SomeOtherUsername");
-        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
-        await using var context = new ApplicationDbContext(options);
+
         _userManager.Setup(x => x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(null as ApplicationUser);
-        var service = new FollowingService(_userManager.Object, context);
         //Act
-        var result = await service.IsUserFollowing(request);
+        var result = await _followingService.IsUserFollowing(request);
 
         //Assert
         Assert.False(result);
         _userManager.Verify(m => m.FindByNameAsync(It.IsAny<string>()), Times.Exactly(2));
+        _context.ChangeTracker.Clear();
     }
 
     [Fact]
@@ -331,42 +267,34 @@ public class FollowingServiceTests
         var request = new FollowRequestDto("SomeUsername", "SomeOtherUsername");
         var currentUser = new ApplicationUser { UserName = "Alice", Id = "1" };
         var targetUser = new ApplicationUser { UserName = "Bob", Id = "2" };
-        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
-        await using var context = new ApplicationDbContext(options);
         _userManager.Setup(x => x.FindByNameAsync("Alice")).ReturnsAsync(currentUser);
         _userManager.Setup(x => x.FindByNameAsync("Bob")).ReturnsAsync(targetUser);
-        var service = new FollowingService(_userManager.Object, context);
         //Act
-        var result = await service.IsUserFollowing(request);
+        var result = await _followingService.IsUserFollowing(request);
 
         //Assert
         Assert.False(result);
         _userManager.Verify(m => m.FindByNameAsync(It.IsAny<string>()), Times.Exactly(2));
+        _context.ChangeTracker.Clear();
     }
     [Fact]
     public async Task IsUserFollowing_UserExists_IsFollowingUser_ShouldReturnFalse()
     {
         //Arrange
         var request = new FollowRequestDto("Alice", "Bob");
-        var currentUser = new ApplicationUser { UserName = "Alice", Id = "1" };
-        var targetUser = new ApplicationUser { UserName = "Bob", Id = "2" };
-        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
-        await using var context = new ApplicationDbContext(options);
-        context.FollowUsers.Add(new Followers() { Id = 1, FollowerUserId = "1", FollowedUserId = "2" });
-        await context.SaveChangesAsync();
+        var currentUser = new ApplicationUser { UserName = "Alice", Id = "19" };
+        var targetUser = new ApplicationUser { UserName = "Bob", Id = "20" };
+        _context.FollowUsers.Add(new Followers() { Id = 4, FollowerUserId = "19", FollowedUserId = "20" });
+        await _context.SaveChangesAsync();
         _userManager.Setup(x => x.FindByNameAsync("Alice")).ReturnsAsync(currentUser);
         _userManager.Setup(x => x.FindByNameAsync("Bob")).ReturnsAsync(targetUser);
-        var service = new FollowingService(_userManager.Object, context);
         //Act
-        var result = await service.IsUserFollowing(request);
+        var result = await _followingService.IsUserFollowing(request);
 
         //Assert
         Assert.True(result);
         _userManager.Verify(m => m.FindByNameAsync(It.IsAny<string>()), Times.Exactly(2));
+        _context.ChangeTracker.Clear();
     }
 
     [Fact]
@@ -374,66 +302,50 @@ public class FollowingServiceTests
     {
          //Arrange 
          var username = "";
-         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-             .Options;
-         await using var context = new ApplicationDbContext(options);
-         var service = new FollowingService(_userManager.Object, context);
          //Act
-         var result = await service.GetUserFollowers(username);
+         var result = await _followingService.GetUserFollowers(username);
          //Assert
          Assert.Empty(result);
          _userManager.Verify(m => m.FindByNameAsync(It.IsAny<string>()), Times.Never);
+         _context.ChangeTracker.Clear();
     }
     [Fact]
     public async Task GetUserFollowers_CannotFindUser_ShouldReturnEmptyList()
     {
         //Arrange 
         var username = "SomeUsername";
-        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
-        await using var context = new ApplicationDbContext(options);
-        var service = new FollowingService(_userManager.Object, context);
         _userManager.Setup(x => x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(null as ApplicationUser);
         //Act
-        var result = await service.GetUserFollowers(username);
+        var result = await _followingService.GetUserFollowers(username);
         //Assert
         Assert.Empty(result);
         _userManager.Verify(m => m.FindByNameAsync(It.IsAny<string>()), Times.Once);
+        _context.ChangeTracker.Clear();
     }
     [Fact]
     public async Task GetUserFollowing_EmptyUser_ShouldReturnEmptyList()
     {
          //Arrange 
          var username = "";
-         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-             .Options;
-         await using var context = new ApplicationDbContext(options);
-         var service = new FollowingService(_userManager.Object, context);
          //Act
-         var result = await service.GetUserFollowing(username);
+         var result = await _followingService.GetUserFollowing(username);
          //Assert
          Assert.Empty(result);
          _userManager.Verify(m => m.FindByNameAsync(It.IsAny<string>()), Times.Never);
+         _context.ChangeTracker.Clear();
     }
     [Fact]
     public async Task GetUserFollowing_CannotFindUser_ShouldReturnEmptyList()
     {
         //Arrange 
         var username = "SomeUsername";
-        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
-        await using var context = new ApplicationDbContext(options);
-        var service = new FollowingService(_userManager.Object, context);
         _userManager.Setup(x => x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(null as ApplicationUser);
         //Act
-        var result = await service.GetUserFollowing(username);
+        var result = await _followingService.GetUserFollowing(username);
         //Assert
         Assert.Empty(result);
         _userManager.Verify(m => m.FindByNameAsync(It.IsAny<string>()), Times.Once);
+        _context.ChangeTracker.Clear();
     }
     
 }
