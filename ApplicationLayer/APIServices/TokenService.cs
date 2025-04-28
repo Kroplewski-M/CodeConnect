@@ -18,17 +18,22 @@ public class TokenService(IOptions<JwtSettings> jwtSettings,ApplicationDbContext
 {
     public string? GenerateJwtToken(IEnumerable<Claim> claims, DateTime expireAt)
     {
+        var enumerable = claims as Claim[] ?? claims.ToArray();
+        if(enumerable.Length == 0)
+            return string.Empty;
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Value.Key));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var token = new JwtSecurityToken(issuer: jwtSettings.Value.Issuer,
             audience: jwtSettings.Value.Audience,
-            claims: claims.Where(x => x.Type != "aud"),
+            claims: enumerable.Where(x => x.Type != "aud"),
             expires: expireAt,
             signingCredentials: creds);
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
     public ClaimsPrincipalResponse ValidateToken(string token)
     {
+        if(string.IsNullOrWhiteSpace(token))
+            return new ClaimsPrincipalResponse(false, new ClaimsPrincipal());
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Value.Key));
         try
