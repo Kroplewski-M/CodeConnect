@@ -11,6 +11,10 @@ public class UserImageService(UserManager<ApplicationUser>userManager, IAzureSer
 {
     public async Task<ServiceResponse> UpdateUserImage(UpdateUserImageRequest updateUserImageRequest)
     {
+        var validator = new UpdateUserImageRequestValidator();
+        var validationResult = await validator.ValidateAsync(updateUserImageRequest);
+        if(!validationResult.IsValid)
+            return new ServiceResponse(false, "Invalid request");
         var user = await userManager.FindByNameAsync(updateUserImageRequest.Username);
         if (user == null)
             return new ServiceResponse(false, "The user could not be found");

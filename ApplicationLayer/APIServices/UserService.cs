@@ -18,7 +18,12 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
 {
     public async Task<ServiceResponse> UpdateUserDetails(EditProfileForm editProfileForm)
     {
-       var user =  await userManager.FindByNameAsync(editProfileForm.Username);
+        var validator = new EditProfileValidator();
+        var result = await validator.ValidateAsync(editProfileForm);
+        if (!result.IsValid)
+            return new ServiceResponse(false, "invalid request"); 
+        
+        var user =  await userManager.FindByNameAsync(editProfileForm.Username);
        if (user == null)
            return new ServiceResponse(false, "");
        user.FirstName = editProfileForm.FirstName;
@@ -33,6 +38,8 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
 
     public async Task<UserDetails?> GetUserDetails(string username)
     {
+        if (string.IsNullOrEmpty(username))
+            return null;
         var user = await userManager.FindByNameAsync(username);
         if (user == null)
             return null;
@@ -47,6 +54,8 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
 
     public async Task<UserInterestsDto> GetUserInterests(string username)
     {
+        if (string.IsNullOrEmpty(username))
+            return new UserInterestsDto(false,"user not found", null);
         var user = await userManager.FindByNameAsync(username);
         if (user != null)
         {
@@ -64,6 +73,8 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
 
     public async Task<ServiceResponse> UpdateUserInterests(string? username, List<TechInterestsDto> userInterests)
     {
+        if (string.IsNullOrEmpty(username))
+            return new ServiceResponse(false, "user not found");
         var user = await userManager.FindByNameAsync(username ?? "");
         if (user != null)
         {

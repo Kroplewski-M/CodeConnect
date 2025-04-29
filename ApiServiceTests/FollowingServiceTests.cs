@@ -15,7 +15,7 @@ public class FollowingServiceTests
     private readonly ApplicationDbContext _context;
     private readonly FollowingService _followingService;
     public FollowingServiceTests(DatabaseFixture databaseFixture)
-    {
+    {       
         var userStoreMock = new Mock<IUserStore<ApplicationUser>>();
         _userManager = new Mock<UserManager<ApplicationUser>>(userStoreMock.Object, null!, null!, null!, null!, null!,
             null!, null!, null!);
