@@ -16,5 +16,4 @@ Built using Blazor WebAssembly for the frontend and a C# Web API for the backend
 - Networking: Follow other developers and explore their work.
 - Posts: Share posts about your projects, including code snippets, project updates, and more.
 
-# CodeConnect
 
