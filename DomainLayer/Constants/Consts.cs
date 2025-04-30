@@ -58,4 +58,6 @@ public static class Consts
         Following
     }
     public static readonly string AzureBlobEndpoint = "https://codeconnectblobs.blob.core.windows.net";
+    public static readonly string GitHubEndpoint = "https://github.com";
+    public static readonly string WebLink = "https://";
 }

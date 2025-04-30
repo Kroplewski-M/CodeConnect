@@ -80,7 +80,8 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
         {
             var interests = context.UserInterests.Include(x => x.TechInterest)
                 .Where(x => x.UserId == user.Id).ToList();
-            context.UserInterests.RemoveRange(interests);
+            if(interests.Count > 0)
+                context.UserInterests.RemoveRange(interests);
             var newInterests = userInterests.Select(x => new UserInterests
             {
                 UserId = user.Id,
