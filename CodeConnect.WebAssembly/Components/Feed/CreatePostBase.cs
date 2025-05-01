@@ -69,6 +69,8 @@ public class CreatePostBase : ComponentBase
     protected bool Loading { get; set; } = false;
     protected async Task HandleValidSubmit()
     {
+        if (string.IsNullOrWhiteSpace(PostContent))
+            return;
         var post = new CreatePostDto(PostContent, Base64Images, UserDetails?.UserName ?? "");
         var postValidator = new CreatePostDtoValidator();
         var validate = await postValidator.ValidateAsync(post);
