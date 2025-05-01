@@ -45,6 +45,7 @@ public class LoginBase : ComponentBase
                 {
                     LoginErrors.Add(new ValidationFailure
                     { PropertyName = "ResponseError", ErrorMessage = result.Message });
+                    LoginForm.Password = "";
                     StateHasChanged();
                 }
                 else

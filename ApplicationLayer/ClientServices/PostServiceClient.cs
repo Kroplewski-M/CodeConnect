@@ -10,8 +10,8 @@ public class PostServiceClient(HttpClient httpClient) : IPostService
     public async Task<ServiceResponse> CreatePost(CreatePostDto createPost)
     {
         var response = await httpClient.PostAsJsonAsync("api/Post/CreatePost", createPost);
-        return await response.Content.ReadFromJsonAsync<ServiceResponse>() 
-            ?? new ServiceResponse(false, "Failed to create post");
+        var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
+        return result ?? new ServiceResponse(false, "Failed to create post");
     }
 
     public Task<Post> GetPostById(int id)
