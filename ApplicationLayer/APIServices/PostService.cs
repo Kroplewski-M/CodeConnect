@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ApplicationLayer.APIServices;
 
-public class PostService(ApplicationDbContext context,IAzureService azureService, UserManager<ApplicationUser>UserManager) : IPostService
+public class PostService(ApplicationDbContext context,IAzureService azureService, UserManager<ApplicationUser>userManager) : IPostService
 {
     public async Task<ServiceResponse> CreatePost(CreatePostDto createPost)
     {
@@ -16,7 +16,7 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         var validationResult = await validator.ValidateAsync(createPost);
         if(!validationResult.IsValid)
             return new ServiceResponse(false, "Error creating post");
-        var user = await UserManager.FindByNameAsync(createPost.CreatedByUserName);
+        var user = await userManager.FindByNameAsync(createPost.CreatedByUserName);
         if(user == null)
             return new ServiceResponse(false, "User not found");
         var newPost  = new Post()

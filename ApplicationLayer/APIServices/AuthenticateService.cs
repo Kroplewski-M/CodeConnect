@@ -28,7 +28,7 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
             LastName = registerForm.LastName,
             Email = registerForm.Email,
             DOB = registerForm.Dob,
-            CreatedAt = DateOnly.FromDateTime(DateTime.Now),
+            CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow),
         };
         var result = await userManager.CreateAsync(user, registerForm.Password);
         if (result.Succeeded)

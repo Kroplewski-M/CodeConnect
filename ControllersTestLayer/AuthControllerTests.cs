@@ -37,7 +37,7 @@ public class AuthControllerTests
     public async Task RegisterUser_ShouldReturnOk()
     {
         // Arrange
-        var registerForm = new RegisterForm() { FirstName = "Test",LastName = "Test",UserName = "testuser", Email = "test@example.com", Password = "password", Dob = DateOnly.FromDateTime(DateTime.Now) };
+        var registerForm = new RegisterForm() { FirstName = "Test",LastName = "Test",UserName = "testuser", Email = "test@example.com", Password = "password", Dob = DateOnly.FromDateTime(DateTime.UtcNow) };
         var expectedResult = new AuthResponse( true, "", "", "User registered successfully");
         _authenticateServiceMock.Setup(x => x.CreateUser(registerForm)).ReturnsAsync(expectedResult);
 
@@ -54,7 +54,7 @@ public class AuthControllerTests
     public async Task RegisterUser_ShouldReturnFalse()
     {
         // Arrange
-        var registerForm = new RegisterForm() { UserName = "", Email = "", Password = "", Dob = DateOnly.FromDateTime(DateTime.Now) };
+        var registerForm = new RegisterForm() { UserName = "", Email = "", Password = "", Dob = DateOnly.FromDateTime(DateTime.UtcNow) };
         var expectedResult = new AuthResponse( false, "", "", "Invalid Register Form");
         _authenticateServiceMock.Setup(x => x.CreateUser(registerForm)).ReturnsAsync(expectedResult);
 

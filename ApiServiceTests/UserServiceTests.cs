@@ -101,7 +101,7 @@ public class UserServiceTests
     public async Task UpdateUserDetails_DobInTheFuture_ReturnsBadService()
     {
         // Arrange
-        var form = new EditProfileForm { Username = "test", FirstName = "Mat",LastName = "Kroplewski", DOB = DateOnly.Parse(DateTime.Now.AddDays(10).Date.ToString("MM/dd/yyyy")) };
+        var form = new EditProfileForm { Username = "test", FirstName = "Mat",LastName = "Kroplewski", DOB = DateOnly.Parse(DateTime.UtcNow.AddDays(10).Date.ToString("MM/dd/yyyy")) };
         var user = new ApplicationUser { UserName = "test" };
     
         _userManagerMock.Setup(x => x.FindByNameAsync(form.Username)).ReturnsAsync(user);

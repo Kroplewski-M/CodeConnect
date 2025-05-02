@@ -19,7 +19,7 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
     private TokenResponse GenerateNewToken(ApplicationUser user)
     {
         var claims = Generics.GetClaimsForUser(user);
-        return new TokenResponse(tokenService.GenerateJwtToken(claims.AsEnumerable(),DateTime.Now.AddHours(1)));
+        return new TokenResponse(tokenService.GenerateJwtToken(claims.AsEnumerable(),DateTime.UtcNow.AddHours(1)));
     }
     [Authorize]
     [HttpPost("EditUserDetails")]

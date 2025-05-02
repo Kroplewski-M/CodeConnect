@@ -49,7 +49,7 @@ public class UserControllerTests
         {
             Username = "",
             Bio = "",
-            DOB = DateOnly.FromDateTime(DateTime.Now),
+            DOB = DateOnly.FromDateTime(DateTime.UtcNow),
             FirstName = "",
             LastName = "",
             GithubLink = "",
@@ -72,7 +72,7 @@ public class UserControllerTests
         {
             Username = "testUsername",
             Bio = "",
-            DOB = DateOnly.FromDateTime(DateTime.Now),
+            DOB = DateOnly.FromDateTime(DateTime.UtcNow),
             FirstName = "",
             LastName = "",
             GithubLink = "",
@@ -97,7 +97,7 @@ public class UserControllerTests
         {
             Username = "testUsername",
             Bio = "",
-            DOB = DateOnly.FromDateTime(DateTime.Now),
+            DOB = DateOnly.FromDateTime(DateTime.UtcNow),
             FirstName = "",
             LastName = "",
             GithubLink = "",
