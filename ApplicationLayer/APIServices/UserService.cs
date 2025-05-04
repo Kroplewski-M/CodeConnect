@@ -59,7 +59,8 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
         var user = await userManager.FindByNameAsync(username);
         if (user != null)
         {
-            var interests = context.UserInterests.Where(x=> x.TechInterest != null)
+            var interests = context.UserInterests.AsNoTracking()
+                .Where(x=> x.TechInterest != null)
                 .Include(x => x.TechInterest)
                 .Include(x=>x.TechInterest!.Interest)
                 .Where(x => x.UserId == user.Id)

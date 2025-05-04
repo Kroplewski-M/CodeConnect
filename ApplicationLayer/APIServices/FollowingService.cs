@@ -79,7 +79,8 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
         var user = await userManager.FindByNameAsync(username);
         if(user == null || user?.UserName != username)
             return new List<UserBasicDto>();
-        var users = context.FollowUsers.Where(x => x.FollowedUserId == user.Id)
+        var users = context.FollowUsers.AsNoTracking()
+            .Where(x => x.FollowedUserId == user.Id)
             .Include(x=> x.Follower)
             .ToList()
             .Where(x => x.Follower is { UserName: not null })
@@ -95,7 +96,8 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
         var user = await userManager.FindByNameAsync(username);
         if(user == null|| user?.UserName != username)
             return new List<UserBasicDto>();
-        var users = context.FollowUsers.Where(x => x.FollowerUserId == user.Id)
+        var users = context.FollowUsers.AsNoTracking()
+            .Where(x => x.FollowerUserId == user.Id)
             .Include(x=> x.Followed)
             .ToList()
             .Where(x => x.Followed is { UserName: not null })
