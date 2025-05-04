@@ -20,15 +20,15 @@ public class AuthServiceTests
     private class TestableAuth(
         UserManager<ApplicationUser> userManager,
         ITokenService tokenService,
-        ApplicationDbContext context,
-        string token)
+        ApplicationDbContext context)
         : AuthenticateService(userManager, tokenService, context)
     {
+        private readonly ITokenService _tokenService = tokenService;
         public int SaveRefreshCount { get; private set; } = 0;
         protected override  Task<string> SaveRefreshToken(List<Claim> claims, string userId)
         {
             SaveRefreshCount++;
-            return Task.FromResult(tokenService.GenerateJwtToken(new List<Claim> { new Claim(ClaimTypes.Name, userId) }, DateTime.UtcNow))!;
+            return Task.FromResult(_tokenService.GenerateJwtToken(new List<Claim> { new Claim(ClaimTypes.Name, userId) }, DateTime.UtcNow))!;
         }
     }
     private ApplicationDbContext GetInMemoryDbContext()
@@ -236,7 +236,7 @@ public class AuthServiceTests
             Email = "testUsername@gmail.com",
             Password = "TestPassword123!",
         };
-        var service = new TestableAuth(_userManagerMock.Object, _tokenServiceMock.Object, context, "token");
+        var service = new TestableAuth(_userManagerMock.Object, _tokenServiceMock.Object, context);
         _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser() {Email = loginForm.Email});
         _userManagerMock.Setup(x => x.CheckPasswordAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).ReturnsAsync(true);
         _tokenServiceMock.Setup(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>())).Returns("token");
@@ -262,7 +262,7 @@ public class AuthServiceTests
             Email = "testUsername",
             Password = "TestPassword123!"
         };
-        var service = new TestableAuth(_userManagerMock.Object, _tokenServiceMock.Object, context, "token");
+        var service = new TestableAuth(_userManagerMock.Object, _tokenServiceMock.Object, context);
         _userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser(){UserName = "testUsername"});
         _userManagerMock.Setup(x => x.CheckPasswordAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
             .ReturnsAsync(true);
@@ -292,7 +292,7 @@ public class AuthServiceTests
         };
         
         //Act  
-        var service = new TestableAuth(_userManagerMock.Object, _tokenServiceMock.Object, context, "token");
+        var service = new TestableAuth(_userManagerMock.Object, _tokenServiceMock.Object, context);
         var result = await service.LoginUser(loginForm);
         //Assert
         Assert.NotNull(result); 
@@ -314,7 +314,7 @@ public class AuthServiceTests
         }; 
         
         //Act 
-        var service = new TestableAuth(_userManagerMock.Object, _tokenServiceMock.Object, context, "token");
+        var service = new TestableAuth(_userManagerMock.Object, _tokenServiceMock.Object, context);
         var result = await service.LoginUser(loginForm);
         
         //Assert

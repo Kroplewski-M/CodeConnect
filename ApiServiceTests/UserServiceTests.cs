@@ -20,7 +20,7 @@ public class UserServiceTests
     public UserServiceTests(DatabaseFixture databaseFixture)
     {
         var userStore = new Mock<IUserStore<ApplicationUser>>();
-        _userManagerMock = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
+        _userManagerMock = new Mock<UserManager<ApplicationUser>>(userStore.Object, null!, null!, null!, null!, null!, null!, null!, null!);
         _context = databaseFixture.Context;
         _cacheMock = new Mock<IMemoryCache>();
 
@@ -101,7 +101,7 @@ public class UserServiceTests
     public async Task UpdateUserDetails_DobInTheFuture_ReturnsBadService()
     {
         // Arrange
-        var form = new EditProfileForm { Username = "test", FirstName = "Mat",LastName = "Kroplewski", DOB = DateOnly.Parse(DateTime.UtcNow.AddDays(10).Date.ToString("MM/dd/yyyy")) };
+        var form = new EditProfileForm { Username = "test", FirstName = "Mat",LastName = "Kroplewski", DOB = DateOnly.Parse(DateTime.UtcNow.AddDays(10).Date.ToString("dd/MM/yyyy")) };
         var user = new ApplicationUser { UserName = "test" };
     
         _userManagerMock.Setup(x => x.FindByNameAsync(form.Username)).ReturnsAsync(user);

@@ -18,7 +18,7 @@ public class UserImageServiceTests
     public UserImageServiceTests()
     {
         _userManagerMock = new Mock<UserManager<ApplicationUser>>(
-            Mock.Of<IUserStore<ApplicationUser>>(), null, null, null, null, null, null, null, null);
+            Mock.Of<IUserStore<ApplicationUser>>(), null!, null!, null!, null!, null!, null!, null!, null!);
 
         _azureServiceMock = new Mock<IAzureService>();
         _userImageService = new UserImageService(_userManagerMock.Object, _azureServiceMock.Object);
