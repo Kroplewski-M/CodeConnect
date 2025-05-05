@@ -28,4 +28,10 @@ public class PostServiceClient(HttpClient httpClient) : IPostService
     {
         throw new NotImplementedException();
     }
+
+    public async Task<List<PostBasicDto>> GetUserPosts(string username)
+    {
+        var response = await httpClient.GetFromJsonAsync<List<PostBasicDto>>($"api/Post/GetUserPosts?username={username}");
+        return response ?? new List<PostBasicDto>();
+    }
 }

@@ -26,12 +26,13 @@ public class PostController(IPostService postService) : ControllerBase
         return Ok(response);
     }
 
-    [HttpGet("GetPosts")]
+    [HttpGet("GetUserPosts")]
     [Authorize]
-    public List<PostDto> GetPosts()
+    public async Task<List<PostBasicDto>> GetUserPosts(string userName)
     {
-        
-        return new List<PostDto>();
+        if(string.IsNullOrEmpty(userName))
+            return new List<PostBasicDto>();
+        return await postService.GetUserPosts(userName);
     }
 
     // [HttpPut("UpdatePost")]

@@ -112,7 +112,9 @@
                     </div>
                 </div>
             </div>
-            <ProfileDetails />
+            <CascadingValue Value="Username">
+                <ProfileDetails />
+            </CascadingValue>
             @if (ShowConfirmLogout)
             {
                 <Confirm Description="Are you sure you want to logout?" ConfirmText="Logout"  ConfirmMethod="AuthenticateServiceClient.LogoutUser" CancelMethod="ToggleShowConfirmLogout"/>
