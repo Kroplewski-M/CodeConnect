@@ -9,7 +9,7 @@ else
 {
     if (Followers.Any())
     {
-        <div class="flex">
+        <div class="flex flex-wrap">
             @foreach (var user in Followers)
             {
                 <UserBasic User="user" />

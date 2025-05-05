@@ -85,6 +85,7 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
             .ToList()
             .Where(x => x.Follower is { UserName: not null })
             .Select(x=> new UserBasicDto(x.Follower!.UserName!,x.Follower.Bio!,x.Follower.ProfileImage! ))
+            .OrderByDescending(x=> x.Username)
             .ToList();
         return users;
     }
@@ -102,6 +103,7 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
             .ToList()
             .Where(x => x.Followed is { UserName: not null })
             .Select(x=> new UserBasicDto(x.Followed!.UserName!,x.Followed.Bio!,x.Followed.ProfileImage! ))
+            .OrderByDescending(x=> x.Username)
             .ToList();
         return users;
     }

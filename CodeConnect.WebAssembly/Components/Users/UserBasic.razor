@@ -3,7 +3,7 @@
 @using DomainLayer.Helpers
 @inject NavigationManager NavigationManager
 
-<div class="md:w-[400px] w-[80%] h-[100px] rounded-md bg-dark-primaryColor hover:bg-dark-primaryColor/80 cursor-pointer" @onclick="()=> Redirect(User.Username)">
+<div class="md:w-[320px] w-[80%] h-[100px] rounded-md bg-dark-primaryColor hover:bg-dark-primaryColor/80 cursor-pointer ml-[10px] mb-[10px]" @onclick="()=> Redirect(User.Username)">
     <div class="flex mt-[15px]">
         <div class="w-[50px] min-w-[50px] h-[50px] ml-[10px]">
             <img src="@ImgUrl" alt="" class="rounded-full w-[100%] h-[100%]"/>
@@ -16,7 +16,7 @@
             }
             else
             {
-                <p class="text-gray-400">@(User.Bio.Length > 80 ? $"{User.Bio[..80]}..." : User.Bio)</p>
+                <p class="text-gray-400">@(User.Bio.Length > 60 ? $"{User.Bio[..60]}..." : User.Bio)</p>
             }
         </div>
     </div>

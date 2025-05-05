@@ -43,12 +43,15 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
         var user = await userManager.FindByNameAsync(username);
         if (user == null)
             return null;
-        if (string.IsNullOrEmpty(user.ProfileImage))
-            user.ProfileImage = Consts.ProfileDefaults.ProfileImg;
-        if (string.IsNullOrEmpty(user.BackgroundImage))
-            user.BackgroundImage = Consts.ProfileDefaults.BackgroundImg;
-        return new UserDetails(user.FirstName ?? "", user.LastName ?? "", user.UserName ?? "", user.Email ?? "", Helpers.GetAzureImgUrl(Consts.ImageType.ProfileImages,user.ProfileImage ?? ""),
-            Helpers.GetAzureImgUrl(Consts.ImageType.BackgroundImages,user.BackgroundImage ?? ""), user.GithubLink ?? "",
+        
+        var profileImg = string.IsNullOrWhiteSpace(user.ProfileImage) ? Consts.ProfileDefaults.ProfileImg 
+            : Helpers.GetAzureImgUrl(Consts.ImageType.ProfileImages, user.ProfileImage);
+        
+        var backgroundImg = string.IsNullOrWhiteSpace(user.BackgroundImage) ? Consts.ProfileDefaults.BackgroundImg 
+            : Helpers.GetAzureImgUrl(Consts.ImageType.BackgroundImages, user.BackgroundImage);
+        
+        return new UserDetails(user.FirstName ?? "", user.LastName ?? "", user.UserName ?? "", user.Email ?? "", profileImg,
+            backgroundImg, user.GithubLink ?? "",
             user.WebsiteLink ?? "", user.DOB, user.CreatedAt,user.Bio ?? "");
     }
 
