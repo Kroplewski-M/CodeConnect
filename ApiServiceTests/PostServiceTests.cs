@@ -3,6 +3,7 @@ using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
 using DomainLayer.Entities.Auth;
+using DomainLayer.Entities.Posts;
 using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -114,5 +115,98 @@ public class PostServiceTests
         Assert.NotNull(post);
         Assert.Equal(base64Images.Count, post.Files?.Count);
         _azureService.Verify(x => x.UploadImage(It.IsAny<Consts.ImageType>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(3));
+    }
+    [Fact]
+    public async Task GetUserPosts_EmptyUsername_ShouldReturnEmptyList()
+    {
+        // Arrange
+        var emptyUsername = "";
+
+        // Act
+        var result = await _postService.GetUserPosts(emptyUsername);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Empty(result);
+        _userManager.Verify(x => x.FindByNameAsync(It.IsAny<string>()), Times.Never);
+    }
+    [Fact]
+    public async Task GetUserPosts_NullUsername_ShouldReturnEmptyList()
+    {
+        // Arrange
+        string? nullUsername = null;
+
+        // Act
+        var result = await _postService.GetUserPosts(nullUsername!);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Empty(result);
+        _userManager.Verify(x => x.FindByNameAsync(It.IsAny<string>()), Times.Never);
+    }
+    [Fact]
+    public async Task GetUserPosts_UserNotFound_ShouldReturnEmptyList()
+    {
+        // Arrange
+        var username = "nonExistentUser";
+        _userManager.Setup(x => x.FindByNameAsync(username)).ReturnsAsync((ApplicationUser?)null);
+
+        // Act
+        var result = await _postService.GetUserPosts(username);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Empty(result);
+        _userManager.Verify(x => x.FindByNameAsync(username), Times.Once);
+    }
+    [Fact]
+    public async Task GetUserPosts_ValidUserWithNoPosts_ShouldReturnEmptyList()
+    {
+        // Arrange
+        var user = new ApplicationUser { Id = Guid.NewGuid().ToString(), UserName = "userWithNoPosts" };
+        _userManager.Setup(x => x.FindByNameAsync(user.UserName)).ReturnsAsync(user);
+        
+        // Act
+        var result = await _postService.GetUserPosts(user.UserName);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Empty(result);
+        _userManager.Verify(x => x.FindByNameAsync(user.UserName), Times.Once);
+    }
+    [Fact]
+    public async Task GetUserPosts_ValidUserWithPosts_ShouldReturnPosts()
+    {
+        // Arrange
+        var user = new ApplicationUser { Id = Guid.NewGuid().ToString(), UserName = "userWithPosts" };
+        _userManager.Setup(x => x.FindByNameAsync(user.UserName)).ReturnsAsync(user);
+
+        var post = new Post
+        {
+            Content = "Hello world",
+            CreatedByUser = user,
+            CreatedByUserId = user.Id,
+            CreatedAt = DateTime.UtcNow,
+            Files = new List<PostFile>
+            {
+                new PostFile { FileName = "image1.png" },
+                new PostFile { FileName = "image2.png" }
+            }
+        };
+
+        _context.Posts.Add(post);
+        await _context.SaveChangesAsync();
+
+        // Act
+        var result = await _postService.GetUserPosts(user.UserName);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Single(result);
+        var returnedPost = result.FirstOrDefault();
+        Assert.Equal(post.Content, returnedPost?.Content);
+        Assert.Equal(user.UserName, returnedPost?.CreatedByUsername);
+        Assert.Equal(2, returnedPost?.Images.Count);
+        _userManager.Verify(x => x.FindByNameAsync(user.UserName), Times.Once);
     }
 }
