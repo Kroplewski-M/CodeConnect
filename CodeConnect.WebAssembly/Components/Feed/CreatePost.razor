@@ -1,3 +1,5 @@
+@using CodeConnect.WebAssembly.Components.General
+@using DomainLayer.Constants
 @inherits CreatePostBase
 <div id="post-container" class="shadow-xl md:w-[550px] w-[90vw] md:min-h-[130px] min-h-[180px] mx-auto relative bg-dark-secondaryColor p-5 pb-[5px] rounded-md mt-5 md:mt-0">
     <div class="flex">
@@ -18,7 +20,9 @@
                         <InputFile multiple type="file" OnChange="HandleFileSelection" accept="image/*" name="postFiles" id="@(InputId)" class="opacity-0 absolute" />
                     </div>
                     <div class="ml-5">
-                        <button disabled="@Loading" class="cursor-pointer rounded-md border-solid hover:bg-light-secondaryColor px-3 py-2 text-dark-supportColor/90 "><i class="fa-solid fa-paper-plane"></i> Post</button>
+                        <button disabled="@Loading" class="cursor-pointer rounded-md border-solid hover:bg-light-secondaryColor px-3 py-2 text-dark-supportColor/90 ">
+                            <FaIcon Icon="@FaIcons.Send"/> Post
+                        </button>
                     </div>
                 </div>
             </EditForm>

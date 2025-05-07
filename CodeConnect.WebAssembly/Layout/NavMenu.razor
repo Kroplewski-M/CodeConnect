@@ -1,6 +1,8 @@
 ﻿@using ApplicationLayer.DTO_s
 @using ApplicationLayer.Interfaces
+@using DomainLayer.Constants
 @using Microsoft.AspNetCore.Components.Authorization
+@using CodeConnect.WebAssembly.Components.General
 @inject NavigationManager NavigationManager
 @inject IAuthenticateServiceClient AuthenticateServiceClient
 @inject IFollowingService FollowingService
@@ -19,25 +21,25 @@
                 <ul class="space-y-2 font-medium">
                     <li>
                         <a href="/MyFeed" class="flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100/10 group mb-5">
-                            <i class="fa-solid fa-house fa-lg" style="color: #f8f9fa; width: 24px;"></i>
+                            <FaIcon Icon="@FaIcons.House" Size="@FaSize.Large" ExtraCss="text-light-primaryColor w-[24px]" />
                             <span class="ms-3 text-light-primaryColor dark:text-dark-supportColor">Home</span>
                         </a>
                     </li>
                     <li>
                         <a href="/Notifications" class="flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100/10 group mb-5">
-                            <i class="fa-solid fa-bell fa-lg" style="color: #f8f9fa; width: 24px;"></i>
+                            <FaIcon Icon="@FaIcons.Bell" Size="@FaSize.Large" ExtraCss="text-light-primaryColor w-[24px]" />
                             <span class="ms-3 text-light-primaryColor dark:text-dark-supportColor">Notifications</span>
                         </a>
                     </li>
                     <li>
                         <a href="/Connect" class="flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100/10 group mb-5">
-                            <i class="fa-solid fa-user-group fa-lg" style="color: #f8f9fa; width: 24px;"></i>
+                            <FaIcon Icon="@FaIcons.UserGroup" Size="@FaSize.Large" ExtraCss="text-light-primaryColor w-[24px]" />
                             <span class="ms-3 text-light-primaryColor dark:text-dark-supportColor">Connect</span>
                         </a>
                     </li>
                     <li>
                         <a href="/Messages" class="flex items-center p-2 dark:text-white hover:bg-gray-100/10 rounded-lg group">
-                            <i class="fa-solid fa-message fa-lg" style="color: #f8f9fa; width: 24px;"></i>
+                            <FaIcon Icon="@FaIcons.Message" Size="@FaSize.Large" ExtraCss="text-light-primaryColor w-[24px]" />
                             <span class="ms-3 text-light-primaryColor dark:text-dark-supportColor">Messages</span>
                         </a>
                     </li>

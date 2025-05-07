@@ -15,7 +15,9 @@
                     <div class="w-[100%] relative">
                         @if (IsCurrentUser)
                         {
-                            <div class="absolute w-[100%] md:h-[450px] h-[200px] rounded-md hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex" @onclick="() => UpdateImage(Consts.ImageType.BackgroundImages)"><i class="fa-solid fa-pen-to-square fa-2xl text-gray-200 mx-auto self-center"></i></div>
+                            <div class="absolute w-[100%] md:h-[450px] h-[200px] rounded-md hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex" @onclick="() => UpdateImage(Consts.ImageType.BackgroundImages)">
+                                <FaIcon Icon="@FaIcons.Edit" Size="@FaSize.XxLarge" ExtraCss="text-gray-200 mx-auto self-center" />
+                            </div>
                         }
                         <img src="@UserDetails?.BackgroundImg" class="w-[100%] md:h-[450px] h-[200px] rounded-md mx-auto object-cover" alt=""/>
                     </div>
@@ -26,7 +28,9 @@
                                     <div class="absolute md:w-[200px] md:h-[200px] w-[100px] h-[100px] -top-[50px] md:left-[30px] left-[10px] rounded-full">
                                         @if (IsCurrentUser)
                                         {
-                                            <div class="absolute md:w-[200px] md:h-[200px] w-[100px] h-[100px] hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex" @onclick="() => UpdateImage(Consts.ImageType.ProfileImages)"><i class="fa-solid fa-pen-to-square fa-2xl text-gray-200 mx-auto self-center"></i></div>
+                                            <div class="absolute md:w-[200px] md:h-[200px] w-[100px] h-[100px] hover:cursor-pointer opacity-0 hover:opacity-100 bg-black/80 rounded-full flex" @onclick="() => UpdateImage(Consts.ImageType.ProfileImages)">
+                                                <FaIcon Icon="@FaIcons.Edit" Size="@FaSize.XxLarge" ExtraCss="text-gray-200 mx-auto self-center" />
+                                            </div>
                                         }
                                         <div class="md:w-[200px] md:h-[200px] w-[100px] h-[100px]">
                                             <img src="@UserDetails?.ProfileImg" class="w-[100%] h-[100%] rounded-full object-cover" alt="profile image"/>
@@ -69,8 +73,12 @@
                                 @if (IsCurrentUser)
                                 {
                                     <div class="mt-[10px] flex">
-                                        <button @onclick="ToggleEditProfile" class="cursor-pointer rounded-md bg-gray-200 w-[150px] h-[30px] font-bold hover:bg-gray-400"><i class="fa-solid fa-pen-to-square"></i> Edit Profile</button>
-                                        <button class="cursor-pointer rounded-md border-red-800 bg-red-500 w-[150px] h-[30px] font-bold hover:bg-red-700 ml-[5px]" @onclick="ToggleShowConfirmLogout"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+                                        <button @onclick="ToggleEditProfile" class="cursor-pointer rounded-md bg-gray-200 w-[150px] h-[30px] font-bold hover:bg-gray-400">
+                                            <FaIcon Icon="@FaIcons.Edit" /> Edit Profile
+                                        </button>
+                                        <button class="cursor-pointer rounded-md border-red-800 bg-red-500 w-[150px] h-[30px] font-bold hover:bg-red-700 ml-[5px]" @onclick="ToggleShowConfirmLogout">
+                                            <FaIcon Icon="@FaIcons.Logout" /> Logout
+                                        </button>
                                     </div>
                                 }
                                 else
@@ -90,7 +98,9 @@
                                 <h3 class="text-2xl ml-2 font-semibold dark:text-dark-supportColor text-light-primaryColor">Interests</h3>
                                 @if (IsCurrentUser)
                                 {
-                                    <button @onclick="ToggleEditUserInterests" class="w-[100px] h-[25px] text-dark-secondaryColor font-bold rounded ml-auto cursor-pointer"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+                                    <button @onclick="ToggleEditUserInterests" class="w-[100px] h-[25px] text-dark-secondaryColor font-bold rounded ml-auto cursor-pointer">
+                                        <FaIcon Icon="@FaIcons.Edit" /> Edit
+                                    </button>
                                 }
                             </div>
                             <div class="flex flex-wrap w-[100%]">

@@ -1,9 +1,13 @@
 @using DomainLayer.DbEnts
+@using CodeConnect.WebAssembly.Components.General
+@using DomainLayer.Constants
 @inherits EditUserInterestsBase
 
 <div class="top-0 left-0 fixed z-[300] w-[100vw] h-[100vh] backdrop-blur-md grid place-content-center">
     <div class="shadow-xl md:w-[500px] w-[90%]  mt-5 relative bg-dark-secondaryColor p-5 rounded-md">
-        <button @onclick="Cancel" class="cursor-pointer rounded-md px-3 py-2 text-light-supportColor bg-light-primaryColor hover:bg-light-primaryColor/70" ><i class="fa-solid fa-angles-left"></i> Back</button>
+        <button @onclick="Cancel" class="cursor-pointer rounded-md px-3 py-2 text-light-supportColor bg-light-primaryColor hover:bg-light-primaryColor/70">
+            <FaIcon Icon="@FaIcons.Back" /> Back
+        </button>
         <h3 class="font-bold dark:text-dark-supportColor text-light-primaryColor text-4xl mt-4 text-center">Edit Interests</h3>
         @if (FetchingInterests)
         {
@@ -43,7 +47,9 @@
                     </div>
                 }
             </div>
-            <button disabled="@Saving" @onclick="UpdateInterests" class="cursor-pointer rounded-md px-3 py-2 text-light-supportColor dark:text-dark-supportColor/90 bg-green-700 hover:bg-green-800">Save</button>
+            <button disabled="@Saving" @onclick="UpdateInterests" class="cursor-pointer rounded-md px-3 py-2 text-light-supportColor dark:text-dark-supportColor/90 bg-green-700 hover:bg-green-800">
+                <FaIcon Icon="@FaIcons.Save" /> Save
+            </button>
         }
     </div>
 </div>

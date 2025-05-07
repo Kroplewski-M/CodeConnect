@@ -1,8 +1,12 @@
+@using DomainLayer.Constants
+@using CodeConnect.WebAssembly.Components.General
 @inherits EditProfileBase
 
 <div class="top-0 left-0 fixed z-[300] w-[100vw] h-[100vh] backdrop-blur-md grid place-content-center">
     <div class="shadow-xl md:w-[700px] w-[95%]  mt-5 relative bg-dark-secondaryColor p-5 rounded-md">
-        <button @onclick="Cancel" class="cursor-pointer rounded-md px-3 py-2 text-light-supportColor bg-light-primaryColor hover:bg-light-primaryColor/70" ><i class="fa-solid fa-angles-left"></i> Back</button>
+        <button @onclick="Cancel" class="cursor-pointer rounded-md px-3 py-2 text-light-supportColor bg-light-primaryColor hover:bg-light-primaryColor/70">
+            <FaIcon Icon="@FaIcons.Back" /> Back
+        </button>
         <h3 class="font-bold dark:text-dark-supportColor text-light-primaryColor text-4xl mt-4">Edit Profile</h3>
         <EditForm Model="EditProfileForm" FormName="editProfile" OnSubmit="ConfirmEditProfile" class="mt-5">
             <div class="flex md:flex-row flex-col">
@@ -52,7 +56,10 @@
                     <p class="text-red-800 font-bold"><span class="fa fa-circle-exclamation text-red-800"></span> @error.ErrorMessage</p>
                 }
             }
-            <button disabled="@DisableEdit" type="submit" class="cursor-pointer rounded-md px-3 py-2 text-light-supportColor dark:text-dark-supportColor/90 bg-green-700 hover:bg-green-800"><i class="@(DisableEdit?"":"fa-regular fa-floppy-disk")"></i> @(DisableEdit?"Saving...":"Save Changes")</button>
+            <button disabled="@DisableEdit" type="submit" class="cursor-pointer rounded-md px-3 py-2 text-light-supportColor dark:text-dark-supportColor/90 bg-green-700 hover:bg-green-800">
+                <FaIcon Icon="@(DisableEdit ? "" : FaIcons.Edit)" /> 
+                @(DisableEdit ? "Saving..." : "Save Changes")
+            </button>
         </EditForm>
     </div>
 </div>
