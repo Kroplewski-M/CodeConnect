@@ -1,11 +1,31 @@
 @using CodeConnect.WebAssembly.Components.SVGs
+@using CodeConnect.WebAssembly.Components.Posts
 @inherits UserPostsBase
 
 <p class="text-4xl font-bold text-dark-supportColor">Recent Posts</p>
-<div class="mt-5 text-center text-dark-supportColor">
-    <p>...Winds howling</p>
-    <div class="w-[100px] mx-auto">
-        <EmptySVG Width="100" Height="100" Color="FFFFFF"></EmptySVG>
-    </div>
-    <p>man its empty in here</p>
-</div>
+@if (Loading)
+{
+    <p>loading posts...</p>
+}
+else
+{
+    if (Posts.Any())
+    {
+        <div class="flex flex-wrap">
+            @foreach (var post in Posts)
+            {
+                <PostBasic Post="post" />
+            }
+        </div>
+    }
+    else
+    {
+        <div class="mt-5 text-center text-dark-supportColor">
+            <p>...Winds howling</p>
+            <div class="w-[100px] mx-auto">
+                <EmptySVG Width="100" Height="100" Color="FFFFFF"></EmptySVG>
+            </div>
+            <p>man its empty in here</p>
+        </div>
+    }
+}

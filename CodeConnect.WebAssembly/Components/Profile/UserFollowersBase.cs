@@ -16,8 +16,6 @@ public class UserFollowersBase() : ComponentBase
     public bool Loading { get; set; } = true;
     protected override async Task OnParametersSetAsync()
     {
-        //Get username from URL
-
         if (!string.IsNullOrWhiteSpace(Username))
         {
             Followers = await FollowingService.GetUserFollowers(Username);

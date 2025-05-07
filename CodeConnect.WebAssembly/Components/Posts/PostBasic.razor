@@ -1,0 +1,8 @@
+@using ApplicationLayer.DTO_s
+<div class="w-[90%] md:w-[300px] min-h-[50px] bg-dark-primaryColor rounded-lg shadow-lg mr-5 mt-5 p-[10px]">
+    <p class="text-light-primaryColor text-[14px]">@Post.Content</p>
+</div>
+
+@code {
+    [Parameter] public required PostBasicDto Post { get; set; }
+}

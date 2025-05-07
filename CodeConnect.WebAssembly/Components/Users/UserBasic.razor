@@ -6,7 +6,7 @@
 <div class="md:w-[320px] w-[80%] h-[100px] rounded-md bg-dark-primaryColor hover:bg-dark-primaryColor/80 cursor-pointer ml-[10px] mb-[10px]" @onclick="()=> Redirect(User.Username)">
     <div class="flex mt-[15px]">
         <div class="w-[50px] min-w-[50px] h-[50px] ml-[10px]">
-            <img src="@ImgUrl" alt="" class="rounded-full w-[100%] h-[100%]"/>
+            <img src="@User.ProfileImgUrl" alt="" class="rounded-full w-[100%] h-[100%]"/>
         </div>
         <div class="ml-4">
             <p class="font-bold text-light-primaryColor light:bg-dark-primaryColor">@User.Username</p>
@@ -24,15 +24,8 @@
 
 
 @code {
-    [Parameter]
-    public required UserBasicDto User { get; set; }
-
-    private string ImgUrl { get; set; } = "";
-    protected override void OnInitialized()
-    {
-        ImgUrl = !string.IsNullOrWhiteSpace(User.ProfileImgUrl) ? Helpers.GetAzureImgUrl(Consts.ImageType.ProfileImages,User.ProfileImgUrl) : Consts.ProfileDefaults.ProfileImg;
-    }
-
+    [Parameter] public required UserBasicDto User { get; set; }
+    
     private void Redirect(string username)
     {
         NavigationManager.NavigateTo($"Profile/{username}");
