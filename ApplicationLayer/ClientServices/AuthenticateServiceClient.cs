@@ -63,10 +63,8 @@ public class AuthenticateServiceClient(
         var profileImg = authState.GetUserInfo(Consts.ClaimTypes.ProfileImg);
         var backgroundImg = authState.GetUserInfo(Consts.ClaimTypes.BackgroundImg);
 
-        profileImg = string.IsNullOrEmpty(profileImg) ? Consts.ProfileDefaults.ProfileImg 
-                     : Helpers.GetAzureImgUrl(Consts.ImageType.ProfileImages, profileImg);
-        backgroundImg = string.IsNullOrEmpty(backgroundImg) ? Consts.ProfileDefaults.BackgroundImg 
-                        : Helpers.GetAzureImgUrl(Consts.ImageType.BackgroundImages, backgroundImg);
+        profileImg = Helpers.GetUserImgUrl(profileImg, Consts.ImageType.ProfileImages);
+        backgroundImg = Helpers.GetUserImgUrl(backgroundImg, Consts.ImageType.BackgroundImages);
 
         return new UserDetails(
             FirstName: authState.GetUserInfo(Consts.ClaimTypes.FirstName),

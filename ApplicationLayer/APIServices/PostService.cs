@@ -3,6 +3,7 @@ using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
 using DomainLayer.Entities.Auth;
 using DomainLayer.Entities.Posts;
+using DomainLayer.Helpers;
 using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -93,6 +94,7 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
                     x.Id,
                     x.Content,
                     x.User?.UserName ?? "",
+                    Helpers.GetUserImgUrl(x.User?.ProfileImage, Consts.ImageType.ProfileImages),
                     x.CommentCount,
                     x.LikeCount,
                     x.FileNames,

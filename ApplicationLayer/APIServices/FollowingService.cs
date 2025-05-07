@@ -1,7 +1,9 @@
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
+using DomainLayer.Constants;
 using DomainLayer.Entities.Auth;
 using DomainLayer.Entities.User;
+using DomainLayer.Helpers;
 using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -84,7 +86,7 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
             .Include(x=> x.Follower)
             .ToList()
             .Where(x => x.Follower is { UserName: not null })
-            .Select(x=> new UserBasicDto(x.Follower!.UserName!,x.Follower.Bio!,x.Follower.ProfileImage! ))
+            .Select(x=> new UserBasicDto(x.Follower!.UserName!,x.Follower.Bio!,Helpers.GetUserImgUrl(x.Follower.ProfileImage!, Consts.ImageType.ProfileImages)))
             .OrderByDescending(x=> x.Username)
             .ToList();
         return users;
@@ -102,7 +104,7 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
             .Include(x=> x.Followed)
             .ToList()
             .Where(x => x.Followed is { UserName: not null })
-            .Select(x=> new UserBasicDto(x.Followed!.UserName!,x.Followed.Bio!,x.Followed.ProfileImage! ))
+            .Select(x=> new UserBasicDto(x.Followed!.UserName!,x.Followed.Bio!,Helpers.GetUserImgUrl(x.Followed.ProfileImage!, Consts.ImageType.ProfileImages)))
             .OrderByDescending(x=> x.Username)
             .ToList();
         return users;

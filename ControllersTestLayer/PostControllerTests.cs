@@ -134,8 +134,8 @@ public class PostControllerTests
         var username = "testUsername";
         var expectedPosts = new List<PostBasicDto>
         {
-            new PostBasicDto(1, "", "", 0, 0, [], DateTime.Now),
-            new PostBasicDto(2, "", "", 0, 0, [], DateTime.Now),
+            new PostBasicDto(1, "", "","", 0, 0, [], DateTime.Now),
+            new PostBasicDto(2, "", "", "",0, 0, [], DateTime.Now),
         };
 
         _mockPostService.Setup(x => x.GetUserPosts(username)).ReturnsAsync(expectedPosts);

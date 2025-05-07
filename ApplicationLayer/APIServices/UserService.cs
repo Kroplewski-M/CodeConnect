@@ -44,11 +44,8 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
         if (user == null)
             return null;
         
-        var profileImg = string.IsNullOrWhiteSpace(user.ProfileImage) ? Consts.ProfileDefaults.ProfileImg 
-            : Helpers.GetAzureImgUrl(Consts.ImageType.ProfileImages, user.ProfileImage);
-        
-        var backgroundImg = string.IsNullOrWhiteSpace(user.BackgroundImage) ? Consts.ProfileDefaults.BackgroundImg 
-            : Helpers.GetAzureImgUrl(Consts.ImageType.BackgroundImages, user.BackgroundImage);
+        var profileImg = Helpers.GetUserImgUrl(user.ProfileImage, Consts.ImageType.ProfileImages);
+        var backgroundImg = Helpers.GetUserImgUrl(user.BackgroundImage, Consts.ImageType.BackgroundImages);
         
         return new UserDetails(user.FirstName ?? "", user.LastName ?? "", user.UserName ?? "", user.Email ?? "", profileImg,
             backgroundImg, user.GithubLink ?? "",

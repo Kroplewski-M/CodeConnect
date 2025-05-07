@@ -20,12 +20,12 @@ public class ProfileBase : ComponentBase
     protected UserDetails? UserDetails = null;
     protected FollowerCount? FollowerCount = null;
     protected List<TechInterestsDto>? UserInterests { get; set; }
-
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationState { get; set; }
 
     protected string? CurrentUsername { get; set; }
     protected override async Task OnParametersSetAsync()
-    {
+    { 
+        FoundUser = false;
         if (AuthenticationState is not null)
         {
             var authState = await AuthenticationState;
