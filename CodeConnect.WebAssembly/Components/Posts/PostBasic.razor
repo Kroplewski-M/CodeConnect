@@ -1,13 +1,14 @@
 @using ApplicationLayer.DTO_s
 @using CodeConnect.WebAssembly.Components.General
 @using DomainLayer.Constants
-<div class="w-[90%] md:w-[300px] min-h-[50px] bg-dark-primaryColor rounded-lg shadow-lg mr-5 mt-5 p-[10px] box-border cursor-pointer hover:scale-[1.1]">
-    <p class="text-light-primaryColor text-[18px] mb-[10px]">@Post.Content</p>
+@using DomainLayer.Helpers
+<div class="w-[90%] md:w-[345px] min-h-[50px] bg-dark-primaryColor mb-[10px] rounded-lg shadow-lg p-[10px] box-border cursor-pointer hover:scale-[1.1]">
+    <p class="text-light-primaryColor text-[16px] mb-[10px]">@Post.Content</p>
     
     @if (FirstImageUrl != null)
     {
-        <div class="relative w-full max-w-[300px] max-h-[100px] overflow-hidden">
-            <img src="@FirstImageUrl" alt="@Post.CreatedByUsername" class="w-full h-auto max-h-[150px] rounded-lg object-cover object-center" />
+        <div class="relative w-full max-w-[300px] mx-auto max-h-[100px] overflow-hidden rounded-md">
+            <img src="@FirstImageUrl" alt="@Post.CreatedByUsername" class="w-full h-auto max-h-[150px] object-cover object-center" />
             @if (RemainingImages > 0)
             {
                 <div class="absolute top-2 right-2 bg-black dark:bg-dark-secondaryColor text-white text-sm px-2 py-1 rounded-full">
@@ -29,7 +30,7 @@
                 <span>@Post.CommentCount</span>
             </div>
         </div>
-        <p class="text-light-primaryColor/80 text-[14px] ml-[5px]">@Post.CreatedAtUtc</p>
+        <p class="text-light-primaryColor/80 text-[14px] ml-[5px]">@Helpers.GetUsersLocalTime(Post.CreatedAtUtc)</p>
     </div>
 </div>
 
@@ -42,5 +43,4 @@
         FirstImageUrl = Post?.Images?.FirstOrDefault();
         RemainingImages = Post?.Images?.Count - 1;
     }
-
 }

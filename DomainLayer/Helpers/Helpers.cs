@@ -29,4 +29,9 @@ public static class Helpers
         }
         return GetAzureImgUrl(imgType, userImg);
     }
+
+    public static string GetUsersLocalTime(DateTime dateTime)
+    {
+        return dateTime.ToLocalTime().ToString("g");
+    }
 }
