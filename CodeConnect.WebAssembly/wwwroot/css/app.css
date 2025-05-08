@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 * {
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.5s ease;
 }
 ::-webkit-scrollbar {
     width: 7px;

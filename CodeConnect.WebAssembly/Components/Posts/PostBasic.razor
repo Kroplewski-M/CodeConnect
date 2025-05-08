@@ -1,8 +1,46 @@
 @using ApplicationLayer.DTO_s
-<div class="w-[90%] md:w-[300px] min-h-[50px] bg-dark-primaryColor rounded-lg shadow-lg mr-5 mt-5 p-[10px]">
-    <p class="text-light-primaryColor text-[14px]">@Post.Content</p>
+@using CodeConnect.WebAssembly.Components.General
+@using DomainLayer.Constants
+<div class="w-[90%] md:w-[300px] min-h-[50px] bg-dark-primaryColor rounded-lg shadow-lg mr-5 mt-5 p-[10px] box-border cursor-pointer hover:scale-[1.1]">
+    <p class="text-light-primaryColor text-[18px] mb-[10px]">@Post.Content</p>
+    
+    @if (FirstImageUrl != null)
+    {
+        <div class="relative w-full max-w-[300px] max-h-[100px] overflow-hidden">
+            <img src="@FirstImageUrl" alt="@Post.CreatedByUsername" class="w-full h-auto max-h-[150px] rounded-lg object-cover object-center" />
+            @if (RemainingImages > 0)
+            {
+                <div class="absolute top-2 right-2 bg-black dark:bg-dark-secondaryColor text-white text-sm px-2 py-1 rounded-full">
+                    +@RemainingImages image(s)
+                </div>
+            }
+        </div>
+    }
+
+    <div class="flex mt-[10px] w-full justify-between">
+        <div class="flex text-light-primaryColor">
+            <img src="@Post.UserImg" alt="@Post.CreatedByUsername" class="w-[20px] h-[20px] rounded-full">
+            <div class="ml-[5px]">
+                <FaIcon Icon="@FaIcons.Heart" />
+                <span>@Post.LikeCount</span>
+            </div>
+            <div class="ml-[5px]">
+                <FaIcon Icon="@FaIcons.Message" />
+                <span>@Post.CommentCount</span>
+            </div>
+        </div>
+        <p class="text-light-primaryColor/80 text-[14px] ml-[5px]">@Post.CreatedAtUtc</p>
+    </div>
 </div>
 
 @code {
     [Parameter] public required PostBasicDto Post { get; set; }
+    private string? FirstImageUrl { get; set; }
+    private int? RemainingImages { get; set; }
+    protected override void OnParametersSet()
+    {
+        FirstImageUrl = Post?.Images?.FirstOrDefault();
+        RemainingImages = Post?.Images?.Count - 1;
+    }
+
 }

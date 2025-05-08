@@ -75,6 +75,7 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
             return new List<PostBasicDto>();
         var posts = context.Posts
             .AsNoTracking()
+            .Where(x => x.CreatedByUserId == user.Id)
             .Include(x => x.CreatedByUser)
             .Include(x => x.Files)
             .OrderByDescending(x => x.CreatedAt)
@@ -97,7 +98,7 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
                     Helpers.GetUserImgUrl(x.User?.ProfileImage, Consts.ImageType.ProfileImages),
                     x.CommentCount,
                     x.LikeCount,
-                    x.FileNames,
+                    x.FileNames.Select(y => Helpers.GetAzureImgUrl(Consts.ImageType.PostImages, y)).ToList(),
                     x.CreatedAt
                 )
             )

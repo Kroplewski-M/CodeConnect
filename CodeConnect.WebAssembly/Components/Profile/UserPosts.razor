@@ -11,7 +11,7 @@ else
 {
     if (Posts.Any())
     {
-        <div class="flex flex-wrap">
+        <div class="flex flex-wrap items-start">
             @foreach (var post in Posts)
             {
                 <PostBasic Post="post" />

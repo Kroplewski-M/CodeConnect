@@ -4,7 +4,7 @@ namespace DomainLayer.Helpers;
 
 public static class Helpers
 {
-    private static string GetAzureImgUrl(Consts.ImageType imgType ,string? imgName)
+    public static string GetAzureImgUrl(Consts.ImageType imgType ,string? imgName)
     { 
         if (string.IsNullOrWhiteSpace(imgName))
             return "";
