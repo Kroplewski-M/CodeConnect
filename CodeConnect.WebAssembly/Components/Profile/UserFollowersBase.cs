@@ -2,6 +2,7 @@ using ApplicationLayer;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web.Virtualization;
 
 namespace CodeConnect.WebAssembly.Components.Profile;
 
@@ -18,7 +19,7 @@ public class UserFollowersBase() : ComponentBase
     {
         if (!string.IsNullOrWhiteSpace(Username))
         {
-            Followers = await FollowingService.GetUserFollowers(Username);
+            Followers = await FollowingService.GetUserFollowers(Username, skip: 0, take: 10);
         }
         else
         {

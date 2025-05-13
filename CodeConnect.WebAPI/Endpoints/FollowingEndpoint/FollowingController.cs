@@ -69,11 +69,11 @@ public class FollowingController(IFollowingService followingService, UserManager
 
     [Authorize]
     [HttpGet("GetUserFollowers")]
-    public async Task<IActionResult> GetUserFollowers(string username)
+    public async Task<IActionResult> GetUserFollowers(string username, int skip, int take)
     {
         if(string.IsNullOrEmpty(username))
             return BadRequest();
-        return Ok(await followingService.GetUserFollowers(username));
+        return Ok(await followingService.GetUserFollowers(username, skip, take));
     }
     [Authorize]
     [HttpGet("GetUserFollowing")]

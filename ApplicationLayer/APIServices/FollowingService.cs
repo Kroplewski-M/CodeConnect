@@ -74,7 +74,7 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
             return false;
         return context.FollowUsers.Any(x=> x.FollowerUserId == currentUser.Id && x.FollowedUserId == targetUser.Id);
     }
-    public async Task<List<UserBasicDto>> GetUserFollowers(string username)
+    public async Task<List<UserBasicDto>> GetUserFollowers(string username, int skip, int take)
     {
         if (string.IsNullOrWhiteSpace(username))
             return new List<UserBasicDto>();
@@ -82,12 +82,14 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
         if(user == null || user?.UserName != username)
             return new List<UserBasicDto>();
         var users = context.FollowUsers.AsNoTracking()
-            .Where(x => x.FollowedUserId == user.Id)
+            .Where(x => x.FollowedUserId == user.Id && x.Follower != null)
             .Include(x=> x.Follower)
+            .OrderByDescending(x=> x.Follower!.UserName)
+            .Skip(skip)
+            .Take(take)
             .ToList()
             .Where(x => x.Follower is { UserName: not null })
             .Select(x=> new UserBasicDto(x.Follower!.UserName!,x.Follower.Bio!,Helpers.GetUserImgUrl(x.Follower.ProfileImage!, Consts.ImageType.ProfileImages)))
-            .OrderByDescending(x=> x.Username)
             .ToList();
         return users;
     }
