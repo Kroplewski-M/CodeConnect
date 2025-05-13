@@ -2,7 +2,8 @@
 @using CodeConnect.WebAssembly.Components.General
 @using DomainLayer.Constants
 @using DomainLayer.Helpers
-<div class="w-[90%] md:w-[345px] min-h-[50px] bg-dark-primaryColor mb-[10px] rounded-lg shadow-lg p-[10px] box-border cursor-pointer hover:scale-[1.1]">
+@inject NavigationManager NavigationManager
+<div onclick="@(()=>NavigationManager.NavigateTo($"/Post/{Post.Id}"))" class="w-[90%] md:w-[345px] min-h-[50px] bg-dark-primaryColor mb-[10px] rounded-lg shadow-lg p-[10px] box-border cursor-pointer hover:scale-[1.1]">
     <p class="text-light-primaryColor text-[16px] mb-[10px]">@Post.Content</p>
     
     @if (FirstImageUrl != null)

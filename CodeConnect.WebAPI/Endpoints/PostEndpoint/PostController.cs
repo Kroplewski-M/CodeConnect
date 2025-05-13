@@ -15,11 +15,9 @@ public class PostController(IPostService postService) : ControllerBase
     {
         var postValidator = new CreatePostDtoValidator();
         var validate = await postValidator.ValidateAsync(createPost);
-        if(!validate.IsValid)
+        if(!validate.IsValid || User.FindFirst(Consts.ClaimTypes.UserName)?.Value != createPost.CreatedByUserName)
             return  BadRequest(new ServiceResponse(false, "Error Creating Post"));
-        if(User.FindFirst(Consts.ClaimTypes.UserName)?.Value != createPost.CreatedByUserName)
-            return BadRequest(new ServiceResponse(false, "Error Creating Post"));
-        
+
         var response = await postService.CreatePost(createPost);
         if(!response.Flag)
             return BadRequest(response);
