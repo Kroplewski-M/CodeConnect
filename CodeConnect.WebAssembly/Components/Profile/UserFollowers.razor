@@ -1,3 +1,4 @@
+@using ApplicationLayer.DTO_s
 @using CodeConnect.WebAssembly.Components.Users
 @inherits UserFollowersBase
 
@@ -7,14 +8,12 @@
 }
 else
 {
+
     if (Followers.Any())
     {
-        <div class="flex flex-wrap">
-            @foreach (var user in Followers)
-            {
+        <LazyList Items="Followers" OnBottomReached="LoadMoreFollowers" Context="user" ParentClasses="flex flex-wrap">
                 <UserBasic User="user" />
-            }
-        </div>
+        </LazyList>
     }
     else
     {

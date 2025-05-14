@@ -1,0 +1,49 @@
+@implements IDisposable
+@typeparam TItem
+@inject IJSRuntime Js
+
+
+<div class="@ParentClasses">
+    @if (Items != null)
+    {
+        foreach (var item in Items)
+        {
+            @ChildContent(item)
+        }
+    }
+
+    <div id="@_sentinelId" style="height: 1px; width: 100%;"></div>
+</div>
+
+@code{
+    [Parameter] public List<TItem>? Items { get; set; }
+    [Parameter] public required RenderFragment<TItem> ChildContent { get; set; }
+    [Parameter] public required EventCallback OnBottomReached { get; set; }
+
+    [Parameter]
+    public string? ParentClasses { get; set; }
+    private readonly string _sentinelId = $"sentinel-{Guid.NewGuid()}";
+    private DotNetObjectReference<LazyList<TItem>>? _dotNetRef;
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _dotNetRef = DotNetObjectReference.Create(this);
+            await Js.InvokeVoidAsync("observeSentinel", _sentinelId, _dotNetRef);
+        }
+    }
+    [JSInvokable]
+    public async Task OnSentinelVisible()
+    {
+        if (OnBottomReached.HasDelegate)
+        {
+            await OnBottomReached.InvokeAsync();
+        }
+    }
+    public async void Dispose()
+    {
+        await Js.InvokeVoidAsync("unobserveSentinel", _sentinelId);
+        _dotNetRef?.Dispose();
+    }
+}

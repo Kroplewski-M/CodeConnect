@@ -27,5 +27,16 @@ public class UserFollowersBase() : ComponentBase
         }
         Loading = false;
         StateHasChanged();
+    } 
+    private int _currentSkip = 10;
+    protected async Task LoadMoreFollowers()
+    {
+        var more = await FollowingService.GetUserFollowers(Username, skip: _currentSkip, take: 10);
+        if (more?.Any() == true)
+        {
+            Followers.AddRange(more);
+            _currentSkip += 10;
+            StateHasChanged();
+        }
     }
 }
