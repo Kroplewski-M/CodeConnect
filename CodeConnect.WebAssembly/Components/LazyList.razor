@@ -1,4 +1,4 @@
-@implements IDisposable
+@implements IAsyncDisposable
 @typeparam TItem
 @inject IJSRuntime Js
 
@@ -18,10 +18,13 @@
 @code{
     [Parameter] public List<TItem>? Items { get; set; }
     [Parameter] public required RenderFragment<TItem> ChildContent { get; set; }
-    [Parameter] public required EventCallback OnBottomReached { get; set; }
-
-    [Parameter]
-    public string? ParentClasses { get; set; }
+    [Parameter] public required EventCallback<(int, int)> OnBottomReached { get; set; }
+    [Parameter] public int StartIndex { get; set; } = 0;
+    [Parameter] public int Take { get; set; } = 50;
+    [Parameter] public string? ParentClasses { get; set; }
+    
+    private bool _noMoreItems = false;
+    private int _startIndexUpdated = 0;
     private readonly string _sentinelId = $"sentinel-{Guid.NewGuid()}";
     private DotNetObjectReference<LazyList<TItem>>? _dotNetRef;
     
@@ -31,19 +34,27 @@
         {
             _dotNetRef = DotNetObjectReference.Create(this);
             await Js.InvokeVoidAsync("observeSentinel", _sentinelId, _dotNetRef);
+            _startIndexUpdated = StartIndex;
         }
     }
     [JSInvokable]
     public async Task OnSentinelVisible()
     {
-        if (OnBottomReached.HasDelegate)
+        if (OnBottomReached.HasDelegate && !_noMoreItems)
         {
-            await OnBottomReached.InvokeAsync();
+            int itemCount = Items?.Count ?? 0;
+            await OnBottomReached.InvokeAsync((_startIndexUpdated, Take));
+            _startIndexUpdated += Take;
+            if ((Items?.Count ?? 0) == itemCount)
+            {
+                _noMoreItems = true;
+            }
         }
     }
-    public async void Dispose()
+    public async ValueTask DisposeAsync()
     {
         await Js.InvokeVoidAsync("unobserveSentinel", _sentinelId);
         _dotNetRef?.Dispose();
     }
+
 }

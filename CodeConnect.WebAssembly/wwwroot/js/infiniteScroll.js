@@ -1,12 +1,10 @@
 window.onload = function(){
-    console.log("Infinite Scroll");
     window.observers = {};
 
     window.observeSentinel = function(sentinelId, dotnetHelper){
         const sentinel = document.getElementById(sentinelId);
         if(!sentinel) return;
-
-
+        
         const observer = new IntersectionObserver((entries) =>{
             entries.forEach(entry =>{
                 if(entry.isIntersecting){

@@ -2,21 +2,15 @@
 @using CodeConnect.WebAssembly.Components.Users
 @inherits UserFollowersBase
 
-@if (Loading)
-{
-    <p>loading followers...</p>
-}
-else
-{
-
-    if (Followers.Any())
-    {
-        <LazyList Items="Followers" OnBottomReached="LoadMoreFollowers" Context="user" ParentClasses="flex flex-wrap">
-                <UserBasic User="user" />
-        </LazyList>
-    }
-    else
-    {
-        <p class="font-bold text-light-primaryColor">You have no followers...loser</p>
-    }
-}
+@* @if (Loading) *@
+@* { *@
+@*     <p>loading followers...</p> *@
+@* } *@
+@* else *@
+@* { *@
+@* *@
+@* *@
+@* } *@
+<LazyList Items="Followers" OnBottomReached="LoadMoreFollowers" Context="user" StartIndex="0" Take="100" ParentClasses="flex flex-wrap">
+    <UserBasic User="user" />
+</LazyList>
