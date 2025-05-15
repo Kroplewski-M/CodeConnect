@@ -13,21 +13,7 @@ public class UserFollowersBase() : ComponentBase
     [Inject] public required NotificationsService NotificationsService { get; set; }
     [CascadingParameter] public required string Username { get; set; }
     public List<UserBasicDto> Followers { get; set; } = new List<UserBasicDto>();
-
-    // public bool Loading { get; set; } = true;
-    // protected override async Task OnParametersSetAsync()
-    // {
-    //     if (!string.IsNullOrWhiteSpace(Username))
-    //     {
-    //         Followers = await FollowingService.GetUserFollowers(Username, skip: 0, take: 10);
-    //     }
-    //     else
-    //     {
-    //         NotificationsService.PushNotification(new ApplicationLayer.Notification("Error occured during fetching users", NotificationType.Error));
-    //     }
-    //     Loading = false;
-    //     StateHasChanged();
-    // } 
+    
     protected async Task LoadMoreFollowers((int,int)range)
     {
         var (startIndex, take) = range;
