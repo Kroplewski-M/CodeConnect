@@ -1,0 +1,21 @@
+@using DomainLayer.Constants
+@typeparam TItem
+@inherits LazyListBase<TItem>
+
+
+<div class="@ParentClasses">
+    @if (Items != null)
+    {
+        foreach (var item in Items)
+        {
+            @ChildContent(item)
+        }
+    }
+    @if (Loading)
+    {
+        <div class="w-full h-full flex justify-center items-center text-light-primaryColor">
+            <FaIcon Icon="@FaIcons.Loading" />
+        </div>
+    }
+    <div id="@SentinelId" style="height: 1px; width: 100%;"></div>
+</div>

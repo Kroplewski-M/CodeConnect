@@ -1,28 +1,11 @@
-@implements IAsyncDisposable
-@using DomainLayer.Constants
-@using CodeConnect.WebAssembly.Components.General
-@typeparam TItem
-@inject IJSRuntime Js
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
+namespace CodeConnect.WebAssembly.Components.General;
 
-
-<div class="@ParentClasses">
-    @if (Items != null)
-    {
-        foreach (var item in Items)
-        {
-            @ChildContent(item)
-        }
-    }
-    @if (_loading)
-    {
-        <div class="w-full h-full flex justify-center items-center text-light-primaryColor">
-            <FaIcon Icon="@FaIcons.Loading" />
-        </div>
-    }
-    <div id="@_sentinelId" style="height: 1px; width: 100%;"></div>
-</div>
-
-@code{
+public class LazyListBase<TItem> : ComponentBase
+{
+    [Inject] public required IJSRuntime Js { get; set; }
+    
     [Parameter] public List<TItem>? Items { get; set; }
     [Parameter] public required RenderFragment<TItem> ChildContent { get; set; }
     [Parameter] public required EventCallback<(int, int)> OnBottomReached { get; set; }
@@ -32,15 +15,16 @@
     
     private bool _noMoreItems = false;
     private int _startIndexUpdated = 0;
-    private readonly string _sentinelId = $"sentinel-{Guid.NewGuid()}";
-    private DotNetObjectReference<LazyList<TItem>>? _dotNetRef;
-    private bool _loading = false;
+    private DotNetObjectReference<LazyListBase<TItem>>? _dotNetRef;
+    
+    protected readonly string SentinelId = $"sentinel-{Guid.NewGuid()}";
+    protected bool Loading = false;
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             _dotNetRef = DotNetObjectReference.Create(this);
-            await Js.InvokeVoidAsync("observeSentinel", _sentinelId, _dotNetRef);
+            await Js.InvokeVoidAsync("observeSentinel", SentinelId, _dotNetRef);
             _startIndexUpdated = StartIndex;
         }
     }
@@ -62,13 +46,12 @@
     }
     private void SetLoading(bool isLoading)
     {
-        _loading = isLoading;
+        Loading = isLoading;
         StateHasChanged();
     }
     public async ValueTask DisposeAsync()
     {
-        await Js.InvokeVoidAsync("unobserveSentinel", _sentinelId);
+        await Js.InvokeVoidAsync("unobserveSentinel", SentinelId);
         _dotNetRef?.Dispose();
     }
-
 }
