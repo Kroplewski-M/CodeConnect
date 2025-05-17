@@ -6,9 +6,16 @@
 <div class="@ParentClasses">
     @if (Items != null)
     {
-        foreach (var item in Items)
+        if (Items.Any())
         {
-            @ChildContent(item)
+            foreach (var item in Items)
+            {
+                @ListTemplate(item)
+            }
+        }
+        else if (!Items.Any() && !Loading)
+        {
+            @EmptyTemplate
         }
     }
     @if (Loading)

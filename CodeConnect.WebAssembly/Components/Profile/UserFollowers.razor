@@ -3,6 +3,11 @@
 @inherits UserFollowersBase
 
 
-<LazyList Items="Followers" OnBottomReached="LoadMoreFollowers" Context="user" StartIndex="0" Take="100" ParentClasses="flex flex-wrap">
-    <UserBasic User="user" />
+<LazyList Items="Followers" OnBottomReached="LoadMoreFollowers" StartIndex="0" Take="100" ParentClasses="flex flex-wrap">
+    <ListTemplate Context="user" >
+        <UserBasic User="user"/>
+    </ListTemplate>
+    <EmptyTemplate>
+        <p>No followers</p>       
+    </EmptyTemplate>
 </LazyList>

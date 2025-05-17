@@ -7,7 +7,8 @@ public class LazyListBase<TItem> : ComponentBase
     [Inject] public required IJSRuntime Js { get; set; }
     
     [Parameter] public List<TItem>? Items { get; set; }
-    [Parameter] public required RenderFragment<TItem> ChildContent { get; set; }
+    [Parameter] public required RenderFragment<TItem> ListTemplate { get; set; }
+    [Parameter] public RenderFragment? EmptyTemplate { get; set; }
     [Parameter] public required EventCallback<(int, int)> OnBottomReached { get; set; }
     [Parameter] public int StartIndex { get; set; } = 0;
     [Parameter] public int Take { get; set; } = 50;
