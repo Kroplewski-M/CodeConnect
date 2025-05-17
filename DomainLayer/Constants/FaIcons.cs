@@ -12,6 +12,7 @@ public static class FaIcons
     public const string Bell = "fa-solid fa-bell";
     public const string UserGroup = "fa-solid fa-user-group";
     public const string Message = "fa-solid fa-message";
+    public const string Loading = "fa-solid fa-spinner fa-spin fa-2x";
 }
 
 public static class FaSize

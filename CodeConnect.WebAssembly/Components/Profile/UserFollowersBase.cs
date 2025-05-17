@@ -21,7 +21,6 @@ public class UserFollowersBase() : ComponentBase
         if (more?.Any() == true)
         {
             Followers.AddRange(more);
-            StateHasChanged();
         }
     }
 }

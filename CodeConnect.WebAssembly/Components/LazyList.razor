@@ -1,4 +1,6 @@
 @implements IAsyncDisposable
+@using DomainLayer.Constants
+@using CodeConnect.WebAssembly.Components.General
 @typeparam TItem
 @inject IJSRuntime Js
 
@@ -11,7 +13,12 @@
             @ChildContent(item)
         }
     }
-
+    @if (_loading)
+    {
+        <div class="w-full h-full flex justify-center items-center text-light-primaryColor">
+            <FaIcon Icon="@FaIcons.Loading" />
+        </div>
+    }
     <div id="@_sentinelId" style="height: 1px; width: 100%;"></div>
 </div>
 
@@ -27,7 +34,7 @@
     private int _startIndexUpdated = 0;
     private readonly string _sentinelId = $"sentinel-{Guid.NewGuid()}";
     private DotNetObjectReference<LazyList<TItem>>? _dotNetRef;
-    
+    private bool _loading = false;
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -42,14 +49,21 @@
     {
         if (OnBottomReached.HasDelegate && !_noMoreItems)
         {
+            SetLoading(true);
             int itemCount = Items?.Count ?? 0;
             await OnBottomReached.InvokeAsync((_startIndexUpdated, Take));
+            SetLoading(false);
             _startIndexUpdated += Take;
             if ((Items?.Count ?? 0) == itemCount)
             {
                 _noMoreItems = true;
             }
         }
+    }
+    private void SetLoading(bool isLoading)
+    {
+        _loading = isLoading;
+        StateHasChanged();
     }
     public async ValueTask DisposeAsync()
     {
