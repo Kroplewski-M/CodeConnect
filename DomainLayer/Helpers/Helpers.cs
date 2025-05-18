@@ -32,6 +32,6 @@ public static class Helpers
 
     public static string GetUsersLocalTime(DateTime dateTime)
     {
-        return dateTime.ToLocalTime().ToString("g");
+        return dateTime.ToLocalTime().ToString("dd/MM/yyyy");
     }
 }
