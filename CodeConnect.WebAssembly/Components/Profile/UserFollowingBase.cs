@@ -11,22 +11,15 @@ public class UserFollowingBase : ComponentBase
     [Inject] public required NavigationManager NavigationManager { get; set; }
     [Inject] public required NotificationsService NotificationsService { get; set; }
     [CascadingParameter] public required string Username { get; set; }
-    public List<UserBasicDto> Followers { get; set; } = new List<UserBasicDto>();
-
-    public bool Loading { get; set; } = true;
-    protected override async Task OnParametersSetAsync()
+    public List<UserBasicDto> Following { get; set; } = new List<UserBasicDto>();
+    
+    protected async Task LoadMoreFollowing((int,int)range)
     {
-        //Get username from URL
-
-        if (!string.IsNullOrWhiteSpace(Username))
+        var (startIndex, take) = range;
+        var more = await FollowingService.GetUserFollowing(Username, skip: startIndex, take: take);
+        if (more?.Any() == true)
         {
-            Followers = await FollowingService.GetUserFollowing(Username);
+            Following.AddRange(more);
         }
-        else
-        {
-            NotificationsService.PushNotification(new ApplicationLayer.Notification("Error occured during fetching users", NotificationType.Error));
-        }
-        Loading = false;
-        StateHasChanged();
     }
 }

@@ -328,7 +328,7 @@ public class FollowingServiceTests
          //Arrange 
          var username = "";
          //Act
-         var result = await _followingService.GetUserFollowing(username);
+         var result = await _followingService.GetUserFollowing(username, 0, 0);
          //Assert
          Assert.Empty(result);
          _userManager.Verify(m => m.FindByNameAsync(It.IsAny<string>()), Times.Never);
@@ -341,7 +341,7 @@ public class FollowingServiceTests
         var username = "SomeUsername";
         _userManager.Setup(x => x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(null as ApplicationUser);
         //Act
-        var result = await _followingService.GetUserFollowing(username);
+        var result = await _followingService.GetUserFollowing(username, 0, 0);
         //Assert
         Assert.Empty(result);
         _userManager.Verify(m => m.FindByNameAsync(It.IsAny<string>()), Times.Once);

@@ -53,9 +53,9 @@ public class FollowingServiceClient(HttpClient httpClient, NotificationsService 
         return response ?? new List<UserBasicDto>();
     }
 
-    public async Task<List<UserBasicDto>> GetUserFollowing(string username)
+    public async Task<List<UserBasicDto>> GetUserFollowing(string username,int skip, int take)
     {
-        var response = await httpClient.GetFromJsonAsync<List<UserBasicDto>>($"api/Following/GetUserFollowing?username={username}");
+        var response = await httpClient.GetFromJsonAsync<List<UserBasicDto>>($"api/Following/GetUserFollowing?username={username}&Skip={skip}&Take={take}");
         return response ?? new List<UserBasicDto>();
     }
 }
