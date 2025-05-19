@@ -30,8 +30,8 @@ public static class Helpers
         return GetAzureImgUrl(imgType, userImg);
     }
 
-    public static string GetUsersLocalTime(DateTime dateTime)
+    public static string GetUsersLocalTime(DateTime dateTime, string format = Consts.DateFormats.DateFormat)
     {
-        return dateTime.ToLocalTime().ToString("dd/MM/yyyy");
+        return dateTime.ToLocalTime().ToString(format);
     }
 }

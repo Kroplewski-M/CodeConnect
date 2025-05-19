@@ -57,6 +57,12 @@ public static class Consts
         Followers,
         Following
     }
+
+    public class DateFormats
+    {
+        public const string DateFormat = "MM/dd/yyyy";
+        public const string DateTimeFormat = "MM/dd/yyyy H:mm";
+    }
     public static readonly string AzureBlobEndpoint = "https://codeconnectblobs.blob.core.windows.net";
     public static readonly string GitHubEndpoint = "https://github.com";
     public static readonly string WebLink = "https://";

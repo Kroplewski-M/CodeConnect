@@ -526,9 +526,6 @@
   }
 }
 @layer utilities {
-  .collapse {
-    visibility: collapse;
-  }
   .absolute {
     position: absolute;
   }
@@ -685,6 +682,9 @@
   .ml-\[10px\] {
     margin-left: 10px;
   }
+  .ml-\[15px\] {
+    margin-left: 15px;
+  }
   .ml-auto {
     margin-left: auto;
   }
@@ -700,18 +700,6 @@
   .grid {
     display: grid;
   }
-  .hidden {
-    display: none;
-  }
-  .inline-flex {
-    display: inline-flex;
-  }
-  .list-item {
-    display: list-item;
-  }
-  .table {
-    display: table;
-  }
   .h-10 {
     height: calc(var(--spacing) * 10);
   }
@@ -723,6 +711,9 @@
   }
   .h-\[30px\] {
     height: 30px;
+  }
+  .h-\[40px\] {
+    height: 40px;
   }
   .h-\[50px\] {
     height: 50px;
@@ -781,6 +772,12 @@
   .w-10 {
     width: calc(var(--spacing) * 10);
   }
+  .w-\[40px\] {
+    width: 40px;
+  }
+  .w-\[100vw\] {
+    width: 100vw;
+  }
   .w-\[150px\] {
     width: 150px;
   }
@@ -817,9 +814,6 @@
   .w-\[100px\] {
     width: 100px;
   }
-  .w-\[100vw\] {
-    width: 100vw;
-  }
   .w-\[250px\] {
     width: 250px;
   }
@@ -831,6 +825,9 @@
   }
   .w-full {
     width: 100%;
+  }
+  .max-w-\[90\%\] {
+    max-width: 90%;
   }
   .max-w-\[300px\] {
     max-width: 300px;
@@ -849,9 +846,6 @@
   }
   .flex-grow {
     flex-grow: 1;
-  }
-  .border-collapse {
-    border-collapse: collapse;
   }
   .-translate-x-full {
     --tw-translate-x: -100%;
@@ -878,9 +872,6 @@
   }
   .cursor-pointer {
     cursor: pointer;
-  }
-  .resize {
-    resize: both;
   }
   .resize-none {
     resize: none;
@@ -909,6 +900,9 @@
   .items-center {
     align-items: center;
   }
+  .items-start {
+    align-items: flex-start;
+  }
   .justify-between {
     justify-content: space-between;
   }
@@ -918,11 +912,24 @@
   .gap-1 {
     gap: calc(var(--spacing) * 1);
   }
+  .gap-2 {
+    gap: calc(var(--spacing) * 2);
+  }
+  .gap-4 {
+    gap: calc(var(--spacing) * 4);
+  }
   .space-y-2 {
     :where(& > :not(:last-child)) {
       --tw-space-y-reverse: 0;
       margin-block-start: calc(calc(var(--spacing) * 2) * var(--tw-space-y-reverse));
       margin-block-end: calc(calc(var(--spacing) * 2) * calc(1 - var(--tw-space-y-reverse)));
+    }
+  }
+  .space-y-4 {
+    :where(& > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block-start: calc(calc(var(--spacing) * 4) * var(--tw-space-y-reverse));
+      margin-block-end: calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-y-reverse)));
     }
   }
   .space-x-4 {
@@ -982,9 +989,6 @@
   }
   .border-amber-800 {
     border-color: var(--color-amber-800);
-  }
-  .border-black {
-    border-color: var(--color-black);
   }
   .border-black\/10 {
     border-color: color-mix(in oklab, var(--color-black) 10%, transparent);
@@ -1280,9 +1284,6 @@
   .text-white {
     color: var(--color-white);
   }
-  .underline {
-    text-decoration-line: underline;
-  }
   .opacity-0 {
     opacity: 0%;
   }
@@ -1298,36 +1299,15 @@
     --tw-shadow: 0 20px 25px -5px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 8px 10px -6px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
-  .outline {
-    outline-style: var(--tw-outline-style);
-    outline-width: 1px;
-  }
-  .blur {
-    --tw-blur: blur(8px);
-    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
-  }
   .backdrop-blur-md {
     --tw-backdrop-blur: blur(var(--blur-md));
     -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
     backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
   }
-  .backdrop-filter {
-    -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
-    backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
-  }
-  .transition {
-    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to, opacity, box-shadow, transform, translate, scale, rotate, filter, -webkit-backdrop-filter, backdrop-filter;
-    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
-    transition-duration: var(--tw-duration, var(--default-transition-duration));
-  }
   .transition-transform {
     transition-property: transform, translate, scale, rotate;
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
     transition-duration: var(--tw-duration, var(--default-transition-duration));
-  }
-  .ease-in {
-    --tw-ease: var(--ease-in);
-    transition-timing-function: var(--ease-in);
   }
   .outline-none {
     --tw-outline-style: none;
@@ -1337,6 +1317,13 @@
     &:hover {
       @media (hover: hover) {
         scale: 1.1;
+      }
+    }
+  }
+  .hover\:scale-\[1\.05\] {
+    &:hover {
+      @media (hover: hover) {
+        scale: 1.05;
       }
     }
   }
@@ -1459,6 +1446,13 @@
       }
     }
   }
+  .hover\:text-light-primaryColor {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-light-primaryColor);
+      }
+    }
+  }
   .hover\:text-light-secondaryColor {
     &:hover {
       @media (hover: hover) {
@@ -1481,6 +1475,11 @@
   .md\:left-\[30px\] {
     @media (width >= 48rem) {
       left: 30px;
+    }
+  }
+  .md\:mx-\[1px\] {
+    @media (width >= 48rem) {
+      margin-inline: 1px;
     }
   }
   .md\:mx-auto {
@@ -1588,6 +1587,16 @@
       width: 700px;
     }
   }
+  .md\:max-w-\[400px\] {
+    @media (width >= 48rem) {
+      max-width: 400px;
+    }
+  }
+  .md\:max-w-\[450px\] {
+    @media (width >= 48rem) {
+      max-width: 450px;
+    }
+  }
   .md\:max-w-\[500px\] {
     @media (width >= 48rem) {
       max-width: 500px;
@@ -1598,14 +1607,29 @@
       min-width: 500px;
     }
   }
+  .md\:columns-2 {
+    @media (width >= 48rem) {
+      columns: 2;
+    }
+  }
   .md\:columns-3 {
     @media (width >= 48rem) {
       columns: 3;
     }
   }
+  .md\:break-inside-avoid {
+    @media (width >= 48rem) {
+      break-inside: avoid;
+    }
+  }
   .md\:flex-row {
     @media (width >= 48rem) {
       flex-direction: row;
+    }
+  }
+  .md\:flex-wrap {
+    @media (width >= 48rem) {
+      flex-wrap: wrap;
     }
   }
   .md\:place-content-center {
@@ -1652,6 +1676,11 @@
   .lg\:max-w-\[400px\] {
     @media (width >= 64rem) {
       max-width: 400px;
+    }
+  }
+  .lg\:columns-3 {
+    @media (width >= 64rem) {
+      columns: 3;
     }
   }
   .lg\:flex-row {
@@ -1900,47 +1929,6 @@
   inherits: false;
   initial-value: 0 0 #0000;
 }
-@property --tw-outline-style {
-  syntax: "*";
-  inherits: false;
-  initial-value: solid;
-}
-@property --tw-blur {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-brightness {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-contrast {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-grayscale {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-hue-rotate {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-invert {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-opacity {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-saturate {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-sepia {
-  syntax: "*";
-  inherits: false;
-}
 @property --tw-backdrop-blur {
   syntax: "*";
   inherits: false;
@@ -1974,10 +1962,6 @@
   inherits: false;
 }
 @property --tw-backdrop-sepia {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-ease {
   syntax: "*";
   inherits: false;
 }

@@ -3,12 +3,23 @@
 @using DomainLayer.Constants
 @using DomainLayer.Helpers
 @inject NavigationManager NavigationManager
-<div onclick="@(()=>NavigationManager.NavigateTo($"/Post/{Post.Id}"))" class="w-[90%] md:w-[345px] min-h-[50px] bg-dark-primaryColor mb-[10px] rounded-lg shadow-lg p-[10px] box-border cursor-pointer hover:scale-[1.1]">
-    <p class="text-light-primaryColor text-[16px] mb-[10px]">@Post.Content</p>
+
+<div onclick="@(()=>NavigationManager.NavigateTo($"/Post/{Post.Id}"))" class="w-[90%] md:break-inside-avoid min-h-[50px] bg-dark-primaryColor rounded-lg shadow-lg p-[10px] box-border cursor-pointer hover:scale-[1.05]">
     
+    <div class="flex mt-[10px] w-full justify-between">
+        <div class="flex text-light-primaryColor">
+            <img src="@Post.UserImg" alt="@Post.CreatedByUsername" class="w-[40px] h-[40px] rounded-full">
+            <div class="ml-[10px]">
+                <p class="text-[16px] font-bold hover:text-light-primaryColor"><span class="text-gray-400">&#64;</span>@Post.CreatedByUsername</p>
+            </div>
+        </div>
+        <p class="text-light-primaryColor/80 text-[14px] ml-[5px]">@Helpers.GetUsersLocalTime(Post.CreatedAtUtc, Consts.DateFormats.DateTimeFormat)</p>
+    </div>
+    
+    <p class="text-light-primaryColor text-[16px] mb-[10px] ml-5 mt-[10px]">@Post.Content</p>
     @if (FirstImageUrl != null)
     {
-        <div class="relative w-full max-w-[300px] mx-auto max-h-[100px] overflow-hidden rounded-md">
+        <div class="relative w-full max-w-[90%] mx-auto overflow-hidden rounded-md">
             <img src="@FirstImageUrl" alt="@Post.CreatedByUsername" class="w-full h-auto max-h-[150px] object-cover object-center" />
             @if (RemainingImages > 0)
             {
@@ -18,20 +29,15 @@
             }
         </div>
     }
-
-    <div class="flex mt-[10px] w-full justify-between">
-        <div class="flex text-light-primaryColor">
-            <img src="@Post.UserImg" alt="@Post.CreatedByUsername" class="w-[20px] h-[20px] rounded-full">
-            <div class="ml-[5px]">
-                <FaIcon Icon="@FaIcons.Heart" />
-                <span>@Post.LikeCount</span>
-            </div>
-            <div class="ml-[5px]">
-                <FaIcon Icon="@FaIcons.Message" />
-                <span>@Post.CommentCount</span>
-            </div>
+    <div class="flex text-light-primaryColor/80">
+        <div>
+            <FaIcon Icon="@FaIcons.Heart" />
+            <span>@Post.LikeCount</span>
         </div>
-        <p class="text-light-primaryColor/80 text-[14px] ml-[5px]">@Helpers.GetUsersLocalTime(Post.CreatedAtUtc)</p>
+        <div class="ml-[5px]">
+            <FaIcon Icon="@FaIcons.Message" />
+            <span>@Post.CommentCount</span>
+        </div>
     </div>
 </div>
 
