@@ -3,6 +3,7 @@ using System.Security.Claims;
 using ApplicationLayer.APIServices;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
+using DomainLayer.Constants;
 using DomainLayer.Entities.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -46,20 +47,19 @@ public class AuthenticationController(IAuthenticateService authenticateService,
     {
         var authorizationHeader = Request.Headers["Authorization"].ToString();
         if(string.IsNullOrWhiteSpace(authorizationHeader))
-            return Unauthorized("No refresh token");
+            return Unauthorized(new AuthResponse(false,"","","error refreshing token"));
         var token = "";
         if (!string.IsNullOrEmpty(authorizationHeader) && authorizationHeader.StartsWith("Bearer "))
         {
             token = authorizationHeader.Substring("Bearer ".Length).Trim();
         }
-
-        var name = User?.Identity?.Name;
+        var res = tokenService.ValidateToken(token);
+        var name = res?.ClaimsPrincipal?.Claims?.FirstOrDefault(x => x.Type == Consts.ClaimTypes.UserName);
         if(name == null)
-            return Unauthorized("Could not retrieve user");
-        var response = await tokenService.RefreshUserTokens(name,token);
+            return Unauthorized(new AuthResponse(false,"","","error refreshing token"));
+        var response = await tokenService.RefreshUserTokens(name.Value,token);
         if(response.Flag)
             return Ok(response);
         return BadRequest(response);
-
     }
 }
