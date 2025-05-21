@@ -5,6 +5,7 @@ using ApplicationLayer.APIServices;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using CodeConnect.WebAPI.Endpoints.AuthenticationEndpoint;
+using DomainLayer.Constants;
 using DomainLayer.Entities.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -185,7 +186,7 @@ public class AuthControllerTests
         const string username = "testuser";
         var httpContext = new DefaultHttpContext();
         httpContext.Request.Headers.Authorization = $"Bearer {token}";
-        var claims = new Claim[] { new Claim(ClaimTypes.Name, username) };
+        var claims = new Claim[] { new Claim(Consts.ClaimTypes.UserName, username) };
         var identity = new ClaimsIdentity(claims, "TestAuthentication");
         var claimsPrincipal = new ClaimsPrincipal(identity);
         httpContext.User = claimsPrincipal;
@@ -197,7 +198,7 @@ public class AuthControllerTests
 
         var expectedResponse = new AuthResponse(true, "","","");
         _tokenServiceMock.Setup(x => x.RefreshUserTokens(username, token)).ReturnsAsync(expectedResponse);
-
+        _tokenServiceMock.Setup(x => x.ValidateToken(token)).Returns(new ClaimsPrincipalResponse(true, claimsPrincipal));
         // Act
         var result = await authControllerWithContext.RefreshToken();
 
