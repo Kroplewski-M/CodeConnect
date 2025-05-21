@@ -81,7 +81,7 @@ public class TokenService(IOptions<JwtSettings> jwtSettings,ApplicationDbContext
                 {
                     return new AuthResponse(false,"","","Error occurred authenticating refresh token");
                 }
-                return new AuthResponse(true, token, refreshToken, "success");
+                return new AuthResponse(true, token, newRefreshToken, "success");
             }
         }
         return new AuthResponse(false,"","","Error occurred authenticating refresh token");

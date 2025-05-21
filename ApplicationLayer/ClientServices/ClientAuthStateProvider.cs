@@ -23,12 +23,15 @@ public class ClientAuthStateProvider(HttpClient httpClient,
             {
                 return CreateAuthenticationStateFromToken(token);
             }
+            var refresh = await localStorageService.GetItemAsync<string>(Consts.Tokens.RefreshToken);
+            var isValidRefresh = await IsTokenValid(refresh);
+            return isValidRefresh ?  CreateAuthenticationStateFromToken(refresh) : new AuthenticationState(new ClaimsPrincipal());
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
+            return new AuthenticationState(new ClaimsPrincipal());
         }
-        return new AuthenticationState(new ClaimsPrincipal());
     }
     public void NotifyStateChanged()
     {
