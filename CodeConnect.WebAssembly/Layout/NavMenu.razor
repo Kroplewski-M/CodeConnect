@@ -9,8 +9,8 @@
 <AuthorizeView>
     <Authorized>
         @*Open nav button*@
-        <div class="@(_openNav ? "hidden" : "left-[10px]") xl:hidden translate-x-full xl:-translate-x-0 transition-transform fixed top-5 z-[300] hover:bg-gray-100/10 rounded-full">
-            <i class="fa-bars text-light-secondaryColor dark:text-dark-secondaryColor fa-solid fa-2xl cursor-pointer" @onclick="() => _openNav = true"></i>
+        <div class="@(_openNav ? "hidden" : "left-[10px]") bg-dark-primaryColor/70 rounded-full p-[10px] xl:hidden translate-x-full xl:-translate-x-0 transition-transform fixed top-5 z-[300] hover:bg-gray-100/10 rounded-full">
+            <i class="fa-bars text-light-secondaryColor dark:text-dark-secondaryColor fa-solid fa-2xl cursor-pointer" onclick="@((MouseEventArgs e) => _openNav = true)"></i>
         </div>
         @*Blur*@
         <div class="fixed w-full h-full z-[50] backdrop-blur-sm md:hidden @(_openNav ? "" : "hidden")"></div>
@@ -18,43 +18,43 @@
         <aside class="sm:w-[250px] w-[80%] fixed top-0 left-0 z-[200] h-screen transition-transform @(_openNav ? "" : "-translate-x-full xl:translate-x-0")" aria-label="Sidebar">
             @*Close nav button*@
             <div class="@(_openNav ? "" : "hidden") xl:hidden absolute top-5 right-10 z-[300] hover:bg-gray-100/10 rounded-full transform translate-x-1/2">
-                <i class="fa-xmark text-light-primaryColor dark:bg-text-supportColor/90 fa-solid fa-2xl cursor-pointer" @onclick="() => _openNav = false"></i>
+                <i class="fa-xmark text-light-primaryColor dark:bg-text-supportColor/90 fa-solid fa-2xl cursor-pointer" onclick="@((MouseEventArgs e) => _openNav = false)"></i>
             </div>
 
             <div class="h-full px-3 py-4 overflow-y-auto bg-light-secondaryColor dark:bg-dark-secondaryColor">
-                <a href="/MyFeed" class="flex items-center p-2 rounded-lg  group mb-5">
+                <buttin onclick="@(() => NavigateAndCloseNav("/"))" class="cursor-pointer flex items-center p-2 rounded-lg group mb-5">
                     <span class="ms-3 text-light-primaryColor dark:bg-text-supportColor font-bold text-[30px]">&lt;Code Connect/&gt;</span>
-                </a>
+                </buttin>
                 <hr class="mb-5 text-light-primaryColor"/>
                 <ul class="space-y-2 font-medium">
                     <li>
-                        <a href="/MyFeed" class="flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100/10 group mb-5">
+                        <button onclick="@(() => NavigateAndCloseNav("/MyFeed"))"  class="cursor-pointer flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100/10 group mb-5">
                             <FaIcon Icon="@FaIcons.House" Size="@FaSize.Large" ExtraCss="text-light-primaryColor w-[24px]"/>
                             <span class="ms-3 text-light-primaryColor dark:text-dark-supportColor">Home</span>
-                        </a>
+                        </button>
                     </li>
                     <li>
-                        <a href="/Notifications" class="flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100/10 group mb-5">
+                        <button onclick="@(() => NavigateAndCloseNav("/Notifications"))"  class="cursor-pointer flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100/10 group mb-5">
                             <FaIcon Icon="@FaIcons.Bell" Size="@FaSize.Large" ExtraCss="text-light-primaryColor w-[24px]"/>
                             <span class="ms-3 text-light-primaryColor dark:text-dark-supportColor">Notifications</span>
-                        </a>
+                        </button>
                     </li>
                     <li>
-                        <a href="/Connect" class="flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100/10 group mb-5">
+                        <button onclick="@(() => NavigateAndCloseNav("/Connect"))"  class="cursor-pointer flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100/10 group mb-5">
                             <FaIcon Icon="@FaIcons.UserGroup" Size="@FaSize.Large" ExtraCss="text-light-primaryColor w-[24px]"/>
                             <span class="ms-3 text-light-primaryColor dark:text-dark-supportColor">Connect</span>
-                        </a>
+                        </button>
                     </li>
                     <li>
-                        <a href="/Messages" class="flex items-center p-2 dark:text-white hover:bg-gray-100/10 rounded-lg group">
+                        <button onclick="@(() => NavigateAndCloseNav("/Messages"))"  class="cursor-pointer flex items-center p-2 dark:text-white hover:bg-gray-100/10 rounded-lg group">
                             <FaIcon Icon="@FaIcons.Message" Size="@FaSize.Large" ExtraCss="text-light-primaryColor w-[24px]"/>
                             <span class="ms-3 text-light-primaryColor dark:text-dark-supportColor">Messages</span>
-                        </a>
+                        </button>
                     </li>
                 </ul>
                 @if (_userDetails != null)
                 {
-                    <div class="absolute bottom-[30px] left-[10px] hover:bg-gray-100/10 cursor-pointer rounded-md p-2 w-[90%] @(LoadingUserDetails ? "animate-pulse bg-gray-100/50" : "")" onclick="@(() => NavigationManager.NavigateTo($"/Profile/{_userDetails.UserName}"))">
+                    <div class="absolute bottom-[30px] left-[10px] hover:bg-gray-100/10 cursor-pointer rounded-md p-2 w-[90%] @(LoadingUserDetails ? "animate-pulse bg-gray-100/50" : "")" onclick="@(() => NavigateAndCloseNav($"/Profile/{_userDetails.UserName}"))">
                         @if (!LoadingUserDetails)
                         {
                             <img class="w-10 ms-3 h-10 rounded-full mb-3" src="@_userDetails.ProfileImg" alt="Rounded avatar">
@@ -89,13 +89,18 @@
 
     private int FollowerCount { get; set; } = 0;
     private int FollowingsCount { get; set; } = 0;
-
+    
     protected override void OnInitialized()
     {
         AuthenticateServiceClient.OnChange +=  OnAuthenticationStateChanged;
         OnAuthenticationStateChanged();
     }
 
+    private void NavigateAndCloseNav(string url)
+    {
+        NavigationManager.NavigateTo(url);
+        _openNav = false;
+    }
     private bool LoadingUserDetails { get; set; } = true;
     private void OnAuthenticationStateChanged()
     {

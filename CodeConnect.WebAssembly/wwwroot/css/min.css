@@ -1008,6 +1008,9 @@
   .bg-dark-primaryColor {
     background-color: var(--color-dark-primaryColor);
   }
+  .bg-dark-primaryColor\/70 {
+    background-color: color-mix(in oklab, var(--color-dark-primaryColor) 70%, transparent);
+  }
   .bg-dark-primaryColor\/90 {
     background-color: color-mix(in oklab, var(--color-dark-primaryColor) 90%, transparent);
   }
@@ -1037,6 +1040,9 @@
   }
   .bg-light-primaryColor\/60 {
     background-color: color-mix(in oklab, var(--color-light-primaryColor) 60%, transparent);
+  }
+  .bg-light-primaryColor\/70 {
+    background-color: color-mix(in oklab, var(--color-light-primaryColor) 70%, transparent);
   }
   .bg-light-primaryColor\/80 {
     background-color: color-mix(in oklab, var(--color-light-primaryColor) 80%, transparent);
