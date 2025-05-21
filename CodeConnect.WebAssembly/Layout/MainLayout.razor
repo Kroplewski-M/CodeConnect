@@ -8,6 +8,7 @@
 @inject NotificationsService NotificationsService
 @inject IJSRuntime Js
 @inject ILocalStorageService LocalStorageService
+@implements IDisposable
 
 <div class="bg-light-primaryColor dark:bg-dark-primaryColor min-h-screen flex @(!IsNonNavPage()?"flex-row":"flex-col") pb-7">
     @if (!IsNonNavPage())
