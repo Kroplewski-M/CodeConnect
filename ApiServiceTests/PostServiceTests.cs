@@ -123,7 +123,7 @@ public class PostServiceTests
         var emptyUsername = "";
 
         // Act
-        var result = await _postService.GetUserPosts(emptyUsername);
+        var result = await _postService.GetUserPosts(emptyUsername,0,10);
 
         // Assert
         Assert.NotNull(result);
@@ -137,7 +137,7 @@ public class PostServiceTests
         string? nullUsername = null;
 
         // Act
-        var result = await _postService.GetUserPosts(nullUsername!);
+        var result = await _postService.GetUserPosts(nullUsername!,0,10);
 
         // Assert
         Assert.NotNull(result);
@@ -152,7 +152,7 @@ public class PostServiceTests
         _userManager.Setup(x => x.FindByNameAsync(username)).ReturnsAsync((ApplicationUser?)null);
 
         // Act
-        var result = await _postService.GetUserPosts(username);
+        var result = await _postService.GetUserPosts(username, 0, 10);
 
         // Assert
         Assert.NotNull(result);
@@ -167,7 +167,7 @@ public class PostServiceTests
         _userManager.Setup(x => x.FindByNameAsync(user.UserName)).ReturnsAsync(user);
         
         // Act
-        var result = await _postService.GetUserPosts(user.UserName);
+        var result = await _postService.GetUserPosts(user.UserName, 0, 10);
 
         // Assert
         Assert.NotNull(result);
@@ -198,7 +198,7 @@ public class PostServiceTests
         await _context.SaveChangesAsync();
 
         // Act
-        var result = await _postService.GetUserPosts(user.UserName);
+        var result = await _postService.GetUserPosts(user.UserName, 0, 10);
 
         // Assert
         Assert.NotNull(result);

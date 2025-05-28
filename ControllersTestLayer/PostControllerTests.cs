@@ -118,14 +118,14 @@ public class PostControllerTests
         //Arrange
         var username = "";
         //Act
-        var result = await _postController.GetUserPosts(username);
+        var result = await _postController.GetUserPosts(username, 0, 10);
         
         // Assert
         var actionResult = Assert.IsType<ActionResult<List<PostBasicDto>>>(result);
         var badResult = Assert.IsType<BadRequestObjectResult>(actionResult.Result);
         var returnedPosts = Assert.IsType<List<PostBasicDto>>(badResult.Value);
         Assert.Empty(returnedPosts);
-        _mockPostService.Verify(x => x.GetUserPosts(username), Times.Never);
+        _mockPostService.Verify(x => x.GetUserPosts(username, It.IsAny<int>(), It.IsAny<int>()), Times.Never);
     }
     [Fact]
     public async Task GetUsersPosts_CorrectUsername_ShouldReturnPosts()
@@ -138,17 +138,17 @@ public class PostControllerTests
             new PostBasicDto(2, "", "", "",0, 0, [], DateTime.Now),
         };
 
-        _mockPostService.Setup(x => x.GetUserPosts(username)).ReturnsAsync(expectedPosts);
+        _mockPostService.Setup(x => x.GetUserPosts(username,0, 10)).ReturnsAsync(expectedPosts);
         _userManagerMock.Setup(x => x.FindByNameAsync(username)).ReturnsAsync(new ApplicationUser());
         // Act
-        var result = await _postController.GetUserPosts(username);
+        var result = await _postController.GetUserPosts(username, 0, 10);
 
         // Assert
         var actionResult = Assert.IsType<ActionResult<List<PostBasicDto>>>(result);
         var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
         var returnedPosts = Assert.IsType<List<PostBasicDto>>(okResult.Value);
         Assert.Equal(2, returnedPosts.Count);
-        _mockPostService.Verify(x => x.GetUserPosts(username), Times.Once);
+        _mockPostService.Verify(x => x.GetUserPosts(username, It.IsAny<int>(), It.IsAny<int>()), Times.Once);
     }
     
 }

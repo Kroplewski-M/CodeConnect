@@ -29,9 +29,9 @@ public class PostServiceClient(HttpClient httpClient) : IPostService
         throw new NotImplementedException();
     }
 
-    public async Task<List<PostBasicDto>> GetUserPosts(string username)
+    public async Task<List<PostBasicDto>> GetUserPosts(string username, int skip, int take)
     {
-        var response = await httpClient.GetFromJsonAsync<List<PostBasicDto>>($"api/Post/GetUserPosts?username={username}");
+        var response = await httpClient.GetFromJsonAsync<List<PostBasicDto>>($"api/Post/GetUserPosts?username={username}&Skip={skip}&Take={take}");
         return response ?? new List<PostBasicDto>();
     }
 }

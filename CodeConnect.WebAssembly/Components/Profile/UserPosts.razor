@@ -1,31 +1,14 @@
-@using CodeConnect.WebAssembly.Components.SVGs
 @using CodeConnect.WebAssembly.Components.Posts
+@using CodeConnect.WebAssembly.Components.General
 @inherits UserPostsBase
 
 <p class="text-4xl font-bold text-dark-supportColor">Recent Posts</p>
-@if (Loading)
-{
-    <p>loading posts...</p>
-}
-else
-{
-    if (Posts.Any())
-    {
-        <div class="columns-1 md:columns-2 gap-2 mt-5 space-y-2">
-            @foreach (var post in Posts)
-            {
-                <PostBasic Post="post" />
-            }
-        </div>
-    }
-    else
-    {
-        <div class="mt-5 text-center text-dark-supportColor">
-            <p>...Winds howling</p>
-            <div class="w-[100px] mx-auto">
-                <EmptySVG Width="100" Height="100" Color="FFFFFF"></EmptySVG>
-            </div>
-            <p>man its empty in here</p>
-        </div>
-    }
-}
+
+<LazyList Items="Posts" OnBottomReached="LoadMorePosts" StartIndex="0" Take="20" ParentClasses="columns-1 md:columns-2 gap-2 mt-5 space-y-2">
+    <ListTemplate Context="post" >
+        <PostBasic Post="post" />
+    </ListTemplate>
+    <EmptyTemplate>
+        <p>No posts</p>       
+    </EmptyTemplate>
+</LazyList>

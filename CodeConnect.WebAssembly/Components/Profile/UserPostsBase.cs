@@ -13,11 +13,13 @@ public class UserPostsBase : ComponentBase
     public List<PostBasicDto> Posts { get; set; } = new List<PostBasicDto>();
     public bool Loading { get; set; } = true;
 
-    protected override async Task OnParametersSetAsync()
+    protected async Task LoadMorePosts((int,int)range)
     {
-        Loading = true;
-        Posts = await PostService.GetUserPosts(Username);
-        Loading = false;
-        StateHasChanged();
+        var (startIndex, take) = range;
+        var more = await PostService.GetUserPosts(Username, skip: startIndex, take: take);
+        if (more?.Any() == true)
+        {
+            Posts.AddRange(more);
+        }
     }
 }

@@ -66,7 +66,7 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         throw new NotImplementedException();
     }
 
-    public async Task<List<PostBasicDto>> GetUserPosts(string username)
+    public async Task<List<PostBasicDto>> GetUserPosts(string username, int skip, int take)
     {
         if (string.IsNullOrWhiteSpace(username))
             return new List<PostBasicDto>();
@@ -79,6 +79,8 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
             .Include(x => x.CreatedByUser)
             .Include(x => x.Files)
             .OrderByDescending(x => x.CreatedAt)
+            .Skip(skip)
+            .Take(take)
             .Select(x => new
             {
                 x.Id,
