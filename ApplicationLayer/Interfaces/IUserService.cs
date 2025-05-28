@@ -10,6 +10,6 @@ public interface IUserService
     public Task<ServiceResponse> UpdateUserDetails(EditProfileForm editProfileForm);
     public Task<UserDetails?> GetUserDetails(string username);
     public Task<UserInterestsDto> GetUserInterests(string username);
-    public Task<ServiceResponse> UpdateUserInterests(string? username,List<TechInterestsDto>interests);
+    public Task<ServiceResponse> UpdateUserInterests(UpdateTechInterestsDto interests);
     public Task<List<TechInterestsDto>> GetAllInterests();
 }

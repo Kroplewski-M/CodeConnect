@@ -73,18 +73,18 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
         return new UserInterestsDto(false,"user not found", null);
     }
 
-    public async Task<ServiceResponse> UpdateUserInterests(string? username, List<TechInterestsDto> userInterests)
+    public async Task<ServiceResponse> UpdateUserInterests(UpdateTechInterestsDto interests)
     {
-        if (string.IsNullOrEmpty(username))
+        if (string.IsNullOrEmpty(interests.Username))
             return new ServiceResponse(false, "user not found");
-        var user = await userManager.FindByNameAsync(username ?? "");
+        var user = await userManager.FindByNameAsync(interests.Username ?? "");
         if (user != null)
         {
-            var interests = context.UserInterests.Include(x => x.TechInterest)
+            var oldInterests = context.UserInterests.Include(x => x.TechInterest)
                 .Where(x => x.UserId == user.Id).ToList();
-            if(interests.Count > 0)
-                context.UserInterests.RemoveRange(interests);
-            var newInterests = userInterests.Select(x => new UserInterests
+            if(oldInterests.Count > 0)
+                context.UserInterests.RemoveRange(oldInterests);
+            var newInterests = interests.Interests.Select(x => new UserInterests
             {
                 UserId = user.Id,
                 TechInterestId = x.Id,

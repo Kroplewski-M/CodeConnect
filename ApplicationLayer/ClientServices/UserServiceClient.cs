@@ -46,7 +46,7 @@ public class UserServiceClient(HttpClient httpClient,ILocalStorageService localS
         return new UserInterestsDto(false, "failed to fetch interests", null);
     }
 
-    public async Task<ServiceResponse> UpdateUserInterests(string? username, List<TechInterestsDto> interests)
+    public async Task<ServiceResponse> UpdateUserInterests(UpdateTechInterestsDto interests)
     {
         var response = await httpClient.PutAsJsonAsync("api/User/UpdateUserInterests",interests);
         var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();

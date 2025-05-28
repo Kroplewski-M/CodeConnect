@@ -2,6 +2,7 @@ using ApplicationLayer;
 using ApplicationLayer.APIServices;
 using ApplicationLayer.ClientServices;
 using ApplicationLayer.DTO_s;
+using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
 using Azure;
 using Microsoft.AspNetCore.Components;
@@ -10,15 +11,11 @@ namespace CodeConnect.WebAssembly.Components.Profile;
 
 public class EditUserInterestsBase : ComponentBase
 {
-    [Inject]
-    public required IUserService UserService { get; set; }
-    [Parameter]
-    public EventCallback Cancel { get; set; }
-
+    [Inject] public required IUserService UserService { get; set; }
+    [Parameter] public EventCallback Cancel { get; set; } 
     [Parameter] public List<TechInterestsDto>? CurrentUserInterests { get; set; }
-    
-    [Inject]
-    public required NotificationsService NotificationsService { get; set; }
+    [CascadingParameter] public required string Username { get; set; }
+    [Inject] public required NotificationsService NotificationsService { get; set; }
 
     protected List<TechInterestsDto> AllTechInterests { get; set; } = new List<TechInterestsDto>();
     protected List<string> TechTypes { get; set; } = new();
@@ -86,7 +83,7 @@ public class EditUserInterestsBase : ComponentBase
                 new ApplicationLayer.Notification("Updating interests", NotificationType.Info));
             if (CurrentUserInterests != null)
             {
-                var result = await UserService.UpdateUserInterests("", CurrentUserInterests);
+                var result = await UserService.UpdateUserInterests(new UpdateTechInterestsDto(Username, CurrentUserInterests));
                 if (result.Flag)
                 {
                     NotificationsService.PushNotification(

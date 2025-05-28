@@ -124,6 +124,10 @@
             </div>
             <CascadingValue Value="Username">
                 <ProfileDetails />
+                @if (EditUserInterests)
+                {
+                    <EditUserInterests CurrentUserInterests="UserInterests" Cancel="ToggleEditUserInterests" />
+                }
             </CascadingValue>
             @if (ShowConfirmLogout)
             {
@@ -137,10 +141,7 @@
             {
                 <UpdateImage UpdateOfImageType="UpdateImageType" Cancel="ToggleEditImage"/> 
             }
-            @if (EditUserInterests)
-            {
-                <EditUserInterests CurrentUserInterests="UserInterests" Cancel="ToggleEditUserInterests" />
-            }
+ 
         </Authorized>
     </AuthorizeView>
 }

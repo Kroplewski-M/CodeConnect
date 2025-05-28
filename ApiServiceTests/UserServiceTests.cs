@@ -1,5 +1,6 @@
 using ApplicationLayer.APIServices;
 using ApplicationLayer.DTO_s;
+using ApplicationLayer.DTO_s.User;
 using DomainLayer.Constants;
 using DomainLayer.DbEnts;
 using DomainLayer.Entities;
@@ -202,7 +203,7 @@ public class UserServiceTests
         await _context.SaveChangesAsync();
 
         // Act
-        var result = await _userService.UpdateUserInterests(username, interestsDto);
+        var result = await _userService.UpdateUserInterests(new UpdateTechInterestsDto(username,interestsDto));
 
         // Assert
         Assert.True(result.Flag);
@@ -216,17 +217,17 @@ public class UserServiceTests
         _userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync((ApplicationUser)null!);
 
         // Act
-        var result = await _userService.UpdateUserInterests("unknown", new());
+        var result = await _userService.UpdateUserInterests(new UpdateTechInterestsDto("", new List<TechInterestsDto>()));
 
         // Assert
         Assert.False(result.Flag);
-        Assert.Equal("User not found", result.Message);
+        Assert.Equal("user not found", result.Message);
     }
     [Fact]
     public async Task UpdateUserInterests_EmptyUsername_ReturnsFailure()
     {
         // Act
-        var result = await _userService.UpdateUserInterests("", new());
+        var result = await _userService.UpdateUserInterests(new UpdateTechInterestsDto("",new List<TechInterestsDto>()));
 
         // Assert
         Assert.False(result.Flag);
@@ -247,7 +248,7 @@ public class UserServiceTests
         await _context.SaveChangesAsync();
 
         // Act
-        var result = await _userService.UpdateUserInterests(username, new List<TechInterestsDto>());
+        var result = await _userService.UpdateUserInterests(new UpdateTechInterestsDto(username,new List<TechInterestsDto>()));
 
         // Assert
         Assert.True(result.Flag);
