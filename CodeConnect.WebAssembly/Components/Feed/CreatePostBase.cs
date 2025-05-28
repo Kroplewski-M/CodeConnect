@@ -1,6 +1,9 @@
 using ApplicationLayer;
 using ApplicationLayer.ClientServices;
 using ApplicationLayer.DTO_s;
+using ApplicationLayer.DTO_s.Images;
+using ApplicationLayer.DTO_s.Post;
+using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;

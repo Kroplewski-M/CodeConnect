@@ -1,5 +1,7 @@
 using System.Security.Claims;
 using ApplicationLayer.DTO_s;
+using ApplicationLayer.DTO_s.Images;
+using ApplicationLayer.DTO_s.Post;
 using ApplicationLayer.Interfaces;
 using CodeConnect.WebAPI.Endpoints.PostEndpoint;
 using DomainLayer.Constants;

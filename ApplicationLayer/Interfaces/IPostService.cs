@@ -1,4 +1,5 @@
 using ApplicationLayer.DTO_s;
+using ApplicationLayer.DTO_s.Post;
 using DomainLayer.Entities.Posts;
 
 namespace ApplicationLayer.Interfaces;

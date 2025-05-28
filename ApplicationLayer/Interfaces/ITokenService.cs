@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using ApplicationLayer.DTO_s;
+using ApplicationLayer.DTO_s.User;
 
 namespace ApplicationLayer.Interfaces;
 

@@ -1,4 +1,5 @@
 using ApplicationLayer.DTO_s;
+using ApplicationLayer.DTO_s.Images;
 using Azure.Storage.Blobs;
 using DomainLayer.Constants;
 

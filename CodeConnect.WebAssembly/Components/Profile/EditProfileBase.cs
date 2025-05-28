@@ -1,5 +1,6 @@
 using ApplicationLayer;
 using ApplicationLayer.DTO_s;
+using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Entities;
 using FluentValidation.Results;

@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using ApplicationLayer.DTO_s;
+using ApplicationLayer.DTO_s.Post;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Entities.Posts;
 

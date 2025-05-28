@@ -1,5 +1,7 @@
 using ApplicationLayer.APIServices;
 using ApplicationLayer.DTO_s;
+using ApplicationLayer.DTO_s.Images;
+using ApplicationLayer.DTO_s.Post;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
 using DomainLayer.Entities.Auth;

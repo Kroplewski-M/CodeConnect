@@ -1,6 +1,7 @@
 using System.Net;
 using System.Security.Claims;
 using ApplicationLayer.DTO_s;
+using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
 using CodeConnect.WebAPI.Endpoints.UserEndpoint;
 using DomainLayer.Constants;

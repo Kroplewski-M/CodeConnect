@@ -1,5 +1,6 @@
 using ApplicationLayer.APIServices;
 using ApplicationLayer.DTO_s;
+using ApplicationLayer.DTO_s.Post;
 using ApplicationLayer.Interfaces;
 using Microsoft.AspNetCore.Components;
 

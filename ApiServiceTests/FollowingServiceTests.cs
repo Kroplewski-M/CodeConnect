@@ -1,5 +1,6 @@
 using ApplicationLayer.APIServices;
 using ApplicationLayer.DTO_s;
+using ApplicationLayer.DTO_s.User;
 using DomainLayer.Entities.Auth;
 using DomainLayer.Entities.User;
 using InfrastructureLayer;

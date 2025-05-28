@@ -1,4 +1,5 @@
 using ApplicationLayer.DTO_s;
+using ApplicationLayer.DTO_s.User;
 using DomainLayer.Entities;
 using DomainLayer.Entities.Auth;
 using Microsoft.AspNetCore.Components.Authorization;
