@@ -36,7 +36,7 @@ public class PostController(IPostService postService) : ControllerBase
 
     [HttpGet("GetPost")]
     [Authorize]
-    public async Task<ActionResult<PostDto?>> GetPost(int id)
+    public async Task<ActionResult<PostDto?>> GetPost(Guid id)
     {
         var post = await postService.GetPostById(id);
         if(post == null)

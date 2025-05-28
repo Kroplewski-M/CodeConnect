@@ -5,7 +5,7 @@ namespace CodeConnect.WebAssembly.Pages.Post;
 
 public class PostBase : ComponentBase
 {
-    [Parameter] public required int Id { get; set; }
+    [Parameter] public required Guid Id { get; set; }
     [Inject] public required IPostService PostService { get; set; }
     protected override async Task OnParametersSetAsync()
     {

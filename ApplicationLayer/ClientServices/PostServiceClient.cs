@@ -15,18 +15,18 @@ public class PostServiceClient(HttpClient httpClient) : IPostService
         return result ?? new ServiceResponse(false, "Failed to create post");
     }
 
-    public async Task<PostDto?> GetPostById(int id)
+    public async Task<PostDto?> GetPostById(Guid id)
     {
         var response = await httpClient.GetFromJsonAsync<PostDto?>($"api/Post/GetPost?id={id}");
         return response;
     }
 
-    public Task UpdatePost(int id)
+    public Task UpdatePost(Guid id)
     {
         throw new NotImplementedException();
     }
 
-    public Task DeletePost(int id)
+    public Task DeletePost(Guid id)
     {
         throw new NotImplementedException();
     }

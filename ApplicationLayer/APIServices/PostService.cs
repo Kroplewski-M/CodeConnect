@@ -53,7 +53,7 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         return new ServiceResponse(true,"Post created successfully");
     }
 
-    public async Task<PostDto?> GetPostById(int id)
+    public async Task<PostDto?> GetPostById(Guid id)
     {
         var post = await context.Posts.Where(x => x.Id == id)
             .Select(x=> new
@@ -73,12 +73,12 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         return null;
     }
 
-    public Task UpdatePost(int id)
+    public Task UpdatePost(Guid id)
     {
         throw new NotImplementedException();
     }
 
-    public Task DeletePost(int id)
+    public Task DeletePost(Guid id)
     {
         throw new NotImplementedException();
     }
