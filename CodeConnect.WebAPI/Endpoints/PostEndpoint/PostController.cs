@@ -33,6 +33,16 @@ public class PostController(IPostService postService) : ControllerBase
             return BadRequest(new List<PostBasicDto>());
         return Ok(await postService.GetUserPosts(userName, skip, take));
     }
+
+    [HttpGet("GetPost")]
+    [Authorize]
+    public async Task<ActionResult<PostDto?>> GetPost(int id)
+    {
+        var post = await postService.GetPostById(id);
+        if(post == null)
+            return NotFound();
+        return Ok(post);
+    }
     // [HttpPut("UpdatePost")]
     // [Authorize]
     // public async Task<IActionResult> UpdatePost()

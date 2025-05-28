@@ -53,9 +53,24 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         return new ServiceResponse(true,"Post created successfully");
     }
 
-    public Task<Post> GetPostById(int id)
+    public async Task<PostDto?> GetPostById(int id)
     {
-        throw new NotImplementedException();
+        var post = await context.Posts.Where(x => x.Id == id)
+            .Select(x=> new
+            {
+                x.Id,
+                x.Content,
+                FileNames = x.Files.Select(y=>y.FileName),
+                CreatedBy = x.CreatedByUser,
+                x.CreatedAt,
+                LikeCount = x.Likes.Count(),
+                CommentCount = x.Comments.Count(),
+            })
+            .FirstOrDefaultAsync();
+        if (post != null)
+            return new PostDto(post.Id, post.Content, post.FileNames?.ToList() ?? new List<string>(),
+                post.CreatedBy?.UserName ?? "", post.CreatedAt, post.LikeCount, post.CommentCount);
+        return null;
     }
 
     public Task UpdatePost(int id)
