@@ -58,7 +58,7 @@
                     <div class="absolute bottom-[30px] left-[10px] hover:bg-gray-100/10 cursor-pointer rounded-md p-2 w-[90%] @(LoadingUserDetails ? "animate-pulse bg-gray-100/50" : "")" onclick="@(() => NavigateAndCloseNav($"/Profile/{_userDetails.UserName}"))">
                         @if (!LoadingUserDetails)
                         {
-                            <img class="w-10 ms-3 h-10 rounded-full mb-3" src="@_userDetails.ProfileImg" alt="Rounded avatar">
+                            <img class="w-10 ms-3 h-10 rounded-full mb-3 object-cover" src="@_userDetails.ProfileImg" alt="Rounded avatar">
                             <p class="font-bold ms-3  text-light-primaryColor dark:text-dark-supportColor">@_userDetails.FirstName</p>
                             <p class="font-bold ms-3 mb-2 text-light-primaryColor dark:text-dark-supportColor">@_userDetails.LastName</p>
                             <p class="font-bold ms-3 mb-2 text-light-primaryColor dark:text-dark-supportColor">&#x40;@_userDetails.UserName</p>

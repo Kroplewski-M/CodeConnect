@@ -104,7 +104,7 @@
                                 }
                             </div>
                             <div class="flex flex-wrap w-[100%]">
-                                @if (UserInterests == null)
+                                @if (UserInterests == null || !UserInterests.Any())
                                 {
                                     <p class="dark:text-dark-supportColor/80 pt-[10px] text-light-primaryColor/90 ">This person has no interests... <br/> Boring.</p>
                                 }
