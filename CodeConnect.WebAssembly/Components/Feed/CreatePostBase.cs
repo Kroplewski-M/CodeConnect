@@ -39,7 +39,7 @@ public class CreatePostBase : ComponentBase
             if (user?.Identity is not null && user.Identity.IsAuthenticated)
             {
                 UserDetails = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
-                await InvokeAsync(StateHasChanged);
+                //await InvokeAsync(StateHasChanged);
             }
         }
     }

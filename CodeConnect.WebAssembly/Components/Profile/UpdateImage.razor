@@ -1,4 +1,5 @@
 @using DomainLayer.Constants
+@using CodeConnect.WebAssembly.Components.General
 @inherits UpdateImageBase
 <div class="top-0 left-0 fixed z-[300] w-[100vw] h-[100vh] backdrop-blur-md grid place-content-center">
     <div class="shadow-xl md:w-[500px] w-[90%]  mt-5 relative bg-dark-secondaryColor p-5 rounded-md -mt-16">
@@ -20,8 +21,12 @@
             </div>
         }
         <div class="w-[150px] h-[30px] mx-auto mt-5 mb-5">
-            <button class="rounded-md bg-gray-200 w-[100%] h-[100%] font-bold hover:bg-gray-300" @onclick="SaveImg">@(DisableImg?"Saving...":"Save")</button>
+            <button disabled="@Loading" @onclick="SaveImg" class="cursor-pointer rounded-md bg-gray-200 hover:bg-gray-300 w-[100%] h-[100%] font-bold ">
+                <FaIcon Icon="@(Loading ? "" : FaIcons.Save)" /> 
+                @(Loading ? "Saving..." : "Save")
+            </button>
         </div>
+
     </div>
 </div>
 
