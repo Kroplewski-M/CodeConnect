@@ -5,6 +5,8 @@ using ApplicationLayer.DTO_s.Images;
 using ApplicationLayer.DTO_s.Post;
 using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
+using DomainLayer.Constants;
+using DomainLayer.Helpers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
@@ -57,6 +59,20 @@ public class CreatePostBase : ComponentBase
     {
         LoadingImages = true;
         Base64Images.Clear();
+        if (e.GetMultipleFiles().Count() > 5)
+        {
+            NotificationsService.PushNotification(new Notification("You may only select upto 5 images", NotificationType.Error));
+            LoadingImages = false;
+            StateHasChanged();
+            return;
+        }
+        if (e.GetMultipleFiles().Any(x => x.Size > Consts.Base.UploadMaxFileSize))
+        {
+            NotificationsService.PushNotification(new Notification($"Max file size is {Helpers.BytesToMegabytes(Consts.Base.UploadMaxFileSize)}MB.", NotificationType.Error));
+            LoadingImages = false;
+            StateHasChanged();
+            return;
+        }
         foreach (var image in e.GetMultipleFiles().ToList())
         {
             Base64Images.Add(new Base64Dto(await ImageConvertor.ImageToBase64(image), Path.GetExtension(image.Name)));

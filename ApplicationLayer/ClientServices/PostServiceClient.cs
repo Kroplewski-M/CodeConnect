@@ -15,9 +15,9 @@ public class PostServiceClient(HttpClient httpClient) : IPostService
         return result ?? new ServiceResponse(false, "Failed to create post");
     }
 
-    public async Task<PostDto?> GetPostById(Guid id)
+    public async Task<PostBasicDto?> GetPostById(Guid id)
     {
-        var response = await httpClient.GetFromJsonAsync<PostDto?>($"api/Post/GetPost?id={id}");
+        var response = await httpClient.GetFromJsonAsync<PostBasicDto?>($"api/Post/GetPost?id={id}");
         return response;
     }
 

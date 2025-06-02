@@ -6,6 +6,7 @@ public static class Consts
     {
         public const string BaseUrl = "https://localhost:7124";
         public const int MaxFileSize = 10 * 1024 * 1024; //10MB
+        public const int UploadMaxFileSize = MaxFileSize / 2; //5MB
         public const string RegisterEndpoint = "/api/Authentication/RegisterUser";
         public const string LoginEndpoint = "/api/Authentication/LoginUser";
         public const string DateFormat = "MM/dd/yyyy";

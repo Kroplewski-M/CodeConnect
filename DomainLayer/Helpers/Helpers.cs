@@ -34,4 +34,8 @@ public static class Helpers
     {
         return dateTime.ToLocalTime().ToString(format);
     }
+    public static double BytesToMegabytes(long bytes)
+    {
+        return bytes / 1048576.0; // 1024 * 1024
+    }
 }

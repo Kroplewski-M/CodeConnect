@@ -53,7 +53,7 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         return new ServiceResponse(true,"Post created successfully");
     }
 
-    public async Task<PostDto?> GetPostById(Guid id)
+    public async Task<PostBasicDto?> GetPostById(Guid id)
     {
         var post = await context.Posts.Where(x => x.Id == id)
             .Select(x=> new
@@ -68,8 +68,16 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
             })
             .FirstOrDefaultAsync();
         if (post != null)
-            return new PostDto(post.Id, post.Content, post.FileNames?.ToList() ?? new List<string>(),
-                post.CreatedBy?.UserName ?? "", post.CreatedAt, post.LikeCount, post.CommentCount);
+            return new PostBasicDto(
+                post.Id,
+                post.Content,
+                post.CreatedBy?.UserName ?? "",
+                Helpers.GetUserImgUrl(post.CreatedBy?.ProfileImage, Consts.ImageType.ProfileImages),
+                post.CommentCount,
+                post.LikeCount,
+                post.FileNames.Select(y => Helpers.GetAzureImgUrl(Consts.ImageType.PostImages, y)).ToList(),
+                post.CreatedAt
+            );
         return null;
     }
 

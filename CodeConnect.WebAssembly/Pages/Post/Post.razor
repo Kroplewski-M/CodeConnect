@@ -1,8 +1,46 @@
 @page "/Post/{id:guid}"
+@using DomainLayer.Constants
+@using CodeConnect.WebAssembly.Components.General
+@using DomainLayer.Helpers
 @inherits PostBase
 
-<div class="w-[90vw] max-w-[1100px] bg-dark-secondaryColor rounded-md mx-auto pt-5 pb-10 mt-5 shadow-xl">
-    <div class="w-[95%] max-w-[1000px] md:mt-5 mx-auto relative rounded-md">
-        <p>Post : @Id</p>
+@if (Post == null && Loading)
+{
+    <div class="w-full h-full flex justify-center items-center text-light-primaryColor">
+        <FaIcon Icon="@FaIcons.Loading" />
     </div>
-</div>
+}
+else
+{
+    if (Post != null)
+    {
+        <div class="w-[90vw] max-w-[1100px] bg-dark-secondaryColor rounded-md mx-auto pt-5 pb-10 mt-5 shadow-xl relative">
+            <div class="flex mt-[10px] w-[95%] justify-between text-[18px]">
+                <div class="flex text-light-primaryColor ml-5">
+                    <img src="@Post.UserImg" alt="@Post.CreatedByUsername" class="w-[50px] h-[50px] rounded-full object-cover">
+                    <div class="ml-[10px] mt-[5px]">
+                        <p class="font-bold hover:text-light-primaryColor"><span class="text-gray-400">&#64;</span>@Post.CreatedByUsername</p>
+                    </div>
+                </div>
+                <p class="text-light-primaryColor/80 text-[14px] mr-5 mt-[5px]">@Helpers.GetUsersLocalTime(Post.CreatedAtUtc, Consts.DateFormats.DateTimeFormat)</p>
+            </div>
+            <div class="w-[95%] max-w-[1000px] md:mt-5 mx-auto relative rounded-md">
+                <p class="text-light-primaryColor text-[20px] font-bold">@Post.Content</p>
+            </div>
+            @if (Post.Images.Any())
+            {
+                <div class="flex flex-wrap mt-5">
+                    @for (int i = 0; i < Post.Images.Count; i++)
+                    {
+                        var currentIndex = i;
+                        <div key="@currentIndex" class="@(i == 0 ? "w-[90%] max-h-[400px] mx-auto" : "md:w-[20%] w-[80%] h-[200px] mx-auto mt-[5px]") relative">
+                            <img class="rounded-md w-[100%] h-[100%] object-cover relative" src="@Post.Images[i]"
+                                 alt="@Post.Images[i]">
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+}
+

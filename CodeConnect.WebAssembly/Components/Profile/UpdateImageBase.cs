@@ -5,6 +5,7 @@ using ApplicationLayer.ExtensionClasses;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
 using DomainLayer.Entities;
+using DomainLayer.Helpers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
@@ -28,6 +29,11 @@ public class UpdateImageBase : ComponentBase
         var img = e.GetMultipleFiles().FirstOrDefault();
         if (img == null)
             return;
+        if (img.Size > Consts.Base.UploadMaxFileSize)
+        {
+            NotificationsService.PushNotification(new ApplicationLayer.Notification($"Max file size is {Helpers.BytesToMegabytes(Consts.Base.UploadMaxFileSize)}MB.", NotificationType.Error));
+            return;
+        }
         Loading = true;
         SelectedImg.ImgBase64 = await ImageConvertor.ImageToBase64(img);
         SelectedImg.FileName = img.Name;
