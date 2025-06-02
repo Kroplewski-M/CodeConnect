@@ -22,7 +22,6 @@ public class UpdateImageBase : ComponentBase
     [Parameter] public EventCallback Cancel { get; set; }
 
     protected bool Loading { get; set; } = false;
-    protected bool DisableImg { get; set; } = false;
     public UpdateUserImageRequest SelectedImg { get; set; } = new UpdateUserImageRequest();
     protected async Task HandleFileSelection(InputFileChangeEventArgs e)
     {
@@ -35,27 +34,21 @@ public class UpdateImageBase : ComponentBase
         SelectedImg.TypeOfImage = UpdateOfImageType;
         Loading = false;
     }
-
+    protected bool LoadingUpdate { get; set; } = false;
     protected async Task SaveImg()
     {
         if (!string.IsNullOrWhiteSpace(SelectedImg.ImgBase64))
         {
             try
             {
-                DisableImg = true;
+                LoadingUpdate = true;
                 NotificationsService.PushNotification(new ApplicationLayer.Notification("Updating please wait...", NotificationType.Info));
                 SelectedImg.Username = await AuthenticateServiceClient.GetUsersUsername()!;
                 
                 var result = await UserImageService.UpdateUserImage(SelectedImg);
-                if (result.Flag)
-                {
-                    NotificationsService.PushNotification(new ApplicationLayer.Notification(result.Message, NotificationType.Success));
-                    StateHasChanged();
-                }
-                else
-                {
-                    NotificationsService.PushNotification(new ApplicationLayer.Notification(result.Message, NotificationType.Error));
-                }
+                NotificationsService.PushNotification(result.Flag
+                    ? new ApplicationLayer.Notification(result.Message, NotificationType.Success)
+                    : new ApplicationLayer.Notification(result.Message, NotificationType.Error));
             }
             catch
             {
@@ -63,7 +56,9 @@ public class UpdateImageBase : ComponentBase
             }
             finally
             {
-                DisableImg = false;
+                LoadingUpdate = false;
+                await Cancel.InvokeAsync(null);
+                StateHasChanged();
             }
             
         }

@@ -47,10 +47,7 @@
                     </div>
                 }
             </div>
-            <button disabled="@Saving" @onclick="UpdateInterests" class="mt-[10px] cursor-pointer rounded-md font-bold px-3 py-2 text-dark-primaryColor bg-gray-200 hover:bg-gray-300">
-                <FaIcon Icon="@(Saving ? "" : FaIcons.Save)" /> 
-                @(Saving ? "Saving..." : "Save Changes")
-            </button>
+            <SaveButton SaveMethod="UpdateInterests" Loading="Saving"/>
         }
     </div>
 </div>

@@ -1,0 +1,18 @@
+@using DomainLayer.Constants
+<button type="@Type" disabled="@Loading" @onclick="OnClick" class="mt-[10px] cursor-pointer rounded-md font-bold px-3 py-2 text-dark-primaryColor bg-gray-200 hover:bg-gray-300">
+    <FaIcon Icon="@(Loading ? "" : FaIcons.Save)" /> 
+    @(Loading ? "Saving..." : "Save Changes")
+</button>
+
+@code {
+    [Parameter] public EventCallback SaveMethod { get; set; }
+    [Parameter] public required bool Loading { get; set; }
+    [Parameter] public string Type { get; set; } = "button";
+    private async Task OnClick()
+    {
+        if (SaveMethod.HasDelegate)
+        {
+            await SaveMethod.InvokeAsync(null);
+        }
+    }
+}

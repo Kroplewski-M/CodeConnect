@@ -20,11 +20,8 @@
                 <i class="fa-solid fa-spinner fa-spin fa-xl text-light-primaryColor"></i>
             </div>
         }
-        <div class="w-[150px] h-[30px] mx-auto mt-5 mb-5">
-            <button disabled="@Loading" @onclick="SaveImg" class="cursor-pointer rounded-md bg-gray-200 hover:bg-gray-300 w-[100%] h-[100%] font-bold ">
-                <FaIcon Icon="@(Loading ? "" : FaIcons.Save)" /> 
-                @(Loading ? "Saving..." : "Save")
-            </button>
+        <div class="w-[190px] h-[30px] mx-auto mt-5 mb-5">
+            <SaveButton SaveMethod="SaveImg" Loading="LoadingUpdate"/>
         </div>
 
     </div>

@@ -88,7 +88,6 @@ public class EditUserInterestsBase : ComponentBase
                 {
                     NotificationsService.PushNotification(
                         new ApplicationLayer.Notification(result.Message, NotificationType.Success));
-                    StateHasChanged();
                     return;
                 }
 
@@ -104,6 +103,8 @@ public class EditUserInterestsBase : ComponentBase
         finally
         {
             Saving = false;
+            await Cancel.InvokeAsync(null);
+            StateHasChanged();
         }
     }
 }
