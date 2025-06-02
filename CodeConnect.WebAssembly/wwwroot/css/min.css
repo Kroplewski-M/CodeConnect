@@ -643,6 +643,9 @@
   .mr-\[5px\] {
     margin-right: 5px;
   }
+  .mr-\[15px\] {
+    margin-right: 15px;
+  }
   .mb-2 {
     margin-bottom: calc(var(--spacing) * 2);
   }

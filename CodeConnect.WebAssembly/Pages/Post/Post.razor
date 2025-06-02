@@ -29,11 +29,11 @@ else
             </div>
             @if (Post.Images.Any())
             {
-                <div class="flex flex-wrap mt-5">
+                <div class="flex flex-wrap mt-5 ml-5 mr-5">
                     @for (int i = 0; i < Post.Images.Count; i++)
                     {
                         var currentIndex = i;
-                        <div key="@currentIndex" class="@(i == 0 ? "w-[90%] max-h-[400px] mx-auto" : "md:w-[20%] w-[80%] h-[200px] mx-auto mt-[5px]") relative">
+                        <div key="@currentIndex" class="@(i == 0 ? "w-[100%] max-h-[400px]" : "md:w-[20%] w-[80%] h-[200px] mt-[5px] mr-[15px]") relative cursor-pointer">
                             <img class="rounded-md w-[100%] h-[100%] object-cover relative" src="@Post.Images[i]"
                                  alt="@Post.Images[i]">
                         </div>
