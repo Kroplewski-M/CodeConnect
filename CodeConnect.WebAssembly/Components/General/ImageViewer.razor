@@ -1,0 +1,16 @@
+@using DomainLayer.Constants
+@inject IJSRuntime Js
+<img src="@ImageUrl" alt="@Alt" class="@($"cursor-pointer {ImageClass}")" @onclick="ShowFullImage" />
+    
+
+@code
+{
+    [Parameter] public string ImageUrl { get; set; } = string.Empty;
+    [Parameter] public string Alt { get; set; } = string.Empty;
+    [Parameter] public string ImageClass { get; set; } = string.Empty;
+    
+    private async Task ShowFullImage()
+    {
+        await Js.InvokeVoidAsync("showOverlayImg", ImageUrl);
+    }
+}

@@ -23,7 +23,7 @@
             &lt;Code Connect/&gt;
         </a>
     }
-    <main class="px-4 z-[200] flex-grow pt-6 mt-5">
+    <main class="relative px-4 z-[200] flex-grow pt-6 mt-5">
         <span @onclick="() => SetDarkTheme(!_darkTheme)" class="fa-solid @(_darkTheme ? "fa-sun text-light-primaryColor" : "fa-moon text-dark-primaryColor") z-[300] fixed top-5 mt-5 right-5 cursor-pointer fa-xl"></span>
         <div class="fixed top-10 right-10 flex flex-col space-y-2 z-[500]">
             @foreach (var notification in _notifications)
@@ -33,6 +33,7 @@
         </div>
         @Body
     </main>
+    <div id="overlay" class="z-[9999]"></div>
 </div>
 
 @code{

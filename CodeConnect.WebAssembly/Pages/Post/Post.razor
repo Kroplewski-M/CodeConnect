@@ -2,6 +2,7 @@
 @using DomainLayer.Constants
 @using CodeConnect.WebAssembly.Components.General
 @using DomainLayer.Helpers
+@inject NavigationManager NavigationManager 
 @inherits PostBase
 
 @if (Post == null && Loading)
@@ -16,7 +17,7 @@ else
     {
         <div class="w-[90vw] max-w-[1100px] bg-dark-secondaryColor rounded-md mx-auto pt-5 pb-10 mt-5 shadow-xl relative">
             <div class="flex mt-[10px] w-[95%] justify-between text-[18px]">
-                <div class="flex text-light-primaryColor ml-5">
+                <div class="flex text-light-primaryColor ml-5 cursor-pointer" onclick="@(()=>NavigationManager.NavigateTo($"/Profile/{Post.CreatedByUsername}"))">
                     <img src="@Post.UserImg" alt="@Post.CreatedByUsername" class="w-[50px] h-[50px] rounded-full object-cover">
                     <div class="ml-[10px] mt-[5px]">
                         <p class="font-bold hover:text-light-primaryColor"><span class="text-gray-400">&#64;</span>@Post.CreatedByUsername</p>
@@ -33,9 +34,8 @@ else
                     @for (int i = 0; i < Post.Images.Count; i++)
                     {
                         var currentIndex = i;
-                        <div key="@currentIndex" class="@(i == 0 ? "w-[100%] max-h-[400px]" : "md:w-[20%] w-[80%] h-[200px] mt-[5px] mr-[15px]") relative cursor-pointer">
-                            <img class="rounded-md w-[100%] h-[100%] object-cover relative" src="@Post.Images[i]"
-                                 alt="@Post.Images[i]">
+                        <div key="@currentIndex" class="@(currentIndex == 0 ? "w-[100%] md:h-[400px] md:max-h-[400px]" : "md:w-[20%] w-[100%] mt-[5px] md:mr-[15px]") h-[200px] relative cursor-pointer">
+                            <ImageViewer ImageUrl="@Post.Images[currentIndex]" Alt="@Post.Images[currentIndex]" ImageClass="rounded-md w-[100%] h-[100%] object-cover" />
                         </div>
                     }
                 </div>
