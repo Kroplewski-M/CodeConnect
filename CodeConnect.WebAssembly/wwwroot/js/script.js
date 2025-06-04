@@ -43,3 +43,9 @@ window.showOverlayImg = (imageUrl) => {
     container.appendChild(overlayDiv);
 };
 //#endregion
+
+window.highlightCodeBlocks = () => {
+    document.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightElement(block);
+    });
+};

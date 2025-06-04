@@ -7,9 +7,11 @@ using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
 using DomainLayer.Helpers;
+using Markdig;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Web.Infrastructure;
 using Microsoft.JSInterop;
 
 namespace CodeConnect.WebAssembly.Components.Feed;
@@ -51,6 +53,11 @@ public class CreatePostBase : ComponentBase
         if (firstRender)
         {
             await Js.InvokeVoidAsync("postSizeOnBlur","post");
+        }
+        if (shouldHighlight)
+        {
+            shouldHighlight = false;
+            await Js.InvokeVoidAsync("highlightCodeBlocks");
         }
     }
     protected bool LoadingImages = false;
@@ -111,5 +118,19 @@ public class CreatePostBase : ComponentBase
         else
             NotificationsService.PushNotification(new Notification(postResponse.Message, NotificationType.Error));
         Loading = false;
+    }
+    protected string PreviewText = string.Empty;
+    private bool shouldHighlight;
+    protected async Task PreviewMarkdown()
+    {
+        var pipeline = new MarkdownPipelineBuilder()
+            .UseAdvancedExtensions()
+            .Build();
+        // Convert markdown to HTML
+        PreviewText = Markdown.ToHtml(PostContent, pipeline);
+        
+        shouldHighlight = true;
+        StateHasChanged();
+        await Js.InvokeVoidAsync("highlightCodeBlocks");
     }
 }
