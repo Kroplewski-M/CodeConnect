@@ -4,6 +4,13 @@ window.toggleDarkMode = function(){
 //#region create post textbox
 let lastHeight = 0;
 const minHeight = 50;
+/**
+ * Dynamically adjusts the height of a textarea element to fit its content.
+ *
+ * Sets the textarea's height to 'auto' to allow shrinking, then expands it if the content exceeds the minimum height. Updates the global `lastHeight` variable with the current scroll height.
+ *
+ * @param {string} textareaId - The ID of the textarea element to resize.
+ */
 function autoResizeTextAreaAndContainer(textareaId) {
     let textarea = document.getElementById(textareaId);
     //set to auto so it shrinks straight away when clearing

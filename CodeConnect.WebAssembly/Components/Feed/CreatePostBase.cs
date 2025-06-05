@@ -28,6 +28,9 @@ public class CreatePostBase : ComponentBase
     [Inject] public required MarkdigServiceClient MarkdigService { get; set; }
     protected string PostContent { get; set; } = string.Empty;
     protected readonly string InputId = "uploadPostImg";
+    /// <summary>
+    /// Initializes the component by retrieving and setting the authenticated user's details if available.
+    /// </summary>
     protected override async Task OnInitializedAsync()
     {
         if (AuthenticationState != null)
@@ -43,6 +46,10 @@ public class CreatePostBase : ComponentBase
         }
     }
 
+    /// <summary>
+    /// Invoked after the component has rendered; initializes post input resizing on first render and triggers code block highlighting if required.
+    /// </summary>
+    /// <param name="firstRender">Indicates whether this is the first time the component is rendered.</param>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -88,6 +95,9 @@ public class CreatePostBase : ComponentBase
         StateHasChanged();
     }
     protected bool Loading { get; set; } = false;
+    /// <summary>
+    /// Submits a new post with optional images after validating the content and notifies the user of the result.
+    /// </summary>
     protected async Task HandleValidSubmit()
     {
         if (string.IsNullOrWhiteSpace(PostContent))
@@ -116,6 +126,13 @@ public class CreatePostBase : ComponentBase
     }
     protected string PreviewText = string.Empty;
     private bool _shouldHighlight;
+    /// <summary>
+    /// Converts the provided Markdown content to HTML code blocks for preview and triggers syntax highlighting.
+    /// </summary>
+    /// <param name="content">The Markdown content to preview.</param>
+    /// <remarks>
+    /// Updates the preview text with rendered HTML code blocks and invokes JavaScript to highlight syntax.
+    /// </remarks>
     protected async Task PreviewMarkdown(string content)
     {
         PreviewText = MarkdigService.ConvertToHtmlOnlyCode(content);
@@ -124,12 +141,18 @@ public class CreatePostBase : ComponentBase
         await Js.InvokeVoidAsync("highlightCodeBlocks");
     }
     protected bool ShowPreview = false;
+    /// <summary>
+    /// Toggles the visibility of the Markdown preview and triggers syntax highlighting for code blocks.
+    /// </summary>
     protected async Task ToggleShowPreview()
     {
         ShowPreview = !ShowPreview;
         await Js.InvokeVoidAsync("highlightCodeBlocks");
         StateHasChanged();
     }
+    /// <summary>
+    /// Handles input changes by updating the Markdown preview and resizing the post input area.
+    /// </summary>
     protected async Task OnInput()
     {
         var content = await Js.InvokeAsync<string>("getValueById", "post");

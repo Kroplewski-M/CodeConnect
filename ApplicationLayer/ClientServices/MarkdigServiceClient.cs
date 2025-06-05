@@ -8,6 +8,11 @@ namespace ApplicationLayer.ClientServices;
 
 public class MarkdigServiceClient
 {
+    /// <summary>
+    /// Converts a Markdown string to an HTML string, rendering only code blocks and paragraph text with specific formatting.
+    /// </summary>
+    /// <param name="markdown">The Markdown content to convert.</param>
+    /// <returns>An HTML string with fenced code blocks rendered as syntax-highlighted code and other content as styled paragraphs.</returns>
     public string ConvertToHtmlOnlyCode(string markdown)
     {
         var pipeline = new MarkdownPipelineBuilder().Build();
