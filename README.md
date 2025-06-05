@@ -17,3 +17,6 @@ Built using Blazor WebAssembly for the frontend and a C# Web API for the backend
 - Posts: Share posts about your projects, including code snippets, project updates, and more.
 
 
+Using Markdig https://github.com/xoofx/markdig to generate markdown
+and HighlightJs https://highlightjs.org for syntax sylighting for code markdown 
+
