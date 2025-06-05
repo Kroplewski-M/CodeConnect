@@ -10,7 +10,7 @@ public class MarkdigServiceClient
 {
     public string ConvertToHtmlOnlyCode(string markdown)
     {
-        var pipeline = new MarkdownPipelineBuilder().Build();
+        var pipeline = new MarkdownPipelineBuilder().DisableHtml().Build();
         var document = Markdown.Parse(markdown, pipeline);
 
         var html = new StringBuilder();
