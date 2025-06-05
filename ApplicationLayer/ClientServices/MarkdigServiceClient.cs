@@ -22,7 +22,7 @@ public class MarkdigServiceClient
                 var lang = codeBlock.Info?.Trim(); // e.g. "csharp"
                 var code = codeBlock.Lines.ToString();
                 html.AppendLine(
-                    $"<pre class='mb-[10px] mt-[10px]'><code class=\"language-{lang}\">{WebUtility.HtmlEncode(code)}</code></pre>");
+                    $"<pre class='mb-[10px] mt-[10px]'><code class=\"language-{WebUtility.HtmlEncode(lang)}\">{WebUtility.HtmlEncode(code)}</code></pre>");
             }
             else
             {
