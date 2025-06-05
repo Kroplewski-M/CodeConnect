@@ -4,7 +4,8 @@ window.toggleDarkMode = function(){
 //#region create post textbox
 let lastHeight = 0;
 const minHeight = 50;
-function autoResizeTextAreaAndContainer(textarea) {
+function autoResizeTextAreaAndContainer(textareaId) {
+    let textarea = document.getElementById(textareaId);
     //set to auto so it shrinks straight away when clearing
     textarea.style.height = 'auto';
     if(textarea.scrollHeight > minHeight){
@@ -43,3 +44,14 @@ window.showOverlayImg = (imageUrl) => {
     container.appendChild(overlayDiv);
 };
 //#endregion
+
+window.highlightCodeBlocks = () => {
+    document.querySelectorAll('pre code').forEach((block) => {
+        block.removeAttribute('data-highlighted');
+        hljs.highlightElement(block);
+    });
+};
+
+window.getValueById = function (id) {
+    return document.getElementById(id).value;
+};

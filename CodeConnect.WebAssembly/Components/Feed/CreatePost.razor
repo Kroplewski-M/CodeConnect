@@ -6,9 +6,9 @@
         <img class="w-10 ms-3 h-10 rounded-full mb-3 object-cover" src="@UserDetails?.ProfileImg" alt="Rounded avatar">
         <div class="ml-[5px] mt-[5px]">
             <EditForm Model="this" OnSubmit="HandleValidSubmit" FormName="Post">
-                <InputTextArea @bind-Value="PostContent" id="post" placeholder="What have you been working on..."
+                <InputTextArea @bind-Value="PostContent" id="post" placeholder="Wrap your code in triple backticks like ```c# ... ```"
                                class="bg-transparent text-dark-supportColor border-dark-supportColor w-[90%] resize-none md:w-[400px] rounded-md font-bold mb-2 pl-[5px] outline-none"
-                               oninput="autoResizeTextAreaAndContainer(this)"
+                               @oninput="OnInput"
                                onblur="postSizeOnBlur('post')"
                                >
                 </InputTextArea>
@@ -18,6 +18,11 @@
                             <p class="fa-solid fa-image fa-xl text-dark-supportColor/90"></p>
                         </label>
                         <InputFile multiple type="file" OnChange="HandleFileSelection" accept="image/*" name="postFiles" id="@(InputId)" class="opacity-0 absolute" />
+                    </div>
+                    <div class="ml-5">
+                        <button type="button" @onclick="ToggleShowPreview" class="cursor-pointer rounded-md border-solid hover:bg-light-secondaryColor px-3 py-2 text-dark-supportColor/90 ">
+                            <FaIcon Icon="@FaIcons.Search"/> Preview
+                        </button>
                     </div>
                     <div class="ml-5">
                         <button disabled="@Loading" class="cursor-pointer rounded-md border-solid hover:bg-light-secondaryColor px-3 py-2 text-dark-supportColor/90 ">
@@ -51,4 +56,11 @@
             }
         </div>
     </div>
+    <div class="@(ShowPreview ? "" : "hidden")">
+        <p class="text-light-primaryColor font-bold text-[16px] mb-5">Preview:</p>
+        <div class="markdown-output">
+            @((MarkupString)PreviewText)
+        </div>
+    </div>
 </div>
+

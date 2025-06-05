@@ -7,28 +7,25 @@ using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
 using DomainLayer.Helpers;
+using Markdig;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Web.Infrastructure;
 using Microsoft.JSInterop;
 
 namespace CodeConnect.WebAssembly.Components.Feed;
 
 public class CreatePostBase : ComponentBase
 {
-    [CascadingParameter]
-    private Task<AuthenticationState>? AuthenticationState { get; set; }
-    [Inject]
-    IAuthenticateServiceClient AuthenticateServiceClient { get; set; } = null!;
+    [CascadingParameter] private Task<AuthenticationState>? AuthenticationState { get; set; }
+    [Inject] IAuthenticateServiceClient AuthenticateServiceClient { get; set; } = null!;
     protected UserDetails? UserDetails = null;
-    [Inject]
-    public required IJSRuntime Js { get; set; }
-    [Inject]
-    public ImageConvertorServiceClient ImageConvertor { get; set; } = null!;
-    [Inject]
-    public IPostService PostService { get; set; } = null!;  
-    [Inject]
-    public required NotificationsService NotificationsService { get; set; }
+    [Inject] public required IJSRuntime Js { get; set; }
+    [Inject] public ImageConvertorServiceClient ImageConvertor { get; set; } = null!;
+    [Inject] public IPostService PostService { get; set; } = null!;  
+    [Inject] public required NotificationsService NotificationsService { get; set; }
+    [Inject] public required MarkdigServiceClient MarkdigService { get; set; }
     protected string PostContent { get; set; } = string.Empty;
     protected readonly string InputId = "uploadPostImg";
     protected override async Task OnInitializedAsync()
@@ -51,6 +48,11 @@ public class CreatePostBase : ComponentBase
         if (firstRender)
         {
             await Js.InvokeVoidAsync("postSizeOnBlur","post");
+        }
+        if (_shouldHighlight)
+        {
+            _shouldHighlight = false;
+            await Js.InvokeVoidAsync("highlightCodeBlocks");
         }
     }
     protected bool LoadingImages = false;
@@ -111,5 +113,35 @@ public class CreatePostBase : ComponentBase
         else
             NotificationsService.PushNotification(new Notification(postResponse.Message, NotificationType.Error));
         Loading = false;
+    }
+    protected string PreviewText = string.Empty;
+    private bool _shouldHighlight;
+    protected async Task PreviewMarkdown(string content)
+    {
+        try
+        {
+            PreviewText = MarkdigService.ConvertToHtmlOnlyCode(content);
+            _shouldHighlight = true;
+            StateHasChanged();
+            await Js.InvokeVoidAsync("highlightCodeBlocks");
+        }
+        catch
+        {
+            NotificationsService.PushNotification(new Notification("Error processing markdown", NotificationType.Error));
+        }
+    }
+    protected bool ShowPreview = false;
+    protected async Task ToggleShowPreview()
+    {
+        ShowPreview = !ShowPreview;
+        await Js.InvokeVoidAsync("highlightCodeBlocks");
+        StateHasChanged();
+    }
+    protected async Task OnInput()
+    {
+        var content = await Js.InvokeAsync<string>("getValueById", "post");
+
+        await PreviewMarkdown(content);
+        await Js.InvokeVoidAsync("autoResizeTextAreaAndContainer","post");
     }
 }
