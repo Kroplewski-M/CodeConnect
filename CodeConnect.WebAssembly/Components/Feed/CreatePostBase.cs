@@ -118,17 +118,10 @@ public class CreatePostBase : ComponentBase
     private bool _shouldHighlight;
     protected async Task PreviewMarkdown(string content)
     {
-        try
-        {
-            PreviewText = MarkdigService.ConvertToHtmlOnlyCode(content);
-            _shouldHighlight = true;
-            StateHasChanged();
-            await Js.InvokeVoidAsync("highlightCodeBlocks");
-        }
-        catch
-        {
-            NotificationsService.PushNotification(new Notification("Error processing markdown", NotificationType.Error));
-        }
+        PreviewText = MarkdigService.ConvertToHtmlOnlyCode(content);
+        _shouldHighlight = true;
+        StateHasChanged();
+        await Js.InvokeVoidAsync("highlightCodeBlocks");
     }
     protected bool ShowPreview = false;
     protected async Task ToggleShowPreview()

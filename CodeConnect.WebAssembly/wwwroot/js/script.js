@@ -48,7 +48,13 @@ window.showOverlayImg = (imageUrl) => {
 window.highlightCodeBlocks = () => {
     document.querySelectorAll('pre code').forEach((block) => {
         block.removeAttribute('data-highlighted');
-        hljs.highlightElement(block);
+        const code = block.textContent;
+        const lang = (block.className.match(/language-(\w+)/) || [])[1] || 'plaintext';
+
+        const result = hljs.highlight(code, { language: lang, ignoreIllegals: true });
+        block.innerHTML = result.value;
+        block.classList.add('hljs');
+        block.dataset.highlighted = 'yes';
     });
 };
 
