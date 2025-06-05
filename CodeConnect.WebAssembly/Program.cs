@@ -37,5 +37,5 @@ builder.Services.AddSingleton<NotificationsService>();
 builder.Services.AddSingleton<ImageConvertorServiceClient>();
 builder.Services.AddScoped<IFollowingService, FollowingServiceClient>();
 builder.Services.AddScoped<IPostService, PostServiceClient>();
-
+builder.Services.AddScoped<MarkdigServiceClient>();
 await builder.Build().RunAsync();

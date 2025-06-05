@@ -2302,33 +2302,7 @@ var hljs = (function () {
 
             fire("before:highlightElement",
                 { el: element, language });
-
-            if (element.dataset.highlighted) {
-                console.log("Element previously highlighted. To highlight again, first unset `dataset.highlighted`.", element);
-                return;
-            }
-
-            // we should be all text, no child nodes (unescaped HTML) - this is possibly
-            // an HTML injection attack - it's likely too late if this is already in
-            // production (the code has likely already done its damage by the time
-            // we're seeing it)... but we yell loudly about this so that hopefully it's
-            // more likely to be caught in development before making it to production
-            if (element.children.length > 0) {
-                if (!options.ignoreUnescapedHTML) {
-                    console.warn("One of your code blocks includes unescaped HTML. This is a potentially serious security risk.");
-                    console.warn("https://github.com/highlightjs/highlight.js/wiki/security");
-                    console.warn("The element with unescaped HTML:");
-                    console.warn(element);
-                }
-                if (options.throwUnescapedHTML) {
-                    const err = new HTMLInjectionError(
-                        "One of your code blocks includes unescaped HTML.",
-                        element.innerHTML
-                    );
-                    throw err;
-                }
-            }
-
+            
             node = element;
             const text = node.textContent;
             const result = language ? highlight(text, { language, ignoreIllegals: true }) : highlightAuto(text);
