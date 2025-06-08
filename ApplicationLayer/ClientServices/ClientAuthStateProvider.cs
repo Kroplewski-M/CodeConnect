@@ -27,9 +27,8 @@ public class ClientAuthStateProvider(HttpClient httpClient,
             var isValidRefresh = await IsTokenValid(refresh);
             return isValidRefresh ?  CreateAuthenticationStateFromToken(refresh) : new AuthenticationState(new ClaimsPrincipal());
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine(ex);
             return new AuthenticationState(new ClaimsPrincipal());
         }
     }
