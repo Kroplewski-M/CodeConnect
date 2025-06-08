@@ -15,4 +15,5 @@ public interface IAuthenticateServiceClient
     public event Action? OnChange;
     public void NotifyStateChanged();
     public Task<string>? GetUsersUsername();
+    public Task GithubLogin();
 }

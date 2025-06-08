@@ -10,6 +10,7 @@ using DomainLayer.Constants;
 using DomainLayer.Entities.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Moq;
 
 namespace TestLayer;
@@ -20,16 +21,18 @@ public class AuthControllerTests
     private readonly Mock<ITokenService> _tokenServiceMock;
     private readonly AuthenticationController _authController;
     private readonly Mock<IHttpContextAccessor> _httpContextMock; 
+    private readonly Mock<IConfiguration> _configMock; 
 
     public AuthControllerTests()
     {
         _authenticateServiceMock = new Mock<IAuthenticateService>();
         _tokenServiceMock = new Mock<ITokenService>();
         _httpContextMock = new Mock<IHttpContextAccessor>();
+        _configMock = new Mock<IConfiguration>();
         
         var context = new DefaultHttpContext();
         _httpContextMock.Setup(x => x.HttpContext).Returns(context);
-        _authController = new AuthenticationController(_authenticateServiceMock.Object, _tokenServiceMock.Object)
+        _authController = new AuthenticationController(_authenticateServiceMock.Object, _tokenServiceMock.Object, _configMock.Object)
         {
             ControllerContext = new ControllerContext() { HttpContext = context.HttpContext }
         };
@@ -166,7 +169,7 @@ public class AuthControllerTests
         var httpContext = new DefaultHttpContext();
         httpContext.Request.Headers.Authorization = $"Bearer {token}";
         _httpContextMock.Setup(x => x.HttpContext).Returns(httpContext);
-        var authControllerWithContext = new AuthenticationController(_authenticateServiceMock.Object, _tokenServiceMock.Object)
+        var authControllerWithContext = new AuthenticationController(_authenticateServiceMock.Object, _tokenServiceMock.Object, _configMock.Object)
         {
             ControllerContext = new ControllerContext { HttpContext = httpContext }
         };
@@ -192,7 +195,7 @@ public class AuthControllerTests
         var claimsPrincipal = new ClaimsPrincipal(identity);
         httpContext.User = claimsPrincipal;
         _httpContextMock.Setup(x => x.HttpContext).Returns(httpContext);
-        var authControllerWithContext = new AuthenticationController(_authenticateServiceMock.Object, _tokenServiceMock.Object)
+        var authControllerWithContext = new AuthenticationController(_authenticateServiceMock.Object, _tokenServiceMock.Object,_configMock.Object)
         {
             ControllerContext = new ControllerContext { HttpContext = httpContext }
         };

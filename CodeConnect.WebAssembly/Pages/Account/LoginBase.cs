@@ -67,4 +67,8 @@ public class LoginBase : ComponentBase
         }
     }
 
+    protected async Task GithubLogin()
+    {
+        await AuthenticateServiceClient.GithubLogin();
+    }
 }

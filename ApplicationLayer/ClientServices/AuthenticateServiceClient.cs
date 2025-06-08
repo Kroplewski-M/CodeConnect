@@ -98,4 +98,9 @@ public class AuthenticateServiceClient(
         notificationsService.PushNotification(new Notification("Logged out successfully",NotificationType.Success));
         return new AuthResponse(true, "","", "Logged out successfully");
     }
+    public async Task GithubLogin()
+    {
+        var response = await httpClient.GetStringAsync("/api/Authentication/GithubLogin");
+        navigationManager.NavigateTo(response ?? "", forceLoad: true);
+    }
 }
