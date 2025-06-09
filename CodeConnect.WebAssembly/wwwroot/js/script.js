@@ -45,8 +45,10 @@ window.showOverlayImg = (imageUrl) => {
 };
 //#endregion
 
-window.highlightCodeBlocks = () => {
-    document.querySelectorAll('pre code').forEach((block) => {
+window.highlightCodeBlocks = (containerId) => {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.querySelectorAll('pre code').forEach((block) => {
         block.removeAttribute('data-highlighted');
         const code = block.textContent;
         const lang = (block.className.match(/language-(\w+)/) || [])[1] || 'plaintext';

@@ -4,7 +4,7 @@
 @using DomainLayer.Constants
 @using DomainLayer.Helpers
 @inject NavigationManager NavigationManager
-
+@inject IJSRuntime Js
 <div onclick="@(()=>NavigationManager.NavigateTo($"/Post/{Post.Id}"))" class="w-[90%] md:break-inside-avoid min-h-[50px] bg-dark-primaryColor rounded-lg shadow-lg p-[10px] box-border cursor-pointer hover:scale-[1.05]">
     
     <div class="flex mt-[10px] w-full justify-between">
@@ -17,7 +17,7 @@
         <p class="text-light-primaryColor/80 text-[14px] ml-[5px]">@Helpers.GetUsersLocalTime(Post.CreatedAtUtc, Consts.DateFormats.DateTimeFormat)</p>
     </div>
     
-    <p class="text-light-primaryColor text-[16px] mb-[10px] ml-5 mt-[10px]">@Post.Content</p>
+    <div id="@Id" class="text-light-primaryColor text-[16px] mb-[10px] ml-5 mt-[10px]">@((MarkupString)Post.Content)</div>
     @if (FirstImageUrl != null)
     {
         <div class="relative w-full max-w-[90%] mx-auto overflow-hidden rounded-md">
@@ -46,9 +46,20 @@
     [Parameter] public required PostBasicDto Post { get; set; }
     private string? FirstImageUrl { get; set; }
     private int? RemainingImages { get; set; }
+    private string Id = Guid.NewGuid().ToString();
     protected override void OnParametersSet()
     {
         FirstImageUrl = Post?.Images?.FirstOrDefault();
         RemainingImages = Post?.Images?.Count - 1;
     }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Js.InvokeVoidAsync("highlightCodeBlocks",Id);
+            StateHasChanged();
+        }
+    }
+
 }

@@ -92,7 +92,7 @@ public class CreatePostBase : ComponentBase
     {
         if (string.IsNullOrWhiteSpace(PostContent))
             return;
-        var post = new CreatePostDto(PostContent, Base64Images, UserDetails?.UserName ?? "");
+        var post = new CreatePostDto(MarkdigService.ConvertToHtmlOnlyCode(PostContent), Base64Images, UserDetails?.UserName ?? "");
         var postValidator = new CreatePostDtoValidator();
         var validate = await postValidator.ValidateAsync(post);
         if (!validate.IsValid)
@@ -108,6 +108,7 @@ public class CreatePostBase : ComponentBase
             NotificationsService.PushNotification(new Notification(postResponse.Message, NotificationType.Success));
             Base64Images.Clear();
             PostContent = string.Empty;
+            PreviewText = string.Empty;
             StateHasChanged();
         }
         else
@@ -124,11 +125,12 @@ public class CreatePostBase : ComponentBase
         await Js.InvokeVoidAsync("highlightCodeBlocks");
     }
     protected bool ShowPreview = false;
+    protected readonly string PreviewTextId = Guid.NewGuid().ToString();
     protected async Task ToggleShowPreview()
     {
         ShowPreview = !ShowPreview;
-        await Js.InvokeVoidAsync("highlightCodeBlocks");
         StateHasChanged();
+        await Js.InvokeVoidAsync("highlightCodeBlocks",PreviewTextId);
     }
     protected async Task OnInput()
     {
@@ -136,5 +138,6 @@ public class CreatePostBase : ComponentBase
 
         await PreviewMarkdown(content);
         await Js.InvokeVoidAsync("autoResizeTextAreaAndContainer","post");
+        await Js.InvokeVoidAsync("highlightCodeBlocks",PreviewTextId);
     }
 }
