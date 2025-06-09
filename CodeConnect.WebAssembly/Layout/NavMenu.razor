@@ -82,10 +82,14 @@
     [CascadingParameter] public required UserState UserState{ get; set; }
     
     private bool LoadingUserDetails { get; set; } = true;
+    private bool Authenticated { get; set; }
     protected override async Task OnParametersSetAsync()
     {
+        if (UserState?.Current != null && Authenticated)
+            return;
         if (!string.IsNullOrWhiteSpace(UserState?.Current?.UserName))
         {
+            Authenticated = true;
             LoadingUserDetails = true;
             var userFollowersAndFollowing = await FollowingService.GetUserFollowersCount(UserState.Current?.UserName!);
             FollowerCount = userFollowersAndFollowing.FollowersCount;
