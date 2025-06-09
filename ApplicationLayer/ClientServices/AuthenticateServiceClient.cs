@@ -81,13 +81,6 @@ public class AuthenticateServiceClient(
             Bio:authState.GetUserInfo(Consts.ClaimTypes.Bio)
             );
     }
-
-    public async Task<string> GetUsersUsername()
-    {
-        var authState = await authenticationStateProvider?.GetAuthenticationStateAsync()!;
-        return authState.User.Identity != null ? authState.GetUserInfo(Consts.ClaimTypes.UserName) 
-                                               : "";
-    }
     public async Task<AuthResponse> LogoutUser()
     {
         await localStorageService.RemoveItemAsync(Consts.Tokens.AuthToken);

@@ -1,5 +1,6 @@
 using System.Reflection.Metadata;
 using ApplicationLayer;
+using ApplicationLayer.Classes;
 using ApplicationLayer.ClientServices;
 using ApplicationLayer.ExtensionClasses;
 using ApplicationLayer.Interfaces;
@@ -21,7 +22,7 @@ public class UpdateImageBase : ComponentBase
     [Inject] public required IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
     [Parameter] public Consts.ImageType UpdateOfImageType { get; set; }
     [Parameter] public EventCallback Cancel { get; set; }
-
+    [CascadingParameter] public required UserState UserState { get; set; }
     protected bool Loading { get; set; } = false;
     public UpdateUserImageRequest SelectedImg { get; set; } = new UpdateUserImageRequest();
     protected async Task HandleFileSelection(InputFileChangeEventArgs e)
@@ -49,7 +50,7 @@ public class UpdateImageBase : ComponentBase
             {
                 LoadingUpdate = true;
                 NotificationsService.PushNotification(new ApplicationLayer.Notification("Updating please wait...", NotificationType.Info));
-                SelectedImg.Username = await AuthenticateServiceClient.GetUsersUsername()!;
+                SelectedImg.Username = UserState?.Current?.UserName ?? "";
                 
                 var result = await UserImageService.UpdateUserImage(SelectedImg);
                 NotificationsService.PushNotification(result.Flag

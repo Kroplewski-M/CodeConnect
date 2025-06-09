@@ -1,11 +1,9 @@
-﻿@using ApplicationLayer.DTO_s
-@using ApplicationLayer.DTO_s.User
+﻿@using ApplicationLayer.Classes
 @using ApplicationLayer.Interfaces
 @using DomainLayer.Constants
 @using Microsoft.AspNetCore.Components.Authorization
 @using CodeConnect.WebAssembly.Components.General
 @inject NavigationManager NavigationManager
-@inject IAuthenticateServiceClient AuthenticateServiceClient
 @inject IFollowingService FollowingService
 <AuthorizeView>
     <Authorized>
@@ -53,26 +51,21 @@
                         </button>
                     </li>
                 </ul>
-                @if (_userDetails != null)
+                @if (UserState?.Current != null)
                 {
-                    <div class="absolute bottom-[30px] left-[10px] hover:bg-gray-100/10 cursor-pointer rounded-md p-2 w-[90%] @(LoadingUserDetails ? "animate-pulse bg-gray-100/50" : "")" onclick="@(() => NavigateAndCloseNav($"/Profile/{_userDetails.UserName}"))">
+                    <div class="absolute bottom-[30px] left-[10px] hover:bg-gray-100/10 cursor-pointer rounded-md p-2 w-[90%] @(LoadingUserDetails ? "animate-pulse bg-gray-100/50" : "")" onclick="@(() => NavigateAndCloseNav($"/Profile/{UserState.Current.UserName}"))">
                         @if (!LoadingUserDetails)
                         {
-                            <img class="w-10 ms-3 h-10 rounded-full mb-3 object-cover" src="@_userDetails.ProfileImg" alt="Rounded avatar">
-                            <p class="font-bold ms-3  text-light-primaryColor dark:text-dark-supportColor">@_userDetails.FirstName</p>
-                            <p class="font-bold ms-3 mb-2 text-light-primaryColor dark:text-dark-supportColor">@_userDetails.LastName</p>
-                            <p class="font-bold ms-3 mb-2 text-light-primaryColor dark:text-dark-supportColor">&#x40;@_userDetails.UserName</p>
+                            <img class="w-10 ms-3 h-10 rounded-full mb-3 object-cover" src="@UserState.Current.ProfileImg" alt="Rounded avatar">
+                            <p class="font-bold ms-3  text-light-primaryColor dark:text-dark-supportColor">@UserState.Current.FirstName</p>
+                            <p class="font-bold ms-3 mb-2 text-light-primaryColor dark:text-dark-supportColor">@UserState.Current.LastName</p>
+                            <p class="font-bold ms-3 mb-2 text-light-primaryColor dark:text-dark-supportColor">&#x40;@UserState.Current.UserName</p>
                             <p class="text-[13px] ms-3 text-light-primaryColor/90 dark:text-dark-supportColor/90 ">Followers: <span class=" text-light-primaryColor dark:text-dark-supportColor font-bold">@FollowerCount</span></p>
                             <p class="text-[13px] ms-3 text-light-primaryColor/90 dark:text-dark-supportColor/90">Following: <span class=" text-light-primaryColor dark:text-dark-supportColor font-bold">@FollowingsCount</span></p>
                         }
                         else
                         {
-                            <div class="w-[100%] h-[300px]">
-                                <div class="w-10 ms-3 h-10 rounded-full mb-3 bg-gray-100"></div>
-                                <div class="w-[100%] h-[20px] rounded-full mb-[5px] bg-gray-100"></div>
-                                <div class="w-[100%] h-[20px] rounded-full mb-[5px] bg-gray-100"></div>
-                                <div class="w-[100%] h-[20px] rounded-full mb-[5px] bg-gray-100"></div>
-                            </div>
+                            <div class="w-[100%] h-[300px]"></div>
                         }
                     </div>
                 }
@@ -81,20 +74,25 @@
     </Authorized>
 </AuthorizeView>
 
-@implements IDisposable
+
 @code{
     private bool _openNav = false;
-    private UserDetails? _userDetails = null;
-    [CascadingParameter]
-    private Task<AuthenticationState>? AuthenticationState { get; set; }
-
     private int FollowerCount { get; set; } = 0;
     private int FollowingsCount { get; set; } = 0;
+    [CascadingParameter] public required UserState UserState{ get; set; }
     
-    protected override void OnInitialized()
+    private bool LoadingUserDetails { get; set; } = true;
+    protected override async Task OnParametersSetAsync()
     {
-        AuthenticateServiceClient.OnChange +=  OnAuthenticationStateChanged;
-        OnAuthenticationStateChanged();
+        if (!string.IsNullOrWhiteSpace(UserState?.Current?.UserName))
+        {
+            LoadingUserDetails = true;
+            var userFollowersAndFollowing = await FollowingService.GetUserFollowersCount(UserState.Current?.UserName!);
+            FollowerCount = userFollowersAndFollowing.FollowersCount;
+            FollowingsCount = userFollowersAndFollowing.FollowingCount;
+            LoadingUserDetails = false;
+            StateHasChanged();
+        }
     }
 
     private void NavigateAndCloseNav(string url)
@@ -102,35 +100,5 @@
         NavigationManager.NavigateTo(url);
         _openNav = false;
     }
-    private bool LoadingUserDetails { get; set; } = true;
-    private void OnAuthenticationStateChanged()
-    {
-        Task.Run(async () =>
-        {
-            LoadingUserDetails = true;
-            if (AuthenticationState == null) return;
-            var authState = await AuthenticationState;
-            var user = authState?.User;
-
-            if (user?.Identity is not null && user.Identity.IsAuthenticated)
-            {
-                _userDetails = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
-                var userFollowersAndFollowing = await FollowingService.GetUserFollowersCount(_userDetails.UserName);
-                FollowerCount = userFollowersAndFollowing.FollowersCount;
-                FollowingsCount = userFollowersAndFollowing.FollowingCount;
-                LoadingUserDetails = false;
-                await InvokeAsync(StateHasChanged);
-            }
-            else
-            {
-                NavigationManager.NavigateTo("/");
-            }
-        });
-    }
-    public void Dispose()
-    {
-        AuthenticateServiceClient.OnChange -= OnAuthenticationStateChanged;
-    }
-
 }
 
