@@ -17,10 +17,12 @@ namespace CodeConnect.WebAPI.Endpoints.UserEndpoint;
 public class UserController(IUserService userService, UserManager<ApplicationUser>userManager,ITokenService tokenService,
     IUserImageService userImageService) : ControllerBase
 {
-    private TokenResponse GenerateNewToken(ApplicationUser user)
+    private AuthResponse GenerateNewTokens(ApplicationUser user)
     {
         var claims = Generics.GetClaimsForUser(user);
-        return new TokenResponse(tokenService.GenerateJwtToken(claims.AsEnumerable(),DateTime.UtcNow.AddHours(1)));
+        var token = tokenService.GenerateJwtToken(claims.AsEnumerable(),DateTime.UtcNow.AddHours(Consts.Tokens.AuthTokenMins));
+        var refresh = tokenService.GenerateJwtToken(claims.AsEnumerable(),DateTime.UtcNow.AddHours(Consts.Tokens.RefreshTokenMins));
+        return new AuthResponse(true,token, refresh, "success");
     }
     [Authorize]
     [HttpPost("EditUserDetails")]
@@ -38,7 +40,7 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
         {
             var result = await userService.UpdateUserDetails(editProfileForm);
             if(result.Flag)
-                return Ok(GenerateNewToken(updateUser));
+                return Ok(GenerateNewTokens(updateUser));
             return BadRequest(result.Message);
         }
         return Unauthorized("Cannot find user");
@@ -75,7 +77,7 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
             var updatedUser = await userManager.FindByNameAsync(loggedInUser);
             if (updatedUser != null)
             {
-                return Ok(GenerateNewToken(updatedUser));
+                return Ok(GenerateNewTokens(updatedUser));
             }
         }
         return Unauthorized("User not found");
