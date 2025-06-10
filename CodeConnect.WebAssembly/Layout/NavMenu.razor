@@ -79,7 +79,7 @@
     private bool _openNav = false;
     private int FollowerCount { get; set; } = 0;
     private int FollowingsCount { get; set; } = 0;
-    [CascadingParameter] public required UserState UserState{ get; set; }
+    [CascadingParameter] public required UserState UserState { get; set; }
     
     private bool LoadingUserDetails { get; set; } = true;
     private bool Authenticated { get; set; }

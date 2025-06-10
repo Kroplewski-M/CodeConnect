@@ -19,16 +19,16 @@ public class MainLayoutBase : LayoutComponentBase, IDisposable
     [Inject] public required IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
     [Inject] public required NavigationManager NavigationManager { get; set; }
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationState { get; set; }
-    
+
     protected List<Notification> Notifications = [];
     protected bool DarkTheme = false;
     public readonly UserState UserState = new();
-    
+
     protected override async Task OnInitializedAsync()
     {
         NotificationsService.OnChange += UpdateNotifications;
         Notifications = NotificationsService.GetNotification();
-        AuthenticateServiceClient.OnChange +=  OnAuthenticationStateChanged;
+        AuthenticateServiceClient.OnChange += OnAuthenticationStateChanged;
         OnAuthenticationStateChanged();
         var darkTheme = await LocalStorageService.GetItemAsync<bool>("DarkTheme");
         if (darkTheme)
@@ -36,32 +36,40 @@ public class MainLayoutBase : LayoutComponentBase, IDisposable
             await ToggleDarkMode();
         }
     }
+
     protected bool IsNonNavPage()
     {
-        string[] nonNavPages = ["/","/Account/Register", "/Account/Login","/404"]; 
+        string[] nonNavPages = ["/", "/Account/Register", "/Account/Login", "/404"];
         return nonNavPages.Any(page => NavManager.Uri.EndsWith(page));
     }
+
     protected void UpdateNotifications()
     {
         Notifications = NotificationsService.GetNotification();
         StateHasChanged();
     }
+
     public void Dispose()
     {
         NotificationsService.OnChange -= UpdateNotifications;
-        AuthenticateServiceClient.OnChange -=  OnAuthenticationStateChanged;
+        AuthenticateServiceClient.OnChange -= OnAuthenticationStateChanged;
     }
+
     protected async Task ToggleDarkMode()
     {
         await Js.InvokeVoidAsync("toggleDarkMode");
         DarkTheme = !DarkTheme;
     }
+
     protected async Task SetDarkTheme(bool isDarkTheme)
     {
         await LocalStorageService.SetItemAsync<bool>("DarkTheme", isDarkTheme);
         await Js.InvokeVoidAsync("toggleDarkMode");
         DarkTheme = isDarkTheme;
     }
+
+    protected bool HasDob { get; set; }
+
     private void OnAuthenticationStateChanged()
     {
         Task.Run(async () =>
@@ -72,7 +80,9 @@ public class MainLayoutBase : LayoutComponentBase, IDisposable
 
             if (user?.Identity is not null && user.Identity.IsAuthenticated)
             {
-                UserState.Current = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
+                var currentUser = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
+                UserState.Current = currentUser;
+                HasDob = currentUser.Dob != null;
                 await InvokeAsync(StateHasChanged);
             }
             else

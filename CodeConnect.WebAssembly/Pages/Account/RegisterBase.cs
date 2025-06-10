@@ -46,7 +46,6 @@ public class RegisterBase
                 {
                     RegisterErrors.Add(new ValidationFailure
                     { PropertyName = "ResponseError", ErrorMessage = result.Message });
-                    StateHasChanged();
                 }
                 else
                 {
@@ -63,6 +62,7 @@ public class RegisterBase
             finally
             {
                 DisableRegister = false;
+                StateHasChanged();
             }
 
         }

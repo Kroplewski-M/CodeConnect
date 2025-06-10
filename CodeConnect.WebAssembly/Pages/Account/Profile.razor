@@ -83,7 +83,7 @@
                                 }
                                 else
                                 {
-                                    <FollowUser CurrentUsername="@CurrentUsername" FollowUsername="@UserDetails?.UserName" />
+                                    <FollowUser FollowUsername="@UserDetails?.UserName" />
                                 }
                             </div>
                         </div>
@@ -122,7 +122,10 @@
                     </div>
                 </div>
             </div>
-            <ProfileDetails />
+            <CascadingValue Value="Username">
+                <ProfileDetails />
+            </CascadingValue>
+            
             @if (EditUserInterests)
             {
                 <EditUserInterests CurrentUserInterests="UserInterests" Cancel="ToggleEditUserInterests" />

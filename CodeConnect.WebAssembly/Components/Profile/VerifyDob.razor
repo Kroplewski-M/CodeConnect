@@ -1,0 +1,20 @@
+@using CodeConnect.WebAssembly.Components.General
+@using DomainLayer.Constants
+@inherits VerifyDobBase
+
+<div class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+    <div class="md:w-[500px] w-[90%] rounded-md bg-dark-secondaryColor py-10">
+        <p class="text-light-primaryColor text-[20px] font-bold mt-2 text-center text-[19px]"><span class="text-gray-300">&#x40;</span>@UserState?.Current?.UserName</p>
+        <p class="text-light-primaryColor mt-2 text-center text-[19px]">Please verify your date of birth</p>
+        <div class="w-[300px] mx-auto">
+            <input type="date" class="bg-light-primaryColor mt-5 rounded-md w-[100%] h-[30px] pl-[5px]" @bind="Dob"/>
+        </div>
+        <div class="flex align-items-center justify-center md:flex-row flex-col md:space-y-0 space-y-2 space-x-2">
+            <button @onclick="Logout" class="cursor-pointer rounded-md border-red-800 bg-red-500 w-[150px] font-bold hover:bg-red-700 mr-[5px] mt-[10px]">
+                <FaIcon Icon="@FaIcons.Logout"/> Logout
+            </button>
+
+            <SaveButton Loading="Loading" SaveMethod="SaveDob"/>
+        </div>
+    </div>
+</div>

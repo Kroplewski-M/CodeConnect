@@ -59,14 +59,16 @@ public class AuthenticateServiceClient(
 
     public UserDetails GetUserFromFromAuthState(AuthenticationState? authState)
     {
-        var dob = authState.GetUserInfo(Consts.ClaimTypes.Dob).Trim() ?? null;
+        var dob = authState.GetUserInfo(Consts.ClaimTypes.Dob)?.Trim() ?? null;
         var createdAt = authState.GetUserInfo(Consts.ClaimTypes.CreatedAt).Trim() ?? null;
         var profileImg = authState.GetUserInfo(Consts.ClaimTypes.ProfileImg);
         var backgroundImg = authState.GetUserInfo(Consts.ClaimTypes.BackgroundImg);
 
         profileImg = Helpers.GetUserImgUrl(profileImg, Consts.ImageType.ProfileImages);
         backgroundImg = Helpers.GetUserImgUrl(backgroundImg, Consts.ImageType.BackgroundImages);
-
+        DateOnly? dateOnly = null;
+        if (!string.IsNullOrWhiteSpace(dob))
+            dateOnly = DateOnly.ParseExact(dob, Consts.Base.DateFormat, CultureInfo.InvariantCulture);
         return new UserDetails(
             FirstName: authState.GetUserInfo(Consts.ClaimTypes.FirstName),
             LastName: authState.GetUserInfo(Consts.ClaimTypes.LastName),
@@ -76,7 +78,7 @@ public class AuthenticateServiceClient(
             BackgroundImg: backgroundImg,
             GithubLink: authState.GetUserInfo(Consts.ClaimTypes.GithubLink),
             WebsiteLink: authState.GetUserInfo(Consts.ClaimTypes.WebsiteLink),
-            Dob: DateOnly.ParseExact(dob ?? "", Consts.Base.DateFormat, CultureInfo.InvariantCulture), 
+            Dob: dateOnly, 
             CreatedAt:DateOnly.ParseExact(createdAt ?? "", Consts.Base.DateFormat, CultureInfo.InvariantCulture),
             Bio:authState.GetUserInfo(Consts.ClaimTypes.Bio)
             );

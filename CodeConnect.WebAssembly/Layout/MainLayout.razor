@@ -3,29 +3,37 @@
 @inherits MainLayoutBase
 
 <CascadingValue Value="UserState">
-    <div class="bg-light-primaryColor dark:bg-dark-primaryColor min-h-screen flex @(!IsNonNavPage()?"flex-row":"flex-col") pb-7">
-        @if (!IsNonNavPage())
+    <div class="bg-light-primaryColor dark:bg-dark-primaryColor min-h-screen flex @(!IsNonNavPage() ? "flex-row" : "flex-col") pb-7">
+        @if (UserState.Current != null && !HasDob)
         {
-            <div class="z-[300] sm:w-[250px] w-[80%]">
-                <NavMenu/>
-            </div>
+            <VerifyDob />
         }
         else
-        { 
-            <a href="/" class="mt-3 ml-3 text-light-secondaryColor dark:bg-text-secondaryColor font-bold text-[20px]">
-                &lt;Code Connect/&gt;
-            </a>
+        {
+            if (!IsNonNavPage())
+            {
+                <div class="z-[300] sm:w-[250px] w-[80%]">
+                    <NavMenu/>
+                </div>
+            }
+            else
+            {
+                <a href="/" class="mt-3 ml-3 text-light-secondaryColor dark:bg-text-secondaryColor font-bold text-[20px]">
+                    &lt;Code Connect/&gt;
+                </a>
+            }
+            <main class="relative px-4 z-[200] flex-grow pt-6 mt-5">
+                <span @onclick="() => SetDarkTheme(!DarkTheme)" class="fa-solid @(DarkTheme ? "fa-sun text-light-primaryColor" : "fa-moon text-dark-primaryColor") z-[300] fixed top-5 mt-5 right-5 cursor-pointer fa-xl"></span>
+                <div class="fixed top-10 right-10 flex flex-col space-y-2 z-[500]">
+                    @foreach (var notification in Notifications)
+                    {
+                        <Notification Notif="notification"/>
+                    }
+                </div>
+                @Body
+            </main>
+            <div id="overlay" class="z-[9999]"></div>
         }
-        <main class="relative px-4 z-[200] flex-grow pt-6 mt-5">
-            <span @onclick="() => SetDarkTheme(!DarkTheme)" class="fa-solid @(DarkTheme ? "fa-sun text-light-primaryColor" : "fa-moon text-dark-primaryColor") z-[300] fixed top-5 mt-5 right-5 cursor-pointer fa-xl"></span>
-            <div class="fixed top-10 right-10 flex flex-col space-y-2 z-[500]">
-                @foreach (var notification in Notifications)
-                {
-                    <Notification Notif="notification" />
-                }
-            </div>
-            @Body
-        </main>
-        <div id="overlay" class="z-[9999]"></div>
+        
     </div>
 </CascadingValue>

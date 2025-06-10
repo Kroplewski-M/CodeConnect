@@ -10,16 +10,15 @@ namespace CodeConnect.WebAssembly.Components.Profile;
 public class UserPostsBase : ComponentBase
 {
     [Inject] public required IPostService PostService { get; set; }
-    [CascadingParameter] public required UserState UserState { get; set; }
+    [CascadingParameter] public required string Username { get; set; }
     
     public List<PostBasicDto> Posts { get; set; } = new List<PostBasicDto>();
     public bool Loading { get; set; } = true;
 
     protected async Task LoadMorePosts((int,int)range)
     {
-        if(UserState.Current == null) return;
         var (startIndex, take) = range;
-        var more = await PostService.GetUserPosts(UserState.Current.UserName, skip: startIndex, take: take);
+        var more = await PostService.GetUserPosts(Username, skip: startIndex, take: take);
         if (more?.Any() == true)
         {
             Posts.AddRange(more);
