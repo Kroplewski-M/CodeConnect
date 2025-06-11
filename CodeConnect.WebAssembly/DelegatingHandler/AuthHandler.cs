@@ -23,7 +23,8 @@ public class AuthHandler(ILocalStorageService localStorageService) : System.Net.
         {
             request.Headers.Authorization = new AuthenticationHeaderValue(Consts.Tokens.ApiAuthTokenName, token);
         }
-        else if(request.RequestUri?.AbsolutePath != Consts.Base.RegisterEndpoint && request.RequestUri?.AbsolutePath != Consts.Base.LoginEndpoint)
+        else if(request.RequestUri?.AbsolutePath != Consts.Base.RegisterEndpoint && request.RequestUri?.AbsolutePath != Consts.Base.LoginEndpoint 
+                && request.RequestUri?.AbsolutePath != "/api/Authentication/GithubLogin")
         {
             await RefreshTokenAndRetry(request, cancellationToken);
         }

@@ -14,4 +14,5 @@ public interface IAuthenticateServiceClient
     public Task<AuthResponse> LogoutUser();
     public event Action? OnChange;
     public void NotifyStateChanged();
+    public Task GithubLogin();
 }
