@@ -1,4 +1,5 @@
 using ApplicationLayer;
+using ApplicationLayer.Classes;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;

@@ -56,7 +56,7 @@
             }
         </div>
     </div>
-    <div class="@(ShowPreview ? "" : "hidden")">
+    <div id="@PreviewTextId" class="@(ShowPreview ? "" : "hidden")">
         <p class="text-light-primaryColor font-bold text-[16px] mb-5">Preview:</p>
         <div class="markdown-output">
             @((MarkupString)PreviewText)

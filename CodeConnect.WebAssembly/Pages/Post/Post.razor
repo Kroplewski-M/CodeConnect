@@ -25,8 +25,8 @@ else
                 </div>
                 <p class="text-light-primaryColor/80 text-[14px] mr-5 mt-[5px]">@Helpers.GetUsersLocalTime(Post.CreatedAtUtc, Consts.DateFormats.DateTimeFormat)</p>
             </div>
-            <div class="w-[95%] max-w-[1000px] md:mt-5 mx-auto relative rounded-md">
-                <p class="text-light-primaryColor text-[20px] font-bold">@Post.Content</p>
+            <div class="w-[95%] max-w-[1000px] text-[20px] font-bold md:mt-5 mx-auto relative rounded-md" id="@Id">
+                @((MarkupString)Post.Content)
             </div>
             @if (Post.Images.Any())
             {

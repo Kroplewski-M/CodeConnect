@@ -29,7 +29,7 @@ public static class Consts
         public const string BackgroundImg = "BackgroundImg";
         public const string GithubLink = "GithubLink";
         public const string WebsiteLink = "WebsiteLink";
-        public const string Dob = "DOB";
+        public const string Dob = "Dob";
         public const string Bio = "Bio";
         public const string CreatedAt = "CreatedAt";
         public const string UserName = "UserName";

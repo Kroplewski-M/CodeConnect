@@ -1,83 +1,39 @@
-﻿@using ApplicationLayer
-@using ApplicationLayer.Interfaces
-@using Blazored.LocalStorage;
-@using Notification = ApplicationLayer.Notification
+﻿@using ApplicationLayer.Classes
 @using CodeConnect.WebAssembly.Components.Profile
-@inherits LayoutComponentBase
-@inject NavigationManager NavManager
-@inject NotificationsService NotificationsService
-@inject IJSRuntime Js
-@inject ILocalStorageService LocalStorageService
-@implements IDisposable
+@inherits MainLayoutBase
 
-<div class="bg-light-primaryColor dark:bg-dark-primaryColor min-h-screen flex @(!IsNonNavPage()?"flex-row":"flex-col") pb-7">
-    @if (!IsNonNavPage())
-    {
-        <div class="z-[300] sm:w-[250px] w-[80%]">
-            <NavMenu/>
-        </div>
-    }
-    else
-    { 
-        <a href="/" class="mt-3 ml-3 text-light-secondaryColor dark:bg-text-secondaryColor font-bold text-[20px]">
-            &lt;Code Connect/&gt;
-        </a>
-    }
-    <main class="relative px-4 z-[200] flex-grow pt-6 mt-5">
-        <span @onclick="() => SetDarkTheme(!_darkTheme)" class="fa-solid @(_darkTheme ? "fa-sun text-light-primaryColor" : "fa-moon text-dark-primaryColor") z-[300] fixed top-5 mt-5 right-5 cursor-pointer fa-xl"></span>
-        <div class="fixed top-10 right-10 flex flex-col space-y-2 z-[500]">
-            @foreach (var notification in _notifications)
-            {
-                <Notification Notif="notification" />
-            }
-        </div>
-        @Body
-    </main>
-    <div id="overlay" class="z-[9999]"></div>
-</div>
-
-@code{
-    private List<Notification> _notifications = [];
-    private bool _darkTheme = false;
-    protected override async Task OnInitializedAsync()
-    {
-        NotificationsService.OnChange += UpdateNotifications;
-        _notifications = NotificationsService.GetNotification();
-        
-        var darkTheme = await LocalStorageService.GetItemAsync<bool>("DarkTheme");
-        if (darkTheme)
+<CascadingValue Value="UserState">
+    <div class="bg-light-primaryColor dark:bg-dark-primaryColor min-h-screen flex @(!IsNonNavPage() ? "flex-row" : "flex-col") pb-7">
+        @if (UserState.Current != null && !HasDob)
         {
-            ToggleDarkMode();
+            <VerifyDob />
         }
-    }
-
-    private bool IsNonNavPage()
-    {
-        string[] nonNavPages = ["/","/Account/Register", "/Account/Login","/404"]; 
-        return nonNavPages.Any(page => NavManager.Uri.EndsWith(page));
-    }
-
-    private void UpdateNotifications()
-    {
-        _notifications = NotificationsService.GetNotification();
-        StateHasChanged();
-    }
-
-    public void Dispose()
-    {
-        NotificationsService.OnChange -= UpdateNotifications;
-    }
-
-    private void ToggleDarkMode()
-    {
-        Js.InvokeVoidAsync("toggleDarkMode");
-        _darkTheme = !_darkTheme;
-    }
-
-    private async Task SetDarkTheme(bool isDarkTheme)
-    {
-        await LocalStorageService.SetItemAsync<bool>("DarkTheme", isDarkTheme);
-        await Js.InvokeVoidAsync("toggleDarkMode");
-        _darkTheme = isDarkTheme;
-    }
-}
+        else
+        {
+            if (!IsNonNavPage())
+            {
+                <div class="z-[300] sm:w-[250px] w-[80%]">
+                    <NavMenu/>
+                </div>
+            }
+            else
+            {
+                <a href="/" class="mt-3 ml-3 text-light-secondaryColor dark:bg-text-secondaryColor font-bold text-[20px]">
+                    &lt;Code Connect/&gt;
+                </a>
+            }
+            <main class="relative px-4 z-[200] flex-grow pt-6 mt-5">
+                <span @onclick="() => SetDarkTheme(!DarkTheme)" class="fa-solid @(DarkTheme ? "fa-sun text-light-primaryColor" : "fa-moon text-dark-primaryColor") z-[300] fixed top-5 mt-5 right-5 cursor-pointer fa-xl"></span>
+                <div class="fixed top-10 right-10 flex flex-col space-y-2 z-[500]">
+                    @foreach (var notification in Notifications)
+                    {
+                        <Notification Notif="notification"/>
+                    }
+                </div>
+                @Body
+            </main>
+            <div id="overlay" class="z-[9999]"></div>
+        }
+        
+    </div>
+</CascadingValue>

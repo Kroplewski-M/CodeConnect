@@ -32,6 +32,7 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
        user.Bio = editProfileForm.Bio;
        user.GithubLink = editProfileForm.GithubLink;
        user.WebsiteLink = editProfileForm.WebsiteLink;
+       user.DOB = editProfileForm.Dob;
 
        await userManager.UpdateAsync(user);
        return new ServiceResponse(true, "Updated User Successfully");

@@ -83,7 +83,7 @@
                                 }
                                 else
                                 {
-                                    <FollowUser CurrentUsername="@CurrentUsername" FollowUsername="@UserDetails?.UserName" />
+                                    <FollowUser FollowUsername="@UserDetails?.UserName" />
                                 }
                             </div>
                         </div>
@@ -124,11 +124,12 @@
             </div>
             <CascadingValue Value="Username">
                 <ProfileDetails />
-                @if (EditUserInterests)
-                {
-                    <EditUserInterests CurrentUserInterests="UserInterests" Cancel="ToggleEditUserInterests" />
-                }
             </CascadingValue>
+            
+            @if (EditUserInterests)
+            {
+                <EditUserInterests CurrentUserInterests="UserInterests" Cancel="ToggleEditUserInterests" />
+            }
             @if (ShowConfirmLogout)
             {
                 <Confirm Description="Are you sure you want to logout?" ConfirmText="Logout"  ConfirmMethod="AuthenticateServiceClient.LogoutUser" CancelMethod="ToggleShowConfirmLogout"/>

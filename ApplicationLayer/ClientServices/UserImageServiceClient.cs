@@ -1,6 +1,7 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using ApplicationLayer.DTO_s;
+using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
 using Blazored.LocalStorage;
 using DomainLayer.Constants;
@@ -16,10 +17,11 @@ public class UserImageServiceClient(HttpClient httpClient,ILocalStorageService l
     {
         var response = await httpClient.PostAsJsonAsync("/api/User/UpdateUserImage", updateUserImageRequest);
         response.EnsureSuccessStatusCode();
-        var result = await response.Content.ReadFromJsonAsync<TokenResponse>();
-        if (!string.IsNullOrEmpty(result?.Key))
+        var result = await response.Content.ReadFromJsonAsync<AuthResponse>();
+        if (result?.Flag == true)
         {
-            await localStorageService.SetItemAsync(Consts.Tokens.AuthToken, result.Key);
+            await localStorageService.SetItemAsync(Consts.Tokens.AuthToken, result.Token);
+            await localStorageService.SetItemAsync(Consts.Tokens.RefreshToken, result.RefreshToken);
             ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
             authenticateServiceClient.NotifyStateChanged();
             return new ServiceResponse(true, "User image updated");

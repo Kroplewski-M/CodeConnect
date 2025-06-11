@@ -79,9 +79,9 @@
                            class="bg-transparent border-b-4 text-dark-supportColor border-dark-supportColor rounded-md font-bold mb-2 w-[80%] pl-[5px] outline-none">
                 </InputDate>
                 <div>
-                    @if (RegisterErrors.Any(x => x.PropertyName == Consts.ClaimTypes.Dob))
+                    @if (RegisterErrors.Any(x => x.PropertyName == "Dob"))
                     {
-                        foreach (var error in RegisterErrors.Where(x=> x.PropertyName == Consts.ClaimTypes.Dob))
+                        foreach (var error in RegisterErrors.Where(x=> x.PropertyName == "Dob"))
                         {
                             <p class="text-red-800 font-bold"><span class="fa fa-circle-exclamation text-red-800"></span> @error.ErrorMessage</p>
                         }

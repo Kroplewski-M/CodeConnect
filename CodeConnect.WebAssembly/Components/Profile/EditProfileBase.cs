@@ -11,15 +11,11 @@ namespace CodeConnect.WebAssembly.Components.Profile;
 
 public class EditProfileBase : ComponentBase
 {
-    [Inject]
-    public required  IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
-    [Inject]
-    public required NotificationsService NotificationsService { get; set; }
-    [Inject]
-    public required IUserService UserService { get; set; }
+    [Inject] public required  IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
+    [Inject] public required NotificationsService NotificationsService { get; set; }
+    [Inject] public required IUserService UserService { get; set; }
     
-    [Parameter]
-    public EventCallback Cancel { get; set; }
+    [Parameter] public EventCallback Cancel { get; set; }
 
     protected List<ValidationFailure> EditProfileErrors = [];
 
@@ -46,7 +42,7 @@ public class EditProfileBase : ComponentBase
                     LastName = _userDetails.LastName,
                     GithubLink = _userDetails.GithubLink,
                     WebsiteLink = _userDetails.WebsiteLink,
-                    DOB = _userDetails.Dob,
+                    Dob = _userDetails.Dob,
                     Bio = _userDetails.Bio,
                 };
                 StateHasChanged();

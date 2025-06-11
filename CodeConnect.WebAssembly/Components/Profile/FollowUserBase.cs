@@ -1,3 +1,4 @@
+using ApplicationLayer.Classes;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
@@ -9,19 +10,21 @@ public class FollowUserBase : ComponentBase
 {
     [Inject] public required IFollowingService FollowingService { get; set; }
     protected bool Following { get; set; }
-    [Parameter] public required string CurrentUsername { get; set; }
+    [CascadingParameter] public required UserState UserState { get; set; }
     [Parameter] public required string FollowUsername { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
-        Following = await FollowingService.IsUserFollowing(new FollowRequestDto(CurrentUsername, FollowUsername));
+        if (UserState.Current == null) return;
+        Following = await FollowingService.IsUserFollowing(new FollowRequestDto(UserState.Current.UserName, FollowUsername));
     }
 
     protected bool DisableFollow { get; set; } = false;
     protected async Task ToggleFollow()
     {
+        if (UserState.Current == null) return;
         DisableFollow = true;
-        var request = new FollowRequestDto(CurrentUsername, FollowUsername);
+        var request = new FollowRequestDto(UserState.Current.UserName, FollowUsername);
         if (!Following)
         {
             await FollowingService.FollowUser(request);
@@ -37,8 +40,9 @@ public class FollowUserBase : ComponentBase
 
     protected async Task UnFollow()
     {
+        if (UserState.Current == null) return;
         DisableFollow = true;
-        var request = new FollowRequestDto(CurrentUsername, FollowUsername);
+        var request = new FollowRequestDto(UserState.Current.UserName, FollowUsername);
         await FollowingService.UnfollowUser(request);
         Following = !Following;
         ConfirmUnFollow = false;
