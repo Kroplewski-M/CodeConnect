@@ -15,5 +15,12 @@
             </button>
             <SaveButton Loading="Loading" SaveMethod="SaveDob"/>
         </div>
+        @if (EditProfileErrors.Any())
+        {
+            foreach (var error in EditProfileErrors)
+            {
+                <p class="text-red-800 font-bold text-center mt-[5px]"><span class="fa fa-circle-exclamation text-red-800 text-center"></span> @error.ErrorMessage</p>
+            }
+        }
     </div>
 </div>
