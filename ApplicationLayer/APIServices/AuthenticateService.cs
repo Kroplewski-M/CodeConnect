@@ -4,17 +4,19 @@ using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
+using DomainLayer.Entities.APIClasses;
 using DomainLayer.Entities.Auth;
 using DomainLayer.Generics;
 using FluentValidation;
 using FluentValidation.Results;
 using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 
 namespace ApplicationLayer.APIServices;
 
 public class AuthenticateService(UserManager<ApplicationUser>userManager,
-    ITokenService tokenGenerationService,  ApplicationDbContext context) : IAuthenticateService
+    ITokenService tokenGenerationService,  ApplicationDbContext context,IOptions<GithubSettings>githubSettings) : IAuthenticateService
 {
     public async Task<AuthResponse> CreateUser(RegisterForm registerForm)
     {
@@ -96,6 +98,37 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
     {
         throw new NotImplementedException();
     }
+    
+    public async Task<AuthResponse> CreateUserFromGithub(string code)
+    {
+        var clientId = githubSettings.Value.ClientId;
+        var clientSecret = githubSettings.Value.Secret;
+
+        using var httpClient = new HttpClient();
+
+        var tokenResponse = await httpClient.PostAsync("https://github.com/login/oauth/access_token",
+            new FormUrlEncodedContent(new Dictionary<string, string>
+            {
+                { "client_id", clientId ?? "" },
+                { "client_secret", clientSecret ?? "" },
+                { "code", code }
+            }));
+        var responseContent = await tokenResponse.Content.ReadAsStringAsync();
+        var query = System.Web.HttpUtility.ParseQueryString(responseContent);
+        var accessToken = query["access_token"];
+
+        // Get user info
+        httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+        httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("CodeConnect");
+        var userResponse = await httpClient.GetAsync("https://api.github.com/user");
+        var emails = await httpClient.GetAsync("https://api.github.com/user/emails");
+        userResponse.EnsureSuccessStatusCode();
+
+        var userJson = await userResponse.Content.ReadAsStringAsync();
+        var emailsJson = await emails.Content.ReadAsStringAsync();
+        return new AuthResponse(true, "", "", "");
+    }
+
     private AuthResponse GenerateAuthResponse(List<Claim> userClaims,string refreshToken)
     {
         var expiresAt = DateTime.UtcNow.AddMinutes(Consts.Tokens.AuthTokenMins);

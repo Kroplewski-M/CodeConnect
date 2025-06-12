@@ -7,10 +7,12 @@ using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
 using CodeConnect.WebAPI.Endpoints.AuthenticationEndpoint;
 using DomainLayer.Constants;
+using DomainLayer.Entities.APIClasses;
 using DomainLayer.Entities.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Moq;
 
 namespace TestLayer;
@@ -21,14 +23,14 @@ public class AuthControllerTests
     private readonly Mock<ITokenService> _tokenServiceMock;
     private readonly AuthenticationController _authController;
     private readonly Mock<IHttpContextAccessor> _httpContextMock; 
-    private readonly Mock<IConfiguration> _configMock; 
+    private readonly Mock<IOptions<GithubSettings>> _configMock; 
 
     public AuthControllerTests()
     {
         _authenticateServiceMock = new Mock<IAuthenticateService>();
         _tokenServiceMock = new Mock<ITokenService>();
         _httpContextMock = new Mock<IHttpContextAccessor>();
-        _configMock = new Mock<IConfiguration>();
+        _configMock = new Mock<IOptions<GithubSettings>>();
         
         var context = new DefaultHttpContext();
         _httpContextMock.Setup(x => x.HttpContext).Returns(context);

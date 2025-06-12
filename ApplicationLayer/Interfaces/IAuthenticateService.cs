@@ -11,4 +11,6 @@ public interface IAuthenticateService
     public Task<AuthResponse> CreateUser(RegisterForm registerForm);
     public Task<AuthResponse> LoginUser(LoginForm loginForm);
     public Task<AuthResponse> LogoutUser();
+    public Task<AuthResponse> CreateUserFromGithub(string code);
+    
 }

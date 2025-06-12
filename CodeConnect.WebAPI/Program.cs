@@ -62,6 +62,7 @@ builder.Services.AddAuthentication(options =>
 });
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 builder.Services.Configure<AzureSettings>(builder.Configuration.GetSection("AzureSettings"));
+builder.Services.Configure<GithubSettings>(builder.Configuration.GetSection("GithubAuth"));
 builder.Services.AddTransient<ITokenService,TokenService>();
 builder.Services.AddTransient<IUserImageService,UserImageService>();
 builder.Services.AddScoped<IAuthenticateService,AuthenticateService>();

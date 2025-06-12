@@ -2,10 +2,12 @@ using System.Security.Claims;
 using ApplicationLayer.APIServices;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
+using DomainLayer.Entities.APIClasses;
 using DomainLayer.Entities.Auth;
 using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Moq;
 
 namespace ApiServiceTests;
@@ -16,7 +18,6 @@ public class AuthServiceTests
     private readonly Mock<UserManager<ApplicationUser>> _userManagerMock;
     private readonly Mock<ITokenService> _tokenServiceMock;
     private readonly Mock<IAuthenticateService> _authServiceMock;
-
     private class TestableAuth(
         UserManager<ApplicationUser> userManager,
         ITokenService tokenService,

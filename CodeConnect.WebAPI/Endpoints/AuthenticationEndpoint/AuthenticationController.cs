@@ -5,9 +5,11 @@ using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
+using DomainLayer.Entities.APIClasses;
 using DomainLayer.Entities.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualBasic;
 
 namespace CodeConnect.WebAPI.Endpoints.AuthenticationEndpoint;
@@ -15,7 +17,7 @@ namespace CodeConnect.WebAPI.Endpoints.AuthenticationEndpoint;
 [Route("api/[controller]")]
 [ApiController]
 public class AuthenticationController(IAuthenticateService authenticateService, 
-    ITokenService tokenService, IConfiguration config) : ControllerBase
+    ITokenService tokenService, IOptions<GithubSettings>githubSettings) : ControllerBase
 {
     [HttpPost("RegisterUser")]
     public async Task<IActionResult> RegisterUser([FromBody]RegisterForm registerForm)
@@ -45,44 +47,19 @@ public class AuthenticationController(IAuthenticateService authenticateService,
     [HttpGet("GithubLogin")]
     public IActionResult GithubLogin()
     {
-        var clientId = config["GithubAuth:ClientId"];
-        var state = Guid.NewGuid().ToString(); 
+        var clientId = githubSettings.Value.ClientId;
         var githubUrl = $"https://github.com/login/oauth/authorize" +
-                        $"?client_id={clientId}&scope=read:user%20user:email&state={state}";
+                        $"?client_id={clientId}&scope=read:user%20user:email";
 
         return Ok(githubUrl);
     }
 
     [HttpGet("github/callback")]
-    public async Task<IActionResult> GitHubCallback(string code, string state)
+    public async Task<IActionResult> GitHubCallback(string code)
     {
-        var clientId = config["GithubAuth:ClientId"];
-        var clientSecret = config["GithubAuth:Secret"];
-
-        using var httpClient = new HttpClient();
-
-        var tokenResponse = await httpClient.PostAsync("https://github.com/login/oauth/access_token",
-            new FormUrlEncodedContent(new Dictionary<string, string>
-            {
-                { "client_id", clientId ?? "" },
-                { "client_secret", clientSecret ?? "" },
-                { "code", code }
-            }));
-        var responseContent = await tokenResponse.Content.ReadAsStringAsync();
-        var query = System.Web.HttpUtility.ParseQueryString(responseContent);
-        var accessToken = query["access_token"];
-
-        // Get user info
-        httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
-        httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("CodeConnect");
-        var userResponse = await httpClient.GetAsync("https://api.github.com/user");
-        var emails = await httpClient.GetAsync("https://api.github.com/user/emails");
-        userResponse.EnsureSuccessStatusCode();
-
-        var userJson = await userResponse.Content.ReadAsStringAsync();
-        var emailsJson = await emails.Content.ReadAsStringAsync();
+        await authenticateService.CreateUserFromGithub(code);
         
-        return Ok();
+        return Redirect("https://localhost:7202/Account/Login");
     }
 
     [Authorize]
