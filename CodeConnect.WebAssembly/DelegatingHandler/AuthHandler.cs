@@ -23,14 +23,10 @@ public class AuthHandler(ILocalStorageService localStorageService) : System.Net.
         {
             request.Headers.Authorization = new AuthenticationHeaderValue(Consts.Tokens.ApiAuthTokenName, token);
         }
-        else if(request.RequestUri?.AbsolutePath != Consts.Base.RegisterEndpoint && request.RequestUri?.AbsolutePath != Consts.Base.LoginEndpoint)
-        {
-            await RefreshTokenAndRetry(request, cancellationToken);
-        }
         var response = await base.SendAsync(request, cancellationToken);
         if (response.StatusCode == HttpStatusCode.Unauthorized && hasToken)
         {
-            await RefreshTokenAndRetry(request, cancellationToken);
+            return await RefreshTokenAndRetry(request, cancellationToken);
         }
         return response;
     }
@@ -38,7 +34,7 @@ public class AuthHandler(ILocalStorageService localStorageService) : System.Net.
     private async Task<HttpResponseMessage> RefreshTokenAndRetry(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         var refreshToken = await localStorageService.GetItemAsync<string>(Consts.Tokens.RefreshToken, cancellationToken);
-        var refreshRequest = new HttpRequestMessage(HttpMethod.Get, $"{Consts.Base.BaseUrl}/api/Authentication/RefreshToken");
+        var refreshRequest = new HttpRequestMessage(HttpMethod.Post, $"{Consts.Base.BaseUrl}/api/Authentication/RefreshToken");
         refreshRequest.Headers.Authorization = new AuthenticationHeaderValue(Consts.Tokens.ApiAuthTokenName, refreshToken);
         var tokenResponse = await base.SendAsync(refreshRequest, cancellationToken);
         var newToken = await tokenResponse.Content.ReadFromJsonAsync<AuthResponse>(cancellationToken: cancellationToken);

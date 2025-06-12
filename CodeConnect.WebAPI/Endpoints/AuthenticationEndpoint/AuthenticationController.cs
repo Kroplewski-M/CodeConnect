@@ -43,7 +43,7 @@ public class AuthenticationController(IAuthenticateService authenticateService,
         return Unauthorized(result);
     }
     [Authorize]
-    [HttpGet("RefreshToken")]
+    [HttpPost("RefreshToken")]
     public async Task<IActionResult> RefreshToken()
     {
         var authorizationHeader = Request.Headers["Authorization"].ToString();
