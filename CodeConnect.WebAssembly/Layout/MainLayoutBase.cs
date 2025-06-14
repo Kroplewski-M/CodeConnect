@@ -88,7 +88,8 @@ public class MainLayoutBase : LayoutComponentBase, IDisposable
             else
             {
                 UserState.Current = null;
-                NavigationManager.NavigateTo("/");
+                NavManager.NavigateTo("/Account/Login");
+                await InvokeAsync(StateHasChanged);
             }
         });
     }

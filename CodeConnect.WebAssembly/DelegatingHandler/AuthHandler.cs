@@ -7,6 +7,7 @@ using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
 using Blazored.LocalStorage;
 using DomainLayer.Constants;
+using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 
 namespace CodeConnect.WebAssembly.DelegatingHandler;
@@ -48,6 +49,8 @@ public class AuthHandler(ILocalStorageService localStorageService) : System.Net.
             var retry = await base.SendAsync(request, cancellationToken);
             return retry;
         }
+        await localStorageService.RemoveItemAsync(Consts.Tokens.RefreshToken, cancellationToken);
+        await localStorageService.RemoveItemAsync(Consts.Tokens.TokenType, cancellationToken);
         return new HttpResponseMessage(HttpStatusCode.Unauthorized);
     }
 }
