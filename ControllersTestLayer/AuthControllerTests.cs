@@ -155,7 +155,7 @@ public class AuthControllerTests
         var unauthedResult = result as UnauthorizedObjectResult;
         Assert.NotNull(unauthedResult);
         Assert.Equal((int)HttpStatusCode.Unauthorized, unauthedResult.StatusCode);
-        _tokenServiceMock.Verify(x => x.RefreshUserTokens(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        _tokenServiceMock.Verify(x => x.RefreshUserTokens( It.IsAny<string>()), Times.Never);
     }
 
     [Fact]
@@ -177,7 +177,7 @@ public class AuthControllerTests
         var unauthedResult = result as UnauthorizedObjectResult;
         Assert.NotNull(unauthedResult);
         Assert.Equal((int)HttpStatusCode.Unauthorized, unauthedResult.StatusCode);
-        _tokenServiceMock.Verify(x => x.RefreshUserTokens(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        _tokenServiceMock.Verify(x => x.RefreshUserTokens( It.IsAny<string>()), Times.Never);
     }
     [Fact]
     public async Task RefreshToken_ValidRequest_TokenServiceSuccess_ShouldReturnOk()
@@ -198,7 +198,7 @@ public class AuthControllerTests
         };
 
         var expectedResponse = new AuthResponse(true, "","","");
-        _tokenServiceMock.Setup(x => x.RefreshUserTokens(username, token)).ReturnsAsync(expectedResponse);
+        _tokenServiceMock.Setup(x => x.RefreshUserTokens(token)).ReturnsAsync(expectedResponse);
         _tokenServiceMock.Setup(x => x.ValidateToken(token)).Returns(new ClaimsPrincipalResponse(true, claimsPrincipal));
         // Act
         var result = await authControllerWithContext.RefreshToken();
@@ -208,7 +208,7 @@ public class AuthControllerTests
         Assert.NotNull(okResult);
         Assert.Equal((int)HttpStatusCode.OK, okResult.StatusCode);
         Assert.Equal(expectedResponse, okResult.Value);
-        _tokenServiceMock.Verify(x => x.RefreshUserTokens(username, token), Times.Once);
+        _tokenServiceMock.Verify(x => x.RefreshUserTokens(token), Times.Once);
     }
 
 }

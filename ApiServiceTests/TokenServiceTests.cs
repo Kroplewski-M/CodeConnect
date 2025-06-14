@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using ApplicationLayer.APIServices;
+using DomainLayer.Constants;
 using DomainLayer.Entities.APIClasses;
 using DomainLayer.Entities.Auth;
 using InfrastructureLayer;
@@ -149,7 +150,7 @@ public class TokenServiceTests
         _userManager.Setup(u => u.FindByNameAsync(It.IsAny<string>())).ReturnsAsync((ApplicationUser?)null);
 
         // Act
-        var result = await _tokenService.RefreshUserTokens("nonexistentuser", "sometoken");
+        var result = await _tokenService.RefreshUserTokens( "sometoken");
 
         // Assert
         Assert.False(result.Flag);
@@ -167,7 +168,7 @@ public class TokenServiceTests
         _context.RefreshUserAuths.Add(new RefreshUserAuth { UserId = "user123", RefreshToken = "token" });
         await _context.SaveChangesAsync();
         // Act
-        var result = await _tokenService.RefreshUserTokens("testuser", "wrongtoken");
+        var result = await _tokenService.RefreshUserTokens( "wrongtoken");
 
         // Assert
         Assert.False(result.Flag);
@@ -182,14 +183,18 @@ public class TokenServiceTests
         // Arrange
         var user = new ApplicationUser { Id = "user123", UserName = "testuser" };
         _userManager.Setup(u => u.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(user);
+        var token = _tokenService.GenerateJwtToken(new List<Claim>
+        {
+            new (Consts.ClaimTypes.UserName, "testuser"),
+            new (Consts.Tokens.TokenType, nameof(Consts.TokenType.Refresh))
+        }, DateTime.UtcNow.AddMinutes(30));
+        var refreshAuth = new RefreshUserAuth { UserId = "user123", RefreshToken = token };
 
-        var refreshAuth = new RefreshUserAuth { UserId = "user123", RefreshToken = "correctToken" };
-
-        _context.RefreshUserAuths.Add(new RefreshUserAuth { UserId = "user123", RefreshToken = "correctToken" });
+        _context.RefreshUserAuths.Add(refreshAuth);
         await _context.SaveChangesAsync();
 
         // Act
-        var result = await _tokenService.RefreshUserTokens("testuser", "correctToken");
+        var result = await _tokenService.RefreshUserTokens(token);
 
         // Assert
         Assert.True(result.Flag);

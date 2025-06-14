@@ -4,7 +4,7 @@ public static class Consts
 {
     public static class AuthEndpoints
     {
-        public static readonly List<string> AuthEndoints = [RegisterEndpoint,LoginEndpoint];
+        public static readonly List<string> AuthUrls = [RegisterEndpoint,LoginEndpoint];
         private const string RegisterEndpoint = "/api/Authentication/RegisterUser";
         private const string LoginEndpoint = "/api/Authentication/LoginUser";
     }
@@ -25,6 +25,13 @@ public static class Consts
         public const string ApiAuthTokenName = "Bearer";
         public const int AuthTokenMins = 10;
         public const int RefreshTokenMins = 10080;
+        public const string TokenType = "Token";
+    }
+
+    public enum TokenType
+    {
+        Access,
+        Refresh,
     }
     public static class ClaimTypes
     {

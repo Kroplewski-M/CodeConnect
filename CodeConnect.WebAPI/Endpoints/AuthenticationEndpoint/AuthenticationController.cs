@@ -54,11 +54,7 @@ public class AuthenticationController(IAuthenticateService authenticateService,
         {
             token = authorizationHeader.Substring("Bearer ".Length).Trim();
         }
-        var res = tokenService.ValidateToken(token);
-        var name = res?.ClaimsPrincipal?.Claims?.FirstOrDefault(x => x.Type == Consts.ClaimTypes.UserName);
-        if(name == null)
-            return Unauthorized(new AuthResponse(false,"","","error refreshing token"));
-        var response = await tokenService.RefreshUserTokens(name.Value,token);
+        var response = await tokenService.RefreshUserTokens(token);
         if(response.Flag)
             return Ok(response);
         return BadRequest(response);

@@ -14,21 +14,23 @@ namespace CodeConnect.WebAssembly.DelegatingHandler;
 
 public class AuthHandler(ILocalStorageService localStorageService) : System.Net.Http.DelegatingHandler
 {
-    
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         var token = await localStorageService.GetItemAsync<string>(Consts.Tokens.AuthToken, cancellationToken);
         var hasToken = !string.IsNullOrEmpty(token);
-        if (hasToken)
+        HttpResponseMessage? response = null;
+        if (request.RequestUri == null)
+            return new HttpResponseMessage(HttpStatusCode.BadRequest);
+        if (hasToken || Consts.AuthEndpoints.AuthUrls.Contains(request.RequestUri.AbsolutePath))
         {
             request.Headers.Authorization = new AuthenticationHeaderValue(Consts.Tokens.ApiAuthTokenName, token);
+            response = await base.SendAsync(request, cancellationToken);
         }
-        var response = await base.SendAsync(request, cancellationToken);
-        if (response.StatusCode == HttpStatusCode.Unauthorized && hasToken)
+        else if (!hasToken || response?.StatusCode == HttpStatusCode.Unauthorized)
         {
             return await RefreshTokenAndRetry(request, cancellationToken);
         }
-        return response;
+        return response!;
     }
 
     private async Task<HttpResponseMessage> RefreshTokenAndRetry(HttpRequestMessage request, CancellationToken cancellationToken)

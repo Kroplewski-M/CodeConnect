@@ -17,11 +17,13 @@ namespace ApplicationLayer.APIServices;
 
 public class TokenService(IOptions<JwtSettings> jwtSettings,ApplicationDbContext context,UserManager<ApplicationUser>userManager) : ITokenService
 {
-    public string? GenerateJwtToken(IEnumerable<Claim> claims, DateTime expireAt)
+    public string? GenerateJwtToken(IEnumerable<Claim> claims, DateTime expireAt, Consts.TokenType tokenType = Consts.TokenType.Access)
     {
-        var enumerable = claims as Claim[] ?? claims.ToArray();
-        if(enumerable.Length == 0)
+        var allClaims = claims.ToList();
+        if(!allClaims.Any())
             return string.Empty;
+        allClaims.Add(new Claim(Consts.Tokens.TokenType, tokenType.ToString()));
+        var enumerable = allClaims;
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Value.Key));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var token = new JwtSecurityToken(issuer: jwtSettings.Value.Issuer,
@@ -60,9 +62,21 @@ public class TokenService(IOptions<JwtSettings> jwtSettings,ApplicationDbContext
         }
     }
 
-    public async Task<AuthResponse> RefreshUserTokens(string userName, string refreshToken)
+    public async Task<AuthResponse> RefreshUserTokens(string refreshToken)
     {
-        var user = await userManager.FindByNameAsync(userName);
+        var res = ValidateToken(refreshToken);
+        if(!res.Flag)
+            return new AuthResponse(false,"","","Invalid token");
+            
+        //make sure token is a refresh token
+        var tokenType = res?.ClaimsPrincipal?.Claims?.FirstOrDefault(x => x.Type == Consts.Tokens.TokenType)?.Value?.ToString();
+        if(tokenType != nameof(Consts.TokenType.Refresh))
+            return new AuthResponse(false,"","","Token is not a refresh token");
+            
+        var username = res?.ClaimsPrincipal?.Claims?.FirstOrDefault(x => x.Type == Consts.ClaimTypes.UserName)?.Value?.ToString();
+        if(string.IsNullOrWhiteSpace(username))
+            return new AuthResponse(false,"","","error refreshing token");
+        var user = await userManager.FindByNameAsync(username);
         if (user == null)
             return new AuthResponse(false,"","","Couldn't find user when refreshing token");
         var refresh = context.RefreshUserAuths.FirstOrDefault(x => x.UserId == user.Id);
@@ -70,7 +84,7 @@ public class TokenService(IOptions<JwtSettings> jwtSettings,ApplicationDbContext
         {
             var userClaims = Generics.GetClaimsForUser(user);
             var token = GenerateJwtToken(userClaims, DateTime.UtcNow.AddMinutes(Consts.Tokens.AuthTokenMins));
-            var newRefreshToken = GenerateJwtToken(userClaims, DateTime.UtcNow.AddMinutes(Consts.Tokens.RefreshTokenMins));
+            var newRefreshToken = GenerateJwtToken(userClaims, DateTime.UtcNow.AddMinutes(Consts.Tokens.RefreshTokenMins), Consts.TokenType.Refresh);
             if (!string.IsNullOrWhiteSpace(token) && !string.IsNullOrWhiteSpace(refreshToken) && !string.IsNullOrWhiteSpace(newRefreshToken))
             {
                 try
