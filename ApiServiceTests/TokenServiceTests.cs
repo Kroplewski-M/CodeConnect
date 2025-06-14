@@ -149,7 +149,7 @@ public class TokenServiceTests
         _userManager.Setup(u => u.FindByNameAsync(It.IsAny<string>())).ReturnsAsync((ApplicationUser?)null);
 
         // Act
-        var result = await _tokenService.RefreshUserTokens("nonexistentuser", "sometoken");
+        var result = await _tokenService.RefreshUserTokens( "sometoken");
 
         // Assert
         Assert.False(result.Flag);
@@ -167,7 +167,7 @@ public class TokenServiceTests
         _context.RefreshUserAuths.Add(new RefreshUserAuth { UserId = "user123", RefreshToken = "token" });
         await _context.SaveChangesAsync();
         // Act
-        var result = await _tokenService.RefreshUserTokens("testuser", "wrongtoken");
+        var result = await _tokenService.RefreshUserTokens( "wrongtoken");
 
         // Assert
         Assert.False(result.Flag);
@@ -189,7 +189,7 @@ public class TokenServiceTests
         await _context.SaveChangesAsync();
 
         // Act
-        var result = await _tokenService.RefreshUserTokens("testuser", "correctToken");
+        var result = await _tokenService.RefreshUserTokens("correctToken");
 
         // Assert
         Assert.True(result.Flag);

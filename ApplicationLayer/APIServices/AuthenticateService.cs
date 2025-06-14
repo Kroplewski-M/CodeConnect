@@ -65,6 +65,7 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         if (user != null)
         {
             var correctPassword = await userManager.CheckPasswordAsync(user, loginForm.Password);
+            
             if (correctPassword)
             {
                 var userClaims = Generics.GetClaimsForUser(user);
@@ -84,7 +85,7 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
             context.RefreshUserAuths.Remove(existingToken);
         //Save refresh token in DB to re authenticate user
         var refreshExpiresAt = DateTime.UtcNow.AddMinutes(Consts.Tokens.RefreshTokenMins);
-        var refreshToken = tokenGenerationService.GenerateJwtToken(userClaims,refreshExpiresAt);
+        var refreshToken = tokenGenerationService.GenerateJwtToken(userClaims,refreshExpiresAt, Consts.TokenType.Refresh);
         if(string.IsNullOrWhiteSpace(refreshToken))
             return "";
         context.RefreshUserAuths.Add(new RefreshUserAuth { RefreshToken = refreshToken, UserId = userId});

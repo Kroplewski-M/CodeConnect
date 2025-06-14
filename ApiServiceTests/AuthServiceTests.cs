@@ -2,6 +2,7 @@ using System.Security.Claims;
 using ApplicationLayer.APIServices;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
+using DomainLayer.Constants;
 using DomainLayer.Entities.Auth;
 using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
@@ -67,7 +68,7 @@ public class AuthServiceTests
         _userManagerMock.Setup(um => um.CreateAsync(It.IsAny<ApplicationUser>(), registerForm.Password))
             .ReturnsAsync(IdentityResult.Success);
         
-        _tokenServiceMock.Setup(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>()))
+        _tokenServiceMock.Setup(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>(),It.IsAny<Consts.TokenType>()))
             .Returns("dummy-refresh-token");
         var service = new AuthenticateService(_userManagerMock.Object, _tokenServiceMock.Object, context);
         //Act
@@ -78,7 +79,7 @@ public class AuthServiceTests
         Assert.Equal("dummy-refresh-token", result.RefreshToken);
         Assert.Equal("dummy-refresh-token", result.Token);
         _userManagerMock.Verify(um => um.CreateAsync(It.IsAny<ApplicationUser>(), registerForm.Password), Times.Once);
-        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>()), Times.Exactly(2));
+        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>(), It.IsAny<Consts.TokenType>()), Times.Exactly(2));
 
     }
     [Fact]
@@ -103,7 +104,7 @@ public class AuthServiceTests
         Assert.NotNull(result);
         Assert.False(result.Flag);
         _userManagerMock.Verify(um => um.CreateAsync(It.IsAny<ApplicationUser>(), registerForm.Password), Times.Never);
-        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>()), Times.Never);
+        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>(),It.IsAny<Consts.TokenType>()), Times.Never);
     }
     [Fact]
     public async Task CreateUser_NoFirstName_ShouldReturnBadRequestResponse()
@@ -127,7 +128,7 @@ public class AuthServiceTests
         Assert.NotNull(result);
         Assert.False(result.Flag);
         _userManagerMock.Verify(um => um.CreateAsync(It.IsAny<ApplicationUser>(), registerForm.Password), Times.Never);
-        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>()), Times.Never);
+        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>(),It.IsAny<Consts.TokenType>()), Times.Never);
     }
     [Fact]
     public async Task CreateUser_NoLastName_ShouldReturnBadRequestResponse()
@@ -151,7 +152,7 @@ public class AuthServiceTests
         Assert.NotNull(result);
         Assert.False(result.Flag);
         _userManagerMock.Verify(um => um.CreateAsync(It.IsAny<ApplicationUser>(), registerForm.Password), Times.Never);
-        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>()), Times.Never);
+        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>(),It.IsAny<Consts.TokenType>()), Times.Never);
     }
     [Fact]
     public async Task CreateUser_NoEmail_ShouldReturnBadRequestResponse()
@@ -175,7 +176,7 @@ public class AuthServiceTests
         Assert.NotNull(result);
         Assert.False(result.Flag);
         _userManagerMock.Verify(um => um.CreateAsync(It.IsAny<ApplicationUser>(), registerForm.Password), Times.Never);
-        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>()), Times.Never);
+        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>(),It.IsAny<Consts.TokenType>()), Times.Never);
     }
     [Fact]
     public async Task CreateUser_NoPassword_ShouldReturnBadRequestResponse()
@@ -199,7 +200,7 @@ public class AuthServiceTests
         Assert.NotNull(result);
         Assert.False(result.Flag);
         _userManagerMock.Verify(um => um.CreateAsync(It.IsAny<ApplicationUser>(), registerForm.Password), Times.Never);
-        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>()), Times.Never);
+        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>(),It.IsAny<Consts.TokenType>()), Times.Never);
     }
     [Fact]
     public async Task CreateUser_PasswordUnderMinLength_ShouldReturnBadRequestResponse()
@@ -223,7 +224,7 @@ public class AuthServiceTests
         Assert.NotNull(result);
         Assert.False(result.Flag);
         _userManagerMock.Verify(um => um.CreateAsync(It.IsAny<ApplicationUser>(), registerForm.Password), Times.Never);
-        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>()), Times.Never);
+        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>(),It.IsAny<Consts.TokenType>()), Times.Never);
     }
 
     [Fact]
@@ -239,7 +240,7 @@ public class AuthServiceTests
         var service = new TestableAuth(_userManagerMock.Object, _tokenServiceMock.Object, context);
         _userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser() {Email = loginForm.Email});
         _userManagerMock.Setup(x => x.CheckPasswordAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).ReturnsAsync(true);
-        _tokenServiceMock.Setup(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>())).Returns("token");
+        _tokenServiceMock.Setup(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>(),It.IsAny<Consts.TokenType>())).Returns("token");
         //Act
         var result = await service.LoginUser(loginForm);
         
@@ -249,7 +250,7 @@ public class AuthServiceTests
         _userManagerMock.Verify(um => um.FindByEmailAsync(It.IsAny<string>()), Times.Once);
         _userManagerMock.Verify(um => um.FindByNameAsync(It.IsAny<string>()), Times.Never);
         Assert.Equal(1, service.SaveRefreshCount);
-        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>()), Times.Exactly(2));
+        _tokenServiceMock.Verify(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>(),It.IsAny<Consts.TokenType>()), Times.Exactly(2));
     }
 
     [Fact]
@@ -266,7 +267,7 @@ public class AuthServiceTests
         _userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser(){UserName = "testUsername"});
         _userManagerMock.Setup(x => x.CheckPasswordAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
             .ReturnsAsync(true);
-        _tokenServiceMock.Setup(x => x.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>()))
+        _tokenServiceMock.Setup(x => x.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>(),It.IsAny<Consts.TokenType>()))
             .Returns("token");
         //Act  
         var result = await service.LoginUser(loginForm);
@@ -277,7 +278,7 @@ public class AuthServiceTests
         Assert.Equal(1, service.SaveRefreshCount);
         _userManagerMock.Verify(x => x.FindByNameAsync(It.IsAny<string>()), Times.Once);
         _userManagerMock.Verify(x => x.FindByEmailAsync(It.IsAny<string>()), Times.Never); 
-        _tokenServiceMock.Verify(x => x.GenerateJwtToken(It.IsAny<List<Claim>>(),It.IsAny<DateTime>()), Times.Exactly(2));
+        _tokenServiceMock.Verify(x => x.GenerateJwtToken(It.IsAny<List<Claim>>(),It.IsAny<DateTime>(),It.IsAny<Consts.TokenType>()), Times.Exactly(2));
     }
 
     [Fact]
@@ -299,7 +300,7 @@ public class AuthServiceTests
         Assert.False(result.Flag);
         _userManagerMock.Verify(x => x.FindByEmailAsync(It.IsAny<string>()), Times.Never);
         _userManagerMock.Verify(x => x.FindByNameAsync(It.IsAny<string>()), Times.Never);
-        _tokenServiceMock.Verify(x => x.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>()), Times.Never);
+        _tokenServiceMock.Verify(x => x.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>(),It.IsAny<Consts.TokenType>()), Times.Never);
     }
 
     [Fact]
