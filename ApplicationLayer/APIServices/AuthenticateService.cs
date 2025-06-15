@@ -10,7 +10,6 @@ using FluentValidation;
 using FluentValidation.Results;
 using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 
 namespace ApplicationLayer.APIServices;
 
