@@ -18,18 +18,18 @@ public class AuthenticationController(IAuthenticateService authenticateService,
     ITokenService tokenService) : ControllerBase
 {
     [HttpPost("RegisterUser")]
-    public async Task<IActionResult> RegisterUser([FromBody]RegisterForm registerForm)
+    public async Task<IActionResult> RegisterUser([FromBody]RegisterForm registerForm, [FromHeader(Name = Consts.Headers.DeviceId)]string deviceId)
     {
-        var result = await authenticateService.CreateUser(registerForm);
+        var result = await authenticateService.CreateUser(registerForm, deviceId);
         if (result.Flag)
             return Ok(result);
         return BadRequest(result);
     }
 
     [HttpPost("LoginUser")]
-    public async Task<IActionResult> LoginUser([FromBody] LoginForm loginForm)
+    public async Task<IActionResult> LoginUser([FromBody] LoginForm loginForm, [FromHeader(Name = Consts.Headers.DeviceId)]string deviceId)
     {
-        var result = await authenticateService.LoginUser(loginForm);
+        var result = await authenticateService.LoginUser(loginForm, deviceId);
         if (result.Flag)
             return Ok(result);
         return BadRequest(result);
@@ -44,7 +44,7 @@ public class AuthenticationController(IAuthenticateService authenticateService,
     }
     [Authorize]
     [HttpPost("RefreshToken")]
-    public async Task<IActionResult> RefreshToken()
+    public async Task<IActionResult> RefreshToken([FromHeader(Name = Consts.Headers.DeviceId)]string deviceId)
     {
         var authorizationHeader = Request.Headers["Authorization"].ToString();
         if(string.IsNullOrWhiteSpace(authorizationHeader))
@@ -54,7 +54,7 @@ public class AuthenticationController(IAuthenticateService authenticateService,
         {
             token = authorizationHeader.Substring("Bearer ".Length).Trim();
         }
-        var response = await tokenService.RefreshUserTokens(token);
+        var response = await tokenService.RefreshUserTokens(token, deviceId);
         if(response.Flag)
             return Ok(response);
         return BadRequest(response);

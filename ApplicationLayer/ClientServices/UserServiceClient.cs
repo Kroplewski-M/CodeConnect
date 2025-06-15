@@ -17,12 +17,15 @@ public class UserServiceClient(HttpClient httpClient,ILocalStorageService localS
     public async Task<ServiceResponse> UpdateUserDetails(EditProfileForm editProfileForm)
     {
         var response = await httpClient.PostAsJsonAsync("/api/User/EditUserDetails", editProfileForm);
-        var newTokens = await response.Content.ReadFromJsonAsync<AuthResponse>();
-        await localStorageService.SetItemAsync(Consts.Tokens.AuthToken, newTokens?.Token);
-        await localStorageService.SetItemAsync(Consts.Tokens.RefreshToken, newTokens?.RefreshToken);
-        ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
-        authenticateServiceClient.NotifyStateChanged();
-        return new ServiceResponse(true, "Updated Details Successfully");
+        var newTokens = await response.Content.ReadFromJsonAsync<TokenResponse>();
+        if (!string.IsNullOrWhiteSpace(newTokens?.Key))
+        {
+            await localStorageService.SetItemAsync(Consts.Tokens.AuthToken, newTokens?.Key);
+            ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
+            authenticateServiceClient.NotifyStateChanged();
+            return new ServiceResponse(true, "Updated Details Successfully");
+        }
+        return new ServiceResponse(false, "invalid response when updating details");
     }
 
     public async Task<UserDetails?> GetUserDetails(string username)

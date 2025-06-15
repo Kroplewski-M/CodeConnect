@@ -41,16 +41,17 @@ public class AuthControllerTests
         // Arrange
         var registerForm = new RegisterForm() { FirstName = "Test",LastName = "Test",UserName = "testuser", Email = "test@example.com", Password = "password", Dob = DateOnly.FromDateTime(DateTime.UtcNow) };
         var expectedResult = new AuthResponse( true, "", "", "User registered successfully");
-        _authenticateServiceMock.Setup(x => x.CreateUser(registerForm)).ReturnsAsync(expectedResult);
+        var deviceId = Guid.NewGuid().ToString();
+        _authenticateServiceMock.Setup(x => x.CreateUser(registerForm,deviceId)).ReturnsAsync(expectedResult);
 
         // Act
-        var result = await _authController.RegisterUser(registerForm);
+        var result = await _authController.RegisterUser(registerForm,deviceId);
         var okResult = result as OkObjectResult;
 
         // Assert
         Assert.NotNull(okResult);
         Assert.Equal((int)HttpStatusCode.OK, okResult.StatusCode);
-        _authenticateServiceMock.Verify(x => x.CreateUser(registerForm), Times.Once);
+        _authenticateServiceMock.Verify(x => x.CreateUser(registerForm,deviceId), Times.Once);
     }
     [Fact]
     public async Task RegisterUser_ShouldReturnFalse()
@@ -58,16 +59,17 @@ public class AuthControllerTests
         // Arrange
         var registerForm = new RegisterForm() { UserName = "", Email = "", Password = "", Dob = DateOnly.FromDateTime(DateTime.UtcNow) };
         var expectedResult = new AuthResponse( false, "", "", "Invalid Register Form");
-        _authenticateServiceMock.Setup(x => x.CreateUser(registerForm)).ReturnsAsync(expectedResult);
+        var deviceId = Guid.NewGuid().ToString();
+        _authenticateServiceMock.Setup(x => x.CreateUser(registerForm,deviceId)).ReturnsAsync(expectedResult);
 
         // Act
-        var result = await _authController.RegisterUser(registerForm);
+        var result = await _authController.RegisterUser(registerForm,deviceId);
         var badResult = result as BadRequestObjectResult;
 
         // Assert
         Assert.NotNull(badResult);
         Assert.Equal((int)HttpStatusCode.BadRequest, badResult.StatusCode);
-        _authenticateServiceMock.Verify(x => x.CreateUser(registerForm), Times.Once);
+        _authenticateServiceMock.Verify(x => x.CreateUser(registerForm,deviceId), Times.Once);
     }
 
     [Fact]
@@ -76,16 +78,17 @@ public class AuthControllerTests
         //Arrange
         var loginForm = new LoginForm() { Email = "test@example.com", Password = "password" };
         var expectedResult = new AuthResponse( true, "", "", "User logged in");
-        _authenticateServiceMock.Setup(x => x.LoginUser(loginForm)).ReturnsAsync(expectedResult); 
+        var deviceId = Guid.NewGuid().ToString();
+        _authenticateServiceMock.Setup(x => x.LoginUser(loginForm,deviceId)).ReturnsAsync(expectedResult); 
         
         //Act 
-        var result = await _authController.LoginUser(loginForm);
+        var result = await _authController.LoginUser(loginForm,deviceId);
         var okResult = result as OkObjectResult;
         
         //Assert
         Assert.NotNull(okResult);
         Assert.Equal((int)HttpStatusCode.OK, okResult.StatusCode);
-        _authenticateServiceMock.Verify(x => x.LoginUser(loginForm), Times.Once);
+        _authenticateServiceMock.Verify(x => x.LoginUser(loginForm,deviceId), Times.Once);
     }
 
     [Fact]
@@ -94,16 +97,17 @@ public class AuthControllerTests
         //Arrange
         var loginForm = new LoginForm() { Email = "test@example.com", Password = "" };
         var expectedResult = new AuthResponse( false, "", "", "Login failed");
-        _authenticateServiceMock.Setup(x => x.LoginUser(loginForm)).ReturnsAsync(expectedResult); 
+        var deviceId = Guid.NewGuid().ToString();
+        _authenticateServiceMock.Setup(x => x.LoginUser(loginForm,deviceId)).ReturnsAsync(expectedResult); 
         
         //Act 
-        var result = await _authController.LoginUser(loginForm);
+        var result = await _authController.LoginUser(loginForm,deviceId);
         var badResult = result as BadRequestObjectResult;
 
         //Assert
         Assert.NotNull(badResult);
         Assert.Equal((int)HttpStatusCode.BadRequest, badResult.StatusCode);
-        _authenticateServiceMock.Verify(x => x.LoginUser(loginForm), Times.Once);
+        _authenticateServiceMock.Verify(x => x.LoginUser(loginForm, deviceId), Times.Once);
     }
 
     [Fact]
@@ -149,13 +153,13 @@ public class AuthControllerTests
         //Do nothing
         
         //Arrange
-        var result = await _authController.RefreshToken();
+        var result = await _authController.RefreshToken(Guid.NewGuid().ToString());
         
         //Assert
         var unauthedResult = result as UnauthorizedObjectResult;
         Assert.NotNull(unauthedResult);
         Assert.Equal((int)HttpStatusCode.Unauthorized, unauthedResult.StatusCode);
-        _tokenServiceMock.Verify(x => x.RefreshUserTokens( It.IsAny<string>()), Times.Never);
+        _tokenServiceMock.Verify(x => x.RefreshUserTokens( It.IsAny<string>(),It.IsAny<string>()), Times.Never);
     }
 
     [Fact]
@@ -171,13 +175,13 @@ public class AuthControllerTests
             ControllerContext = new ControllerContext { HttpContext = httpContext }
         };
         //Act
-        var result = await _authController.RefreshToken();
+        var result = await _authController.RefreshToken(Guid.NewGuid().ToString());
         
         //Assert
         var unauthedResult = result as UnauthorizedObjectResult;
         Assert.NotNull(unauthedResult);
         Assert.Equal((int)HttpStatusCode.Unauthorized, unauthedResult.StatusCode);
-        _tokenServiceMock.Verify(x => x.RefreshUserTokens( It.IsAny<string>()), Times.Never);
+        _tokenServiceMock.Verify(x => x.RefreshUserTokens( It.IsAny<string>(),It.IsAny<string>()), Times.Never);
     }
     [Fact]
     public async Task RefreshToken_ValidRequest_TokenServiceSuccess_ShouldReturnOk()
@@ -198,17 +202,18 @@ public class AuthControllerTests
         };
 
         var expectedResponse = new AuthResponse(true, "","","");
-        _tokenServiceMock.Setup(x => x.RefreshUserTokens(token)).ReturnsAsync(expectedResponse);
+        var deviceId = Guid.NewGuid().ToString();
+        _tokenServiceMock.Setup(x => x.RefreshUserTokens(token,deviceId)).ReturnsAsync(expectedResponse);
         _tokenServiceMock.Setup(x => x.ValidateToken(token)).Returns(new ClaimsPrincipalResponse(true, claimsPrincipal));
         // Act
-        var result = await authControllerWithContext.RefreshToken();
+        var result = await authControllerWithContext.RefreshToken(deviceId);
 
         // Assert
         var okResult = result as OkObjectResult;
         Assert.NotNull(okResult);
         Assert.Equal((int)HttpStatusCode.OK, okResult.StatusCode);
         Assert.Equal(expectedResponse, okResult.Value);
-        _tokenServiceMock.Verify(x => x.RefreshUserTokens(token), Times.Once);
+        _tokenServiceMock.Verify(x => x.RefreshUserTokens(token,deviceId), Times.Once);
     }
 
 }

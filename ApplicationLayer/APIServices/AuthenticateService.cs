@@ -16,8 +16,10 @@ namespace ApplicationLayer.APIServices;
 public class AuthenticateService(UserManager<ApplicationUser>userManager,
     ITokenService tokenGenerationService,  ApplicationDbContext context) : IAuthenticateService
 {
-    public async Task<AuthResponse> CreateUser(RegisterForm registerForm)
+    public async Task<AuthResponse> CreateUser(RegisterForm registerForm, string deviceId)
     {
+        if(!Guid.TryParse(deviceId, out Guid deviceGuid))
+            return new AuthResponse(false,"","","Invalid device id");
         RegisterFormValidator registerFormValidator = new RegisterFormValidator();
         var validate = await registerFormValidator.ValidateAsync(registerForm);
         if (!validate.IsValid)
@@ -35,7 +37,7 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         if (result.Succeeded)
         {
             var userClaims = Generics.GetClaimsForUser(user);
-            var createdRefresh = await SaveRefreshToken(userClaims, user.Id);
+            var createdRefresh = await SaveRefreshToken(userClaims, user.Id,deviceGuid);
             if (string.IsNullOrWhiteSpace(createdRefresh))
                 return new AuthResponse(false,"","","Error creating refresh token");
             return GenerateAuthResponse(userClaims,createdRefresh);
@@ -44,8 +46,10 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         return new AuthResponse(false,"","",error);
     }
 
-    public async Task<AuthResponse> LoginUser(LoginForm loginForm)
-    {
+    public async Task<AuthResponse> LoginUser(LoginForm loginForm,string deviceId)
+    { 
+        if(!Guid.TryParse(deviceId, out Guid deviceGuid))
+            return new AuthResponse(false,"","","Invalid device id");
         var validate = new LoginFormValidator();
         var validateResult = await validate.ValidateAsync(loginForm);
         if (!validateResult.IsValid)
@@ -69,7 +73,7 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
             if (correctPassword)
             {
                 var userClaims = Generics.GetClaimsForUser(user);
-                var createdRefresh = await SaveRefreshToken(userClaims, user.Id);
+                var createdRefresh = await SaveRefreshToken(userClaims, user.Id,deviceGuid);
                 if (string.IsNullOrWhiteSpace(createdRefresh))
                     return new AuthResponse(false,"","","Error creating refresh token");
                 return GenerateAuthResponse(userClaims,createdRefresh);
@@ -78,17 +82,30 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         return new AuthResponse(false, "","","Incorrect Email or Password");
     }
 
-    protected virtual async Task<string> SaveRefreshToken(List<Claim> userClaims,string userId)
+    protected virtual async Task<string> SaveRefreshToken(List<Claim> userClaims,string userId, Guid deviceId)
     {
-        var existingToken = context.RefreshUserAuths.FirstOrDefault(x=> x.UserId == userId);
-        if (existingToken != null)
-            context.RefreshUserAuths.Remove(existingToken);
+        var existingToken = context.RefreshUserAuths
+            .FirstOrDefault(x=> x.UserId == userId && x.Expires > DateTime.UtcNow && x.DeviceId == deviceId);
+
         //Save refresh token in DB to re authenticate user
         var refreshExpiresAt = DateTime.UtcNow.AddMinutes(Consts.Tokens.RefreshTokenMins);
         var refreshToken = tokenGenerationService.GenerateJwtToken(userClaims,refreshExpiresAt, Consts.TokenType.Refresh);
         if(string.IsNullOrWhiteSpace(refreshToken))
             return "";
-        context.RefreshUserAuths.Add(new RefreshUserAuth { RefreshToken = refreshToken, UserId = userId});
+        if (existingToken != null)
+        {
+            existingToken.RefreshToken = refreshToken;
+            existingToken.Expires = refreshExpiresAt;
+            await context.SaveChangesAsync();
+            return refreshToken;
+        }
+        context.RefreshUserAuths.Add(new RefreshUserAuth 
+        { 
+            RefreshToken = refreshToken,
+            UserId = userId, 
+            DeviceId = deviceId, 
+            Expires = refreshExpiresAt
+        });
         await context.SaveChangesAsync();
         return refreshToken;
     }

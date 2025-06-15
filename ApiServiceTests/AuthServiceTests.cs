@@ -26,7 +26,7 @@ public class AuthServiceTests
     {
         private readonly ITokenService _tokenService = tokenService;
         public int SaveRefreshCount { get; private set; } = 0;
-        protected override  Task<string> SaveRefreshToken(List<Claim> claims, string userId)
+        protected override  Task<string> SaveRefreshToken(List<Claim> claims, string userId, Guid deviceId)
         {
             SaveRefreshCount++;
             return Task.FromResult(_tokenService.GenerateJwtToken(new List<Claim> { new Claim(ClaimTypes.Name, userId) }, DateTime.UtcNow))!;
@@ -72,7 +72,7 @@ public class AuthServiceTests
             .Returns("dummy-refresh-token");
         var service = new AuthenticateService(_userManagerMock.Object, _tokenServiceMock.Object, context);
         //Act
-        var result = await service.CreateUser(registerForm);
+        var result = await service.CreateUser(registerForm, Guid.NewGuid().ToString());
         //Assert
         Assert.NotNull(result);
         Assert.True(result.Flag);
@@ -99,7 +99,7 @@ public class AuthServiceTests
         
         var service = new AuthenticateService(_userManagerMock.Object, _tokenServiceMock.Object, context);
         //Act
-        var result = await service.CreateUser(registerForm);
+        var result = await service.CreateUser(registerForm,Guid.NewGuid().ToString());
         //Assert
         Assert.NotNull(result);
         Assert.False(result.Flag);
@@ -123,7 +123,7 @@ public class AuthServiceTests
         
         var service = new AuthenticateService(_userManagerMock.Object, _tokenServiceMock.Object, context);
         //Act
-        var result = await service.CreateUser(registerForm);
+        var result = await service.CreateUser(registerForm,Guid.NewGuid().ToString());
         //Assert
         Assert.NotNull(result);
         Assert.False(result.Flag);
@@ -147,7 +147,7 @@ public class AuthServiceTests
         
         var service = new AuthenticateService(_userManagerMock.Object, _tokenServiceMock.Object, context);
         //Act
-        var result = await service.CreateUser(registerForm);
+        var result = await service.CreateUser(registerForm,Guid.NewGuid().ToString());
         //Assert
         Assert.NotNull(result);
         Assert.False(result.Flag);
@@ -171,7 +171,7 @@ public class AuthServiceTests
         
         var service = new AuthenticateService(_userManagerMock.Object, _tokenServiceMock.Object, context);
         //Act
-        var result = await service.CreateUser(registerForm);
+        var result = await service.CreateUser(registerForm,Guid.NewGuid().ToString());
         //Assert
         Assert.NotNull(result);
         Assert.False(result.Flag);
@@ -195,7 +195,7 @@ public class AuthServiceTests
         
         var service = new AuthenticateService(_userManagerMock.Object, _tokenServiceMock.Object, context);
         //Act
-        var result = await service.CreateUser(registerForm);
+        var result = await service.CreateUser(registerForm,Guid.NewGuid().ToString());
         //Assert
         Assert.NotNull(result);
         Assert.False(result.Flag);
@@ -219,7 +219,7 @@ public class AuthServiceTests
         
         var service = new AuthenticateService(_userManagerMock.Object, _tokenServiceMock.Object, context);
         //Act
-        var result = await service.CreateUser(registerForm);
+        var result = await service.CreateUser(registerForm,Guid.NewGuid().ToString());
         //Assert
         Assert.NotNull(result);
         Assert.False(result.Flag);
@@ -242,7 +242,7 @@ public class AuthServiceTests
         _userManagerMock.Setup(x => x.CheckPasswordAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>())).ReturnsAsync(true);
         _tokenServiceMock.Setup(ts => ts.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>(),It.IsAny<Consts.TokenType>())).Returns("token");
         //Act
-        var result = await service.LoginUser(loginForm);
+        var result = await service.LoginUser(loginForm,Guid.NewGuid().ToString());
         
         //Assert
         Assert.NotNull(result);
@@ -270,7 +270,7 @@ public class AuthServiceTests
         _tokenServiceMock.Setup(x => x.GenerateJwtToken(It.IsAny<List<Claim>>(), It.IsAny<DateTime>(),It.IsAny<Consts.TokenType>()))
             .Returns("token");
         //Act  
-        var result = await service.LoginUser(loginForm);
+        var result = await service.LoginUser(loginForm,Guid.NewGuid().ToString());
         
         //Assert
         Assert.NotNull(result);
@@ -294,7 +294,7 @@ public class AuthServiceTests
         
         //Act  
         var service = new TestableAuth(_userManagerMock.Object, _tokenServiceMock.Object, context);
-        var result = await service.LoginUser(loginForm);
+        var result = await service.LoginUser(loginForm,Guid.NewGuid().ToString());
         //Assert
         Assert.NotNull(result); 
         Assert.False(result.Flag);
@@ -316,7 +316,7 @@ public class AuthServiceTests
         
         //Act 
         var service = new TestableAuth(_userManagerMock.Object, _tokenServiceMock.Object, context);
-        var result = await service.LoginUser(loginForm);
+        var result = await service.LoginUser(loginForm,Guid.NewGuid().ToString());
         
         //Assert
         Assert.NotNull(result);

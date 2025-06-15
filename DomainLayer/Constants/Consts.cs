@@ -28,6 +28,10 @@ public static class Consts
         public const string TokenType = "Token";
     }
 
+    public static class Headers
+    {
+        public const string DeviceId = "X-Device-ID";
+    }
     public enum TokenType
     {
         Access,
