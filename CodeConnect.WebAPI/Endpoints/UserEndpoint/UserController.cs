@@ -20,7 +20,7 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
     private TokenResponse GenerateNewToken(ApplicationUser user)
     {
         var claims = Generics.GetClaimsForUser(user);
-        var token = tokenService.GenerateJwtToken(claims.AsEnumerable(),DateTime.UtcNow.AddHours(Consts.Tokens.AuthTokenMins));
+        var token = tokenService.GenerateJwtToken(claims.AsEnumerable(),DateTime.UtcNow.AddMinutes(Consts.Tokens.AuthTokenMins));
         return new TokenResponse(token);
     }
     [Authorize]

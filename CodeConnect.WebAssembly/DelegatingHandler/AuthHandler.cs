@@ -48,7 +48,8 @@ public class AuthHandler(ILocalStorageService localStorageService) : System.Net.
         var refreshRequest = new HttpRequestMessage(HttpMethod.Post, $"{Consts.Base.BaseUrl}/api/Authentication/RefreshToken");
         refreshRequest.Headers.Authorization = new AuthenticationHeaderValue(Consts.Tokens.ApiAuthTokenName, refreshToken);
         var deviceId = await localStorageService.GetItemAsync<string>(Consts.Headers.DeviceId, cancellationToken);
-        refreshRequest.Headers.Add(Consts.Headers.DeviceId, deviceId);
+        if(!string.IsNullOrWhiteSpace(deviceId))
+            refreshRequest.Headers.TryAddWithoutValidation(Consts.Headers.DeviceId, deviceId);
         var tokenResponse = await base.SendAsync(refreshRequest, cancellationToken);
         var newToken = await tokenResponse.Content.ReadFromJsonAsync<AuthResponse>(cancellationToken: cancellationToken);
         if (newToken?.Flag == true)
