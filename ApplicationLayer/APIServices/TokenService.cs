@@ -62,8 +62,10 @@ public class TokenService(IOptions<JwtSettings> jwtSettings,ApplicationDbContext
         }
     }
 
-    public async Task<AuthResponse> RefreshUserTokens(string refreshToken)
+    public async Task<AuthResponse> RefreshUserTokens(string refreshToken, string deviceId)
     {
+        if(!Guid.TryParse(deviceId, out Guid deviceGuid))
+            return new AuthResponse(false,"","","Invalid device id");
         var res = ValidateToken(refreshToken);
         if(!res.Flag)
             return new AuthResponse(false,"","","Invalid token");
@@ -79,7 +81,7 @@ public class TokenService(IOptions<JwtSettings> jwtSettings,ApplicationDbContext
         var user = await userManager.FindByNameAsync(username);
         if (user == null)
             return new AuthResponse(false,"","","Couldn't find user when refreshing token");
-        var refresh = context.RefreshUserAuths.FirstOrDefault(x => x.UserId == user.Id);
+        var refresh = context.RefreshUserAuths.FirstOrDefault(x=> x.UserId == user.Id && x.Expires > DateTime.UtcNow && x.DeviceId == deviceGuid);
         if (refresh != null && refresh?.RefreshToken == refreshToken)
         {
             var userClaims = Generics.GetClaimsForUser(user);

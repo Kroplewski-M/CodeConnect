@@ -150,7 +150,7 @@ public class TokenServiceTests
         _userManager.Setup(u => u.FindByNameAsync(It.IsAny<string>())).ReturnsAsync((ApplicationUser?)null);
 
         // Act
-        var result = await _tokenService.RefreshUserTokens( "sometoken");
+        var result = await _tokenService.RefreshUserTokens( "sometoken",Guid.NewGuid().ToString());
 
         // Assert
         Assert.False(result.Flag);
@@ -165,10 +165,10 @@ public class TokenServiceTests
         // Arrange
         var user = new ApplicationUser { Id = "user123", UserName = "testuser" };
         _userManager.Setup(u => u.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(user);
-        _context.RefreshUserAuths.Add(new RefreshUserAuth { UserId = "user123", RefreshToken = "token" });
+        _context.RefreshUserAuths.Add(new RefreshUserAuth { UserId = "user123", RefreshToken = "token", DeviceId = Guid.NewGuid()});
         await _context.SaveChangesAsync();
         // Act
-        var result = await _tokenService.RefreshUserTokens( "wrongtoken");
+        var result = await _tokenService.RefreshUserTokens( "wrongtoken",Guid.NewGuid().ToString());
 
         // Assert
         Assert.False(result.Flag);
@@ -188,13 +188,14 @@ public class TokenServiceTests
             new (Consts.ClaimTypes.UserName, "testuser"),
             new (Consts.Tokens.TokenType, nameof(Consts.TokenType.Refresh))
         }, DateTime.UtcNow.AddMinutes(30));
-        var refreshAuth = new RefreshUserAuth { UserId = "user123", RefreshToken = token };
+        var deviceId = Guid.NewGuid();
+        var refreshAuth = new RefreshUserAuth { UserId = "user123", RefreshToken = token, DeviceId = deviceId, Expires = DateTime.UtcNow.AddMinutes(30)};
 
         _context.RefreshUserAuths.Add(refreshAuth);
         await _context.SaveChangesAsync();
 
         // Act
-        var result = await _tokenService.RefreshUserTokens(token);
+        var result = await _tokenService.RefreshUserTokens(token,deviceId.ToString());
 
         // Assert
         Assert.True(result.Flag);

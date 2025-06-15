@@ -8,7 +8,7 @@ namespace ApplicationLayer.Interfaces;
 
 public interface IAuthenticateService
 {
-    public Task<AuthResponse> CreateUser(RegisterForm registerForm);
-    public Task<AuthResponse> LoginUser(LoginForm loginForm);
+    public Task<AuthResponse> CreateUser(RegisterForm registerForm, string deviceId);
+    public Task<AuthResponse> LoginUser(LoginForm loginForm, string deviceId);
     public Task<AuthResponse> LogoutUser();
 }

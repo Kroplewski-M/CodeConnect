@@ -17,12 +17,11 @@ namespace CodeConnect.WebAPI.Endpoints.UserEndpoint;
 public class UserController(IUserService userService, UserManager<ApplicationUser>userManager,ITokenService tokenService,
     IUserImageService userImageService) : ControllerBase
 {
-    private AuthResponse GenerateNewTokens(ApplicationUser user)
+    private TokenResponse GenerateNewToken(ApplicationUser user)
     {
         var claims = Generics.GetClaimsForUser(user);
         var token = tokenService.GenerateJwtToken(claims.AsEnumerable(),DateTime.UtcNow.AddHours(Consts.Tokens.AuthTokenMins));
-        var refresh = tokenService.GenerateJwtToken(claims.AsEnumerable(),DateTime.UtcNow.AddHours(Consts.Tokens.RefreshTokenMins));
-        return new AuthResponse(true,token, refresh, "success");
+        return new TokenResponse(token);
     }
     [Authorize]
     [HttpPost("EditUserDetails")]
@@ -40,7 +39,7 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
         {
             var result = await userService.UpdateUserDetails(editProfileForm);
             if(result.Flag)
-                return Ok(GenerateNewTokens(updateUser));
+                return Ok(GenerateNewToken(updateUser));
             return BadRequest(result.Message);
         }
         return Unauthorized("Cannot find user");
@@ -77,7 +76,7 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
             var updatedUser = await userManager.FindByNameAsync(loggedInUser);
             if (updatedUser != null)
             {
-                return Ok(GenerateNewTokens(updatedUser));
+                return Ok(GenerateNewToken(updatedUser));
             }
         }
         return Unauthorized("User not found");

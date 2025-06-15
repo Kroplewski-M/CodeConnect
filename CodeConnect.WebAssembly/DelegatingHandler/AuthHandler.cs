@@ -17,6 +17,14 @@ public class AuthHandler(ILocalStorageService localStorageService) : System.Net.
 {
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
+        var deviceId = await localStorageService.GetItemAsync<string>(Consts.Headers.DeviceId, cancellationToken);
+        if (deviceId == null)
+        {
+            deviceId = Guid.NewGuid().ToString();
+            await localStorageService.SetItemAsync(Consts.Headers.DeviceId, deviceId, cancellationToken);
+        }
+        request.Headers.Add(Consts.Headers.DeviceId, deviceId);
+        
         var token = await localStorageService.GetItemAsync<string>(Consts.Tokens.AuthToken, cancellationToken);
         var hasToken = !string.IsNullOrEmpty(token);
         HttpResponseMessage? response = null;
@@ -39,6 +47,8 @@ public class AuthHandler(ILocalStorageService localStorageService) : System.Net.
         var refreshToken = await localStorageService.GetItemAsync<string>(Consts.Tokens.RefreshToken, cancellationToken);
         var refreshRequest = new HttpRequestMessage(HttpMethod.Post, $"{Consts.Base.BaseUrl}/api/Authentication/RefreshToken");
         refreshRequest.Headers.Authorization = new AuthenticationHeaderValue(Consts.Tokens.ApiAuthTokenName, refreshToken);
+        var deviceId = await localStorageService.GetItemAsync<string>(Consts.Headers.DeviceId, cancellationToken);
+        refreshRequest.Headers.Add(Consts.Headers.DeviceId, deviceId);
         var tokenResponse = await base.SendAsync(refreshRequest, cancellationToken);
         var newToken = await tokenResponse.Content.ReadFromJsonAsync<AuthResponse>(cancellationToken: cancellationToken);
         if (newToken?.Flag == true)
@@ -53,4 +63,5 @@ public class AuthHandler(ILocalStorageService localStorageService) : System.Net.
         await localStorageService.RemoveItemAsync(Consts.Tokens.TokenType, cancellationToken);
         return new HttpResponseMessage(HttpStatusCode.Unauthorized);
     }
+
 }

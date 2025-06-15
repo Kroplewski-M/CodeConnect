@@ -9,6 +9,6 @@ public interface ITokenService
 {
     public string? GenerateJwtToken(IEnumerable<Claim> claims, DateTime expireAt, Consts.TokenType tokenType = Consts.TokenType.Access);
     public ClaimsPrincipalResponse ValidateToken(string token);
-    public Task<AuthResponse> RefreshUserTokens(string refreshToken);
+    public Task<AuthResponse> RefreshUserTokens(string refreshToken, string deviceId);
 
 }

@@ -17,9 +17,8 @@ public class UserServiceClient(HttpClient httpClient,ILocalStorageService localS
     public async Task<ServiceResponse> UpdateUserDetails(EditProfileForm editProfileForm)
     {
         var response = await httpClient.PostAsJsonAsync("/api/User/EditUserDetails", editProfileForm);
-        var newTokens = await response.Content.ReadFromJsonAsync<AuthResponse>();
-        await localStorageService.SetItemAsync(Consts.Tokens.AuthToken, newTokens?.Token);
-        await localStorageService.SetItemAsync(Consts.Tokens.RefreshToken, newTokens?.RefreshToken);
+        var newTokens = await response.Content.ReadFromJsonAsync<TokenResponse>();
+        await localStorageService.SetItemAsync(Consts.Tokens.AuthToken, newTokens?.Key);
         ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
         authenticateServiceClient.NotifyStateChanged();
         return new ServiceResponse(true, "Updated Details Successfully");
