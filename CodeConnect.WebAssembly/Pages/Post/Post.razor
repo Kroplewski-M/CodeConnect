@@ -15,17 +15,17 @@ else
 {
     if (Post != null)
     {
-        <div class="w-[90vw] max-w-[1100px] bg-dark-secondaryColor rounded-md mx-auto pt-5 pb-10 mt-5 shadow-xl relative">
+        <div class="w-[90vw] max-w-[1100px] bg-dark-secondaryColor rounded-md mx-auto pt-5 pb-[10px] mt-5 shadow-xl relative">
             <div class="flex mt-[10px] w-[95%] justify-between text-[18px]">
                 <div class="flex text-light-primaryColor ml-5 cursor-pointer" onclick="@(()=>NavigationManager.NavigateTo($"/Profile/{Post.CreatedByUsername}"))">
-                    <img src="@Post.UserImg" alt="@Post.CreatedByUsername" class="w-[50px] h-[50px] rounded-full object-cover">
-                    <div class="ml-[10px] mt-[5px]">
+                    <img src="@Post.UserImg" alt="@Post.CreatedByUsername" class="w-[50px] h-[50px] mr-5 rounded-full object-cover">
+                    <div class="mt-[5px]">
                         <p class="font-bold hover:text-light-primaryColor"><span class="text-gray-400">&#64;</span>@Post.CreatedByUsername</p>
                     </div>
                 </div>
-                <p class="text-light-primaryColor/80 text-[14px] mr-5 mt-[5px]">@Helpers.GetUsersLocalTime(Post.CreatedAtUtc, Consts.DateFormats.DateTimeFormat)</p>
+                <p class="text-light-primaryColor/80 text-[14px] mt-[5px]">@Helpers.GetUsersLocalTime(Post.CreatedAtUtc, Consts.DateFormats.DateTimeFormat)</p>
             </div>
-            <div class="w-[95%] max-w-[1000px] text-[20px] font-bold md:mt-5 mx-auto relative rounded-md" id="@Id">
+            <div class="w-[100%] text-[20px] font-bold mt-5 pl-5 relative rounded-md pr-5" id="@Id">
                 @((MarkupString)Post.Content)
             </div>
             @if (Post.Images.Any())
@@ -40,6 +40,21 @@ else
                     }
                 </div>
             }
+            <div class="flex ml-5 mt-[10px]">
+                <div class="flex text-light-primaryColor/80">
+                    <div class="cursor-pointer">
+                        <FaIcon Icon="@FaIcons.Heart" Size="@FaSize.Large"/>
+                        <span>@Post.LikeCount</span>
+                    </div>
+                    <div class="ml-[15px] cursor-pointer">
+                        <FaIcon Icon="@FaIcons.Message" Size="@FaSize.Large" />
+                        <span>@Post.CommentCount</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w-[90vw] max-w-[1100px] bg-dark-secondaryColor rounded-md mx-auto pt-5 pb-[10px] mt-5 shadow-xl relative pl-[10px]">
+            <h1 class="text-light-primaryColor font-bold text-[20px]">Comments</h1>
         </div>
     }
 }

@@ -19,6 +19,7 @@ public class FollowUserBase : ComponentBase
         Following = await FollowingService.IsUserFollowing(new FollowRequestDto(UserState.Current.UserName, FollowUsername));
     }
 
+    protected string UnFollowText => $"Are you sure you want to unfollow {FollowUsername}?";
     protected bool DisableFollow { get; set; } = false;
     protected async Task ToggleFollow()
     {
