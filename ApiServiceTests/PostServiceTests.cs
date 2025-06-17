@@ -211,4 +211,145 @@ public class PostServiceTests
         Assert.Equal(2, returnedPost?.Images.Count);
         _userManager.Verify(x => x.FindByNameAsync(user.UserName), Times.Once);
     }
+    [Fact]
+    public async Task GetPostById_NullOrEmptyId_ShouldReturnNull()
+    {
+        // Arrange
+        var emptyId = Guid.Empty;
+
+        // Act
+        var result = await _postService.GetPostById(emptyId);
+
+        // Assert
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task GetPostById_NonExistentPost_ShouldReturnNull()
+    {
+        // Arrange
+        var nonExistentPostId = Guid.NewGuid();
+
+        // Act
+        var result = await _postService.GetPostById(nonExistentPostId);
+
+        // Assert
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task GetPostById_ExistingPostWithoutImages_ShouldReturnPostDto()
+    {
+        // Arrange
+        var user = new ApplicationUser { Id = Guid.NewGuid().ToString(), UserName = "testUser" };
+        _userManager.Setup(x => x.FindByIdAsync(user.Id)).ReturnsAsync(user);
+
+        var post = new Post
+        {
+            Id = Guid.NewGuid(),
+            Content = "Test post content",
+            CreatedByUser = user,
+            CreatedByUserId = user.Id,
+            CreatedAt = DateTime.UtcNow,
+            Files = new List<PostFile>()
+        };
+
+        _context.Posts.Add(post);
+        await _context.SaveChangesAsync();
+
+        // Act
+        var result = await _postService.GetPostById(post.Id);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(post.Id, result.Id);
+        Assert.Equal(post.Content, result.Content);
+        Assert.Equal(user.UserName, result.CreatedByUsername);
+        Assert.Empty(result.Images);
+    }
+
+    [Fact]
+    public async Task GetPostById_ExistingPostWithImages_ShouldReturnPostDtoWithImages()
+    {
+        // Arrange
+        var user = new ApplicationUser { Id = Guid.NewGuid().ToString(), UserName = "testUser" };
+        _userManager.Setup(x => x.FindByIdAsync(user.Id)).ReturnsAsync(user);
+
+        var post = new Post
+        {
+            Id = Guid.NewGuid(),
+            Content = "Test post content with images",
+            CreatedByUser = user,
+            CreatedByUserId = user.Id,
+            CreatedAt = DateTime.UtcNow,
+            Files = new List<PostFile>
+            {
+                new PostFile { FileName = "image1.png" },
+                new PostFile { FileName = "image2.png" }
+            }
+        };
+
+        _context.Posts.Add(post);
+        await _context.SaveChangesAsync();
+
+        // Act
+        var result = await _postService.GetPostById(post.Id);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(post.Id, result.Id);
+        Assert.Equal(post.Content, result.Content);
+        Assert.Equal(user.UserName, result.CreatedByUsername);
+        Assert.Equal(2, result.Images.Count);
+    }
+
+    [Fact]
+    public async Task GetPostById_ShouldIncludeLikesAndCommentsCount()
+    {
+        // Arrange
+        var user = new ApplicationUser { Id = Guid.NewGuid().ToString(), UserName = "testUser" };
+        _userManager.Setup(x => x.FindByIdAsync(user.Id)).ReturnsAsync(user);
+
+        var post = new Post
+        {
+            Id = Guid.NewGuid(),
+            Content = "Test post with likes and comments",
+            CreatedByUser = user,
+            CreatedByUserId = user.Id,
+            CreatedAt = DateTime.UtcNow,
+            Files = new List<PostFile>(),
+            Comments = new List<Comment>
+            {
+                new Comment { Content = "Test comment 1", CreatedByUserId = Guid.NewGuid().ToString() },
+                new Comment { Content = "Test comment 2", CreatedByUserId = Guid.NewGuid().ToString() },
+                new Comment { Content = "Test comment 3", CreatedByUserId = Guid.NewGuid().ToString() }
+            }
+        };
+        post.Likes.Add(new PostLike()
+        {
+            Id = Guid.NewGuid(),
+            LikedByUserId = user.Id,
+            PostId = post.Id,
+            LikedOn = DateTime.UtcNow
+        });
+        post.Likes.Add(new PostLike()
+        {
+            Id = Guid.NewGuid(),
+            LikedByUserId = user.Id,
+            PostId = post.Id,
+            LikedOn = DateTime.UtcNow
+        });
+        _context.Posts.Add(post);
+        await _context.SaveChangesAsync();
+
+        // Act
+        var result = await _postService.GetPostById(post.Id);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(post.Id, result.Id);
+        Assert.Equal(2, result.LikeCount);
+        Assert.Equal(3, result.CommentCount);
+    }
+
 }
