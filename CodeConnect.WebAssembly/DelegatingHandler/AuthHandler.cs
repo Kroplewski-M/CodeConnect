@@ -35,7 +35,7 @@ public class AuthHandler(ILocalStorageService localStorageService) : System.Net.
             request.Headers.Authorization = new AuthenticationHeaderValue(Consts.Tokens.ApiAuthTokenName, token);
             response = await base.SendAsync(request, cancellationToken);
         }
-        else if (!hasToken || response?.StatusCode == HttpStatusCode.Unauthorized)
+        if (!hasToken || response?.StatusCode == HttpStatusCode.Unauthorized)
         {
             return await RefreshTokenAndRetry(request, cancellationToken);
         }

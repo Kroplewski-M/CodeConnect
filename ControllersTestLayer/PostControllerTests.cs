@@ -152,5 +152,64 @@ public class PostControllerTests
         Assert.Equal(2, returnedPosts.Count);
         _mockPostService.Verify(x => x.GetUserPosts(username, It.IsAny<int>(), It.IsAny<int>()), Times.Once);
     }
-    
+    [Fact]
+    public async Task GetPostById_InvalidId_ShouldReturnNotFound()
+    {
+        // Arrange
+        var invalidId = Guid.Empty;
+        
+        // Act
+        var result = await _postController.GetPost(invalidId);
+
+        // Assert
+        var badRequestResult = Assert.IsType<BadRequestResult>(result.Result);
+        _mockPostService.Verify(x => x.GetPostById(invalidId), Times.Never);
+    }
+
+    [Fact]
+    public async Task GetPostById_PostNotFound_ShouldReturnNotFound()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        _mockPostService.Setup(x => x.GetPostById(postId)).ReturnsAsync((PostBasicDto?)null);
+        
+        // Act
+        var result = await _postController.GetPost(postId);
+
+        // Assert
+        Assert.IsType<NotFoundResult>(result.Result);
+        _mockPostService.Verify(x => x.GetPostById(postId), Times.Once);
+    }
+
+    [Fact]
+    public async Task GetPostById_ValidId_ShouldReturnPost()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        var expectedPost = new PostBasicDto(
+            postId,
+            "Test Content",
+            "testUsername",
+            "Img",
+            10,
+            5,
+            [],
+            DateTime.Now
+        );
+        
+        _mockPostService.Setup(x => x.GetPostById(postId)).ReturnsAsync(expectedPost);
+        
+        // Act
+        var result = await _postController.GetPost(postId);
+
+        // Assert
+        Assert.IsType<ActionResult<PostBasicDto>>(result);
+        var okResult = Assert.IsType<OkObjectResult>(result.Result);
+        var returnedPost = Assert.IsType<PostBasicDto>(okResult.Value);
+        Assert.Equal(postId, returnedPost.Id);
+        Assert.Equal("Test Content", returnedPost.Content);
+        Assert.Equal("testUsername", returnedPost.CreatedByUsername);
+        _mockPostService.Verify(x => x.GetPostById(postId), Times.Once);
+    }
+
 }

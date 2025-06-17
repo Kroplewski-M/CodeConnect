@@ -36,8 +36,10 @@ public class PostController(IPostService postService) : ControllerBase
 
     [HttpGet("GetPost")]
     [Authorize]
-    public async Task<ActionResult<PostDto?>> GetPost(Guid id)
+    public async Task<ActionResult<PostBasicDto?>> GetPost(Guid id)
     {
+        if(id == Guid.Empty)
+            return BadRequest();
         var post = await postService.GetPostById(id);
         if(post == null)
             return NotFound();
