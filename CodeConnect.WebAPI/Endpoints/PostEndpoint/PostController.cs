@@ -45,6 +45,18 @@ public class PostController(IPostService postService) : ControllerBase
             return NotFound();
         return Ok(post);
     }
+
+    [HttpPost("LikePost")]
+    [Authorize]
+    public async Task<ActionResult<ServiceResponse>> ToggleLikePost(LikePostDto likePostDto)
+    {
+        var username = User.FindFirst(Consts.ClaimTypes.UserName)?.Value;
+        if(username != likePostDto.Username)
+            return BadRequest("user does not match");
+        var result = await postService.ToggleLikePost(likePostDto);
+        return Ok(result);
+
+    }
     // [HttpPut("UpdatePost")]
     // [Authorize]
     // public async Task<IActionResult> UpdatePost()

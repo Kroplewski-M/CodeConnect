@@ -25,5 +25,5 @@ public class PostBase : ComponentBase
         Loading = isLoading;
         StateHasChanged();
     }
-
+    
 }

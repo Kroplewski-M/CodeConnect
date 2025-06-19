@@ -11,4 +11,5 @@ public interface IPostService
     public Task UpdatePost(Guid id);
     public Task DeletePost(Guid id);
     public Task<List<PostBasicDto>> GetUserPosts(string username,  int skip, int take);
+    public Task<ServiceResponse> ToggleLikePost(LikePostDto likePostDto);
 }

@@ -36,4 +36,11 @@ public class PostServiceClient(HttpClient httpClient) : IPostService
         var response = await httpClient.GetFromJsonAsync<List<PostBasicDto>>($"api/Post/GetUserPosts?username={username}&Skip={skip}&Take={take}");
         return response ?? new List<PostBasicDto>();
     }
+
+    public async Task<ServiceResponse> ToggleLikePost(LikePostDto likePostDto)
+    {
+        var response = await httpClient.PostAsJsonAsync("api/Post/ToggleLikePost", likePostDto);
+        var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
+        return result ?? new ServiceResponse(false, "Failed to toggle like post");
+    }
 }

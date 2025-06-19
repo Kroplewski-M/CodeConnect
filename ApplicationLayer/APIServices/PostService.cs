@@ -132,4 +132,25 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
             .ToList();
         return posts;
     }
+
+    public async Task<ServiceResponse> ToggleLikePost(LikePostDto likePostDto)
+    {
+        if (string.IsNullOrWhiteSpace(likePostDto.Username))
+            return new ServiceResponse(false, "Error occured while toggling like post");
+        var post = context.Posts.FirstOrDefault(x => x.Id == likePostDto.PostId);
+        if(post == null)
+            return new ServiceResponse(false, "Post not found");
+        var user = await userManager.FindByNameAsync(likePostDto.Username);
+        if(user == null)
+            return new ServiceResponse(false, "User not found");
+        var postLike = new PostLike()
+        {
+            PostId = post.Id,
+            LikedByUserId = user.Id,
+            LikedOn = DateTime.UtcNow,
+        };
+        post.Likes.Add(postLike);
+        await context.SaveChangesAsync();
+        return new ServiceResponse(true, "Like added successfully");
+    }
 }
