@@ -47,7 +47,7 @@ public class PostController(IPostService postService) : ControllerBase
         return Ok(post);
     }
 
-    [HttpPost("LikePost")]
+    [HttpPost("ToggleLikePost")]
     [Authorize]
     public async Task<ActionResult<ServiceResponse>> ToggleLikePost(LikePostDto likePostDto)
     {
@@ -57,6 +57,16 @@ public class PostController(IPostService postService) : ControllerBase
         var result = await postService.ToggleLikePost(likePostDto);
         return Ok(result);
 
+    }
+
+    [HttpGet("IsUserLikingPost")]
+    [Authorize]
+    public async Task<ActionResult<bool>> IsUserLikingPost(Guid postId, string username)
+    {
+        if(string.IsNullOrWhiteSpace(username))
+            return BadRequest();
+        var result = await postService.IsUserLikingPost(postId, username);
+        return Ok(result);
     }
     // [HttpPut("UpdatePost")]
     // [Authorize]

@@ -43,4 +43,10 @@ public class PostServiceClient(HttpClient httpClient) : IPostService
         var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
         return result ?? new ServiceResponse(false, "Failed to toggle like post");
     }
+
+    public async Task<bool> IsUserLikingPost(Guid postId, string username)
+    {
+        var response = await httpClient.GetFromJsonAsync<bool>($"api/Post/IsUserLikingPost?postId={postId}&username={username}");
+        return response;
+    }
 }

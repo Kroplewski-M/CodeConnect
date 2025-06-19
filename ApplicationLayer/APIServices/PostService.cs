@@ -143,14 +143,30 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         var user = await userManager.FindByNameAsync(likePostDto.Username);
         if(user == null)
             return new ServiceResponse(false, "User not found");
-        var postLike = new PostLike()
+        var existingLike = context.PostLikes.FirstOrDefault(x => x.LikedByUserId == user.Id && x.PostId == post.Id);
+        if(existingLike != null)
+            context.PostLikes.Remove(existingLike);
+        else
         {
-            PostId = post.Id,
-            LikedByUserId = user.Id,
-            LikedOn = DateTime.UtcNow,
-        };
-        post.Likes.Add(postLike);
+            var postLike = new PostLike()
+            {
+                PostId = post.Id,
+                LikedByUserId = user.Id,
+                LikedOn = DateTime.UtcNow,
+            };
+            post.Likes.Add(postLike);
+        }
         await context.SaveChangesAsync();
         return new ServiceResponse(true, "Like added successfully");
+    }
+
+    public async Task<bool> IsUserLikingPost(Guid postId, string username)
+    {
+        if (string.IsNullOrWhiteSpace(username))
+            return false;
+        var user = await userManager.FindByNameAsync(username);
+        if(user == null)
+            return false;
+        return context.PostLikes.Any(x => x.LikedByUserId == user.Id && x.PostId == postId);
     }
 }
