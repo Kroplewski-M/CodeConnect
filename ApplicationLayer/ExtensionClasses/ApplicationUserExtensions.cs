@@ -3,11 +3,11 @@ using System.Security.Claims;
 using DomainLayer.Constants;
 using DomainLayer.Entities.Auth;
 
-namespace DomainLayer.Generics;
+namespace ApplicationLayer.ExtensionClasses;
 
-public static class Generics
+public static class ApplicationUserExtensions
 {
-    public static List<Claim> GetClaimsForUser(ApplicationUser user)
+    public static List<Claim> GetClaimsForUser(this ApplicationUser user)
     {
         string? dob = null;
         if (user.DOB != null)

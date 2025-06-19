@@ -4,11 +4,11 @@ using System.Security.Claims;
 using System.Text;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
+using ApplicationLayer.ExtensionClasses;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
 using DomainLayer.Entities.APIClasses;
 using DomainLayer.Entities.Auth;
-using DomainLayer.Generics;
 using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -84,7 +84,7 @@ public class TokenService(IOptions<JwtSettings> jwtSettings,ApplicationDbContext
         var refresh = context.RefreshUserAuths.FirstOrDefault(x=> x.UserId == user.Id && x.Expires > DateTime.UtcNow && x.DeviceId == deviceGuid);
         if (refresh != null && refresh?.RefreshToken == refreshToken)
         {
-            var userClaims = Generics.GetClaimsForUser(user);
+            var userClaims = user.GetClaimsForUser();
             var token = GenerateJwtToken(userClaims, DateTime.UtcNow.AddMinutes(Consts.Tokens.AuthTokenMins));
             var newRefreshToken = GenerateJwtToken(userClaims, DateTime.UtcNow.AddMinutes(Consts.Tokens.RefreshTokenMins), Consts.TokenType.Refresh);
             if (!string.IsNullOrWhiteSpace(token) && !string.IsNullOrWhiteSpace(refreshToken) && !string.IsNullOrWhiteSpace(newRefreshToken))

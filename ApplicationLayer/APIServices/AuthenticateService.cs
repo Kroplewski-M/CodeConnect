@@ -2,10 +2,10 @@ using System.Globalization;
 using System.Security.Claims;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
+using ApplicationLayer.ExtensionClasses;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
 using DomainLayer.Entities.Auth;
-using DomainLayer.Generics;
 using FluentValidation;
 using FluentValidation.Results;
 using InfrastructureLayer;
@@ -36,7 +36,7 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         var result = await userManager.CreateAsync(user, registerForm.Password);
         if (result.Succeeded)
         {
-            var userClaims = Generics.GetClaimsForUser(user);
+            var userClaims = user.GetClaimsForUser();
             var createdRefresh = await SaveRefreshToken(userClaims, user.Id,deviceGuid);
             if (string.IsNullOrWhiteSpace(createdRefresh))
                 return new AuthResponse(false,"","","Error creating refresh token");
@@ -72,7 +72,7 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
             
             if (correctPassword)
             {
-                var userClaims = Generics.GetClaimsForUser(user);
+                var userClaims = user.GetClaimsForUser();
                 var createdRefresh = await SaveRefreshToken(userClaims, user.Id,deviceGuid);
                 if (string.IsNullOrWhiteSpace(createdRefresh))
                     return new AuthResponse(false,"","","Error creating refresh token");

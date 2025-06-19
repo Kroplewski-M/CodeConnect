@@ -1,5 +1,6 @@
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.Post;
+using ApplicationLayer.ExtensionClasses;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
 using Microsoft.AspNetCore.Authorization;
@@ -16,7 +17,7 @@ public class PostController(IPostService postService) : ControllerBase
     {
         var postValidator = new CreatePostDtoValidator();
         var validate = await postValidator.ValidateAsync(createPost);
-        if(!validate.IsValid || User.FindFirst(Consts.ClaimTypes.UserName)?.Value != createPost.CreatedByUserName)
+        if(!validate.IsValid || User.GetInfo(Consts.ClaimTypes.UserName) != createPost.CreatedByUserName)
             return  BadRequest(new ServiceResponse(false, "Error Creating Post"));
 
         var response = await postService.CreatePost(createPost);
@@ -50,7 +51,7 @@ public class PostController(IPostService postService) : ControllerBase
     [Authorize]
     public async Task<ActionResult<ServiceResponse>> ToggleLikePost(LikePostDto likePostDto)
     {
-        var username = User.FindFirst(Consts.ClaimTypes.UserName)?.Value;
+        var username = User.GetInfo(Consts.ClaimTypes.UserName);
         if(username != likePostDto.Username)
             return BadRequest("user does not match");
         var result = await postService.ToggleLikePost(likePostDto);

@@ -1,5 +1,6 @@
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
+using ApplicationLayer.ExtensionClasses;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
 using DomainLayer.Entities.Auth;
@@ -20,7 +21,7 @@ public class FollowingController(IFollowingService followingService, UserManager
         if(string.IsNullOrWhiteSpace(followRequest.CurrentUsername) || string.IsNullOrWhiteSpace(followRequest.TargetUsername))
             return BadRequest();
         
-        var username = User.FindFirst(Consts.ClaimTypes.UserName)?.Value;
+        var username = User.GetInfo(Consts.ClaimTypes.UserName);
         
         if(string.IsNullOrWhiteSpace(username)  || username != followRequest.CurrentUsername)
             return BadRequest();
@@ -35,7 +36,7 @@ public class FollowingController(IFollowingService followingService, UserManager
         if(string.IsNullOrWhiteSpace(unFollowRequest.CurrentUsername) || string.IsNullOrWhiteSpace(unFollowRequest.TargetUsername))
             return BadRequest();
         
-        var username = User.FindFirst(Consts.ClaimTypes.UserName)?.Value;
+        var username = User.GetInfo(Consts.ClaimTypes.UserName);
         
         if(string.IsNullOrWhiteSpace(username) || username != unFollowRequest.CurrentUsername)
             return BadRequest();

@@ -1,11 +1,11 @@
 using ApplicationLayer.APIServices;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
+using ApplicationLayer.ExtensionClasses;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
 using DomainLayer.Entities;
 using DomainLayer.Entities.Auth;
-using DomainLayer.Generics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +19,7 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
 {
     private TokenResponse GenerateNewToken(ApplicationUser user)
     {
-        var claims = Generics.GetClaimsForUser(user);
+        var claims = user.GetClaimsForUser();
         var token = tokenService.GenerateJwtToken(claims.AsEnumerable(),DateTime.UtcNow.AddMinutes(Consts.Tokens.AuthTokenMins));
         return new TokenResponse(token);
     }
@@ -30,7 +30,7 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
         if (string.IsNullOrWhiteSpace(editProfileForm.Username))
             return BadRequest("No username provided");
         
-        var loggedInUser = User.FindFirst(Consts.ClaimTypes.UserName)?.Value;
+        var loggedInUser = User.GetInfo(Consts.ClaimTypes.UserName);
         var updateUser = await userManager.FindByNameAsync(editProfileForm.Username);
         
         if (loggedInUser != updateUser?.UserName)
@@ -61,7 +61,7 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
     [HttpPost("UpdateUserImage")]
     public async Task<IActionResult> UpdateUserImage(UpdateUserImageRequest updateUserImageRequest)
     {
-        var loggedInUser = User.FindFirst(Consts.ClaimTypes.UserName)?.Value;
+        var loggedInUser = User.GetInfo(Consts.ClaimTypes.UserName);
         if(loggedInUser != updateUserImageRequest.Username)
             return Unauthorized("User not found");
         if(string.IsNullOrWhiteSpace(updateUserImageRequest.ImgBase64) || string.IsNullOrWhiteSpace(updateUserImageRequest.FileName))
@@ -97,7 +97,7 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
     [HttpPut("UpdateUserInterests")]
     public async Task<IActionResult> UpdateUserInterests([FromBody]UpdateTechInterestsDto interests)
     {
-        var findUsername = User.FindFirst(Consts.ClaimTypes.UserName)?.Value;
+        var findUsername = User.GetInfo(Consts.ClaimTypes.UserName);
         if (findUsername != null && findUsername == interests.Username)
         {
             var response = await userService.UpdateUserInterests(interests);
