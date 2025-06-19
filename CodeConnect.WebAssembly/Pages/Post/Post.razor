@@ -42,9 +42,9 @@ else
             }
             <div class="flex ml-5 mt-[10px]">
                 <div class="flex text-light-primaryColor/80">
-                    <div class="cursor-pointer">
+                    <div class="cursor-pointer @(IsUserLiking ? "text-red-700" : "")" @onclick="ToggleLike">
                         <FaIcon Icon="@FaIcons.Heart" Size="@FaSize.Large"/>
-                        <span>@Post.LikeCount</span>
+                        <span>@LikeCount</span>
                     </div>
                     <div class="ml-[15px] cursor-pointer">
                         <FaIcon Icon="@FaIcons.Message" Size="@FaSize.Large" />
