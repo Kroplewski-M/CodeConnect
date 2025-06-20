@@ -211,5 +211,107 @@ public class PostControllerTests
         Assert.Equal("testUsername", returnedPost.CreatedByUsername);
         _mockPostService.Verify(x => x.GetPostById(postId), Times.Once);
     }
+    [Fact]
+    public async Task ToggleLikePost_UsernameMismatch_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var likePostDto = new LikePostDto(Guid.NewGuid(),"wrongUsername");
+    
+        // Act
+        var result = await _postController.ToggleLikePost(likePostDto);
+    
+        // Assert
+        var actionResult = Assert.IsType<ActionResult<ServiceResponse>>(result);
+        var badRequestResult = Assert.IsType<BadRequestObjectResult>(actionResult.Result);
+        _mockPostService.Verify(x => x.ToggleLikePost(It.IsAny<LikePostDto>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task ToggleLikePost_ValidRequest_ShouldReturnOk()
+    {
+        // Arrange
+        var likePostDto = new LikePostDto(Guid.NewGuid(),"testUsername");
+        var expectedResponse = new ServiceResponse(true, "Like toggled successfully");
+        _mockPostService.Setup(x => x.ToggleLikePost(likePostDto)).ReturnsAsync(expectedResponse);
+    
+        // Act
+        var result = await _postController.ToggleLikePost(likePostDto);
+    
+        // Assert
+        var actionResult = Assert.IsType<ActionResult<ServiceResponse>>(result);
+        var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
+        var serviceResponse = Assert.IsType<ServiceResponse>(okResult.Value);
+        Assert.True(serviceResponse.Flag);
+        _mockPostService.Verify(x => x.ToggleLikePost(likePostDto), Times.Once);
+    }
+    [Fact]
+    public async Task IsUserLikingPost_EmptyUsername_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        var username = "";
+        
+        // Act
+        var result = await _postController.IsUserLikingPost(postId, username);
+        
+        // Assert
+        var actionResult = Assert.IsType<ActionResult<bool>>(result);
+        Assert.IsType<BadRequestResult>(actionResult.Result);
+        _mockPostService.Verify(x => x.IsUserLikingPost(It.IsAny<Guid>(), It.IsAny<string>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task IsUserLikingPost_WhitespaceUsername_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        var username = "   ";
+        
+        // Act
+        var result = await _postController.IsUserLikingPost(postId, username);
+        
+        // Assert
+        var actionResult = Assert.IsType<ActionResult<bool>>(result);
+        Assert.IsType<BadRequestResult>(actionResult.Result);
+        _mockPostService.Verify(x => x.IsUserLikingPost(It.IsAny<Guid>(), It.IsAny<string>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task IsUserLikingPost_ValidRequest_UserLikingPost_ShouldReturnTrue()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        var username = "testUsername";
+        _mockPostService.Setup(x => x.IsUserLikingPost(postId, username)).ReturnsAsync(true);
+        
+        // Act
+        var result = await _postController.IsUserLikingPost(postId, username);
+        
+        // Assert
+        var actionResult = Assert.IsType<ActionResult<bool>>(result);
+        var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
+        var isLiking = Assert.IsType<bool>(okResult.Value);
+        Assert.True(isLiking);
+        _mockPostService.Verify(x => x.IsUserLikingPost(postId, username), Times.Once);
+    }
+
+    [Fact]
+    public async Task IsUserLikingPost_ValidRequest_UserNotLikingPost_ShouldReturnFalse()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        var username = "testUsername";
+        _mockPostService.Setup(x => x.IsUserLikingPost(postId, username)).ReturnsAsync(false);
+        
+        // Act
+        var result = await _postController.IsUserLikingPost(postId, username);
+        
+        // Assert
+        var actionResult = Assert.IsType<ActionResult<bool>>(result);
+        var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
+        var isLiking = Assert.IsType<bool>(okResult.Value);
+        Assert.False(isLiking);
+        _mockPostService.Verify(x => x.IsUserLikingPost(postId, username), Times.Once);
+    }
 
 }
