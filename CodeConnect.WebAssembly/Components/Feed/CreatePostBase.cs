@@ -42,19 +42,6 @@ public class CreatePostBase : ComponentBase
             }
         }
     }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await Js.InvokeVoidAsync("postSizeOnBlur","post");
-        }
-        if (_shouldHighlight)
-        {
-            _shouldHighlight = false;
-            await Js.InvokeVoidAsync("highlightCodeBlocks");
-        }
-    }
     protected bool LoadingImages = false;
     protected List<Base64Dto> Base64Images = new List<Base64Dto>();
     protected async Task HandleFileSelection(InputFileChangeEventArgs e)
@@ -108,36 +95,16 @@ public class CreatePostBase : ComponentBase
             NotificationsService.PushNotification(new Notification(postResponse.Message, NotificationType.Success));
             Base64Images.Clear();
             PostContent = string.Empty;
-            PreviewText = string.Empty;
             StateHasChanged();
         }
         else
             NotificationsService.PushNotification(new Notification(postResponse.Message, NotificationType.Error));
         Loading = false;
     }
-    protected string PreviewText = string.Empty;
-    private bool _shouldHighlight;
-    protected async Task PreviewMarkdown(string content)
-    {
-        PreviewText = MarkdigService.ConvertToHtmlOnlyCode(content);
-        _shouldHighlight = true;
-        StateHasChanged();
-        await Js.InvokeVoidAsync("highlightCodeBlocks");
-    }
     protected bool ShowPreview = false;
-    protected readonly string PreviewTextId = Guid.NewGuid().ToString();
-    protected async Task ToggleShowPreview()
+    protected void ToggleShowPreview()
     {
         ShowPreview = !ShowPreview;
         StateHasChanged();
-        await Js.InvokeVoidAsync("highlightCodeBlocks",PreviewTextId);
-    }
-    protected async Task OnInput()
-    {
-        var content = await Js.InvokeAsync<string>("getValueById", "post");
-
-        await PreviewMarkdown(content);
-        await Js.InvokeVoidAsync("autoResizeTextAreaAndContainer","post");
-        await Js.InvokeVoidAsync("highlightCodeBlocks",PreviewTextId);
     }
 }

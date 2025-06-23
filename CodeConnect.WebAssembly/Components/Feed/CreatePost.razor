@@ -6,12 +6,7 @@
         <img class="w-10 ms-3 h-10 rounded-full mb-3 object-cover" src="@UserDetails?.ProfileImg" alt="Rounded avatar">
         <div class="ml-[5px] mt-[5px]">
             <EditForm Model="this" OnSubmit="HandleValidSubmit" FormName="Post">
-                <InputTextArea @bind-Value="PostContent" id="post" placeholder="Wrap your code in triple backticks like ```c# ... ```"
-                               class="bg-transparent text-dark-supportColor border-dark-supportColor w-[90%] resize-none md:w-[400px] rounded-md font-bold mb-2 pl-[5px] outline-none"
-                               @oninput="OnInput"
-                               onblur="postSizeOnBlur('post')"
-                               >
-                </InputTextArea>
+                <MarkdownTextbox Id="post" @bind-BindContent="PostContent" showPreview="@ShowPreview" />
                 <div class="mt-[5px] flex -ml-[45px]" >
                     <div class="mt-[9px]">
                         <label for="@InputId" class="block hover:cursor-pointer">
@@ -54,12 +49,6 @@
                     }
                 </div>
             }
-        </div>
-    </div>
-    <div id="@PreviewTextId" class="@(ShowPreview ? "" : "hidden")">
-        <p class="text-light-primaryColor font-bold text-[16px] mb-5">Preview:</p>
-        <div class="markdown-output">
-            @((MarkupString)PreviewText)
         </div>
     </div>
 </div>

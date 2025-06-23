@@ -1,0 +1,84 @@
+@using ApplicationLayer.ClientServices
+@inject MarkdigServiceClient MarkdigService 
+@inject IJSRuntime Js
+
+<InputTextArea @bind-Value="_content" id="@Id" placeholder="Wrap your code in triple backticks like ```c# ... ```"
+               class="bg-transparent text-dark-supportColor border-dark-supportColor w-[90%] resize-none md:w-[400px] rounded-md font-bold mb-2 pl-[5px] outline-none"
+               @oninput="OnInput"
+               @onblur="OnBlur">
+</InputTextArea>
+<div id="@_previewTextId" class="@(ShowPreview ? "" : "hidden")">
+    <p class="text-light-primaryColor font-bold text-[16px] mb-5">Preview:</p>
+    <div class="markdown-output">
+        @((MarkupString)_previewText)
+    </div>
+</div>
+
+@code {
+    [Parameter] public required string BindContent { get; set; }
+    [Parameter] public EventCallback<string> BindContentChanged { get; set; }
+    [Parameter] public required string Id { get; set; }
+    [Parameter] public required bool ShowPreview { get; set; }
+    private string _content = string.Empty;
+    protected override async Task OnParametersSetAsync()
+    {
+        _content = BindContent ?? string.Empty;
+        if (ShowPreview)
+        {
+            await PreviewMarkdown(_content);
+            await Js.InvokeVoidAsync("highlightCodeBlocks", _previewTextId);
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Js.InvokeVoidAsync("postSizeOnBlur",Id);
+        }
+        if (_shouldHighlight)
+        {
+            _shouldHighlight = false;
+            await Js.InvokeVoidAsync("highlightCodeBlocks");
+        }
+    }
+    
+    private async Task OnInput()
+    {
+        var content = await GetSetContent();
+        if (ShowPreview)
+        {
+            await PreviewMarkdown(content);
+            await Js.InvokeVoidAsync("highlightCodeBlocks",_previewTextId);
+        }
+        await Js.InvokeVoidAsync("autoResizeTextAreaAndContainer",Id);
+    }
+    private string _previewText = string.Empty;
+    private bool _shouldHighlight;
+    private async Task PreviewMarkdown(string content)
+    {
+        _previewText = MarkdigService.ConvertToHtmlOnlyCode(content);
+        _shouldHighlight = true;
+        StateHasChanged();
+        await Js.InvokeVoidAsync("highlightCodeBlocks");
+    }
+    private readonly string _previewTextId = Guid.NewGuid().ToString();
+
+    private async Task OnBlur()
+    {
+        await Js.InvokeVoidAsync("postSizeOnBlur", Id);
+    }
+
+    private async Task<string> GetSetContent()
+    {
+        var content = await Js.InvokeAsync<string>("getValueById", Id);
+        if (BindContent != content)
+        {
+            // Update property
+            BindContent = content;
+            // Notify parent of the change
+            await BindContentChanged.InvokeAsync(content);
+        }
+        return content;
+    }
+}
