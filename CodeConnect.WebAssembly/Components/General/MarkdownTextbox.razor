@@ -23,6 +23,7 @@
     protected override async Task OnParametersSetAsync()
     {
         _content = BindContent ?? string.Empty;
+        await Js.InvokeVoidAsync("autoResizeTextAreaAndContainer",Id);
         if (ShowPreview)
         {
             await PreviewMarkdown(_content);

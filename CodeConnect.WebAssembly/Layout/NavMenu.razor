@@ -60,8 +60,8 @@
                             <p class="font-bold ms-3  text-light-primaryColor dark:text-dark-supportColor">@UserState.Current.FirstName</p>
                             <p class="font-bold ms-3 mb-2 text-light-primaryColor dark:text-dark-supportColor">@UserState.Current.LastName</p>
                             <p class="font-bold ms-3 mb-2 text-light-primaryColor dark:text-dark-supportColor">&#x40;@UserState.Current.UserName</p>
-                            <p class="text-[13px] ms-3 text-light-primaryColor/90 dark:text-dark-supportColor/90 ">Followers: <span class=" text-light-primaryColor dark:text-dark-supportColor font-bold">@FollowerCount</span></p>
-                            <p class="text-[13px] ms-3 text-light-primaryColor/90 dark:text-dark-supportColor/90">Following: <span class=" text-light-primaryColor dark:text-dark-supportColor font-bold">@FollowingsCount</span></p>
+                            <p class="text-[13px] ms-3 text-light-primaryColor/90 dark:text-dark-supportColor/90 ">Followers: <span class=" text-light-primaryColor dark:text-dark-supportColor font-bold"><FormatNumber Number="FollowerCount"/></span></p>
+                            <p class="text-[13px] ms-3 text-light-primaryColor/90 dark:text-dark-supportColor/90">Following: <span class=" text-light-primaryColor dark:text-dark-supportColor font-bold"><FormatNumber Number="FollowingsCount"/></span></p>
                         }
                         else
                         {

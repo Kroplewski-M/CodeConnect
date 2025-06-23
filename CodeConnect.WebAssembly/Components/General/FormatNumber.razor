@@ -1,0 +1,33 @@
+<span>@_result</span>
+
+@code {
+    [Parameter] public int Number { get; set; } = 0;
+    private string _result = "";
+    protected override void OnParametersSet()
+    {
+        if (Number <= 0)
+        {
+            _result = "0";
+            return;
+        }
+        int mag = (int)(Math.Floor(Math.Log10(Number)) / 3); 
+        double divisor = Math.Pow(10, mag * 3);
+        
+        double shortNumber = Number / divisor;
+
+        string suffix = string.Empty;
+        switch(mag)
+        {
+            case 1:
+                suffix = "k";
+                break;
+            case 2:
+                suffix = "m";
+                break;
+            case 3:
+                suffix = "b";
+                break;
+        }
+        _result = mag == 0 ? Number.ToString("0.#") : shortNumber.ToString("0.#") + suffix;
+    }
+}

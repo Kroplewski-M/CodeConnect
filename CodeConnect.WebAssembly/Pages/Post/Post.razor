@@ -44,11 +44,11 @@ else
                 <div class="flex text-light-primaryColor/80">
                     <div class="cursor-pointer @(IsUserLiking ? "text-red-700" : "")" @onclick="ToggleLike">
                         <FaIcon Icon="@FaIcons.Heart" Size="@FaSize.Large"/>
-                        <span>@LikeCount</span>
+                        <span><FormatNumber Number="LikeCount"/></span>
                     </div>
                     <div class="ml-[15px] cursor-pointer">
                         <FaIcon Icon="@FaIcons.Message" Size="@FaSize.Large" />
-                        <span>@Post.CommentCount</span>
+                        <span><FormatNumber Number="Post.CommentCount"/></span>
                     </div>
                 </div>
             </div>

@@ -66,8 +66,8 @@
                                 @if (FollowerCount != null)
                                 {
                                     <div class="flex text-dark-supportColor/70">
-                                        <p>Following @FollowerCount.FollowingCount</p>
-                                        <p class="ml-2">Followers @FollowerCount.FollowersCount</p>
+                                        <p>Following <FormatNumber Number="FollowerCount.FollowingCount"/></p>
+                                        <p class="ml-2">Followers <FormatNumber Number="FollowerCount.FollowersCount"/></p>
                                     </div>
                                 }
                                 @if (IsCurrentUser)

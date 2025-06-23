@@ -33,11 +33,11 @@
     <div class="flex text-light-primaryColor/80">
         <div>
             <FaIcon Icon="@FaIcons.Heart" />
-            <span>@Post.LikeCount</span>
+            <span><FormatNumber Number="Post.LikeCount"/></span>
         </div>
         <div class="ml-[5px]">
             <FaIcon Icon="@FaIcons.Message" />
-            <span>@Post.CommentCount</span>
+            <span><FormatNumber Number="Post.CommentCount"/></span>
         </div>
     </div>
 </div>
