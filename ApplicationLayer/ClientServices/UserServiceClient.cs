@@ -11,8 +11,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace ApplicationLayer.ClientServices;
 
-public class UserServiceClient(HttpClient httpClient,ILocalStorageService localStorageService, 
-    AuthenticationStateProvider authenticationStateProvider, NavigationManager navigationManager, IAuthenticateServiceClient authenticateServiceClient) : IUserService
+public class UserServiceClient(HttpClient httpClient,ILocalStorageService localStorageService, NavigationManager navigationManager, IAuthenticateServiceClient authenticateServiceClient) : IUserService
 {
     public async Task<ServiceResponse> UpdateUserDetails(EditProfileForm editProfileForm)
     {
@@ -21,32 +20,26 @@ public class UserServiceClient(HttpClient httpClient,ILocalStorageService localS
         if (!string.IsNullOrWhiteSpace(newTokens?.Key))
         {
             await localStorageService.SetItemAsync(Consts.Tokens.AuthToken, newTokens?.Key);
-            ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
             authenticateServiceClient.NotifyStateChanged();
             return new ServiceResponse(true, "Updated Details Successfully");
         }
         return new ServiceResponse(false, "invalid response when updating details");
     }
 
-    public async Task<UserDetails?> GetUserDetails(string username)
+    public async Task<UserDetails?> GetUserDetails(string? userId)
     {
-        var response = await httpClient.PostAsJsonAsync("/api/User/GetUserDetails", username);
-        if(response.IsSuccessStatusCode)
-            return await response.Content.ReadFromJsonAsync<UserDetails?>();
+        var response = await httpClient.GetFromJsonAsync<UserDetails?>("/api/User/GetUserDetails");
+        if(response != null)
+            return response;
         navigationManager.NavigateTo("UserNotFound");
         return null;
     }
 
-    public async Task<UserInterestsDto> GetUserInterests(string username)
+    public async Task<UserInterestsDto> GetUserInterests(string? userId = null)
     {
-        var response = await httpClient.PostAsJsonAsync("/api/User/GetUserInterests", username);
-        if (response.IsSuccessStatusCode)
-        {
-            var result = await response.Content.ReadFromJsonAsync<UserInterestsDto>();
-            if(result != null)
-                return result;
-            return new UserInterestsDto(false, "failed to fetch interests", null);
-        }
+        var response = await httpClient.GetFromJsonAsync<UserInterestsDto>("/api/User/GetUserInterests");
+        if (response != null)
+            return response;
         return new UserInterestsDto(false, "failed to fetch interests", null);
     }
 

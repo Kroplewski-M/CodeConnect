@@ -36,7 +36,7 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         var result = await userManager.CreateAsync(user, registerForm.Password);
         if (result.Succeeded)
         {
-            var userClaims = user.GetClaimsForUser();
+            var userClaims = user.GetJwtClaimsForUser();
             var createdRefresh = await SaveRefreshToken(userClaims, user.Id,deviceGuid);
             if (string.IsNullOrWhiteSpace(createdRefresh))
                 return new AuthResponse(false,"","","Error creating refresh token");
@@ -72,7 +72,7 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
             
             if (correctPassword)
             {
-                var userClaims = user.GetClaimsForUser();
+                var userClaims = user.GetJwtClaimsForUser();
                 var createdRefresh = await SaveRefreshToken(userClaims, user.Id,deviceGuid);
                 if (string.IsNullOrWhiteSpace(createdRefresh))
                     return new AuthResponse(false,"","","Error creating refresh token");

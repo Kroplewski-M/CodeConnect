@@ -8,8 +8,8 @@ namespace ApplicationLayer.Interfaces;
 public interface IUserService
 {
     public Task<ServiceResponse> UpdateUserDetails(EditProfileForm editProfileForm);
-    public Task<UserDetails?> GetUserDetails(string username);
-    public Task<UserInterestsDto> GetUserInterests(string username);
+    public Task<UserDetails?> GetUserDetails(string? userId = null);
+    public Task<UserInterestsDto> GetUserInterests(string? userId = null);
     public Task<ServiceResponse> UpdateUserInterests(UpdateTechInterestsDto interests);
     public Task<List<TechInterestsDto>> GetAllInterests();
 }

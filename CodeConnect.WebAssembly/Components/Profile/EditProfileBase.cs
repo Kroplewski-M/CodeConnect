@@ -1,4 +1,5 @@
 using ApplicationLayer;
+using ApplicationLayer.Classes;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
@@ -15,39 +16,30 @@ public class EditProfileBase : ComponentBase
     [Inject] public required NotificationsService NotificationsService { get; set; }
     [Inject] public required IUserService UserService { get; set; }
     
-    [Parameter] public EventCallback Cancel { get; set; }
+    [Parameter] public EventCallback Cancel { get; set; } 
+    [CascadingParameter] public required UserState UserState { get; set; }
 
     protected List<ValidationFailure> EditProfileErrors = [];
 
     
     protected EditProfileForm EditProfileForm = new EditProfileForm();
     private UserDetails? _userDetails;
-    [CascadingParameter]
-    private Task<AuthenticationState>? AuthenticationState { get; set; }
-    
-    protected override async Task OnInitializedAsync()
-    {
-        if (AuthenticationState is not null)
-        {
-            var authState = await AuthenticationState;
-            var user = authState?.User;
 
-            if (user?.Identity is not null && user.Identity.IsAuthenticated)
-            {
-                _userDetails = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
-                EditProfileForm = new EditProfileForm
-                {
-                    Username = _userDetails.UserName,
-                    FirstName = _userDetails.FirstName,
-                    LastName = _userDetails.LastName,
-                    GithubLink = _userDetails.GithubLink,
-                    WebsiteLink = _userDetails.WebsiteLink,
-                    Dob = _userDetails.Dob,
-                    Bio = _userDetails.Bio,
-                };
-                StateHasChanged();
-            }
-        }
+    
+    protected override void  OnInitialized()
+    {
+        _userDetails = UserState.Current;
+        EditProfileForm = new EditProfileForm
+        {
+            Username = _userDetails?.UserName ?? String.Empty,
+            FirstName = _userDetails?.FirstName ?? String.Empty,
+            LastName = _userDetails?.LastName ?? String.Empty,
+            GithubLink = _userDetails?.GithubLink?? String.Empty,
+            WebsiteLink = _userDetails?.WebsiteLink ?? String.Empty,
+            Dob = _userDetails?.Dob,
+            Bio = _userDetails?.Bio ?? String.Empty,
+        };
+        StateHasChanged();
     }
 
     public bool DisableEdit = false;
@@ -78,6 +70,7 @@ public class EditProfileBase : ComponentBase
         finally
         {
             DisableEdit = false;
+            await Cancel.InvokeAsync(null);
         }
     }
     

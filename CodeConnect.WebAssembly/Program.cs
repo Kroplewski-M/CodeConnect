@@ -28,8 +28,9 @@ builder
 builder.Services.AddScoped(sp =>
     sp.GetRequiredService<IHttpClientFactory>().CreateClient("DefaultClient")
 );
-builder.Services.AddScoped<AuthenticationStateProvider, ClientAuthStateProvider>();
-builder.Services.AddScoped<IAuthenticateServiceClient, AuthenticateServiceClient>();
+builder.Services.AddScoped<ClientAuthStateProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<ClientAuthStateProvider>());
+builder.Services.AddScoped<IAuthenticateServiceClient>(sp => sp.GetRequiredService<ClientAuthStateProvider>());
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<IUserService, UserServiceClient>();
 builder.Services.AddTransient<IUserImageService, UserImageServiceClient>();

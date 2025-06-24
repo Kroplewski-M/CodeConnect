@@ -38,11 +38,11 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
        return new ServiceResponse(true, "Updated User Successfully");
     }
 
-    public async Task<UserDetails?> GetUserDetails(string username)
+    public async Task<UserDetails?> GetUserDetails(string? userId)
     {
-        if (string.IsNullOrEmpty(username))
+        if (string.IsNullOrEmpty(userId))
             return null;
-        var user = await userManager.FindByNameAsync(username);
+        var user = await userManager.FindByIdAsync(userId);
         if (user == null)
             return null;
         
@@ -54,11 +54,11 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
             user.WebsiteLink ?? "", user.DOB, user.CreatedAt,user.Bio ?? "");
     }
 
-    public async Task<UserInterestsDto> GetUserInterests(string username)
+    public async Task<UserInterestsDto> GetUserInterests(string? userId = null)
     {
-        if (string.IsNullOrEmpty(username))
+        if (string.IsNullOrEmpty(userId))
             return new UserInterestsDto(false,"user not found", null);
-        var user = await userManager.FindByNameAsync(username);
+        var user = await userManager.FindByIdAsync(userId);
         if (user != null)
         {
             var interests = context.UserInterests.AsNoTracking()

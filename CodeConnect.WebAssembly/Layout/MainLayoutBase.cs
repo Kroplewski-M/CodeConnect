@@ -80,16 +80,19 @@ public class MainLayoutBase : LayoutComponentBase, IDisposable
 
             if (user?.Identity is not null && user.Identity.IsAuthenticated)
             {
-                var currentUser = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
-                UserState.Current = currentUser;
-                HasDob = currentUser.Dob != null;
-                await InvokeAsync(StateHasChanged);
+                var currentUser = await AuthenticateServiceClient.GetUserFromFromAuthState(authState);
+                if (currentUser != UserState.Current)
+                {
+                    UserState.Current = currentUser;
+                    HasDob = currentUser?.Dob != null;
+                    StateHasChanged();
+                }
             }
             else
             {
                 UserState.Current = null;
                 NavManager.NavigateTo("/Account/Login");
-                await InvokeAsync(StateHasChanged);
+                StateHasChanged();
             }
         });
     }

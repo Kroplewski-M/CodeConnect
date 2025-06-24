@@ -19,7 +19,7 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
 {
     private TokenResponse GenerateNewToken(ApplicationUser user)
     {
-        var claims = user.GetClaimsForUser();
+        var claims = user.GetJwtClaimsForUser();
         var token = tokenService.GenerateJwtToken(claims.AsEnumerable(),DateTime.UtcNow.AddMinutes(Consts.Tokens.AuthTokenMins));
         return new TokenResponse(token);
     }
@@ -46,12 +46,13 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
     }
 
     [Authorize]
-    [HttpPost("GetUserDetails")]
-    public async Task<IActionResult> GetUserDetails([FromBody] string username)
+    [HttpGet("GetUserDetails")]
+    public async Task<IActionResult> GetUserDetails()
     {
-        if(string.IsNullOrWhiteSpace(username))
-            return BadRequest("No username provided");
-        var userDetails = await userService.GetUserDetails(username);
+        var id = User.GetInfo(Consts.ClaimTypes.Id);
+        if(string.IsNullOrWhiteSpace(id))
+            return BadRequest("No user found");
+        var userDetails = await userService.GetUserDetails(id);
         if (userDetails == null)
             return NotFound("User does not exist");
         return Ok(userDetails);
@@ -61,33 +62,26 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
     [HttpPost("UpdateUserImage")]
     public async Task<IActionResult> UpdateUserImage(UpdateUserImageRequest updateUserImageRequest)
     {
-        var loggedInUser = User.GetInfo(Consts.ClaimTypes.UserName);
-        if(loggedInUser != updateUserImageRequest.Username)
-            return Unauthorized("User not found");
+        var userId = User.GetInfo(Consts.ClaimTypes.Id);
+        if(string.IsNullOrWhiteSpace(userId))
+            return Unauthorized("No user found");
+        updateUserImageRequest.UserId = userId;
         if(string.IsNullOrWhiteSpace(updateUserImageRequest.ImgBase64) || string.IsNullOrWhiteSpace(updateUserImageRequest.FileName))
             return BadRequest("No image provided");
-        if (!string.IsNullOrEmpty(loggedInUser))
-        {
-            updateUserImageRequest.Username = loggedInUser;
-            var response = await userImageService.UpdateUserImage(updateUserImageRequest);
-            if (!response.Flag)
-                return BadRequest(response.Message);
-            //GET NEW TOKEN
-            var updatedUser = await userManager.FindByNameAsync(loggedInUser);
-            if (updatedUser != null)
-            {
-                return Ok(GenerateNewToken(updatedUser));
-            }
-        }
-        return Unauthorized("User not found");
+        
+        var response = await userImageService.UpdateUserImage(updateUserImageRequest);
+        if (!response.Flag)
+            return BadRequest(response.Message);
+        return Ok(response);
     }
 
-    [HttpPost("GetUserInterests")]
-    public async Task<IActionResult> GetUserInterests([FromBody]string username)
+    [HttpGet("GetUserInterests")]
+    public async Task<IActionResult> GetUserInterests()
     {
-        if(string.IsNullOrWhiteSpace(username))
-            return BadRequest("No username provided");
-        var response = await userService.GetUserInterests(username);
+        var id = User.GetInfo(Consts.ClaimTypes.Id);
+        if(string.IsNullOrWhiteSpace(id))
+            return BadRequest("No user found");
+        var response = await userService.GetUserInterests(id);
         if(response.Flag)
             return Ok(new UserInterestsDto(response.Flag, response.Message, response.Interests));
         return BadRequest(response);

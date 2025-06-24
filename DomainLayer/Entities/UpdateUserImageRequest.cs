@@ -8,7 +8,7 @@ public class UpdateUserImageRequest
 {
     public Constants.Consts.ImageType TypeOfImage { get; set; }
     public string ImgBase64 { get; set; } = "";
-    public string Username { get; set; } = "";
+    public string UserId { get; set; } = "";
     public string FileName { get; set; } = ""; 
 }
 
@@ -17,7 +17,6 @@ public class UpdateUserImageRequestValidator : AbstractValidator<UpdateUserImage
     public UpdateUserImageRequestValidator()
     {
         RuleFor(x => x.ImgBase64).NotEmpty();
-        RuleFor(x => x.Username).NotEmpty();
         RuleFor(x => x.FileName).NotEmpty();
         RuleFor(x => x.TypeOfImage).NotNull();
     }
