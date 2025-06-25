@@ -91,10 +91,10 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
     [HttpPut("UpdateUserInterests")]
     public async Task<IActionResult> UpdateUserInterests([FromBody]UpdateTechInterestsDto interests)
     {
-        var findUsername = User.GetInfo(Consts.ClaimTypes.UserName);
-        if (findUsername != null && findUsername == interests.Username)
+        var findUserId = User.GetInfo(Consts.ClaimTypes.Id);
+        if (findUserId != null)
         {
-            var response = await userService.UpdateUserInterests(interests);
+            var response = await userService.UpdateUserInterests(new UpdateTechInterestsDto(findUserId,interests.Interests));
             if(response.Flag)
                 return Ok(response);
             return BadRequest(response);

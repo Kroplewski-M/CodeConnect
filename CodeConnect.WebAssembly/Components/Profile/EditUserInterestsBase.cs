@@ -1,5 +1,6 @@
 using ApplicationLayer;
 using ApplicationLayer.APIServices;
+using ApplicationLayer.Classes;
 using ApplicationLayer.ClientServices;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
@@ -14,7 +15,7 @@ public class EditUserInterestsBase : ComponentBase
     [Inject] public required IUserService UserService { get; set; }
     [Parameter] public EventCallback Cancel { get; set; } 
     [Parameter] public List<TechInterestsDto>? CurrentUserInterests { get; set; }
-    [CascadingParameter] public required string Username { get; set; }
+    [CascadingParameter] public required UserState UserState { get; set; }
     [Inject] public required NotificationsService NotificationsService { get; set; }
 
     protected List<TechInterestsDto> AllTechInterests { get; set; } = new List<TechInterestsDto>();
@@ -83,7 +84,7 @@ public class EditUserInterestsBase : ComponentBase
                 new ApplicationLayer.Notification("Updating interests", NotificationType.Info));
             if (CurrentUserInterests != null)
             {
-                var result = await UserService.UpdateUserInterests(new UpdateTechInterestsDto(Username, CurrentUserInterests));
+                var result = await UserService.UpdateUserInterests(new UpdateTechInterestsDto("", CurrentUserInterests));
                 if (result.Flag)
                 {
                     NotificationsService.PushNotification(

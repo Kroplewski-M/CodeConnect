@@ -76,9 +76,9 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
 
     public async Task<ServiceResponse> UpdateUserInterests(UpdateTechInterestsDto interests)
     {
-        if (string.IsNullOrEmpty(interests.Username))
+        if (string.IsNullOrEmpty(interests.UserId))
             return new ServiceResponse(false, "user not found");
-        var user = await userManager.FindByNameAsync(interests.Username ?? "");
+        var user = await userManager.FindByIdAsync(interests.UserId ?? "");
         if (user != null)
         {
             var oldInterests = context.UserInterests.Include(x => x.TechInterest)

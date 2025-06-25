@@ -1,3 +1,3 @@
 namespace ApplicationLayer.DTO_s.User;
 
-public record UpdateTechInterestsDto(string Username, List<TechInterestsDto> Interests);
+public record UpdateTechInterestsDto(string UserId, List<TechInterestsDto> Interests);
