@@ -14,7 +14,7 @@ namespace CodeConnect.WebAPI.Endpoints.UserEndpoint;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UserController(IUserService userService, UserManager<ApplicationUser>userManager,ITokenService tokenService,
+public class UserController(IUserService userService,ITokenService tokenService,
     IUserImageService userImageService) : ControllerBase
 {
     private TokenResponse GenerateNewToken(ApplicationUser user)
@@ -27,22 +27,11 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
     [HttpPost("EditUserDetails")]
     public async Task<IActionResult> EditUserDetails([FromBody] EditProfileForm editProfileForm)
     {
-        if (string.IsNullOrWhiteSpace(editProfileForm.Username))
-            return BadRequest("No username provided");
-        
-        var loggedInUser = User.GetInfo(Consts.ClaimTypes.UserName);
-        var updateUser = await userManager.FindByNameAsync(editProfileForm.Username);
-        
-        if (loggedInUser != updateUser?.UserName)
-            return Unauthorized("Cannot find user");
-        if (updateUser != null)
-        {
-            var result = await userService.UpdateUserDetails(editProfileForm);
-            if(result.Flag)
-                return Ok(GenerateNewToken(updateUser));
-            return BadRequest(result.Message);
-        }
-        return Unauthorized("Cannot find user");
+        editProfileForm.UserId = User.GetInfo(Consts.ClaimTypes.Id) ?? "";
+        var result = await userService.UpdateUserDetails(editProfileForm);
+        if(result.Flag)
+            return Ok(result);
+        return BadRequest(result.Message);
     }
 
     [Authorize]

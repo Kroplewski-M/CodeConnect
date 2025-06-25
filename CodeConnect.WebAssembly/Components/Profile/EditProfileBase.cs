@@ -31,7 +31,7 @@ public class EditProfileBase : ComponentBase
         _userDetails = UserState.Current;
         EditProfileForm = new EditProfileForm
         {
-            Username = _userDetails?.UserName ?? String.Empty,
+            UserId = String.Empty,
             FirstName = _userDetails?.FirstName ?? String.Empty,
             LastName = _userDetails?.LastName ?? String.Empty,
             GithubLink = _userDetails?.GithubLink?? String.Empty,

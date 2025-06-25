@@ -11,17 +11,16 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace ApplicationLayer.ClientServices;
 
-public class UserServiceClient(HttpClient httpClient,ILocalStorageService localStorageService, NavigationManager navigationManager, IAuthenticateServiceClient authenticateServiceClient) : IUserService
+public class UserServiceClient(HttpClient httpClient, NavigationManager navigationManager, IAuthenticateServiceClient authenticateServiceClient) : IUserService
 {
     public async Task<ServiceResponse> UpdateUserDetails(EditProfileForm editProfileForm)
     {
         var response = await httpClient.PostAsJsonAsync("/api/User/EditUserDetails", editProfileForm);
-        var newTokens = await response.Content.ReadFromJsonAsync<TokenResponse>();
-        if (!string.IsNullOrWhiteSpace(newTokens?.Key))
+        var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
+        if (result?.Flag ?? false)
         {
-            await localStorageService.SetItemAsync(Consts.Tokens.AuthToken, newTokens?.Key);
             authenticateServiceClient.NotifyStateChanged();
-            return new ServiceResponse(true, "Updated Details Successfully");
+            return result;
         }
         return new ServiceResponse(false, "invalid response when updating details");
     }

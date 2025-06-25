@@ -25,7 +25,7 @@ public class VerifyDobBase : ComponentBase
             Loading = true;
             var editProfileForm = new EditProfileForm
             {
-                Username = UserState.Current.UserName,
+                UserId = string.Empty,
                 FirstName = UserState.Current.FirstName,
                 LastName = UserState.Current.LastName,
                 GithubLink = UserState.Current.GithubLink,

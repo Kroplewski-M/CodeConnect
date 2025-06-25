@@ -35,7 +35,7 @@ public class UserControllerTests
         _userServiceMock = new Mock<IUserService>();
         _tokenServiceMock = new Mock<ITokenService>();
         _userImageServiceMock = new Mock<IUserImageService>();
-        _userController = new UserController(_userServiceMock.Object, _userManagerMock.Object, _tokenServiceMock.Object, _userImageServiceMock.Object);
+        _userController = new UserController(_userServiceMock.Object, _tokenServiceMock.Object, _userImageServiceMock.Object);
         
         // Setup claims for authenticated user
         var claims = new[]
@@ -48,90 +48,12 @@ public class UserControllerTests
         var httpContext = new DefaultHttpContext { User = principal };
         _userController.ControllerContext = new ControllerContext(){ HttpContext = httpContext };
     }
-
-    [Fact]
-    public async Task EditUserDetails_EmptyUsername_ReturnsBadRequest()
-    {
-        //Arrange
-        EditProfileForm editForm = new EditProfileForm()
-        {
-            Username = "",
-            Bio = "",
-            Dob = DateOnly.FromDateTime(DateTime.UtcNow),
-            FirstName = "",
-            LastName = "",
-            GithubLink = "",
-            WebsiteLink = "",
-        };
-        //Act
-        var result = await _userController.EditUserDetails(editForm);
-        var badRequestResult = result as BadRequestObjectResult;
-        
-        //Assert
-        Assert.NotNull(badRequestResult);  
-        Assert.Equal(badRequestResult.StatusCode, (int)HttpStatusCode.BadRequest);
-        _userServiceMock.Verify(x=> x.UpdateUserDetails(It.IsAny<EditProfileForm>()), Times.Never);
-    }
-    
-    [Fact]
-    public async Task EditUserDetails_WrongUsername_ReturnsBadRequest()
-    {
-        //Arrange
-        EditProfileForm editForm = new EditProfileForm()
-        {
-            Username = "testUsername",
-            Bio = "",
-            Dob = DateOnly.FromDateTime(DateTime.UtcNow),
-            FirstName = "",
-            LastName = "",
-            GithubLink = "",
-            WebsiteLink = "",
-        };
-        _userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser(){UserName = "WrongUsername"});
-        //Act
-        var result = await _userController.EditUserDetails(editForm);
-        var unAuthorizedRequestResult = result as UnauthorizedObjectResult;
-        
-        //Assert
-        Assert.NotNull(unAuthorizedRequestResult);  
-        Assert.Equal(unAuthorizedRequestResult.StatusCode, (int)HttpStatusCode.Unauthorized);
-        _userServiceMock.Verify(x=> x.UpdateUserDetails(It.IsAny<EditProfileForm>()), Times.Never);
-    }
-
-    [Fact]
-    public async Task EditUserDetails_GoodForm_CorrectUser_ShouldReturnOk()
-    {
-        //Arrange
-        EditProfileForm editForm = new EditProfileForm()
-        {
-            Username = "testUsername",
-            Bio = "",
-            Dob = DateOnly.FromDateTime(DateTime.UtcNow),
-            FirstName = "",
-            LastName = "",
-            GithubLink = "",
-            WebsiteLink = "",
-        };
-        var expectedResult = new ServiceResponse(true,"");
-        _userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser(){UserName = "testUsername"});
-        _userServiceMock.Setup(x => x.UpdateUserDetails(editForm)).ReturnsAsync(expectedResult);
-        
-        //Act
-        var result = await _userController.EditUserDetails(editForm);
-        var okRequestResult = result as OkObjectResult;
-        
-        //Assert
-        Assert.NotNull(okRequestResult);
-        Assert.Equal(okRequestResult.StatusCode, (int)HttpStatusCode.OK);
-        _userServiceMock.Verify(x => x.UpdateUserDetails(It.IsAny<EditProfileForm>()), Times.Once);
-    }
-
     [Fact]
     public async Task GetUserDetails_NoUserIdInClaims_ShouldReturnBadRequest()
     {
         //Arrange
         // Create new controller with no ID claim
-        var controller = new UserController(_userServiceMock.Object, _userManagerMock.Object, _tokenServiceMock.Object, _userImageServiceMock.Object);
+        var controller = new UserController(_userServiceMock.Object, _tokenServiceMock.Object, _userImageServiceMock.Object);
         var claims = new[] { new Claim(Consts.ClaimTypes.UserName, _testUsername) }; // Only username, no ID
         var identity = new ClaimsIdentity(claims, "TestAuthentication");
         var principal = new ClaimsPrincipal(identity);
@@ -170,7 +92,7 @@ public class UserControllerTests
     {
         //Arrange
         // Create new controller with no ID claim
-        var controller = new UserController(_userServiceMock.Object, _userManagerMock.Object, _tokenServiceMock.Object, _userImageServiceMock.Object);
+        var controller = new UserController(_userServiceMock.Object, _tokenServiceMock.Object, _userImageServiceMock.Object);
         var claims = new[] { new Claim(Consts.ClaimTypes.UserName, _testUsername) }; // Only username, no ID
         var identity = new ClaimsIdentity(claims, "TestAuthentication");
         var principal = new ClaimsPrincipal(identity);
@@ -266,7 +188,7 @@ public class UserControllerTests
     {
         //Arrange
         // Create new controller with no ID claim
-        var controller = new UserController(_userServiceMock.Object, _userManagerMock.Object, _tokenServiceMock.Object, _userImageServiceMock.Object);
+        var controller = new UserController(_userServiceMock.Object, _tokenServiceMock.Object, _userImageServiceMock.Object);
         var claims = new[] { new Claim(Consts.ClaimTypes.UserName, _testUsername) }; // Only username, no ID
         var identity = new ClaimsIdentity(claims, "TestAuthentication");
         var principal = new ClaimsPrincipal(identity);

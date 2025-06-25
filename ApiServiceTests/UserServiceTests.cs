@@ -31,10 +31,10 @@ public class UserServiceTests
     public async Task UpdateUserDetails_ReturnsSuccess_WhenValid()
     {
         // Arrange
-        var form = new EditProfileForm { Username = "test", FirstName = "John",LastName = "John", Dob = DateOnly.Parse("2012-09-19") };
+        var form = new EditProfileForm { UserId = "test", FirstName = "John",LastName = "John", Dob = DateOnly.Parse("2012-09-19") };
         var user = new ApplicationUser { UserName = "test" };
     
-        _userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(user);
+        _userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(user);
         _userManagerMock.Setup(x => x.UpdateAsync(user)).ReturnsAsync(IdentityResult.Success);
 
         // Act
@@ -48,7 +48,7 @@ public class UserServiceTests
     public async Task UpdateUserDetails_NoFirstName_ReturnsBadService()
     {
         // Arrange
-        var form = new EditProfileForm { Username = "test", FirstName = "",LastName = "John", Dob = DateOnly.Parse("2012-09-19") };
+        var form = new EditProfileForm { UserId = "test", FirstName = "",LastName = "John", Dob = DateOnly.Parse("2012-09-19") };
         var user = new ApplicationUser { UserName = "test" };
     
         _userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(user);
@@ -66,7 +66,7 @@ public class UserServiceTests
     public async Task UpdateUserDetails_NoLastName_ReturnsBadService()
     {
         // Arrange
-        var form = new EditProfileForm { Username = "test", FirstName = "Mat",LastName = "", Dob = DateOnly.Parse("2012-09-19") };
+        var form = new EditProfileForm { UserId = "test", FirstName = "Mat",LastName = "", Dob = DateOnly.Parse("2012-09-19") };
         var user = new ApplicationUser { UserName = "test" };
     
         _userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(user);
@@ -84,7 +84,7 @@ public class UserServiceTests
     public async Task UpdateUserDetails_NoDob_ReturnsBadService()
     {
         // Arrange
-        var form = new EditProfileForm { Username = "test", FirstName = "Mat",LastName = "Kroplewski", Dob = null };
+        var form = new EditProfileForm { UserId = "test", FirstName = "Mat",LastName = "Kroplewski", Dob = null };
         var user = new ApplicationUser { UserName = "test" };
     
         _userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(user);
@@ -102,10 +102,10 @@ public class UserServiceTests
     public async Task UpdateUserDetails_DobInTheFuture_ReturnsBadService()
     {
         // Arrange
-        var form = new EditProfileForm { Username = "test", FirstName = "Mat",LastName = "Kroplewski", Dob = DateOnly.Parse(DateTime.UtcNow.AddDays(10).Date.ToString("yyyy/MM/dd")) };
+        var form = new EditProfileForm { UserId = "test", FirstName = "Mat",LastName = "Kroplewski", Dob = DateOnly.Parse(DateTime.UtcNow.AddDays(10).Date.ToString("yyyy/MM/dd")) };
         var user = new ApplicationUser { UserName = "test" };
     
-        _userManagerMock.Setup(x => x.FindByIdAsync(form.Username)).ReturnsAsync(user);
+        _userManagerMock.Setup(x => x.FindByIdAsync(form.UserId)).ReturnsAsync(user);
         _userManagerMock.Setup(x => x.UpdateAsync(user)).ReturnsAsync(IdentityResult.Success);
 
         // Act

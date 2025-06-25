@@ -24,7 +24,7 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
         if (!result.IsValid)
             return new ServiceResponse(false, "invalid request"); 
         
-        var user =  await userManager.FindByNameAsync(editProfileForm.Username);
+        var user =  await userManager.FindByIdAsync(editProfileForm.UserId);
        if (user == null)
            return new ServiceResponse(false, "");
        user.FirstName = editProfileForm.FirstName;
