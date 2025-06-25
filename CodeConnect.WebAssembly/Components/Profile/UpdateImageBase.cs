@@ -20,6 +20,7 @@ public class UpdateImageBase : ComponentBase
     [Inject] public required NotificationsService NotificationsService { get; set; }
     [Inject] public required ImageConvertorServiceClient ImageConvertor { get; set; }
     [Inject] public required IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
+    [Inject] public required NavigationManager NavigationManager { get; set; }
     [Parameter] public Consts.ImageType UpdateOfImageType { get; set; }
     [Parameter] public EventCallback Cancel { get; set; }
     [CascadingParameter] public required UserState UserState { get; set; }
@@ -55,6 +56,8 @@ public class UpdateImageBase : ComponentBase
                 NotificationsService.PushNotification(result.Flag
                     ? new ApplicationLayer.Notification(result.Message, NotificationType.Success)
                     : new ApplicationLayer.Notification(result.Message, NotificationType.Error));
+                var currentUri = NavigationManager.Uri;
+                NavigationManager.NavigateTo(currentUri, forceLoad: true);
             }
             catch
             {

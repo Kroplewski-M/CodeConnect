@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace ApplicationLayer.ClientServices;
 
-public class UserImageServiceClient(HttpClient httpClient, NavigationManager navigationManager): IUserImageService
+public class UserImageServiceClient(HttpClient httpClient): IUserImageService
 {
     public async Task<ServiceResponse> UpdateUserImage(UpdateUserImageRequest updateUserImageRequest)
     {
@@ -20,8 +20,6 @@ public class UserImageServiceClient(HttpClient httpClient, NavigationManager nav
         var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
         if (result?.Flag ?? false)
         {
-            var currentUri = navigationManager.Uri;
-            navigationManager.NavigateTo(currentUri, forceLoad: true);
             return result;
         }
         return new ServiceResponse(false, "An error occured, please try again later.");

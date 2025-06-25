@@ -15,6 +15,7 @@ public class EditProfileBase : ComponentBase
     [Inject] public required  IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
     [Inject] public required NotificationsService NotificationsService { get; set; }
     [Inject] public required IUserService UserService { get; set; }
+    [Inject] public required NavigationManager NavigationManager { get; set; }
     
     [Parameter] public EventCallback Cancel { get; set; } 
     [CascadingParameter] public required UserState UserState { get; set; }
@@ -70,7 +71,8 @@ public class EditProfileBase : ComponentBase
         finally
         {
             DisableEdit = false;
-            await Cancel.InvokeAsync(null);
+            var currentUri = NavigationManager.Uri;
+            NavigationManager.NavigateTo(currentUri, forceLoad: true);
         }
     }
     
