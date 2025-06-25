@@ -6,11 +6,12 @@ using ApplicationLayer.Interfaces;
 using Blazored.LocalStorage;
 using DomainLayer.Constants;
 using DomainLayer.Entities;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace ApplicationLayer.ClientServices;
 
-public class UserImageServiceClient(HttpClient httpClient, IAuthenticateServiceClient authenticateServiceClient): IUserImageService
+public class UserImageServiceClient(HttpClient httpClient, NavigationManager navigationManager): IUserImageService
 {
     public async Task<ServiceResponse> UpdateUserImage(UpdateUserImageRequest updateUserImageRequest)
     {
@@ -19,7 +20,8 @@ public class UserImageServiceClient(HttpClient httpClient, IAuthenticateServiceC
         var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
         if (result?.Flag ?? false)
         {
-            authenticateServiceClient.NotifyStateChanged();
+            var currentUri = navigationManager.Uri;
+            navigationManager.NavigateTo(currentUri, forceLoad: true);
             return result;
         }
         return new ServiceResponse(false, "An error occured, please try again later.");

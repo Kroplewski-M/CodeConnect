@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace ApplicationLayer.ClientServices;
 
-public class UserServiceClient(HttpClient httpClient, NavigationManager navigationManager, IAuthenticateServiceClient authenticateServiceClient) : IUserService
+public class UserServiceClient(HttpClient httpClient, NavigationManager navigationManager) : IUserService
 {
     public async Task<ServiceResponse> UpdateUserDetails(EditProfileForm editProfileForm)
     {
@@ -19,7 +19,8 @@ public class UserServiceClient(HttpClient httpClient, NavigationManager navigati
         var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
         if (result?.Flag ?? false)
         {
-            authenticateServiceClient.NotifyStateChanged();
+            var currentUri = navigationManager.Uri;
+            navigationManager.NavigateTo(currentUri, forceLoad: true);
             return result;
         }
         return new ServiceResponse(false, "invalid response when updating details");
