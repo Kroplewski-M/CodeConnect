@@ -24,7 +24,7 @@ public class UserServiceClient(HttpClient httpClient, NavigationManager navigati
         return new ServiceResponse(false, "invalid response when updating details");
     }
 
-    public async Task<UserDetails?> GetUserDetails(string? userId)
+    public async Task<UserDetails?> GetUserDetails(string? userId = null)
     {
         var response = await httpClient.GetFromJsonAsync<UserDetails?>("/api/User/GetUserDetails");
         if(response != null)
