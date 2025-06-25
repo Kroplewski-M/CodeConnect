@@ -75,7 +75,7 @@ public class ClientAuthStateProvider(HttpClient httpClient,
         if (!response.IsSuccessStatusCode || authResponse == null || !authResponse.Flag)
             return new AuthResponse(false, "", "", authResponse?.Message ?? "An error occured please try again later");
         await localStorageService.SetItemAsync(Consts.Tokens.AuthToken, authResponse.Token);
-        await localStorageService.SetItemAsync(Consts.Tokens.RefreshToken, authResponse.Token);
+        await localStorageService.SetItemAsync(Consts.Tokens.RefreshToken, authResponse.RefreshToken);
         
         StateChange(authResponse.Token);
         return authResponse;
@@ -104,7 +104,7 @@ public class ClientAuthStateProvider(HttpClient httpClient,
         CreateAuthenticationStateFromToken(token);
         NotifyStateChanged();
     }
-    public async Task<UserDetails?> GetUserFromFromAuthState(AuthenticationState? authState)
+    public async Task<UserDetails?> GetUserFromAuthState(AuthenticationState? authState)
     {
         return await httpClient.GetFromJsonAsync<UserDetails?>("/api/User/GetUserDetails");
     }

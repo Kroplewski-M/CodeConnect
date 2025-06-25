@@ -80,7 +80,7 @@ public class MainLayoutBase : LayoutComponentBase, IDisposable
 
             if (user?.Identity is not null && user.Identity.IsAuthenticated)
             {
-                var currentUser = await AuthenticateServiceClient.GetUserFromFromAuthState(authState);
+                var currentUser = await AuthenticateServiceClient.GetUserFromAuthState(authState);
                 if (currentUser != UserState.Current)
                 {
                     UserState.Current = currentUser;

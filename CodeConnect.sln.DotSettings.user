@@ -67,6 +67,7 @@
     &lt;TestId&gt;xUnit::7A14E943-041F-4EF7-A9EF-5E81637AFE5B::net9.0::TestLayer.PostControllerTests.ToggleLikePost_UsernameMismatch_ShouldReturnBadRequest&lt;/TestId&gt;
     &lt;TestId&gt;xUnit::7A14E943-041F-4EF7-A9EF-5E81637AFE5B::net9.0::TestLayer.UserControllerTests&lt;/TestId&gt;
     &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.UserImageServiceTests.UpdateUserImage_UserHasOldProfileImage_RemovesOldImage&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.UserServiceTests.UpdateUserInterests_UserNotFound_ReturnsFailure&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b0666a8f_002Da7ec_002D426d_002D87ce_002D2082ed2b97b3/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GenerateJwtToken_WithValidClaims_ReturnsValidToken" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;

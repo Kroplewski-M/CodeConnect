@@ -215,7 +215,7 @@ public class UserServiceTests
     public async Task UpdateUserInterests_UserNotFound_ReturnsFailure()
     {
         // Arrange
-        _userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync((ApplicationUser)null!);
+        _userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync((ApplicationUser)null!);
 
         // Act
         var result = await _userService.UpdateUserInterests(new UpdateTechInterestsDto("", new List<TechInterestsDto>()));

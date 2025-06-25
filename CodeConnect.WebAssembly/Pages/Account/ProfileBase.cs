@@ -40,7 +40,7 @@ public class ProfileBase : ComponentBase
             {
                 IsCurrentUser = false;
                 CurrentUsername = UserState.Current.UserName;
-                UserDetails = await UserService.GetUserDetails(Username ?? "");
+                UserDetails = await UserService.GetUserDetails();
             }
 
             if (UserDetails != null)
