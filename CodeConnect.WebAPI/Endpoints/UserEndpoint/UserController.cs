@@ -23,7 +23,7 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
         var token = tokenService.GenerateJwtToken(claims.AsEnumerable(),DateTime.UtcNow.AddMinutes(Consts.Tokens.AuthTokenMins));
         return new TokenResponse(token);
     }
-    [Authorize]
+    [Authorize(nameof(Consts.TokenType.Access))]
     [HttpPost("EditUserDetails")]
     public async Task<IActionResult> EditUserDetails([FromBody] EditProfileForm editProfileForm)
     {
@@ -45,7 +45,7 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
         return Unauthorized("Cannot find user");
     }
 
-    [Authorize]
+    [Authorize(nameof(Consts.TokenType.Access))]
     [HttpPost("GetUserDetails")]
     public async Task<IActionResult> GetUserDetails([FromBody] string username)
     {
@@ -57,7 +57,7 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
         return Ok(userDetails);
     }
 
-    [Authorize]
+    [Authorize(nameof(Consts.TokenType.Access))]
     [HttpPost("UpdateUserImage")]
     public async Task<IActionResult> UpdateUserImage(UpdateUserImageRequest updateUserImageRequest)
     {
@@ -93,7 +93,7 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
         return BadRequest(response);
     }
 
-    [Authorize]
+    [Authorize(nameof(Consts.TokenType.Access))]
     [HttpPut("UpdateUserInterests")]
     public async Task<IActionResult> UpdateUserInterests([FromBody]UpdateTechInterestsDto interests)
     {

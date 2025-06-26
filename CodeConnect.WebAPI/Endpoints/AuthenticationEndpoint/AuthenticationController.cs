@@ -42,7 +42,7 @@ public class AuthenticationController(IAuthenticateService authenticateService,
             return Ok(result);
         return Unauthorized(result);
     }
-    [Authorize]
+    [Authorize(nameof(Consts.TokenType.Refresh))]
     [HttpPost("RefreshToken")]
     public async Task<IActionResult> RefreshToken([FromHeader(Name = Consts.Headers.DeviceId)]string deviceId)
     {

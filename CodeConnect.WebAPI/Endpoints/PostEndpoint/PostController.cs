@@ -12,7 +12,7 @@ namespace CodeConnect.WebAPI.Endpoints.PostEndpoint;
 public class PostController(IPostService postService) : ControllerBase
 {
     [HttpPost("CreatePost")]
-    [Authorize]
+    [Authorize(nameof(Consts.TokenType.Access))]
     public async Task<ActionResult<ServiceResponse>> CreatePost([FromBody]CreatePostDto createPost)
     {
         var postValidator = new CreatePostDtoValidator();
@@ -27,7 +27,7 @@ public class PostController(IPostService postService) : ControllerBase
     }
 
     [HttpGet("GetUserPosts")]
-    [Authorize]
+    [Authorize(nameof(Consts.TokenType.Access))]
     public async Task<ActionResult<List<PostBasicDto>>> GetUserPosts(string userName, int skip, int take)
     {
         if(string.IsNullOrEmpty(userName))
@@ -36,7 +36,7 @@ public class PostController(IPostService postService) : ControllerBase
     }
 
     [HttpGet("GetPost")]
-    [Authorize]
+    [Authorize(nameof(Consts.TokenType.Refresh))]
     public async Task<ActionResult<PostBasicDto?>> GetPost(Guid id)
     {
         if(id == Guid.Empty)
@@ -48,7 +48,7 @@ public class PostController(IPostService postService) : ControllerBase
     }
 
     [HttpPost("ToggleLikePost")]
-    [Authorize]
+    [Authorize(nameof(Consts.TokenType.Access))]
     public async Task<ActionResult<ServiceResponse>> ToggleLikePost(LikePostDto likePostDto)
     {
         var username = User.GetInfo(Consts.ClaimTypes.UserName);
@@ -60,7 +60,7 @@ public class PostController(IPostService postService) : ControllerBase
     }
 
     [HttpGet("IsUserLikingPost")]
-    [Authorize]
+    [Authorize(nameof(Consts.TokenType.Access))]
     public async Task<ActionResult<bool>> IsUserLikingPost(Guid postId, string username)
     {
         if(string.IsNullOrWhiteSpace(username))

@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using ApplicationLayer;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
@@ -13,7 +14,7 @@ using Newtonsoft.Json;
 namespace CodeConnect.WebAssembly.DelegatingHandler;
 
 
-public class AuthHandler(ILocalStorageService localStorageService) : System.Net.Http.DelegatingHandler
+public class AuthHandler(ILocalStorageService localStorageService, NavigationManager navigationManager) : System.Net.Http.DelegatingHandler
 {
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
@@ -34,6 +35,12 @@ public class AuthHandler(ILocalStorageService localStorageService) : System.Net.
         {
             request.Headers.Authorization = new AuthenticationHeaderValue(Consts.Tokens.ApiAuthTokenName, token);
             response = await base.SendAsync(request, cancellationToken);
+        }
+
+        if (response?.StatusCode == HttpStatusCode.Forbidden)
+        {
+            navigationManager.NavigateTo("/Unauthorized");
+            return response;       
         }
         if (!hasToken || response?.StatusCode == HttpStatusCode.Unauthorized)
         {

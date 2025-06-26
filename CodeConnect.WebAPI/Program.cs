@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using ApplicationLayer.APIServices;
 using ApplicationLayer.Interfaces;
 using Azure.Storage.Blobs;
+using DomainLayer.Constants;
 using DomainLayer.Entities.APIClasses;
 using DomainLayer.Entities.Auth;
 using InfrastructureLayer;
@@ -59,6 +60,14 @@ builder.Services.AddAuthentication(options =>
             return false;
         }
     };
+});
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(nameof(Consts.TokenType.Access), policy =>
+        policy.RequireClaim(Consts.Tokens.TokenType, nameof(Consts.TokenType.Access)));
+
+    options.AddPolicy(nameof(Consts.TokenType.Refresh), policy =>
+        policy.RequireClaim(Consts.Tokens.TokenType, nameof(Consts.TokenType.Refresh)));
 });
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 builder.Services.Configure<AzureSettings>(builder.Configuration.GetSection("AzureSettings"));

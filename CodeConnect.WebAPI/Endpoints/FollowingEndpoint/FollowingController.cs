@@ -14,7 +14,7 @@ namespace CodeConnect.WebAPI.Endpoints.FollowingEndpoint;
 [ApiController]
 public class FollowingController(IFollowingService followingService, UserManager<ApplicationUser>userManager) : ControllerBase
 {
-    [Authorize]
+    [Authorize(nameof(Consts.TokenType.Access))]
     [HttpPost("FollowUser")]
     public async Task<IActionResult> FollowUser(FollowRequestDto followRequest)
     {
@@ -29,7 +29,7 @@ public class FollowingController(IFollowingService followingService, UserManager
         var response = await followingService.FollowUser(followRequest);
         return Ok(response);
     }
-    [Authorize]
+    [Authorize(nameof(Consts.TokenType.Access))]
     [HttpPost("UnFollowUser")]
     public async Task<IActionResult> UnFollowUser(FollowRequestDto unFollowRequest)
     {
@@ -45,7 +45,7 @@ public class FollowingController(IFollowingService followingService, UserManager
         return Ok(response);
     }
 
-    [Authorize]
+    [Authorize(nameof(Consts.TokenType.Access))]
     [HttpGet("UserFollowersCount")]
     public async Task<IActionResult> UserFollowersCount(string username)
     {
@@ -59,7 +59,7 @@ public class FollowingController(IFollowingService followingService, UserManager
         return Ok(await followingService.GetUserFollowersCount(user.Id));
     }
 
-    [Authorize]
+    [Authorize(nameof(Consts.TokenType.Access))]
     [HttpGet("IsUserFollowing")]
     public async Task<IActionResult> IsUserFollowing(string currentUsername, string targetUsername)
     {
@@ -69,7 +69,7 @@ public class FollowingController(IFollowingService followingService, UserManager
         return Ok(await followingService.IsUserFollowing(request));
     }
 
-    [Authorize]
+    [Authorize(nameof(Consts.TokenType.Access))]
     [HttpGet("GetUserFollowers")]
     public async Task<IActionResult> GetUserFollowers(string username, int skip, int take)
     {
@@ -77,7 +77,7 @@ public class FollowingController(IFollowingService followingService, UserManager
             return BadRequest();
         return Ok(await followingService.GetUserFollowers(username, skip, take));
     }
-    [Authorize]
+    [Authorize(nameof(Consts.TokenType.Access))]
     [HttpGet("GetUserFollowing")]
     public async Task<IActionResult> GetUserFollowing(string username, int skip, int take)
     {
