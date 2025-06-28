@@ -36,7 +36,7 @@ public class PostController(IPostService postService) : ControllerBase
     }
 
     [HttpGet("GetPost")]
-    [Authorize(nameof(Consts.TokenType.Refresh))]
+    [Authorize(nameof(Consts.TokenType.Access))]
     public async Task<ActionResult<PostBasicDto?>> GetPost(Guid id)
     {
         if(id == Guid.Empty)
