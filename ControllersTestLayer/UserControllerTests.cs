@@ -35,11 +35,22 @@ public class UserControllerTests
         _userController = new UserController(_userServiceMock.Object, _userManagerMock.Object, _tokenServiceMock.Object, _userImageServiceMock.Object);
         
         var currentUsername = "testUsername";
-        var claims = new[] { new Claim(Consts.ClaimTypes.UserName, currentUsername) };
-        var identity = new ClaimsIdentity(claims, "TestAuthentication");
-        var principal = new ClaimsPrincipal(identity);
-        var httpContext = new DefaultHttpContext { User = principal };
-        _userController.ControllerContext = new ControllerContext(){ HttpContext = httpContext };
+        var currentId = Guid.NewGuid().ToString();
+        SetMockUserInContext(currentUsername, currentId);
+    }
+    private void SetMockUserInContext(string username, string userId)
+    {
+        var claims = new List<Claim>
+        {
+            new Claim(Consts.ClaimTypes.UserName, username),
+            new Claim(Consts.ClaimTypes.Id, userId)
+        };
+        var identity = new ClaimsIdentity(claims, "TestAuthType");
+        var claimsPrincipal = new ClaimsPrincipal(identity);
+        _userController.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext { User = claimsPrincipal }
+        };
     }
 
     [Fact]
@@ -150,28 +161,6 @@ public class UserControllerTests
         Assert.Equal(okRequestResult.StatusCode, (int)HttpStatusCode.OK);
         _userServiceMock.Verify(x=> x.GetUserDetails(It.IsAny<string>()), Times.Once);
     }
-
-    [Fact]
-    public async Task UpdateUserImage_WrongUsername_ShouldReturnUnauthorized()
-    {
-        //Arrange
-        var editUserImg = new UpdateUserImageRequest()
-        {
-            FileName = "",
-            ImgBase64 = "",
-            TypeOfImage = Consts.ImageType.ProfileImages,
-            Username = "WrongUsername"
-        };
-        //Act
-        var result = await _userController.UpdateUserImage(editUserImg);
-        var unAuthorizedRequestResult = result as UnauthorizedObjectResult;
-        
-        //Assert
-        Assert.NotNull(unAuthorizedRequestResult);
-        Assert.Equal((int)HttpStatusCode.Unauthorized,unAuthorizedRequestResult.StatusCode);
-        _userImageServiceMock.Verify(x=> x.UpdateUserImage(It.IsAny<UpdateUserImageRequest>()), Times.Never);
-    }
-
     [Fact]
     public async Task UpdateUserImage_CorrectUsername_NoImage_ShouldReturnBadRequest()
     {
@@ -181,7 +170,6 @@ public class UserControllerTests
             FileName = "",
             ImgBase64 = "",
             TypeOfImage = Consts.ImageType.ProfileImages,
-            Username = "testUsername"
         };
         //Act
         var result = await _userController.UpdateUserImage(editUserImg);
@@ -190,7 +178,7 @@ public class UserControllerTests
         //Assert
         Assert.NotNull(badRequestResult);
         Assert.Equal((int)HttpStatusCode.BadRequest,badRequestResult.StatusCode);
-        _userImageServiceMock.Verify(x=> x.UpdateUserImage(It.IsAny<UpdateUserImageRequest>()), Times.Never);
+        _userImageServiceMock.Verify(x=> x.UpdateUserImage(It.IsAny<UpdateUserImageRequest>(), It.IsAny<string>()), Times.Never);
     }
 
     [Fact]
@@ -202,7 +190,6 @@ public class UserControllerTests
             FileName = "",
             ImgBase64 = "randomImage",
             TypeOfImage = Consts.ImageType.ProfileImages,
-            Username = "testUsername"
         };
         //Act
         var result = await _userController.UpdateUserImage(editUserImg);
@@ -211,7 +198,7 @@ public class UserControllerTests
         //Assert
         Assert.NotNull(badRequestResult);
         Assert.Equal((int)HttpStatusCode.BadRequest,badRequestResult.StatusCode);
-        _userImageServiceMock.Verify(x=> x.UpdateUserImage(It.IsAny<UpdateUserImageRequest>()), Times.Never);
+        _userImageServiceMock.Verify(x=> x.UpdateUserImage(It.IsAny<UpdateUserImageRequest>(), It.IsAny<string>()), Times.Never);
     }
     [Fact]
     public async Task UpdateUserImage_AllDataPopulated_ShouldReturnOk()
@@ -222,11 +209,10 @@ public class UserControllerTests
             FileName = "randomFileName",
             ImgBase64 = "randomImage",
             TypeOfImage = Consts.ImageType.ProfileImages,
-            Username = "testUsername"
         };
         var expectedResponse = new ServiceResponse(true,"");
-        _userImageServiceMock.Setup(x=> x.UpdateUserImage(editUserImg)).ReturnsAsync(expectedResponse);
-        _userManagerMock.Setup(x=> x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser(){UserName = "testUsername"});
+        _userImageServiceMock.Setup(x=> x.UpdateUserImage(editUserImg, It.IsAny<string>())).ReturnsAsync(expectedResponse);
+        _userManagerMock.Setup(x=> x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser(){UserName = "testUsername"});
         //Act
         var result = await _userController.UpdateUserImage(editUserImg);
         var okRequestResult = result as OkObjectResult;
@@ -234,7 +220,7 @@ public class UserControllerTests
         //Assert
         Assert.NotNull(okRequestResult);
         Assert.Equal((int)HttpStatusCode.OK,okRequestResult.StatusCode);
-        _userImageServiceMock.Verify(x=> x.UpdateUserImage(It.IsAny<UpdateUserImageRequest>()), Times.Once);
+        _userImageServiceMock.Verify(x=> x.UpdateUserImage(It.IsAny<UpdateUserImageRequest>(), It.IsAny<string>()), Times.Once);
     }
 
     [Fact]

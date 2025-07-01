@@ -39,6 +39,7 @@ public static class Consts
     }
     public static class ClaimTypes
     {
+        public const string Id = "Id";
         public const string FirstName = "FirstName";
         public const string LastName = "LastName";
         public const string Email = "Email";

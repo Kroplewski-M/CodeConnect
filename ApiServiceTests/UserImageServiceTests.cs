@@ -28,10 +28,10 @@ public class UserImageServiceTests
     public async Task UpdateUserImage_UserNotFound_ReturnsErrorResponse()
     {
         // Arrange
-        _userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
+        _userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>()))
             .ReturnsAsync((ApplicationUser)null!);
 
-        var request = new UpdateUserImageRequest { Username = "testuser", TypeOfImage = Consts.ImageType.PostImages, FileName = "something", ImgBase64 = "someBase"};
+        var request = new UpdateUserImageRequest { TypeOfImage = Consts.ImageType.PostImages, FileName = "something", ImgBase64 = "someBase"};
 
         // Act
         var result = await _userImageService.UpdateUserImage(request);
@@ -47,7 +47,7 @@ public class UserImageServiceTests
         _userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
             .ReturnsAsync((ApplicationUser)null!);
 
-        var request = new UpdateUserImageRequest { Username = "", TypeOfImage = Consts.ImageType.PostImages, FileName = "something", ImgBase64 = "someBase"};
+        var request = new UpdateUserImageRequest { TypeOfImage = Consts.ImageType.PostImages, FileName = "something", ImgBase64 = "someBase"};
 
         // Act
         var result = await _userImageService.UpdateUserImage(request);
@@ -63,7 +63,7 @@ public class UserImageServiceTests
         _userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
             .ReturnsAsync((ApplicationUser)null!);
 
-        var request = new UpdateUserImageRequest { Username = "username", TypeOfImage = Consts.ImageType.PostImages, FileName = "", ImgBase64 = "someBase"};
+        var request = new UpdateUserImageRequest { TypeOfImage = Consts.ImageType.PostImages, FileName = "", ImgBase64 = "someBase"};
 
         // Act
         var result = await _userImageService.UpdateUserImage(request);
@@ -79,7 +79,7 @@ public class UserImageServiceTests
         _userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
             .ReturnsAsync((ApplicationUser)null!);
 
-        var request = new UpdateUserImageRequest { Username = "username", TypeOfImage = Consts.ImageType.PostImages, FileName = "fileName", ImgBase64 = ""};
+        var request = new UpdateUserImageRequest { TypeOfImage = Consts.ImageType.PostImages, FileName = "fileName", ImgBase64 = ""};
 
         // Act
         var result = await _userImageService.UpdateUserImage(request);
@@ -102,7 +102,6 @@ public class UserImageServiceTests
 
         var request = new UpdateUserImageRequest
         {
-            Username = "testuser",
             FileName = "test.png",
             ImgBase64 = "base64string",
             TypeOfImage = Consts.ImageType.ProfileImages
@@ -115,8 +114,8 @@ public class UserImageServiceTests
     [Fact]
     public async Task UpdateUserImage_Success_UpdatesUserAndReturnsSuccess()
     {
-        var user = new ApplicationUser { UserName = "testuser" };
-        _userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(user);
+        var user = new ApplicationUser { UserName = "testuser", Id = Guid.NewGuid().ToString()};
+        _userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(user);
 
         _azureServiceMock.Setup(x => x.RemoveImage(It.IsAny<string>(), It.IsAny<Consts.ImageType>()))
             .ReturnsAsync(new ServiceResponse(true, "No image is needing deletion"));
@@ -128,13 +127,12 @@ public class UserImageServiceTests
 
         var request = new UpdateUserImageRequest
         {
-            Username = "testuser",
             FileName = "test.png",
             ImgBase64 = "base64string",
             TypeOfImage = Consts.ImageType.ProfileImages
         };
 
-        var result = await _userImageService.UpdateUserImage(request);
+        var result = await _userImageService.UpdateUserImage(request, user.Id);
 
         Assert.True(result.Flag);
         _azureServiceMock.Verify(x=> x.UploadImage(It.IsAny<Consts.ImageType>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
@@ -146,10 +144,11 @@ public class UserImageServiceTests
         var user = new ApplicationUser
         {
             UserName = "testuser",
-            ProfileImage = "old-image.png"
+            ProfileImage = "old-image.png", 
+            Id = Guid.NewGuid().ToString()
         };
 
-        _userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(user);
+        _userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(user);
 
         // Assert RemoveImage is called
         _azureServiceMock.Setup(x => x.RemoveImage("old-image.png", Consts.ImageType.ProfileImages))
@@ -163,14 +162,13 @@ public class UserImageServiceTests
 
         var request = new UpdateUserImageRequest
         {
-            Username = "testuser",
             FileName = "file.jpg",
             ImgBase64 = "base64string",
             TypeOfImage = Consts.ImageType.ProfileImages
         };
 
         // Act
-        var result = await _userImageService.UpdateUserImage(request);
+        var result = await _userImageService.UpdateUserImage(request, user.Id);
 
         // Assert
         Assert.True(result.Flag);

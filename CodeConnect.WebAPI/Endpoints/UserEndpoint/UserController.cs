@@ -61,19 +61,16 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
     [HttpPost("UpdateUserImage")]
     public async Task<IActionResult> UpdateUserImage(UpdateUserImageRequest updateUserImageRequest)
     {
-        var loggedInUser = User.GetInfo(Consts.ClaimTypes.UserName);
-        if(loggedInUser != updateUserImageRequest.Username)
-            return Unauthorized("User not found");
+        var loggedInUser = User.GetInfo(Consts.ClaimTypes.Id);
         if(string.IsNullOrWhiteSpace(updateUserImageRequest.ImgBase64) || string.IsNullOrWhiteSpace(updateUserImageRequest.FileName))
             return BadRequest("No image provided");
         if (!string.IsNullOrEmpty(loggedInUser))
         {
-            updateUserImageRequest.Username = loggedInUser;
-            var response = await userImageService.UpdateUserImage(updateUserImageRequest);
+            var response = await userImageService.UpdateUserImage(updateUserImageRequest, loggedInUser);
             if (!response.Flag)
                 return BadRequest(response.Message);
             //GET NEW TOKEN
-            var updatedUser = await userManager.FindByNameAsync(loggedInUser);
+            var updatedUser = await userManager.FindByIdAsync(loggedInUser);
             if (updatedUser != null)
             {
                 return Ok(GenerateNewToken(updatedUser));

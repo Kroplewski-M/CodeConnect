@@ -9,13 +9,15 @@ namespace ApplicationLayer.APIServices;
 
 public class UserImageService(UserManager<ApplicationUser>userManager, IAzureService azureService) : IUserImageService
 {
-    public async Task<ServiceResponse> UpdateUserImage(UpdateUserImageRequest updateUserImageRequest)
+    public async Task<ServiceResponse> UpdateUserImage(UpdateUserImageRequest updateUserImageRequest,string? userId = null)
     {
+        if (userId == null)
+            return new ServiceResponse(false, "The user could not be found");
         var validator = new UpdateUserImageRequestValidator();
         var validationResult = await validator.ValidateAsync(updateUserImageRequest);
         if(!validationResult.IsValid)
             return new ServiceResponse(false, "Invalid request");
-        var user = await userManager.FindByNameAsync(updateUserImageRequest.Username);
+        var user = await userManager.FindByIdAsync(userId);
         if (user == null)
             return new ServiceResponse(false, "The user could not be found");
         
@@ -28,7 +30,7 @@ public class UserImageService(UserManager<ApplicationUser>userManager, IAzureSer
         if(string.IsNullOrEmpty(fileExtension))
             return new ServiceResponse(false, "issue occured getting file extension");
         var guid = Guid.NewGuid();
-        var userImgName = $"{updateUserImageRequest.Username}-{guid}";
+        var userImgName = $"{user.UserName}-{guid}";
         
         var response = await azureService.UploadImage(updateUserImageRequest.TypeOfImage,updateUserImageRequest.ImgBase64,userImgName,fileExtension);
 

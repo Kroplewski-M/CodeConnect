@@ -13,7 +13,7 @@ namespace ApplicationLayer.ClientServices;
 public class UserImageServiceClient(HttpClient httpClient,ILocalStorageService localStorageService,
     AuthenticationStateProvider authenticationStateProvider, IAuthenticateServiceClient authenticateServiceClient): IUserImageService
 {
-    public async Task<ServiceResponse> UpdateUserImage(UpdateUserImageRequest updateUserImageRequest)
+    public async Task<ServiceResponse> UpdateUserImage(UpdateUserImageRequest updateUserImageRequest,string? userId = null)
     {
         var response = await httpClient.PostAsJsonAsync("/api/User/UpdateUserImage", updateUserImageRequest);
         response.EnsureSuccessStatusCode();

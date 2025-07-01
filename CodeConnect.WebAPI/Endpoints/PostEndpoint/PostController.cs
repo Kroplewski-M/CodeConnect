@@ -17,10 +17,10 @@ public class PostController(IPostService postService) : ControllerBase
     {
         var postValidator = new CreatePostDtoValidator();
         var validate = await postValidator.ValidateAsync(createPost);
-        if(!validate.IsValid || User.GetInfo(Consts.ClaimTypes.UserName) != createPost.CreatedByUserName)
+        if(!validate.IsValid)
             return  BadRequest(new ServiceResponse(false, "Error Creating Post"));
 
-        var response = await postService.CreatePost(createPost);
+        var response = await postService.CreatePost(createPost, User.GetInfo(Consts.ClaimTypes.Id));
         if(!response.Flag)
             return BadRequest(response);
         return Ok(response);
@@ -51,21 +51,17 @@ public class PostController(IPostService postService) : ControllerBase
     [Authorize(nameof(Consts.TokenType.Access))]
     public async Task<ActionResult<ServiceResponse>> ToggleLikePost(LikePostDto likePostDto)
     {
-        var username = User.GetInfo(Consts.ClaimTypes.UserName);
-        if(username != likePostDto.Username)
-            return BadRequest("user does not match");
-        var result = await postService.ToggleLikePost(likePostDto);
-        return Ok(result);
-
+        var result = await postService.ToggleLikePost(likePostDto, User.GetInfo(Consts.ClaimTypes.Id));
+        if(result.Flag)
+            return Ok(result);
+        return BadRequest(result);
     }
 
     [HttpGet("IsUserLikingPost")]
     [Authorize(nameof(Consts.TokenType.Access))]
-    public async Task<ActionResult<bool>> IsUserLikingPost(Guid postId, string username)
+    public async Task<ActionResult<bool>> IsUserLikingPost(Guid postId)
     {
-        if(string.IsNullOrWhiteSpace(username))
-            return BadRequest();
-        var result = await postService.IsUserLikingPost(postId, username);
+        var result = await postService.IsUserLikingPost(postId, User.GetInfo(Consts.ClaimTypes.Id));
         return Ok(result);
     }
     // [HttpPut("UpdatePost")]

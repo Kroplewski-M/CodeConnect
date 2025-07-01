@@ -1,3 +1,4 @@
+using ApplicationLayer;
 using ApplicationLayer.Classes;
 using ApplicationLayer.DTO_s.Post;
 using ApplicationLayer.Interfaces;
@@ -11,6 +12,7 @@ public class PostBase : ComponentBase
     [Parameter] public required Guid Id { get; set; }
     [Inject] public required IPostService PostService { get; set; }
     [Inject] public required IJSRuntime Js { get; set; }
+    [Inject] public required NotificationsService NotificationsService { get; set; }
     [CascadingParameter] public required UserState UserState { get; set; }
     protected bool Loading { get; set; } = true;
     protected PostBasicDto? Post { get; set; }
@@ -36,12 +38,19 @@ public class PostBase : ComponentBase
         if (LoadingLike)
             return;
         LoadingLike = true;
-        await PostService.ToggleLikePost(new LikePostDto(Id, UserState.Current?.UserName ?? ""));
-        IsUserLiking = !IsUserLiking;
-        if(IsUserLiking)
-            LikeCount++;
+        var res = await PostService.ToggleLikePost(new LikePostDto(Id));
+        if (res.Flag)
+        {
+            IsUserLiking = !IsUserLiking;
+            if(IsUserLiking)
+                LikeCount++;
+            else
+                LikeCount--;
+        }
         else
-            LikeCount--;
+        {
+            NotificationsService.PushNotification(new Notification(res.Message, NotificationType.Error));
+        }
         LoadingLike = false;
         StateHasChanged();
     }

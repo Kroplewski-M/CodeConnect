@@ -66,7 +66,7 @@ public class CreatePostBase : ComponentBase
     {
         if (string.IsNullOrWhiteSpace(PostContent))
             return;
-        var post = new CreatePostDto(MarkdigService.ConvertToHtmlOnlyCode(PostContent), Base64Images, UserState?.Current?.UserName ?? "");
+        var post = new CreatePostDto(MarkdigService.ConvertToHtmlOnlyCode(PostContent), Base64Images);
         var postValidator = new CreatePostDtoValidator();
         var validate = await postValidator.ValidateAsync(post);
         if (!validate.IsValid)
