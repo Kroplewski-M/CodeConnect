@@ -1,4 +1,5 @@
 using ApplicationLayer;
+using ApplicationLayer.Classes;
 using ApplicationLayer.ClientServices;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.Images;
@@ -20,7 +21,7 @@ public class CreatePostBase : ComponentBase
 {
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationState { get; set; }
     [Inject] IAuthenticateServiceClient AuthenticateServiceClient { get; set; } = null!;
-    protected UserDetails? UserDetails = null;
+    [CascadingParameter] public required UserState UserState { get; set; }
     [Inject] public required IJSRuntime Js { get; set; }
     [Inject] public ImageConvertorServiceClient ImageConvertor { get; set; } = null!;
     [Inject] public IPostService PostService { get; set; } = null!;  
@@ -28,20 +29,6 @@ public class CreatePostBase : ComponentBase
     [Inject] public required MarkdigServiceClient MarkdigService { get; set; }
     protected string PostContent { get; set; } = string.Empty;
     protected readonly string InputId = "uploadPostImg";
-    protected override async Task OnInitializedAsync()
-    {
-        if (AuthenticationState != null)
-        {
-            var authState = await AuthenticationState;
-            var user = authState?.User;
-
-            if (user?.Identity is not null && user.Identity.IsAuthenticated)
-            {
-                UserDetails = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
-                //await InvokeAsync(StateHasChanged);
-            }
-        }
-    }
     protected bool LoadingImages = false;
     protected List<Base64Dto> Base64Images = new List<Base64Dto>();
     protected async Task HandleFileSelection(InputFileChangeEventArgs e)
@@ -79,7 +66,7 @@ public class CreatePostBase : ComponentBase
     {
         if (string.IsNullOrWhiteSpace(PostContent))
             return;
-        var post = new CreatePostDto(MarkdigService.ConvertToHtmlOnlyCode(PostContent), Base64Images, UserDetails?.UserName ?? "");
+        var post = new CreatePostDto(MarkdigService.ConvertToHtmlOnlyCode(PostContent), Base64Images, UserState?.Current?.UserName ?? "");
         var postValidator = new CreatePostDtoValidator();
         var validate = await postValidator.ValidateAsync(post);
         if (!validate.IsValid)

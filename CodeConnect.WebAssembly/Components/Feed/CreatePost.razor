@@ -3,7 +3,7 @@
 @inherits CreatePostBase
 <div id="post-container" class="shadow-xl md:w-[550px] w-[90vw] md:min-h-[130px] min-h-[180px] mx-auto relative bg-dark-secondaryColor p-5 pb-[5px] rounded-md mt-5 md:mt-0">
     <div class="flex">
-        <img class="w-10 ms-3 h-10 rounded-full mb-3 object-cover" src="@UserDetails?.ProfileImg" alt="Rounded avatar">
+        <img class="w-10 ms-3 h-10 rounded-full mb-3 object-cover" src="@UserState?.Current?.ProfileImg" alt="Rounded avatar">
         <div class="ml-[5px] mt-[5px]">
             <EditForm Model="this" OnSubmit="HandleValidSubmit" FormName="Post">
                 <MarkdownTextbox Id="post" @bind-BindContent="PostContent" showPreview="@ShowPreview" />

@@ -1,3 +1,4 @@
+using ApplicationLayer.Classes;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
@@ -21,42 +22,32 @@ public class ProfileBase : ComponentBase
     protected UserDetails? UserDetails = null;
     protected FollowerCount? FollowerCount = null;
     protected List<TechInterestsDto>? UserInterests { get; set; }
-    [CascadingParameter] private Task<AuthenticationState>? AuthenticationState { get; set; }
-
+    [CascadingParameter] public required UserState UserState { get; set; }
     protected string? CurrentUsername { get; set; }
     protected override async Task OnParametersSetAsync()
     { 
         FoundUser = false;
-        if (AuthenticationState is not null)
+        
+        if (UserState?.Current?.UserName == Username)
         {
-            var authState = await AuthenticationState;
-            var user = authState?.User;
-            
-            if (user?.Identity is not null && user.Identity.IsAuthenticated)
-            {
-                var currentUser = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
-                if (currentUser.UserName == Username)
-                {
-                    IsCurrentUser = true;
-                    UserDetails = currentUser;
-                }
-                else
-                {
-                    IsCurrentUser = false;
-                    CurrentUsername = currentUser.UserName;
-                    UserDetails = await UserService.GetUserDetails(Username ?? "");
-                }
-
-                if (UserDetails != null)
-                {
-                    var interests = await UserService.GetUserInterests(UserDetails.UserName);
-                    UserInterests = interests.Interests;
-                    FollowerCount = await FollowingService.GetUserFollowersCount(UserDetails.UserName);
-                    FoundUser = true;
-                }
-                StateHasChanged();
-            }
+            IsCurrentUser = true;
+            UserDetails = UserState?.Current;
         }
+        else
+        {
+            IsCurrentUser = false;
+            CurrentUsername = UserState?.Current?.UserName;
+            UserDetails = await UserService.GetUserDetails(Username ?? "");
+        }
+
+        if (UserDetails != null)
+        {
+            var interests = await UserService.GetUserInterests(UserDetails.UserName);
+            UserInterests = interests.Interests;
+            FollowerCount = await FollowingService.GetUserFollowersCount(UserDetails.UserName);
+            FoundUser = true;
+        }
+        StateHasChanged();
     }
     protected void ToggleShowConfirmLogout()
     {

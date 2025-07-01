@@ -42,7 +42,7 @@ public class AuthHandler(ILocalStorageService localStorageService, NavigationMan
             navigationManager.NavigateTo("/Unauthorized");
             return response;       
         }
-        if (!hasToken || response?.StatusCode == HttpStatusCode.Unauthorized)
+        if (response?.StatusCode == HttpStatusCode.Unauthorized)
         {
             return await RefreshTokenAndRetry(request, cancellationToken);
         }

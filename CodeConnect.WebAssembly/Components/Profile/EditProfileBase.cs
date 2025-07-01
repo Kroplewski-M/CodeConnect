@@ -1,4 +1,5 @@
 using ApplicationLayer;
+using ApplicationLayer.Classes;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
@@ -21,33 +22,21 @@ public class EditProfileBase : ComponentBase
 
     
     protected EditProfileForm EditProfileForm = new EditProfileForm();
-    private UserDetails? _userDetails;
-    [CascadingParameter]
-    private Task<AuthenticationState>? AuthenticationState { get; set; }
+    [CascadingParameter] public required UserState UserState { get; set; }
     
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        if (AuthenticationState is not null)
+        EditProfileForm = new EditProfileForm
         {
-            var authState = await AuthenticationState;
-            var user = authState?.User;
-
-            if (user?.Identity is not null && user.Identity.IsAuthenticated)
-            {
-                _userDetails = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
-                EditProfileForm = new EditProfileForm
-                {
-                    Username = _userDetails.UserName,
-                    FirstName = _userDetails.FirstName,
-                    LastName = _userDetails.LastName,
-                    GithubLink = _userDetails.GithubLink,
-                    WebsiteLink = _userDetails.WebsiteLink,
-                    Dob = _userDetails.Dob,
-                    Bio = _userDetails.Bio,
-                };
-                StateHasChanged();
-            }
-        }
+            Username = UserState?.Current?.UserName ?? "",
+            FirstName = UserState?.Current?.FirstName ?? "",
+            LastName = UserState?.Current?.LastName ?? "",
+            GithubLink = UserState?.Current?.GithubLink ?? "",
+            WebsiteLink = UserState?.Current?.WebsiteLink ?? "",
+            Dob = UserState?.Current?.Dob ?? null,
+            Bio = UserState?.Current?.Bio ?? "",
+        };
+        StateHasChanged();
     }
 
     public bool DisableEdit = false;
