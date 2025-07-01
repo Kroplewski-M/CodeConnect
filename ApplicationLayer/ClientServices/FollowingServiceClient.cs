@@ -15,7 +15,7 @@ public class FollowingServiceClient(HttpClient httpClient, NotificationsService 
         return response ?? new FollowerCount(0,0);
     }
 
-    public async Task<ServiceResponse> FollowUser(FollowRequestDto followRequest)
+    public async Task<ServiceResponse> FollowUser(FollowRequestDto followRequest, string? userId = null)
     {
         var response = await httpClient.PostAsJsonAsync<FollowRequestDto>("api/Following/FollowUser", followRequest);
         if (response.IsSuccessStatusCode)
@@ -28,7 +28,7 @@ public class FollowingServiceClient(HttpClient httpClient, NotificationsService 
         return new ServiceResponse(false, "Error Occured");
     }
 
-    public async Task<ServiceResponse> UnfollowUser(FollowRequestDto unFollowRequest)
+    public async Task<ServiceResponse> UnfollowUser(FollowRequestDto unFollowRequest, string? userId = null)
     {
         var response = await httpClient.PostAsJsonAsync<FollowRequestDto>("api/Following/UnFollowUser",unFollowRequest);
         if (response.IsSuccessStatusCode)
@@ -41,10 +41,10 @@ public class FollowingServiceClient(HttpClient httpClient, NotificationsService 
         return new ServiceResponse(false, "Error Occured");
     }
 
-    public async Task<bool> IsUserFollowing(FollowRequestDto request)
+    public async Task<bool> IsUserFollowing(FollowRequestDto request, string? userId = null)
     {
         var response = await httpClient.GetFromJsonAsync<bool>(
-            $"api/Following/IsUserFollowing?currentUsername={request.CurrentUsername}&targetUsername={request.TargetUsername}");
+            $"api/Following/IsUserFollowing?targetUsername={request.TargetUsername}");
         return response;
     }
 

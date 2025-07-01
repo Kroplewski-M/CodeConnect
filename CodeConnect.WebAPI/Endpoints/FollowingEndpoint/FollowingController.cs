@@ -18,31 +18,30 @@ public class FollowingController(IFollowingService followingService, UserManager
     [HttpPost("FollowUser")]
     public async Task<IActionResult> FollowUser(FollowRequestDto followRequest)
     {
-        if(string.IsNullOrWhiteSpace(followRequest.CurrentUsername) || string.IsNullOrWhiteSpace(followRequest.TargetUsername))
-            return BadRequest();
+        var userId = User.GetInfo(Consts.ClaimTypes.Id);
+        if(string.IsNullOrWhiteSpace(userId))
+            return BadRequest(new ServiceResponse(false, "User not found" ));
         
-        var username = User.GetInfo(Consts.ClaimTypes.UserName);
-        
-        if(string.IsNullOrWhiteSpace(username)  || username != followRequest.CurrentUsername)
-            return BadRequest();
-        
-        var response = await followingService.FollowUser(followRequest);
-        return Ok(response);
+        var response = await followingService.FollowUser(followRequest, userId);
+        if(response.Flag)
+            return Ok(response);
+        return BadRequest(response);
     }
     [Authorize(nameof(Consts.TokenType.Access))]
     [HttpPost("UnFollowUser")]
     public async Task<IActionResult> UnFollowUser(FollowRequestDto unFollowRequest)
     {
-        if(string.IsNullOrWhiteSpace(unFollowRequest.CurrentUsername) || string.IsNullOrWhiteSpace(unFollowRequest.TargetUsername))
+        if(string.IsNullOrWhiteSpace(unFollowRequest.TargetUsername))
             return BadRequest();
         
-        var username = User.GetInfo(Consts.ClaimTypes.UserName);
-        
-        if(string.IsNullOrWhiteSpace(username) || username != unFollowRequest.CurrentUsername)
+        var userId = User.GetInfo(Consts.ClaimTypes.Id);
+        if(string.IsNullOrWhiteSpace(userId))
             return BadRequest();
         
-        var response = await followingService.UnfollowUser(unFollowRequest);
-        return Ok(response);
+        var response = await followingService.UnfollowUser(unFollowRequest, userId);
+        if(response.Flag)
+            return Ok(response);
+        return BadRequest(response);
     }
 
     [Authorize(nameof(Consts.TokenType.Access))]
@@ -61,12 +60,13 @@ public class FollowingController(IFollowingService followingService, UserManager
 
     [Authorize(nameof(Consts.TokenType.Access))]
     [HttpGet("IsUserFollowing")]
-    public async Task<IActionResult> IsUserFollowing(string currentUsername, string targetUsername)
+    public async Task<IActionResult> IsUserFollowing(string targetUsername)
     {
-        if (string.IsNullOrWhiteSpace(currentUsername) || string.IsNullOrWhiteSpace(targetUsername))
+        var userId = User.GetInfo(Consts.ClaimTypes.Id);
+        if (string.IsNullOrWhiteSpace(targetUsername) || string.IsNullOrWhiteSpace(userId))
             return BadRequest();
-        var request = new FollowRequestDto(currentUsername, targetUsername);
-        return Ok(await followingService.IsUserFollowing(request));
+        var request = new FollowRequestDto(targetUsername);
+        return Ok(await followingService.IsUserFollowing(request, userId));
     }
 
     [Authorize(nameof(Consts.TokenType.Access))]

@@ -22,12 +22,12 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
         var followers = context.FollowUsers.Count(x => x.FollowedUserId == user.Id);
         return new FollowerCount(followers,following);
     }
-    public async Task<ServiceResponse> FollowUser(FollowRequestDto followRequest)
+    public async Task<ServiceResponse> FollowUser(FollowRequestDto followRequest,string? userId = null)
     {
-        if (string.IsNullOrWhiteSpace(followRequest.CurrentUsername) ||
+        if (string.IsNullOrWhiteSpace(userId) ||
             string.IsNullOrWhiteSpace(followRequest.TargetUsername))
             return new ServiceResponse(false, "Error occured while following user");
-        var currentUser = await userManager.FindByNameAsync(followRequest.CurrentUsername);
+        var currentUser = await userManager.FindByIdAsync(userId);
         var targetUser = await userManager.FindByNameAsync(followRequest.TargetUsername);
         if(currentUser == null || targetUser == null)
             return new ServiceResponse(false, "A user could not be found");
@@ -46,13 +46,13 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
         return new ServiceResponse(true, "Followed Successfully");
     }
 
-    public async Task<ServiceResponse> UnfollowUser(FollowRequestDto unFollowRequest)
+    public async Task<ServiceResponse> UnfollowUser(FollowRequestDto unFollowRequest,string? userId = null)
     {
-        if (string.IsNullOrWhiteSpace(unFollowRequest.CurrentUsername) ||
+        if (string.IsNullOrWhiteSpace(userId) ||
             string.IsNullOrWhiteSpace(unFollowRequest.TargetUsername))
             return new ServiceResponse(false, "Error occured while unfollowing user");
         
-        var currentUser = await userManager.FindByNameAsync(unFollowRequest.CurrentUsername);
+        var currentUser = await userManager.FindByIdAsync(userId);
         var targetUser = await userManager.FindByNameAsync(unFollowRequest.TargetUsername);
         if(currentUser == null || targetUser == null)
             return new ServiceResponse(false, "A user could not be found");
@@ -64,12 +64,12 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
         return new ServiceResponse(true, "UnFollowed Successfully");
     }
 
-    public async Task<bool> IsUserFollowing(FollowRequestDto request)
+    public async Task<bool> IsUserFollowing(FollowRequestDto request,string? userId = null)
     {
-        if (string.IsNullOrWhiteSpace(request.CurrentUsername) ||
+        if (string.IsNullOrWhiteSpace(userId) ||
             string.IsNullOrWhiteSpace(request.TargetUsername))
             return false;
-        var currentUser = await userManager.FindByNameAsync(request.CurrentUsername);
+        var currentUser = await userManager.FindByIdAsync(userId);
         var targetUser = await userManager.FindByNameAsync(request.TargetUsername);
         if(currentUser == null || targetUser == null)
             return false;

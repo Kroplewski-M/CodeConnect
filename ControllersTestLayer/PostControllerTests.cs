@@ -105,6 +105,4 @@ public class PostControllerTests
         Assert.True(serviceResponse.Flag);
         Assert.Equal("Post created successfully", serviceResponse.Message);
     }
-
-    // Additional tests for different controller methods...
 }

@@ -16,7 +16,7 @@ public class FollowUserBase : ComponentBase
     protected override async Task OnParametersSetAsync()
     {
         if (UserState.Current == null) return;
-        Following = await FollowingService.IsUserFollowing(new FollowRequestDto(UserState.Current.UserName, FollowUsername));
+        Following = await FollowingService.IsUserFollowing(new FollowRequestDto(FollowUsername));
     }
 
     protected string UnFollowText => $"Are you sure you want to unfollow {FollowUsername}?";
@@ -25,7 +25,7 @@ public class FollowUserBase : ComponentBase
     {
         if (UserState.Current == null) return;
         DisableFollow = true;
-        var request = new FollowRequestDto(UserState.Current.UserName, FollowUsername);
+        var request = new FollowRequestDto(FollowUsername);
         if (!Following)
         {
             await FollowingService.FollowUser(request);
@@ -43,7 +43,7 @@ public class FollowUserBase : ComponentBase
     {
         if (UserState.Current == null) return;
         DisableFollow = true;
-        var request = new FollowRequestDto(UserState.Current.UserName, FollowUsername);
+        var request = new FollowRequestDto(FollowUsername);
         await FollowingService.UnfollowUser(request);
         Following = !Following;
         ConfirmUnFollow = false;
