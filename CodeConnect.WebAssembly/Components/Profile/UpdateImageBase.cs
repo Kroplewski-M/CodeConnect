@@ -50,7 +50,6 @@ public class UpdateImageBase : ComponentBase
             {
                 LoadingUpdate = true;
                 NotificationsService.PushNotification(new ApplicationLayer.Notification("Updating please wait...", NotificationType.Info));
-                SelectedImg.Username = UserState?.Current?.UserName ?? "";
                 
                 var result = await UserImageService.UpdateUserImage(SelectedImg);
                 NotificationsService.PushNotification(result.Flag

@@ -14,13 +14,16 @@ namespace ApplicationLayer.APIServices;
 
 public class PostService(ApplicationDbContext context,IAzureService azureService, UserManager<ApplicationUser>userManager) : IPostService
 {
-    public async Task<ServiceResponse> CreatePost(CreatePostDto createPost)
+    public async Task<ServiceResponse> CreatePost(CreatePostDto createPost,string? userId)
     {
+        if (string.IsNullOrWhiteSpace(userId))
+            return new ServiceResponse(false, "Error creating post");
+        
         var validator = new CreatePostDtoValidator();
         var validationResult = await validator.ValidateAsync(createPost);
         if(!validationResult.IsValid)
             return new ServiceResponse(false, "Error creating post");
-        var user = await userManager.FindByNameAsync(createPost.CreatedByUserName);
+        var user = await userManager.FindByIdAsync(userId);
         if(user == null)
             return new ServiceResponse(false, "User not found");
         var newPost  = new Post()
@@ -133,14 +136,14 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         return posts;
     }
 
-    public async Task<ServiceResponse> ToggleLikePost(LikePostDto likePostDto)
+    public async Task<ServiceResponse> ToggleLikePost(LikePostDto likePostDto, string? userId = null)
     {
-        if (string.IsNullOrWhiteSpace(likePostDto.Username))
+        if (string.IsNullOrWhiteSpace(userId))
             return new ServiceResponse(false, "Error occured while toggling like post");
         var post = context.Posts.FirstOrDefault(x => x.Id == likePostDto.PostId);
         if(post == null)
             return new ServiceResponse(false, "Post not found");
-        var user = await userManager.FindByNameAsync(likePostDto.Username);
+        var user = await userManager.FindByIdAsync(userId);
         if(user == null)
             return new ServiceResponse(false, "User not found");
         var existingLike = context.PostLikes.FirstOrDefault(x => x.LikedByUserId == user.Id && x.PostId == post.Id);
@@ -160,11 +163,11 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         return new ServiceResponse(true, "Like added successfully");
     }
 
-    public async Task<bool> IsUserLikingPost(Guid postId, string username)
+    public async Task<bool> IsUserLikingPost(Guid postId, string? userId = null)
     {
-        if (string.IsNullOrWhiteSpace(username))
+        if (string.IsNullOrWhiteSpace(userId))
             return false;
-        var user = await userManager.FindByNameAsync(username);
+        var user = await userManager.FindByIdAsync(userId);
         if(user == null)
             return false;
         return context.PostLikes.Any(x => x.LikedByUserId == user.Id && x.PostId == postId);

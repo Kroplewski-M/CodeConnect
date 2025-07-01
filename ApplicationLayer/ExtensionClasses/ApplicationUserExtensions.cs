@@ -14,6 +14,7 @@ public static class ApplicationUserExtensions
             dob = user.DOB?.ToString(CultureInfo.InvariantCulture);
         return
         [
+            new Claim(Consts.ClaimTypes.Id, user.Id),
             new Claim(Consts.ClaimTypes.FirstName, user.FirstName ?? ""),
             new Claim(Consts.ClaimTypes.LastName, user.LastName ?? ""),
             new Claim(Consts.ClaimTypes.UserName, user.UserName ?? ""),

@@ -14,6 +14,7 @@
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AComponentState_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002Econfig_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003F46b111c8b4d14cd2ad02fb3dbfc40e3153928_003Ff0_003Fd5ef48e2_003FComponentState_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AConfiguredTaskAwaitable_00601_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002Econfig_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003Fa37572bebc0242608eba6e3f1775f18f403f38_003F03_003Ff5a5f4e3_003FConfiguredTaskAwaitable_00601_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AControllerBase_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002Econfig_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003F5df406c2dbd24098b6ca04c9b5c4ee741daa00_003Fe2_003F910158e9_003FControllerBase_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AControllerBase_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002Econfig_003FJetBrains_003FRider2025_002E1_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003F757fe7496b5f46058b243488abf8f5db1daa00_003Fe0_003F81ca9ef9_003FControllerBase_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AControllerBase_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002Econfig_003FJetBrains_003FRider2025_002E1_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003Fd539447397b94a8fb83bdd94675b6df61daa00_003F94_003F908837d1_003FControllerBase_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AEnumerable_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002Econfig_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003Fd6da5887f45e4693b3f60c69ae9f3a9924728_003F24_003Fe6a5d451_003FEnumerable_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AGuid_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003F_002Econfig_003FJetBrains_003FRider2025_002E1_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003Fbf07be36dfaa4f47b843d44a6617c8b9d19e00_003F5f_003F16867b1b_003FGuid_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
@@ -57,18 +58,24 @@
     &lt;Project Location="/home/mateuszk/Repos/DotNet/CodeConnect/ApiServiceTests" Presentation="&amp;lt;Tests&amp;gt;\&amp;lt;ApiServiceTests&amp;gt;" /&gt;
   &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=af6031f9_002Dbcbc_002D4188_002D82bc_002De11f8df5e25b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GetPostById_ValidId_ShouldReturnPost" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;xUnit::7A14E943-041F-4EF7-A9EF-5E81637AFE5B::net9.0::TestLayer.PostControllerTests.GetPostById_ValidId_ShouldReturnPost&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.PostServiceTests.GetPostById_ShouldIncludeLikesAndCommentsCount&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.PostServiceTests.GetPostById_ExistingPostWithImages_ShouldReturnPostDtoWithImages&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.PostServiceTests.GetPostById_ExistingPostWithoutImages_ShouldReturnPostDto&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.PostServiceTests.GetPostById_NonExistentPost_ShouldReturnNull&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.PostServiceTests.GetPostById_NullOrEmptyId_ShouldReturnNull&lt;/TestId&gt;
-    &lt;TestId&gt;xUnit::7A14E943-041F-4EF7-A9EF-5E81637AFE5B::net9.0::TestLayer.PostControllerTests.ToggleLikePost_UsernameMismatch_ShouldReturnBadRequest&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=af6031f9_002Dbcbc_002D4188_002D82bc_002De11f8df5e25b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="GetPostById_ValidId_ShouldReturnPost" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Or&gt;
+    &lt;TestAncestor&gt;
+      &lt;TestId&gt;xUnit::7A14E943-041F-4EF7-A9EF-5E81637AFE5B::net9.0::TestLayer.PostControllerTests.GetPostById_ValidId_ShouldReturnPost&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.PostServiceTests.GetPostById_ShouldIncludeLikesAndCommentsCount&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.PostServiceTests.GetPostById_ExistingPostWithImages_ShouldReturnPostDtoWithImages&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.PostServiceTests.GetPostById_ExistingPostWithoutImages_ShouldReturnPostDto&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.PostServiceTests.GetPostById_NonExistentPost_ShouldReturnNull&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.PostServiceTests.GetPostById_NullOrEmptyId_ShouldReturnNull&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::7A14E943-041F-4EF7-A9EF-5E81637AFE5B::net9.0::TestLayer.PostControllerTests.ToggleLikePost_UsernameMismatch_ShouldReturnBadRequest&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::7A14E943-041F-4EF7-A9EF-5E81637AFE5B::net9.0::TestLayer.PostControllerTests&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.PostServiceTests&lt;/TestId&gt;
+    &lt;/TestAncestor&gt;
+    &lt;ProjectFile&gt;3D8BF299-5E11-4A03-B03B-00F065DB7FF2/f:UserImageServiceTests.cs&lt;/ProjectFile&gt;
+    &lt;ProjectFile&gt;7A14E943-041F-4EF7-A9EF-5E81637AFE5B/f:UserControllerTests.cs&lt;/ProjectFile&gt;
+  &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b0666a8f_002Da7ec_002D426d_002D87ce_002D2082ed2b97b3/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="GenerateJwtToken_WithValidClaims_ReturnsValidToken" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b0666a8f_002Da7ec_002D426d_002D87ce_002D2082ed2b97b3/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GenerateJwtToken_WithValidClaims_ReturnsValidToken" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Or&gt;
     &lt;Project Location="/home/mateuszk/Repos/DotNet/CodeConnect/ApiServiceTests" Presentation="&amp;lt;Tests&amp;gt;\&amp;lt;ApiServiceTests&amp;gt;" /&gt;
     &lt;TestAncestor&gt;

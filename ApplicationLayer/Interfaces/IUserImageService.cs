@@ -7,5 +7,5 @@ namespace ApplicationLayer.Interfaces;
 
 public interface IUserImageService
 {
-    public Task<ServiceResponse> UpdateUserImage(UpdateUserImageRequest updateUserImageRequest);
+    public Task<ServiceResponse> UpdateUserImage(UpdateUserImageRequest updateUserImageRequest, string? userId = null);
 }

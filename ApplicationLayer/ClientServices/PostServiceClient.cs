@@ -8,7 +8,7 @@ namespace ApplicationLayer.ClientServices;
 
 public class PostServiceClient(HttpClient httpClient) : IPostService
 {
-    public async Task<ServiceResponse> CreatePost(CreatePostDto createPost)
+    public async Task<ServiceResponse> CreatePost(CreatePostDto createPost, string? userId = null)
     {
         var response = await httpClient.PostAsJsonAsync("api/Post/CreatePost", createPost);
         var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
@@ -37,16 +37,16 @@ public class PostServiceClient(HttpClient httpClient) : IPostService
         return response ?? new List<PostBasicDto>();
     }
 
-    public async Task<ServiceResponse> ToggleLikePost(LikePostDto likePostDto)
+    public async Task<ServiceResponse> ToggleLikePost(LikePostDto likePostDto, string? userId = null)
     {
         var response = await httpClient.PostAsJsonAsync("api/Post/ToggleLikePost", likePostDto);
         var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
         return result ?? new ServiceResponse(false, "Failed to toggle like post");
     }
 
-    public async Task<bool> IsUserLikingPost(Guid postId, string username)
+    public async Task<bool> IsUserLikingPost(Guid postId, string? userId = null)
     {
-        var response = await httpClient.GetFromJsonAsync<bool>($"api/Post/IsUserLikingPost?postId={postId}&username={username}");
+        var response = await httpClient.GetFromJsonAsync<bool>($"api/Post/IsUserLikingPost?postId={postId}");
         return response;
     }
 }
