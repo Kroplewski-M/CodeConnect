@@ -81,7 +81,7 @@ public class PostServiceTests
     {
         // Arrange
         var request = CreatePostDto("content", null);
-        _userManager.SetupFindByName(null);
+        _userManager.SetupFindById(null);
 
         // Act
         var response = await _postService.CreatePost(request, "non");

@@ -28,7 +28,7 @@ public class UserImageServiceTests
     public async Task UpdateUserImage_UserNotFound_ReturnsErrorResponse()
     {
         // Arrange
-        _userManagerMock.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
+        _userManagerMock.Setup(x => x.FindByIdAsync(It.IsAny<string>()))
             .ReturnsAsync((ApplicationUser)null!);
 
         var request = new UpdateUserImageRequest { TypeOfImage = Consts.ImageType.PostImages, FileName = "something", ImgBase64 = "someBase"};
