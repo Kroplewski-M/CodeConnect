@@ -1,7 +1,6 @@
 using System.Globalization;
 using System.Net.Http.Json;
 using ApplicationLayer;
-using ApplicationLayer.ClientServices;
 using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.ExtensionClasses;
 using ApplicationLayer.Interfaces;

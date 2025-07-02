@@ -1,9 +1,9 @@
 using ApplicationLayer;
 using ApplicationLayer.Classes;
-using ApplicationLayer.ClientServices;
 using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
 using Blazored.LocalStorage;
+using ClientApplicationLayer;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
@@ -16,6 +16,7 @@ public class MainLayoutBase : LayoutComponentBase, IDisposable
     [Inject] public required NotificationsService NotificationsService { get; set; }
     [Inject] public required IJSRuntime Js { get; set; }
     [Inject] public required ILocalStorageService LocalStorageService { get; set; }
+    [Inject] public required AuthenticationStateProvider AuthenticationStateProvider { get; set; }
     [Inject] public required IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
     [Inject] public required NavigationManager NavigationManager { get; set; }
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationState { get; set; }
@@ -28,8 +29,7 @@ public class MainLayoutBase : LayoutComponentBase, IDisposable
     {
         NotificationsService.OnChange += UpdateNotifications;
         Notifications = NotificationsService.GetNotification();
-        AuthenticateServiceClient.OnChange += OnAuthenticationStateChanged;
-        OnAuthenticationStateChanged();
+        AuthenticationStateProvider.AuthenticationStateChanged += OnAuthenticationStateChanged;
         var darkTheme = await LocalStorageService.GetItemAsync<bool>("DarkTheme");
         if (darkTheme)
         {
@@ -52,7 +52,7 @@ public class MainLayoutBase : LayoutComponentBase, IDisposable
     public void Dispose()
     {
         NotificationsService.OnChange -= UpdateNotifications;
-        AuthenticateServiceClient.OnChange -= OnAuthenticationStateChanged;
+        AuthenticationStateProvider.AuthenticationStateChanged -= OnAuthenticationStateChanged;
     }
 
     protected async Task ToggleDarkMode()
@@ -70,7 +70,7 @@ public class MainLayoutBase : LayoutComponentBase, IDisposable
 
     protected bool HasDob { get; set; }
 
-    private void OnAuthenticationStateChanged()
+    private void OnAuthenticationStateChanged(Task<AuthenticationState> task)
     {
         Task.Run(async () =>
         {

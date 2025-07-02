@@ -3,17 +3,15 @@ using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
 using Blazored.LocalStorage;
-using ClientApplicationLayer;
 using DomainLayer.Constants;
-using DomainLayer.DbEnts;
 using DomainLayer.Entities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace ApplicationLayer.ClientServices;
+namespace ClientApplicationLayer;
 
 public class UserServiceClient(HttpClient httpClient,ILocalStorageService localStorageService, 
-    AuthenticationStateProvider authenticationStateProvider, NavigationManager navigationManager, IAuthenticateServiceClient authenticateServiceClient) : IUserService
+    AuthenticationStateProvider authenticationStateProvider, NavigationManager navigationManager) : IUserService
 {
     public async Task<ServiceResponse> UpdateUserDetails(EditProfileForm editProfileForm)
     {
@@ -23,7 +21,6 @@ public class UserServiceClient(HttpClient httpClient,ILocalStorageService localS
         {
             await localStorageService.SetItemAsync(Consts.Tokens.AuthToken, newTokens?.Key);
             ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
-            authenticateServiceClient.NotifyStateChanged();
             return new ServiceResponse(true, "Updated Details Successfully");
         }
         return new ServiceResponse(false, "invalid response when updating details");

@@ -1,6 +1,5 @@
 using ApplicationLayer;
 using ApplicationLayer.Classes;
-using ApplicationLayer.ClientServices;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.Images;
 using ApplicationLayer.DTO_s.Post;
