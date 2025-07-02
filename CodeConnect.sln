@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeConnect.WebAssembly", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeConnect.WebAPI", "CodeConnect.WebAPI\CodeConnect.WebAPI.csproj", "{55787C12-0423-4D36-A6F0-33B78CAC9FDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationLayer", "ApplicationLayer\ApplicationLayer.csproj", "{4E47E8D7-EAD4-41EA-B904-711969A95671}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedApplicationLayer", "SharedApplicationLayer\SharedApplicationLayer.csproj", "{4E47E8D7-EAD4-41EA-B904-711969A95671}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainLayer", "DomainLayer\DomainLayer.csproj", "{322C3AD3-15DF-41C8-93B4-92550AE057B0}"
 EndProject
@@ -18,6 +18,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8DD488CE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiServiceTests", "ApiServiceTests\ApiServiceTests.csproj", "{3D8BF299-5E11-4A03-B03B-00F065DB7FF2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientApplicationLayer", "ClientApplicationLayer\ClientApplicationLayer.csproj", "{68AB1023-D276-49A7-9E15-385A530D84AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiApplicationLayer", "WebApiApplicationLayer\WebApiApplicationLayer.csproj", "{CE9837B6-3B5E-4A55-A334-6508ED287C5D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApplicationLayer", "ApplicationLayer", "{1149936C-3CED-4892-A9C5-2C828AEFEF1C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +34,9 @@ Global
 		{55787C12-0423-4D36-A6F0-33B78CAC9FDD} = {83752F4E-6043-4FCC-9384-9F01C0C77539}
 		{7A14E943-041F-4EF7-A9EF-5E81637AFE5B} = {8DD488CE-A33D-4A9F-9DBC-D033C92BE0EB}
 		{3D8BF299-5E11-4A03-B03B-00F065DB7FF2} = {8DD488CE-A33D-4A9F-9DBC-D033C92BE0EB}
+		{68AB1023-D276-49A7-9E15-385A530D84AF} = {1149936C-3CED-4892-A9C5-2C828AEFEF1C}
+		{4E47E8D7-EAD4-41EA-B904-711969A95671} = {1149936C-3CED-4892-A9C5-2C828AEFEF1C}
+		{CE9837B6-3B5E-4A55-A334-6508ED287C5D} = {1149936C-3CED-4892-A9C5-2C828AEFEF1C}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{C0359684-A5C0-40F1-A5B1-A6C0FD31B26B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -58,5 +67,13 @@ Global
 		{3D8BF299-5E11-4A03-B03B-00F065DB7FF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D8BF299-5E11-4A03-B03B-00F065DB7FF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D8BF299-5E11-4A03-B03B-00F065DB7FF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68AB1023-D276-49A7-9E15-385A530D84AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68AB1023-D276-49A7-9E15-385A530D84AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68AB1023-D276-49A7-9E15-385A530D84AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68AB1023-D276-49A7-9E15-385A530D84AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE9837B6-3B5E-4A55-A334-6508ED287C5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE9837B6-3B5E-4A55-A334-6508ED287C5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE9837B6-3B5E-4A55-A334-6508ED287C5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE9837B6-3B5E-4A55-A334-6508ED287C5D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
