@@ -17,11 +17,11 @@ public class AuthenticateServiceClient(
     HttpClient httpClient,
     ILocalStorageService localStorageService,
     AuthenticationStateProvider authenticationStateProvider,
+    IUserService userService,
     NavigationManager navigationManager,NotificationsService notificationsService)
     : IAuthenticateServiceClient
 {
-    public event Action? OnChange;
-    public void NotifyStateChanged() => OnChange?.Invoke();
+
     public async Task<AuthResponse> CreateUser(RegisterForm registerForm)
     {
         var response = await httpClient.PostAsJsonAsync("/api/Authentication/RegisterUser", registerForm);
@@ -32,7 +32,6 @@ public class AuthenticateServiceClient(
         await localStorageService.SetItemAsync(Consts.Tokens.RefreshToken, authResponse.Token);
 
         ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
-        NotifyStateChanged();
         return authResponse;
     }
 
@@ -47,45 +46,22 @@ public class AuthenticateServiceClient(
                 await localStorageService.SetItemAsync(Consts.Tokens.AuthToken, authResponse.Token);
                 await localStorageService.SetItemAsync(Consts.Tokens.RefreshToken, authResponse.RefreshToken);
                 ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
-                NotifyStateChanged();
                 return authResponse;
             }
         }
         return new AuthResponse(false, "","", authResponse?.Message ?? "Error occured during login please try again later");
     }
 
-    public UserDetails GetUserFromFromAuthState(AuthenticationState? authState)
+    public async Task<UserDetails?> GetUserFromFromAuthState(AuthenticationState? authState)
     {
-        var dob = authState.GetUserInfo(Consts.ClaimTypes.Dob)?.Trim() ?? null;
-        var createdAt = authState.GetUserInfo(Consts.ClaimTypes.CreatedAt).Trim() ?? null;
-        var profileImg = authState.GetUserInfo(Consts.ClaimTypes.ProfileImg);
-        var backgroundImg = authState.GetUserInfo(Consts.ClaimTypes.BackgroundImg);
-
-        profileImg = Helpers.GetUserImgUrl(profileImg, Consts.ImageType.ProfileImages);
-        backgroundImg = Helpers.GetUserImgUrl(backgroundImg, Consts.ImageType.BackgroundImages);
-        DateOnly? dateOnly = null;
-        if (!string.IsNullOrWhiteSpace(dob))
-            dateOnly = DateOnly.ParseExact(dob, Consts.Base.DateFormat, CultureInfo.InvariantCulture);
-        return new UserDetails(
-            FirstName: authState.GetUserInfo(Consts.ClaimTypes.FirstName),
-            LastName: authState.GetUserInfo(Consts.ClaimTypes.LastName),
-            Email: authState.GetUserInfo(Consts.ClaimTypes.Email),
-            UserName: authState.GetUserInfo(Consts.ClaimTypes.UserName),
-            ProfileImg: profileImg,
-            BackgroundImg: backgroundImg,
-            GithubLink: authState.GetUserInfo(Consts.ClaimTypes.GithubLink),
-            WebsiteLink: authState.GetUserInfo(Consts.ClaimTypes.WebsiteLink),
-            Dob: dateOnly, 
-            CreatedAt:DateOnly.ParseExact(createdAt ?? "", Consts.Base.DateFormat, CultureInfo.InvariantCulture),
-            Bio:authState.GetUserInfo(Consts.ClaimTypes.Bio)
-            );
+        var username = authState.GetUserInfo(Consts.ClaimTypes.UserName);
+        return await userService.GetUserDetails(username);
     }
     public async Task<AuthResponse> LogoutUser()
     {
         await localStorageService.RemoveItemAsync(Consts.Tokens.AuthToken);
         await localStorageService.RemoveItemAsync(Consts.Tokens.RefreshToken);
         ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
-        NotifyStateChanged();
         navigationManager.NavigateTo("/");
         notificationsService.PushNotification(new Notification("Logged out successfully",NotificationType.Success));
         return new AuthResponse(true, "","", "Logged out successfully");
