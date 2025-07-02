@@ -23,7 +23,7 @@ public class ProfileBase : ComponentBase
     protected FollowerCount? FollowerCount = null;
     protected List<TechInterestsDto>? UserInterests { get; set; }
     [CascadingParameter] public required UserState UserState { get; set; }
-    private static string PrevUsername { get; set; } = "";
+    private string PrevUsername { get; set; } = "";
     protected override async Task OnParametersSetAsync()
     { 
         if(PrevUsername == Username)
