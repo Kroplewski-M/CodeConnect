@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ApplicationLayer\ApplicationLayer.csproj" />
+      <ProjectReference Include="..\SharedApplicationLayer\SharedApplicationLayer.csproj" />
       <ProjectReference Include="..\CodeConnect.WebAPI\CodeConnect.WebAPI.csproj" />
       <ProjectReference Include="..\DomainLayer\DomainLayer.csproj" />
     </ItemGroup>

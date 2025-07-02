@@ -24,8 +24,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ApplicationLayer\ApplicationLayer.csproj" />
+      <ProjectReference Include="..\SharedApplicationLayer\SharedApplicationLayer.csproj" />
       <ProjectReference Include="..\InfrastructureLayer\InfrastructureLayer.csproj" />
+      <ProjectReference Include="..\WebApiApplicationLayer\WebApiApplicationLayer.csproj" />
     </ItemGroup>
 
 </Project>
