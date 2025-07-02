@@ -1,9 +1,10 @@
 using System.Net.Http.Json;
+using ApplicationLayer;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
 
-namespace ApplicationLayer.ClientServices;
+namespace ClientApplicationLayer;
 
 public class FollowingServiceClient(HttpClient httpClient, NotificationsService notificationsService) : IFollowingService
 {

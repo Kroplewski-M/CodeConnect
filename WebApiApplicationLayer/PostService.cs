@@ -10,7 +10,7 @@ using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace ApplicationLayer.APIServices;
+namespace WebApiApplicationLayer;
 
 public class PostService(ApplicationDbContext context,IAzureService azureService, UserManager<ApplicationUser>userManager) : IPostService
 {

@@ -4,6 +4,7 @@ using ApplicationLayer.Classes;
 using ApplicationLayer.ClientServices;
 using ApplicationLayer.ExtensionClasses;
 using ApplicationLayer.Interfaces;
+using ClientApplicationLayer;
 using DomainLayer.Constants;
 using DomainLayer.Entities;
 using DomainLayer.Helpers;

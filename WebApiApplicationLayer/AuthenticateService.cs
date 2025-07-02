@@ -1,6 +1,4 @@
-using System.Globalization;
 using System.Security.Claims;
-using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.ExtensionClasses;
 using ApplicationLayer.Interfaces;
@@ -11,7 +9,7 @@ using FluentValidation.Results;
 using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
 
-namespace ApplicationLayer.APIServices;
+namespace WebApiApplicationLayer;
 
 public class AuthenticateService(UserManager<ApplicationUser>userManager,
     ITokenService tokenGenerationService,  ApplicationDbContext context) : IAuthenticateService

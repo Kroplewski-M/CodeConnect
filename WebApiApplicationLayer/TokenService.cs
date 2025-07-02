@@ -1,8 +1,6 @@
-using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.ExtensionClasses;
 using ApplicationLayer.Interfaces;
@@ -13,7 +11,8 @@ using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-namespace ApplicationLayer.APIServices;
+
+namespace WebApiApplicationLayer;
 
 public class TokenService(IOptions<JwtSettings> jwtSettings,ApplicationDbContext context,UserManager<ApplicationUser>userManager) : ITokenService
 {

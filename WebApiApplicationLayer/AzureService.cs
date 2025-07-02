@@ -5,11 +5,9 @@ using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using DomainLayer.Constants;
-using DomainLayer.Entities.APIClasses;
 using DomainLayer.Helpers;
-using Microsoft.Extensions.Options;
 
-namespace ApplicationLayer.APIServices;
+namespace WebApiApplicationLayer;
 
 public class AzureService(BlobServiceClient blobServiceClient) : IAzureService
 {

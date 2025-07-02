@@ -4,7 +4,7 @@ using Markdig;
 using Markdig.Syntax;
 using Markdig.Syntax.Inlines;
 
-namespace ApplicationLayer.ClientServices;
+namespace ClientApplicationLayer;
 
 public class MarkdigServiceClient
 {

@@ -1,6 +1,5 @@
 using System.Text;
 using System.Text.Json.Serialization;
-using ApplicationLayer.APIServices;
 using ApplicationLayer.Interfaces;
 using Azure.Storage.Blobs;
 using DomainLayer.Constants;
@@ -14,6 +13,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
+using WebApiApplicationLayer;
 
 var builder = WebApplication.CreateBuilder(args);
 

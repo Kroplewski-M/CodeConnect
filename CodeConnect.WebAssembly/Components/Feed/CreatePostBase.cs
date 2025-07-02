@@ -6,6 +6,7 @@ using ApplicationLayer.DTO_s.Images;
 using ApplicationLayer.DTO_s.Post;
 using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
+using ClientApplicationLayer;
 using DomainLayer.Constants;
 using DomainLayer.Helpers;
 using Markdig;

@@ -4,6 +4,7 @@ using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
 using Blazored.LocalStorage;
+using ClientApplicationLayer;
 using DomainLayer.Constants;
 using DomainLayer.Entities;
 using Microsoft.AspNetCore.Components.Authorization;

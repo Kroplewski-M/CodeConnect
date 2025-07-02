@@ -1,7 +1,7 @@
 using DomainLayer.Constants;
 using Microsoft.AspNetCore.Components.Forms;
 
-namespace ApplicationLayer.ClientServices;
+namespace ClientApplicationLayer;
 
 public class ImageConvertorServiceClient
 {

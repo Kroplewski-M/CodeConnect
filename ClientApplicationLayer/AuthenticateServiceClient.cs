@@ -1,20 +1,18 @@
 using System.Globalization;
 using System.Net.Http.Json;
-using System.Security.Claims;
-using ApplicationLayer.DTO_s;
+using ApplicationLayer;
+using ApplicationLayer.ClientServices;
 using ApplicationLayer.DTO_s.User;
+using ApplicationLayer.ExtensionClasses;
 using ApplicationLayer.Interfaces;
 using Blazored.LocalStorage;
-using DomainLayer.Entities;
+using DomainLayer.Constants;
 using DomainLayer.Entities.Auth;
+using DomainLayer.Helpers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using ApplicationLayer.ExtensionClasses;
-using DomainLayer.Constants;
-using DomainLayer.DbEnts;
-using DomainLayer.Helpers;
 
-namespace ApplicationLayer.ClientServices;
+namespace ClientApplicationLayer;
 
 public class AuthenticateServiceClient(
     HttpClient httpClient,

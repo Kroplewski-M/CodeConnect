@@ -1,14 +1,12 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Json;
 using System.Security.Claims;
-using ApplicationLayer.DTO_s;
 using Blazored.LocalStorage;
 using DomainLayer.Constants;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Newtonsoft.Json;
 
-namespace ApplicationLayer.ClientServices;
+namespace ClientApplicationLayer;
 
 public class ClientAuthStateProvider(HttpClient httpClient,
     ILocalStorageService localStorageService, NavigationManager navigationManager) : AuthenticationStateProvider

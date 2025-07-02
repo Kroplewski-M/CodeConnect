@@ -2,6 +2,7 @@ using ApplicationLayer;
 using ApplicationLayer.ClientServices;
 using ApplicationLayer.Interfaces;
 using Blazored.LocalStorage;
+using ClientApplicationLayer;
 using CodeConnect.WebAssembly;
 using CodeConnect.WebAssembly.DelegatingHandler;
 using DomainLayer.Constants;

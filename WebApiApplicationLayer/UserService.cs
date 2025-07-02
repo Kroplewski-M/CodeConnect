@@ -5,14 +5,13 @@ using DomainLayer.Constants;
 using DomainLayer.DbEnts;
 using DomainLayer.Entities;
 using DomainLayer.Entities.Auth;
-using DomainLayer.Entities.User;
 using DomainLayer.Helpers;
 using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace ApplicationLayer.APIServices;
+namespace WebApiApplicationLayer;
 
 public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbContext context,
     IMemoryCache memoryCache) : IUserService

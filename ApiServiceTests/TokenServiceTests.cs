@@ -1,6 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using ApplicationLayer.APIServices;
 using DomainLayer.Constants;
 using DomainLayer.Entities.APIClasses;
 using DomainLayer.Entities.Auth;
@@ -8,6 +7,7 @@ using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Moq;
+using WebApiApplicationLayer;
 
 namespace ApiServiceTests;
 

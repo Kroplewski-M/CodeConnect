@@ -1,7 +1,6 @@
 using System.ClientModel.Primitives;
 using System.Net;
 using System.Security.Claims;
-using ApplicationLayer.APIServices;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
