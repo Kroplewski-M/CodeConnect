@@ -18,6 +18,7 @@ public class MainLayoutBase : LayoutComponentBase, IDisposable
     [Inject] public required ILocalStorageService LocalStorageService { get; set; }
     [Inject] public required AuthenticationStateProvider AuthenticationStateProvider { get; set; }
     [Inject] public required IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
+    [Inject] public required IUserService UserService { get; set; }
     [Inject] public required NavigationManager NavigationManager { get; set; }
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationState { get; set; }
 
@@ -80,9 +81,9 @@ public class MainLayoutBase : LayoutComponentBase, IDisposable
 
             if (user?.Identity is not null && user.Identity.IsAuthenticated)
             {
-                var currentUser = AuthenticateServiceClient.GetUserFromFromAuthState(authState);
+                var currentUser = await AuthenticateServiceClient.GetUserFromFromAuthState(authState);
                 UserState.Current = currentUser;
-                HasDob = currentUser.Dob != null;
+                HasDob = currentUser?.Dob != null;
                 await InvokeAsync(StateHasChanged);
             }
             else

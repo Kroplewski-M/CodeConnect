@@ -8,7 +8,7 @@ namespace ApplicationLayer.Interfaces;
 
 public interface IAuthenticateServiceClient
 {
-    public UserDetails GetUserFromFromAuthState(AuthenticationState? authState);
+    public Task<UserDetails?> GetUserFromFromAuthState(AuthenticationState? authState);
     public Task<AuthResponse> CreateUser(RegisterForm registerForm);
     public Task<AuthResponse> LoginUser(LoginForm loginForm);
     public Task<AuthResponse> LogoutUser();
