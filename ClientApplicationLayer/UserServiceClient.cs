@@ -13,13 +13,12 @@ namespace ClientApplicationLayer;
 public class UserServiceClient(HttpClient httpClient,ILocalStorageService localStorageService, 
     AuthenticationStateProvider authenticationStateProvider, NavigationManager navigationManager) : IUserService
 {
-    public async Task<ServiceResponse> UpdateUserDetails(EditProfileForm editProfileForm)
+    public async Task<ServiceResponse> UpdateUserDetails(EditProfileForm editProfileForm, string? userId = null)
     {
         var response = await httpClient.PostAsJsonAsync("/api/User/EditUserDetails", editProfileForm);
-        var newTokens = await response.Content.ReadFromJsonAsync<TokenResponse>();
-        if (!string.IsNullOrWhiteSpace(newTokens?.Key))
+        var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
+        if (result?.Flag == true)
         {
-            await localStorageService.SetItemAsync(Consts.Tokens.AuthToken, newTokens?.Key);
             ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
             return new ServiceResponse(true, "Updated Details Successfully");
         }

@@ -62,7 +62,7 @@
     &lt;Project Location="/home/mateuszk/Repos/DotNet/CodeConnect/ApiServiceTests" Presentation="&amp;lt;Tests&amp;gt;\&amp;lt;ApiServiceTests&amp;gt;" /&gt;
   &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=af6031f9_002Dbcbc_002D4188_002D82bc_002De11f8df5e25b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GetPostById_ValidId_ShouldReturnPost" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=af6031f9_002Dbcbc_002D4188_002D82bc_002De11f8df5e25b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="GetPostById_ValidId_ShouldReturnPost" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Or&gt;
     &lt;TestAncestor&gt;
       &lt;TestId&gt;xUnit::7A14E943-041F-4EF7-A9EF-5E81637AFE5B::net9.0::TestLayer.PostControllerTests.GetPostById_ValidId_ShouldReturnPost&lt;/TestId&gt;
@@ -76,12 +76,13 @@
       &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.PostServiceTests&lt;/TestId&gt;
       &lt;TestId&gt;xUnit::7A14E943-041F-4EF7-A9EF-5E81637AFE5B::net9.0::TestLayer.FollowingControllerTests&lt;/TestId&gt;
       &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.FollowingServiceTests&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::3D8BF299-5E11-4A03-B03B-00F065DB7FF2::net9.0::ApiServiceTests.UserServiceTests&lt;/TestId&gt;
     &lt;/TestAncestor&gt;
     &lt;ProjectFile&gt;3D8BF299-5E11-4A03-B03B-00F065DB7FF2/f:UserImageServiceTests.cs&lt;/ProjectFile&gt;
     &lt;ProjectFile&gt;7A14E943-041F-4EF7-A9EF-5E81637AFE5B/f:UserControllerTests.cs&lt;/ProjectFile&gt;
   &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b0666a8f_002Da7ec_002D426d_002D87ce_002D2082ed2b97b3/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="GenerateJwtToken_WithValidClaims_ReturnsValidToken" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b0666a8f_002Da7ec_002D426d_002D87ce_002D2082ed2b97b3/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GenerateJwtToken_WithValidClaims_ReturnsValidToken" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Or&gt;
     &lt;Project Location="/home/mateuszk/Repos/DotNet/CodeConnect/ApiServiceTests" Presentation="&amp;lt;Tests&amp;gt;\&amp;lt;ApiServiceTests&amp;gt;" /&gt;
     &lt;TestAncestor&gt;
@@ -95,6 +96,7 @@
       &lt;TestId&gt;xUnit::7A14E943-041F-4EF7-A9EF-5E81637AFE5B::net9.0::TestLayer.PostControllerTests.IsUserLikingPost_WhitespaceUsername_ShouldReturnBadRequest&lt;/TestId&gt;
       &lt;TestId&gt;xUnit::7A14E943-041F-4EF7-A9EF-5E81637AFE5B::net9.0::TestLayer.PostControllerTests.IsUserLikingPost_ValidRequest_UserLikingPost_ShouldReturnTrue&lt;/TestId&gt;
       &lt;TestId&gt;xUnit::7A14E943-041F-4EF7-A9EF-5E81637AFE5B::net9.0::TestLayer.PostControllerTests.IsUserLikingPost_ValidRequest_UserNotLikingPost_ShouldReturnFalse&lt;/TestId&gt;
+      &lt;TestId&gt;xUnit::7A14E943-041F-4EF7-A9EF-5E81637AFE5B::net9.0::TestLayer.UserControllerTests&lt;/TestId&gt;
     &lt;/TestAncestor&gt;
   &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String>

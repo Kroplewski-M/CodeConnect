@@ -54,60 +54,11 @@ public class UserControllerTests
     }
 
     [Fact]
-    public async Task EditUserDetails_EmptyUsername_ReturnsBadRequest()
-    {
-        //Arrange
-        EditProfileForm editForm = new EditProfileForm()
-        {
-            Username = "",
-            Bio = "",
-            Dob = DateOnly.FromDateTime(DateTime.UtcNow),
-            FirstName = "",
-            LastName = "",
-            GithubLink = "",
-            WebsiteLink = "",
-        };
-        //Act
-        var result = await _userController.EditUserDetails(editForm);
-        var badRequestResult = result as BadRequestObjectResult;
-        
-        //Assert
-        Assert.NotNull(badRequestResult);  
-        Assert.Equal(badRequestResult.StatusCode, (int)HttpStatusCode.BadRequest);
-        _userServiceMock.Verify(x=> x.UpdateUserDetails(It.IsAny<EditProfileForm>()), Times.Never);
-    }
-    [Fact]
-    public async Task EditUserDetails_WrongUsername_ReturnsBadRequest()
-    {
-        //Arrange
-        EditProfileForm editForm = new EditProfileForm()
-        {
-            Username = "testUsername",
-            Bio = "",
-            Dob = DateOnly.FromDateTime(DateTime.UtcNow),
-            FirstName = "",
-            LastName = "",
-            GithubLink = "",
-            WebsiteLink = "",
-        };
-        _userManagerMock.Setup(x=> x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser(){UserName = "WrongUsername"});
-        //Act
-        var result = await _userController.EditUserDetails(editForm);
-        var unAuthorizedRequestResult = result as UnauthorizedObjectResult;
-        
-        //Assert
-        Assert.NotNull(unAuthorizedRequestResult);  
-        Assert.Equal(unAuthorizedRequestResult.StatusCode, (int)HttpStatusCode.Unauthorized);
-        _userServiceMock.Verify(x=> x.UpdateUserDetails(It.IsAny<EditProfileForm>()), Times.Never);
-    }
-
-    [Fact]
     public async Task EditUserDetails_GoodForm_CorrectUser_ShouldReturnOk()
     {
         //Arrange
         EditProfileForm editForm = new EditProfileForm()
         {
-            Username = "testUsername",
             Bio = "",
             Dob = DateOnly.FromDateTime(DateTime.UtcNow),
             FirstName = "",
@@ -117,7 +68,7 @@ public class UserControllerTests
         };
         var expectedResult = new ServiceResponse(true,"");
         _userManagerMock.Setup(x=> x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser(){UserName = "testUsername"});
-        _userServiceMock.Setup(x=> x.UpdateUserDetails(editForm)).ReturnsAsync(expectedResult);
+        _userServiceMock.Setup(x=> x.UpdateUserDetails(editForm,It.IsAny<string>())).ReturnsAsync(expectedResult);
         //Act
         var result = await _userController.EditUserDetails(editForm);
         var okRequestResult = result as OkObjectResult;
@@ -125,7 +76,7 @@ public class UserControllerTests
         //Assert
         Assert.NotNull(okRequestResult);
         Assert.Equal(okRequestResult.StatusCode, (int)HttpStatusCode.OK);
-        _userServiceMock.Verify(x=> x.UpdateUserDetails(It.IsAny<EditProfileForm>()), Times.Once);
+        _userServiceMock.Verify(x=> x.UpdateUserDetails(It.IsAny<EditProfileForm>(),It.IsAny<string>()), Times.Once);
     }
 
     [Fact]

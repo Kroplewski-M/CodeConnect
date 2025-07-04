@@ -16,14 +16,16 @@ namespace WebApiApplicationLayer;
 public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbContext context,
     IMemoryCache memoryCache) : IUserService
 {
-    public async Task<ServiceResponse> UpdateUserDetails(EditProfileForm editProfileForm)
+    public async Task<ServiceResponse> UpdateUserDetails(EditProfileForm editProfileForm, string? userId = null)
     {
+        if(string.IsNullOrWhiteSpace(userId))
+            return new ServiceResponse(false, "invalid request");
         var validator = new EditProfileValidator();
         var result = await validator.ValidateAsync(editProfileForm);
         if (!result.IsValid)
             return new ServiceResponse(false, "invalid request"); 
         
-        var user =  await userManager.FindByNameAsync(editProfileForm.Username);
+        var user =  await userManager.FindByIdAsync(userId);
        if (user == null)
            return new ServiceResponse(false, "");
        user.FirstName = editProfileForm.FirstName;

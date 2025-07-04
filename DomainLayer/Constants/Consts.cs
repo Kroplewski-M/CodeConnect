@@ -39,17 +39,11 @@ public static class Consts
     }
     public static class ClaimTypes
     {
-        public const string Id = "Id";
-        public const string FirstName = "FirstName";
-        public const string LastName = "LastName";
-        public const string Email = "Email";
-        public const string ProfileImg = "ProfileImg";
-        public const string BackgroundImg = "BackgroundImg";
-        public const string GithubLink = "GithubLink";
-        public const string WebsiteLink = "WebsiteLink";
+        public const string Id = System.Security.Claims.ClaimTypes.NameIdentifier;
+        public const string FirstName = System.Security.Claims.ClaimTypes.Name;
+        public const string LastName = System.Security.Claims.ClaimTypes.Surname;
+        public const string Email = System.Security.Claims.ClaimTypes.Email;
         public const string Dob = "Dob";
-        public const string Bio = "Bio";
-        public const string CreatedAt = "CreatedAt";
         public const string UserName = "UserName";
         public const string Password = "Password";
     }
@@ -77,7 +71,7 @@ public static class Consts
         Following
     }
 
-    public class DateFormats
+    public static class DateFormats
     {
         public const string DateFormat = "MM/dd/yyyy";
         public const string DateTimeFormat = "MM/dd/yyyy H:mm";

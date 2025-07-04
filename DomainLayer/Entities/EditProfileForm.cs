@@ -5,7 +5,6 @@ namespace DomainLayer.Entities;
 
 public class EditProfileForm
 {
-    public string Username { get; set; } = "";
     public string FirstName { get; set; } = "";
     public string LastName { get; set; }= "";
     public DateOnly? Dob { get; set; } = null;
