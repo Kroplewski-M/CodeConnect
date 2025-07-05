@@ -15,13 +15,10 @@ public class UserImageServiceClient(HttpClient httpClient,ILocalStorageService l
     {
         var response = await httpClient.PostAsJsonAsync("/api/User/UpdateUserImage", updateUserImageRequest);
         response.EnsureSuccessStatusCode();
-        var result = await response.Content.ReadFromJsonAsync<TokenResponse>();
-        if (!string.IsNullOrWhiteSpace(result?.Key))
-        {
-            await localStorageService.SetItemAsync(Consts.Tokens.AuthToken, result.Key);
-            ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
-            return new ServiceResponse(true, "User image updated");
-        }
-        return new ServiceResponse(false, "An error occured, please try again later.");
+        var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
+        ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
+        if(result?.Flag == true)
+            return result;
+        return new ServiceResponse(false, "An error occured while updating the image");
     }
 }

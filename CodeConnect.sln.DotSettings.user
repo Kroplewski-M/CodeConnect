@@ -62,7 +62,7 @@
     &lt;Project Location="/home/mateuszk/Repos/DotNet/CodeConnect/ApiServiceTests" Presentation="&amp;lt;Tests&amp;gt;\&amp;lt;ApiServiceTests&amp;gt;" /&gt;
   &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=af6031f9_002Dbcbc_002D4188_002D82bc_002De11f8df5e25b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="GetPostById_ValidId_ShouldReturnPost" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=af6031f9_002Dbcbc_002D4188_002D82bc_002De11f8df5e25b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GetPostById_ValidId_ShouldReturnPost" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Or&gt;
     &lt;TestAncestor&gt;
       &lt;TestId&gt;xUnit::7A14E943-041F-4EF7-A9EF-5E81637AFE5B::net9.0::TestLayer.PostControllerTests.GetPostById_ValidId_ShouldReturnPost&lt;/TestId&gt;
@@ -82,7 +82,7 @@
     &lt;ProjectFile&gt;7A14E943-041F-4EF7-A9EF-5E81637AFE5B/f:UserControllerTests.cs&lt;/ProjectFile&gt;
   &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b0666a8f_002Da7ec_002D426d_002D87ce_002D2082ed2b97b3/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GenerateJwtToken_WithValidClaims_ReturnsValidToken" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b0666a8f_002Da7ec_002D426d_002D87ce_002D2082ed2b97b3/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="GenerateJwtToken_WithValidClaims_ReturnsValidToken" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Or&gt;
     &lt;Project Location="/home/mateuszk/Repos/DotNet/CodeConnect/ApiServiceTests" Presentation="&amp;lt;Tests&amp;gt;\&amp;lt;ApiServiceTests&amp;gt;" /&gt;
     &lt;TestAncestor&gt;

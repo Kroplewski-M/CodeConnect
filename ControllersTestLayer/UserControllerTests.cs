@@ -32,7 +32,7 @@ public class UserControllerTests
         _userServiceMock = new Mock<IUserService>();
         _tokenServiceMock = new Mock<ITokenService>();
         _userImageServiceMock = new Mock<IUserImageService>();
-        _userController = new UserController(_userServiceMock.Object, _userManagerMock.Object, _tokenServiceMock.Object, _userImageServiceMock.Object);
+        _userController = new UserController(_userServiceMock.Object, _tokenServiceMock.Object, _userImageServiceMock.Object);
         
         var currentUsername = "testUsername";
         var currentId = Guid.NewGuid().ToString();

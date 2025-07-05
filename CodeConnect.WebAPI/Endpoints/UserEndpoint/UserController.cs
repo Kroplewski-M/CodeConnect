@@ -13,7 +13,7 @@ namespace CodeConnect.WebAPI.Endpoints.UserEndpoint;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UserController(IUserService userService, UserManager<ApplicationUser>userManager,ITokenService tokenService,
+public class UserController(IUserService userService,ITokenService tokenService,
     IUserImageService userImageService) : ControllerBase
 {
     private TokenResponse GenerateNewToken(ApplicationUser user)
@@ -61,13 +61,8 @@ public class UserController(IUserService userService, UserManager<ApplicationUse
         {
             var response = await userImageService.UpdateUserImage(updateUserImageRequest, loggedInUser);
             if (!response.Flag)
-                return BadRequest(response.Message);
-            //GET NEW TOKEN
-            var updatedUser = await userManager.FindByIdAsync(loggedInUser);
-            if (updatedUser != null)
-            {
-                return Ok(GenerateNewToken(updatedUser));
-            }
+                return BadRequest(response);
+            return Ok(response);
         }
         return Unauthorized("User not found");
     }
