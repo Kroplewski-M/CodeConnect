@@ -20,10 +20,17 @@
     [Parameter] public required string Id { get; set; }
     [Parameter] public required bool ShowPreview { get; set; }
     private string _content = string.Empty;
+    private bool _loadedContent = false;
+    protected override void OnAfterRender(bool firstRender)
+    {
+        _loadedContent = true;
+    }
+
     protected override async Task OnParametersSetAsync()
     {
         _content = BindContent ?? string.Empty;
-        await Js.InvokeVoidAsync("autoResizeTextAreaAndContainer",Id);
+        if(_loadedContent)
+            await Js.InvokeVoidAsync("autoResizeTextAreaAndContainer",Id);
         if (ShowPreview)
         {
             await PreviewMarkdown(_content);

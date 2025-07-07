@@ -580,6 +580,9 @@
   .z-\[10\] {
     z-index: 10;
   }
+  .z-\[50\] {
+    z-index: 50;
+  }
   .z-\[200\] {
     z-index: 200;
   }
@@ -588,9 +591,6 @@
   }
   .z-\[500\] {
     z-index: 500;
-  }
-  .z-\[50\] {
-    z-index: 50;
   }
   .z-\[9999\] {
     z-index: 9999;
@@ -790,6 +790,9 @@
   .h-screen {
     height: 100vh;
   }
+  .max-h-\[10px\] {
+    max-height: 10px;
+  }
   .max-h-\[150px\] {
     max-height: 150px;
   }
@@ -865,11 +868,14 @@
   .w-full {
     width: 100%;
   }
-  .max-w-\[95\%\] {
-    max-width: 95%;
-  }
   .max-w-\[1000px\] {
     max-width: 1000px;
+  }
+  .max-w-\[10px\] {
+    max-width: 10px;
+  }
+  .max-w-\[95\%\] {
+    max-width: 95%;
   }
   .max-w-\[1100px\] {
     max-width: 1100px;
