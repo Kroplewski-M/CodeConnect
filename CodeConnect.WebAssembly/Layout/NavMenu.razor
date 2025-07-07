@@ -39,7 +39,7 @@
                             <FaIcon Icon="@FaIcons.Bell" Size="@FaSize.Large" ExtraCss="text-light-primaryColor w-[24px]"/>
                             <span class="ms-3 text-light-primaryColor dark:text-dark-supportColor">
                                 Notifications
-                                @if (NotificationCount >= 0)
+                                @if (NotificationCount > 0)
                                 {
                                     <span class="rounded-full font-bold bg-red-700 p-2 max-w-[10px] max-h-[10px]">@(NotificationCount <= 99 ? NotificationCount : "99+")</span>
                                 }
