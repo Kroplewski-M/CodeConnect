@@ -7,6 +7,7 @@
 @using Microsoft.AspNetCore.SignalR.Client
 @inject NavigationManager NavigationManager
 @inject IFollowingService FollowingService
++@implements IAsyncDisposable
 <AuthorizeView>
     <Authorized>
         @*Open nav button*@
@@ -128,6 +129,13 @@
     {
         NavigationManager.NavigateTo(url);
         _openNav = false;
+    }
+    public async ValueTask DisposeAsync()
+    { 
+        if (HubConnection is not null)
+        { 
+            await HubConnection.DisposeAsync();
+        }
     }
 }
 
