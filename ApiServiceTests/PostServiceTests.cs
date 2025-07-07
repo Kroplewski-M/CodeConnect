@@ -7,6 +7,7 @@ using DomainLayer.Entities.Auth;
 using DomainLayer.Entities.Posts;
 using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using WebApiApplicationLayer;
@@ -28,7 +29,8 @@ public class PostServiceTests
         var userStoreMock = new Mock<IUserStore<ApplicationUser>>();
         _userManager = new Mock<UserManager<ApplicationUser>>(userStoreMock.Object, null!, null!, null!, null!, null!,
             null!, null!, null!);
-        _postService = new PostService(_context, _azureService.Object, _userManager.Object);
+        var hubMock = new Mock<IHubContext<NotificationsHub, INotificationClient>>();
+        _postService = new PostService(_context, _azureService.Object, _userManager.Object,hubMock.Object);
     }
     
     // Helper methods

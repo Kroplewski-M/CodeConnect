@@ -1,10 +1,14 @@
-﻿@using ApplicationLayer.Classes
+﻿@implements IAsyncDisposable
+@using ApplicationLayer.Classes
 @using ApplicationLayer.Interfaces
+@using Blazored.LocalStorage
 @using DomainLayer.Constants
 @using Microsoft.AspNetCore.Components.Authorization
 @using CodeConnect.WebAssembly.Components.General
+@using Microsoft.AspNetCore.SignalR.Client
 @inject NavigationManager NavigationManager
 @inject IFollowingService FollowingService
+
 <AuthorizeView>
     <Authorized>
         @*Open nav button*@
@@ -35,7 +39,13 @@
                     <li>
                         <button onclick="@(() => NavigateAndCloseNav("/Notifications"))"  class="cursor-pointer flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100/10 group mb-5">
                             <FaIcon Icon="@FaIcons.Bell" Size="@FaSize.Large" ExtraCss="text-light-primaryColor w-[24px]"/>
-                            <span class="ms-3 text-light-primaryColor dark:text-dark-supportColor">Notifications</span>
+                            <span class="ms-3 text-light-primaryColor dark:text-dark-supportColor">
+                                Notifications
+                                @if (NotificationCount > 0)
+                                {
+                                    <span class="rounded-full font-bold bg-red-700 p-2 max-w-[10px] max-h-[10px]">@(NotificationCount <= 99 ? NotificationCount : "99+")</span>
+                                }
+                            </span>
                         </button>
                     </li>
                     <li>
@@ -80,9 +90,26 @@
     private int FollowerCount { get; set; } = 0;
     private int FollowingsCount { get; set; } = 0;
     [CascadingParameter] public required UserState UserState { get; set; }
-    
+    private HubConnection? HubConnection { get; set; }
+    [Inject] public required ILocalStorageService LocalStorageService { get; set; }
     private bool LoadingUserDetails { get; set; } = true;
     private bool Authenticated { get; set; }
+    private int NotificationCount { get; set; } = 0;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        HubConnection = new HubConnectionBuilder().WithUrl($"{Consts.Base.BaseUrl}/{Consts.SignalR.HubName}", options =>
+        {
+            options.AccessTokenProvider = async () => await LocalStorageService.GetItemAsync<string?>(Consts.Tokens.AuthToken);
+        }).Build();
+        HubConnection.On(Consts.SignalR.NotificationMethodWatch, () =>
+        {
+            NotificationCount++;
+            InvokeAsync(StateHasChanged);
+        });
+        await HubConnection.StartAsync();
+    }
+
     protected override async Task OnParametersSetAsync()
     {
         if (UserState?.Current != null && Authenticated)
@@ -103,6 +130,13 @@
     {
         NavigationManager.NavigateTo(url);
         _openNav = false;
+    }
+    public async ValueTask DisposeAsync()
+    { 
+        if (HubConnection is not null)
+        { 
+            await HubConnection.DisposeAsync();
+        }
     }
 }
 

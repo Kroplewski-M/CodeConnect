@@ -2,6 +2,11 @@ namespace DomainLayer.Constants;
 
 public static class Consts
 {
+    public static class SignalR
+    {
+        public const string HubName = "notifications";
+        public const string NotificationMethodWatch = "NotificationPing";
+    }
     public static class AuthEndpoints
     {
         public static readonly List<string> AuthUrls = [RegisterEndpoint,LoginEndpoint];

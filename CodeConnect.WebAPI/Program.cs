@@ -60,6 +60,22 @@ builder.Services.AddAuthentication(options =>
             return false;
         }
     };
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+
+            // If the request is for the SignalR hub
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments(Consts.SignalR.HubName))
+            {
+                context.Token = accessToken;
+            }
+
+            return Task.CompletedTask;
+        }
+    };
 });
 builder.Services.AddAuthorization(options =>
 {
@@ -69,6 +85,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy(nameof(Consts.TokenType.Refresh), policy =>
         policy.RequireClaim(Consts.Tokens.TokenType, nameof(Consts.TokenType.Refresh)));
 });
+builder.Services.AddSignalR();
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 builder.Services.Configure<AzureSettings>(builder.Configuration.GetSection("AzureSettings"));
 builder.Services.AddTransient<ITokenService,TokenService>();
@@ -112,6 +129,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("CodeConnect");
+app.MapHub<NotificationsHub>(Consts.SignalR.HubName);
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
