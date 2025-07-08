@@ -12,7 +12,7 @@ public class PostBase : ComponentBase
     [Parameter] public required Guid Id { get; set; }
     [Inject] public required IPostService PostService { get; set; }
     [Inject] public required IJSRuntime Js { get; set; }
-    [Inject] public required NotificationsService NotificationsService { get; set; }
+    [Inject] public required ToastService ToastService { get; set; }
     [CascadingParameter] public required UserState UserState { get; set; }
     protected bool Loading { get; set; } = true;
     protected PostBasicDto? Post { get; set; }
@@ -49,7 +49,7 @@ public class PostBase : ComponentBase
         }
         else
         {
-            NotificationsService.PushNotification(new Notification(res.Message, NotificationType.Error));
+            ToastService.PushToast(new Toast(res.Message, ToastType.Error));
         }
         LoadingLike = false;
         StateHasChanged();

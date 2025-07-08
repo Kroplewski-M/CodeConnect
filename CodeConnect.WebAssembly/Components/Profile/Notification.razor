@@ -3,8 +3,8 @@
 
 @if (Notif != null)
 {
-    <div class="flex items-center p-4 text-sm rounded-lg rounded-md border-4 @GetNotificationBorderAndBg(Notif.NotificationType)" role="alert">
-        <span class="@(GetNotificationIcon(Notif.NotificationType))"></span>
+    <div class="flex items-center p-4 text-sm rounded-lg rounded-md border-4 @GetNotificationBorderAndBg(Notif.ToastType)" role="alert">
+        <span class="@(GetNotificationIcon(Notif.ToastType))"></span>
         <div>
             <p class="font-bold pl-3">@Notif.Message</p> 
         </div>
@@ -13,35 +13,35 @@
 
 
 @code {
-    [Parameter] public ApplicationLayer.Notification? Notif { get; set; }
+    [Parameter] public ApplicationLayer.Toast? Notif { get; set; }
     
-    public string GetNotificationBorderAndBg(NotificationType type)
+    public string GetNotificationBorderAndBg(ToastType type)
     {
         switch (type)
         {
-            case NotificationType.Success:
+            case ToastType.Success:
                 return "border-green-800 bg-green-400";
-            case NotificationType.Error:
+            case ToastType.Error:
                 return "border-red-800 bg-red-500";
-            case NotificationType.Warning:
+            case ToastType.Warning:
                 return "border-amber-800 bg-amber-400";
-            case NotificationType.Info:
+            case ToastType.Info:
                 return "border-blue-800 bg-blue-400 ";
             default:
                 return "bg-purple-600";
         }
     }
-    public string GetNotificationIcon(NotificationType type)
+    public string GetNotificationIcon(ToastType type)
     {
         switch (type)
         {
-            case NotificationType.Success:
+            case ToastType.Success:
                 return "fa-solid fa-circle-check text-green-800";
-            case NotificationType.Error:
+            case ToastType.Error:
                 return "fa-solid fa-circle-exclamation text-red-800";
-            case NotificationType.Warning:
+            case ToastType.Warning:
                 return "fa-solid fa-triangle-exclamation text-amber-800";
-            case NotificationType.Info:
+            case ToastType.Info:
                 return "fa-solid fa-circle-exclamation text-blue-800";
             default:
                 return "fa-solid fa-circle-exclamation text-amber-400";

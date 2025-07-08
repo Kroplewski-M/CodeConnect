@@ -11,7 +11,7 @@ public class UserFollowingBase : ComponentBase
 {
     [Inject] public required IFollowingService FollowingService { get; set; }
     [Inject] public required NavigationManager NavigationManager { get; set; }
-    [Inject] public required NotificationsService NotificationsService { get; set; }
+    [Inject] public required ToastService ToastService { get; set; }
     [CascadingParameter] public required string Username { get; set; }
     public List<UserBasicDto> Following { get; set; } = new List<UserBasicDto>();
     

@@ -3,12 +3,11 @@ using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
 using Blazored.LocalStorage;
-using DomainLayer.Constants;
 using DomainLayer.Entities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace ClientApplicationLayer;
+namespace ClientApplicationLayer.Services;
 
 public class UserServiceClient(HttpClient httpClient,ILocalStorageService localStorageService, 
     AuthenticationStateProvider authenticationStateProvider, NavigationManager navigationManager) : IUserService

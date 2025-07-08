@@ -8,6 +8,7 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using DomainLayer.Constants;
 using WebApiApplicationLayer;
+using WebApiApplicationLayer.Services;
 
 namespace ApiServiceTests;
 

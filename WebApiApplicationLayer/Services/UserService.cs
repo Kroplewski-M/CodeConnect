@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace WebApiApplicationLayer;
+namespace WebApiApplicationLayer.Services;
 
 public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbContext context,
     IMemoryCache memoryCache) : IUserService

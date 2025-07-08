@@ -5,7 +5,7 @@ using DomainLayer.Entities;
 using DomainLayer.Entities.Auth;
 using Microsoft.AspNetCore.Identity;
 
-namespace WebApiApplicationLayer;
+namespace WebApiApplicationLayer.Services;
 
 public class UserImageService(UserManager<ApplicationUser>userManager, IAzureService azureService) : IUserImageService
 {

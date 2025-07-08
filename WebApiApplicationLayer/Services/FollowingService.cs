@@ -9,7 +9,7 @@ using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace WebApiApplicationLayer;
+namespace WebApiApplicationLayer.Services;
 
 public class FollowingService(UserManager<ApplicationUser>userManager, ApplicationDbContext context): IFollowingService
 {

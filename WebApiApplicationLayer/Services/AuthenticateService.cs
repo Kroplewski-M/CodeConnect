@@ -9,7 +9,7 @@ using FluentValidation.Results;
 using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
 
-namespace WebApiApplicationLayer;
+namespace WebApiApplicationLayer.Services;
 
 public class AuthenticateService(UserManager<ApplicationUser>userManager,
     ITokenService tokenGenerationService,  ApplicationDbContext context) : IAuthenticateService

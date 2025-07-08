@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using WebApiApplicationLayer;
+using WebApiApplicationLayer.Interfaces;
+using WebApiApplicationLayer.Services;
 
 namespace ApiServiceTests;
 [Collection("DatabaseCollection")]
@@ -29,8 +31,8 @@ public class PostServiceTests
         var userStoreMock = new Mock<IUserStore<ApplicationUser>>();
         _userManager = new Mock<UserManager<ApplicationUser>>(userStoreMock.Object, null!, null!, null!, null!, null!,
             null!, null!, null!);
-        var hubMock = new Mock<IHubContext<NotificationsHub, INotificationClient>>();
-        _postService = new PostService(_context, _azureService.Object, _userManager.Object,hubMock.Object);
+        var notificationServiceMock = new Mock<INotificationsService>();
+        _postService = new PostService(_context, _azureService.Object, _userManager.Object,notificationServiceMock.Object);
     }
     
     // Helper methods

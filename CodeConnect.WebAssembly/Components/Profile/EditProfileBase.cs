@@ -13,7 +13,7 @@ namespace CodeConnect.WebAssembly.Components.Profile;
 public class EditProfileBase : ComponentBase
 {
     [Inject] public required  IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
-    [Inject] public required NotificationsService NotificationsService { get; set; }
+    [Inject] public required ToastService ToastService { get; set; }
     [Inject] public required IUserService UserService { get; set; }
     
     [Parameter] public EventCallback Cancel { get; set; }
@@ -52,16 +52,16 @@ public class EditProfileBase : ComponentBase
         try
         {
             DisableEdit = true;
-            NotificationsService.PushNotification(new ApplicationLayer.Notification("Updating Profile...",
-                NotificationType.Info));
+            ToastService.PushToast(new ApplicationLayer.Toast("Updating Profile...",
+                ToastType.Info));
             await UserService.UpdateUserDetails(EditProfileForm);
-            NotificationsService.PushNotification(new ApplicationLayer.Notification("Updated Profile Successfully!",
-                NotificationType.Success));
+            ToastService.PushToast(new ApplicationLayer.Toast("Updated Profile Successfully!",
+                ToastType.Success));
         }
         catch
         {
-            NotificationsService.PushNotification(new ApplicationLayer.Notification("Error while updating profile details, please try again later.",
-                NotificationType.Error));
+            ToastService.PushToast(new ApplicationLayer.Toast("Error while updating profile details, please try again later.",
+                ToastType.Error));
         }
         finally
         {

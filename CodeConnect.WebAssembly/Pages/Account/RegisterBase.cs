@@ -13,7 +13,7 @@ public class RegisterBase
     : ComponentBase
 {
     [Inject]
-    public required NotificationsService NotificationsService { get; set; }
+    public required ToastService ToastService { get; set; }
 
     [Inject]
     public required NavigationManager NavigationManager { get; set; }
@@ -36,7 +36,7 @@ public class RegisterBase
         else
         {
             RegisterErrors = [];
-            NotificationsService.PushNotification(new Notification("Creating Account", NotificationType.Info));
+            ToastService.PushToast(new Toast("Creating Account", ToastType.Info));
             try
             {
                 DisableRegister = true;
@@ -48,15 +48,15 @@ public class RegisterBase
                 }
                 else
                 {
-                    NotificationsService.PushNotification(new Notification("Account Created, Welcome to Code Connect!",
-                        NotificationType.Success));
+                    ToastService.PushToast(new Toast("Account Created, Welcome to Code Connect!",
+                        ToastType.Success));
                     NavigationManager.NavigateTo("/MyFeed");
                 }
             }
             catch
             {
-                NotificationsService.PushNotification(new Notification("Error Occured During Registering Please Try Again Later.",
-                    NotificationType.Error));
+                ToastService.PushToast(new Toast("Error Occured During Registering Please Try Again Later.",
+                    ToastType.Error));
             }
             finally
             {

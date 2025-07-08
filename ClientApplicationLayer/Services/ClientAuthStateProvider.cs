@@ -6,7 +6,7 @@ using DomainLayer.Constants;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace ClientApplicationLayer;
+namespace ClientApplicationLayer.Services;
 
 public class ClientAuthStateProvider(HttpClient httpClient,
     ILocalStorageService localStorageService, NavigationManager navigationManager) : AuthenticationStateProvider

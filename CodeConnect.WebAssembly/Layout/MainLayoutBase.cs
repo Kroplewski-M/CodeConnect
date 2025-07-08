@@ -13,7 +13,7 @@ namespace CodeConnect.WebAssembly.Layout;
 public class MainLayoutBase : LayoutComponentBase, IDisposable
 {
     [Inject] public required NavigationManager NavManager { get; set; }
-    [Inject] public required NotificationsService NotificationsService { get; set; }
+    [Inject] public required ToastService ToastService { get; set; }
     [Inject] public required IJSRuntime Js { get; set; }
     [Inject] public required ILocalStorageService LocalStorageService { get; set; }
     [Inject] public required AuthenticationStateProvider AuthenticationStateProvider { get; set; }
@@ -22,14 +22,14 @@ public class MainLayoutBase : LayoutComponentBase, IDisposable
     [Inject] public required NavigationManager NavigationManager { get; set; }
     [CascadingParameter] private Task<AuthenticationState>? AuthenticationState { get; set; }
 
-    protected List<Notification> Notifications = [];
+    protected List<Toast> Notifications = [];
     protected bool DarkTheme = false;
     public readonly UserState UserState = new();
 
     protected override async Task OnInitializedAsync()
     {
-        NotificationsService.OnChange += UpdateNotifications;
-        Notifications = NotificationsService.GetNotification();
+        ToastService.OnChange += UpdateToast;
+        Notifications = ToastService.GetToasts();
         AuthenticationStateProvider.AuthenticationStateChanged += OnAuthenticationStateChanged;
         var darkTheme = await LocalStorageService.GetItemAsync<bool>("DarkTheme");
         if (darkTheme)
@@ -44,15 +44,15 @@ public class MainLayoutBase : LayoutComponentBase, IDisposable
         return nonNavPages.Any(page => NavManager.Uri.EndsWith(page));
     }
 
-    protected void UpdateNotifications()
+    protected void UpdateToast()
     {
-        Notifications = NotificationsService.GetNotification();
+        Notifications = ToastService.GetToasts();
         StateHasChanged();
     }
 
     public void Dispose()
     {
-        NotificationsService.OnChange -= UpdateNotifications;
+        ToastService.OnChange -= UpdateToast;
         AuthenticationStateProvider.AuthenticationStateChanged -= OnAuthenticationStateChanged;
     }
 

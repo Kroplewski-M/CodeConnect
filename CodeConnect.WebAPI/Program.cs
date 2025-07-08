@@ -14,6 +14,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 using WebApiApplicationLayer;
+using WebApiApplicationLayer.Interfaces;
+using WebApiApplicationLayer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -114,6 +116,7 @@ builder.Services.AddCors(options =>
     });
 });
 builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<INotificationsService, NotificationService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

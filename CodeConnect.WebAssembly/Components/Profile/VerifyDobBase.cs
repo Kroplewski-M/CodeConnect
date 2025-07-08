@@ -13,7 +13,7 @@ public class VerifyDobBase : ComponentBase
     [CascadingParameter] public required UserState UserState { get; set; }
     [Inject] public required IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
     [Inject] public required IUserService UserService { get; set; }
-    [Inject] public required NotificationsService NotificationsService { get; set; }
+    [Inject] public required ToastService ToastService { get; set; }
     protected bool Loading { get; set; } = false;
     protected DateOnly? Dob { get; set; }
     protected List<ValidationFailure> EditProfileErrors = [];
@@ -42,12 +42,12 @@ public class VerifyDobBase : ComponentBase
             else
             {
                 await UserService.UpdateUserDetails(editProfileForm);
-                NotificationsService.PushNotification(new ApplicationLayer.Notification("Dob verified", NotificationType.Success));
+                ToastService.PushToast(new ApplicationLayer.Toast("Dob verified", ToastType.Success));
             }
         }
         catch
         {
-            NotificationsService.PushNotification(new ApplicationLayer.Notification("An error occured please try again later.", NotificationType.Error));
+            ToastService.PushToast(new ApplicationLayer.Toast("An error occured please try again later.", ToastType.Error));
         }
         finally
         {

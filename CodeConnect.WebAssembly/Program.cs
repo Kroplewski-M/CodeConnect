@@ -2,6 +2,7 @@ using ApplicationLayer;
 using ApplicationLayer.Interfaces;
 using Blazored.LocalStorage;
 using ClientApplicationLayer;
+using ClientApplicationLayer.Services;
 using CodeConnect.WebAssembly;
 using CodeConnect.WebAssembly.DelegatingHandler;
 using DomainLayer.Constants;
@@ -33,7 +34,7 @@ builder.Services.AddScoped<IAuthenticateServiceClient, AuthenticateServiceClient
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<IUserService, UserServiceClient>();
 builder.Services.AddTransient<IUserImageService, UserImageServiceClient>();
-builder.Services.AddSingleton<NotificationsService>();
+builder.Services.AddSingleton<ToastService>();
 builder.Services.AddSingleton<ImageConvertorServiceClient>();
 builder.Services.AddScoped<IFollowingService, FollowingServiceClient>();
 builder.Services.AddScoped<IPostService, PostServiceClient>();

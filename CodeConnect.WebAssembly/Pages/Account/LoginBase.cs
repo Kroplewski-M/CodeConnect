@@ -11,7 +11,7 @@ namespace CodeConnect.WebAssembly.Pages.Account;
 public class LoginBase : ComponentBase
 {
     [Inject]
-    public required NotificationsService NotificationsService { get; set; }
+    public required ToastService ToastService { get; set; }
 
     [Inject]
     public required NavigationManager NavigationManager { get; set; }
@@ -38,8 +38,8 @@ public class LoginBase : ComponentBase
             try
             {
                 DisableLogin = true;
-                NotificationsService.PushNotification(new Notification("Logging in",
-                    NotificationType.Info));
+                ToastService.PushToast(new Toast("Logging in",
+                    ToastType.Info));
                 var result = await AuthenticateServiceClient.LoginUser(LoginForm);
                 if (!result.Flag)
                 {
@@ -50,15 +50,15 @@ public class LoginBase : ComponentBase
                 }
                 else
                 {
-                    NotificationsService.PushNotification(new Notification("Account found!",
-                        NotificationType.Success));
+                    ToastService.PushToast(new Toast("Account found!",
+                        ToastType.Success));
                     NavigationManager.NavigateTo("/MyFeed");
                 }
             }
             catch
             {
-                NotificationsService.PushNotification(new Notification("Error Occured During Log In Please Try Again Later.",
-                    NotificationType.Error));
+                ToastService.PushToast(new Toast("Error Occured During Log In Please Try Again Later.",
+                    ToastType.Error));
             }
             finally
             {

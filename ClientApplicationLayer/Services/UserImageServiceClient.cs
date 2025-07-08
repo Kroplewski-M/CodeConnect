@@ -2,11 +2,10 @@ using System.Net.Http.Json;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.Interfaces;
 using Blazored.LocalStorage;
-using DomainLayer.Constants;
 using DomainLayer.Entities;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace ClientApplicationLayer;
+namespace ClientApplicationLayer.Services;
 
 public class UserImageServiceClient(HttpClient httpClient,ILocalStorageService localStorageService,
     AuthenticationStateProvider authenticationStateProvider): IUserImageService

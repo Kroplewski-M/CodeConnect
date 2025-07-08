@@ -3,7 +3,7 @@ using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.Post;
 using ApplicationLayer.Interfaces;
 
-namespace ClientApplicationLayer;
+namespace ClientApplicationLayer.Services;
 
 public class PostServiceClient(HttpClient httpClient) : IPostService
 {

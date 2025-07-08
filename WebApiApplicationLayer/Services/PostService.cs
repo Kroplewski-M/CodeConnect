@@ -10,10 +10,11 @@ using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using WebApiApplicationLayer.Interfaces;
 
-namespace WebApiApplicationLayer;
+namespace WebApiApplicationLayer.Services;
 
-public class PostService(ApplicationDbContext context,IAzureService azureService, UserManager<ApplicationUser>userManager,IHubContext<NotificationsHub, INotificationClient>notificationHub) : IPostService
+public class PostService(ApplicationDbContext context,IAzureService azureService, UserManager<ApplicationUser>userManager,INotificationsService notificationsService) : IPostService
 {
     public async Task<ServiceResponse> CreatePost(CreatePostDto createPost,string? userId)
     {
@@ -159,7 +160,7 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
                 LikedOn = DateTime.UtcNow,
             };
             post.Likes.Add(postLike);
-            await notificationHub.Clients.User(userId).NotificationPing();
+            await notificationsService.SendNotificationAsync(post.CreatedByUserId);
         }
         await context.SaveChangesAsync();
         return new ServiceResponse(true, "Like added successfully");

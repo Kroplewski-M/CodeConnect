@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Net.Http.Json;
 using ApplicationLayer;
 using ApplicationLayer.DTO_s.User;
@@ -7,18 +6,17 @@ using ApplicationLayer.Interfaces;
 using Blazored.LocalStorage;
 using DomainLayer.Constants;
 using DomainLayer.Entities.Auth;
-using DomainLayer.Helpers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
-namespace ClientApplicationLayer;
+namespace ClientApplicationLayer.Services;
 
 public class AuthenticateServiceClient(
     HttpClient httpClient,
     ILocalStorageService localStorageService,
     AuthenticationStateProvider authenticationStateProvider,
     IUserService userService,
-    NavigationManager navigationManager,NotificationsService notificationsService)
+    NavigationManager navigationManager,ToastService toastService)
     : IAuthenticateServiceClient
 {
 
@@ -63,7 +61,7 @@ public class AuthenticateServiceClient(
         await localStorageService.RemoveItemAsync(Consts.Tokens.RefreshToken);
         ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
         navigationManager.NavigateTo("/");
-        notificationsService.PushNotification(new Notification("Logged out successfully",NotificationType.Success));
+        toastService.PushToast(new Toast("Logged out successfully",ToastType.Success));
         return new AuthResponse(true, "","", "Logged out successfully");
     }
 }

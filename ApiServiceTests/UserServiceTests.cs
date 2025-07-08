@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using WebApiApplicationLayer;
+using WebApiApplicationLayer.Services;
 
 namespace ApiServiceTests;
 [Collection("DatabaseCollection")]

@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace WebApiApplicationLayer;
+namespace WebApiApplicationLayer.Services;
 
 public class TokenService(IOptions<JwtSettings> jwtSettings,ApplicationDbContext context,UserManager<ApplicationUser>userManager) : ITokenService
 {

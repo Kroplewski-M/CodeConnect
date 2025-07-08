@@ -7,7 +7,7 @@ using Azure.Storage.Blobs.Models;
 using DomainLayer.Constants;
 using DomainLayer.Helpers;
 
-namespace WebApiApplicationLayer;
+namespace WebApiApplicationLayer.Services;
 
 public class AzureService(BlobServiceClient blobServiceClient) : IAzureService
 {

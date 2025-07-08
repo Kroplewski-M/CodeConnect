@@ -4,6 +4,7 @@ using ApplicationLayer.Classes;
 using ApplicationLayer.ExtensionClasses;
 using ApplicationLayer.Interfaces;
 using ClientApplicationLayer;
+using ClientApplicationLayer.Services;
 using DomainLayer.Constants;
 using DomainLayer.Entities;
 using DomainLayer.Helpers;
@@ -17,7 +18,7 @@ namespace CodeConnect.WebAssembly.Components.Profile;
 public class UpdateImageBase : ComponentBase
 {
     [Inject] public required IUserImageService UserImageService { get; set; }
-    [Inject] public required NotificationsService NotificationsService { get; set; }
+    [Inject] public required ToastService ToastService { get; set; }
     [Inject] public required ImageConvertorServiceClient ImageConvertor { get; set; }
     [Inject] public required IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
     [Parameter] public Consts.ImageType UpdateOfImageType { get; set; }
@@ -32,7 +33,7 @@ public class UpdateImageBase : ComponentBase
             return;
         if (img.Size > Consts.Base.UploadMaxFileSize)
         {
-            NotificationsService.PushNotification(new ApplicationLayer.Notification($"Max file size is {Helpers.BytesToMegabytes(Consts.Base.UploadMaxFileSize)}MB.", NotificationType.Error));
+            ToastService.PushToast(new ApplicationLayer.Toast($"Max file size is {Helpers.BytesToMegabytes(Consts.Base.UploadMaxFileSize)}MB.", ToastType.Error));
             return;
         }
         Loading = true;
@@ -49,16 +50,16 @@ public class UpdateImageBase : ComponentBase
             try
             {
                 LoadingUpdate = true;
-                NotificationsService.PushNotification(new ApplicationLayer.Notification("Updating please wait...", NotificationType.Info));
+                ToastService.PushToast(new ApplicationLayer.Toast("Updating please wait...", ToastType.Info));
                 
                 var result = await UserImageService.UpdateUserImage(SelectedImg);
-                NotificationsService.PushNotification(result.Flag
-                    ? new ApplicationLayer.Notification(result.Message, NotificationType.Success)
-                    : new ApplicationLayer.Notification(result.Message, NotificationType.Error));
+                ToastService.PushToast(result.Flag
+                    ? new ApplicationLayer.Toast(result.Message, ToastType.Success)
+                    : new ApplicationLayer.Toast(result.Message, ToastType.Error));
             }
             catch
             {
-                NotificationsService.PushNotification(new ApplicationLayer.Notification("An error occured please try again later.", NotificationType.Error));
+                ToastService.PushToast(new ApplicationLayer.Toast("An error occured please try again later.", ToastType.Error));
             }
             finally
             {

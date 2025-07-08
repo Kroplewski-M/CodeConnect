@@ -13,7 +13,7 @@ public class EditUserInterestsBase : ComponentBase
     [Parameter] public EventCallback Cancel { get; set; } 
     [Parameter] public List<TechInterestsDto>? CurrentUserInterests { get; set; }
     [CascadingParameter] public required string Username { get; set; }
-    [Inject] public required NotificationsService NotificationsService { get; set; }
+    [Inject] public required ToastService ToastService { get; set; }
 
     protected List<TechInterestsDto> AllTechInterests { get; set; } = new List<TechInterestsDto>();
     protected List<string> TechTypes { get; set; } = new();
@@ -35,8 +35,8 @@ public class EditUserInterestsBase : ComponentBase
         }
         catch
         {
-            NotificationsService.PushNotification(
-                new ApplicationLayer.Notification("Failed to fetch interests", NotificationType.Error));
+            ToastService.PushToast(
+                new ApplicationLayer.Toast("Failed to fetch interests", ToastType.Error));
         }
         finally
         {
@@ -77,26 +77,26 @@ public class EditUserInterestsBase : ComponentBase
         try
         {
             Saving = true;
-            NotificationsService.PushNotification(
-                new ApplicationLayer.Notification("Updating interests", NotificationType.Info));
+            ToastService.PushToast(
+                new ApplicationLayer.Toast("Updating interests", ToastType.Info));
             if (CurrentUserInterests != null)
             {
                 var result = await UserService.UpdateUserInterests(new UpdateTechInterestsDto(Username, CurrentUserInterests));
                 if (result.Flag)
                 {
-                    NotificationsService.PushNotification(
-                        new ApplicationLayer.Notification(result.Message, NotificationType.Success));
+                    ToastService.PushToast(
+                        new ApplicationLayer.Toast(result.Message, ToastType.Success));
                     return;
                 }
 
-                NotificationsService.PushNotification(
-                    new ApplicationLayer.Notification(result.Message, NotificationType.Error));
+                ToastService.PushToast(
+                    new ApplicationLayer.Toast(result.Message, ToastType.Error));
             }
         }
         catch
         {
-            NotificationsService.PushNotification(
-                new ApplicationLayer.Notification("An error occured please try again later.", NotificationType.Error));
+            ToastService.PushToast(
+                new ApplicationLayer.Toast("An error occured please try again later.", ToastType.Error));
         }
         finally
         {

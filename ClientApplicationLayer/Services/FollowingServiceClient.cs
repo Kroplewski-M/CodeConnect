@@ -4,15 +4,15 @@ using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
 
-namespace ClientApplicationLayer;
+namespace ClientApplicationLayer.Services;
 
-public class FollowingServiceClient(HttpClient httpClient, NotificationsService notificationsService) : IFollowingService
+public class FollowingServiceClient(HttpClient httpClient, ToastService toastService) : IFollowingService
 {
     public async Task<FollowerCount> GetUserFollowersCount(string userName)
     {
         var response = await httpClient.GetFromJsonAsync<FollowerCount>($"api/Following/UserFollowersCount?username={userName}");
         if(response == null)
-            notificationsService.PushNotification(new Notification("An Error Occured when fetching followers", NotificationType.Error));
+            toastService.PushToast(new Toast("An Error Occured when fetching followers", ToastType.Error));
         return response ?? new FollowerCount(0,0);
     }
 
@@ -25,7 +25,7 @@ public class FollowingServiceClient(HttpClient httpClient, NotificationsService 
             if (result != null)
                 return result;
         }
-        notificationsService.PushNotification(new Notification("An Error Occured when following user", NotificationType.Error));
+        toastService.PushToast(new Toast("An Error Occured when following user", ToastType.Error));
         return new ServiceResponse(false, "Error Occured");
     }
 
@@ -38,7 +38,7 @@ public class FollowingServiceClient(HttpClient httpClient, NotificationsService 
             if (result != null)
                 return result;
         }
-        notificationsService.PushNotification(new Notification("An Error Occured when unfollowing user", NotificationType.Error));
+        toastService.PushToast(new Toast("An Error Occured when unfollowing user", ToastType.Error));
         return new ServiceResponse(false, "Error Occured");
     }
 

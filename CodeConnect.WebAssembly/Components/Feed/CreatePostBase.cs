@@ -6,6 +6,7 @@ using ApplicationLayer.DTO_s.Post;
 using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
 using ClientApplicationLayer;
+using ClientApplicationLayer.Services;
 using DomainLayer.Constants;
 using DomainLayer.Helpers;
 using Markdig;
@@ -25,7 +26,7 @@ public class CreatePostBase : ComponentBase
     [Inject] public required IJSRuntime Js { get; set; }
     [Inject] public ImageConvertorServiceClient ImageConvertor { get; set; } = null!;
     [Inject] public IPostService PostService { get; set; } = null!;  
-    [Inject] public required NotificationsService NotificationsService { get; set; }
+    [Inject] public required ToastService ToastService { get; set; }
     [Inject] public required MarkdigServiceClient MarkdigService { get; set; }
     protected string PostContent { get; set; } = string.Empty;
     protected readonly string InputId = "uploadPostImg";
@@ -37,14 +38,14 @@ public class CreatePostBase : ComponentBase
         Base64Images.Clear();
         if (e.GetMultipleFiles().Count() > 5)
         {
-            NotificationsService.PushNotification(new Notification("You may only select upto 5 images", NotificationType.Error));
+            ToastService.PushToast(new Toast("You may only select upto 5 images", ToastType.Error));
             LoadingImages = false;
             StateHasChanged();
             return;
         }
         if (e.GetMultipleFiles().Any(x => x.Size > Consts.Base.UploadMaxFileSize))
         {
-            NotificationsService.PushNotification(new Notification($"Max file size is {Helpers.BytesToMegabytes(Consts.Base.UploadMaxFileSize)}MB.", NotificationType.Error));
+            ToastService.PushToast(new Toast($"Max file size is {Helpers.BytesToMegabytes(Consts.Base.UploadMaxFileSize)}MB.", ToastType.Error));
             LoadingImages = false;
             StateHasChanged();
             return;
@@ -71,21 +72,21 @@ public class CreatePostBase : ComponentBase
         var validate = await postValidator.ValidateAsync(post);
         if (!validate.IsValid)
         {
-            NotificationsService.PushNotification(new Notification("Error creating post", NotificationType.Error));
+            ToastService.PushToast(new Toast("Error creating post", ToastType.Error));
             return;
         }
         Loading = true;
-        NotificationsService.PushNotification(new Notification("Creating Post", NotificationType.Info));
+        ToastService.PushToast(new Toast("Creating Post", ToastType.Info));
         var postResponse = await PostService.CreatePost(post);
         if (postResponse.Flag)
         {
-            NotificationsService.PushNotification(new Notification(postResponse.Message, NotificationType.Success));
+            ToastService.PushToast(new Toast(postResponse.Message, ToastType.Success));
             Base64Images.Clear();
             PostContent = string.Empty;
             StateHasChanged();
         }
         else
-            NotificationsService.PushNotification(new Notification(postResponse.Message, NotificationType.Error));
+            ToastService.PushToast(new Toast(postResponse.Message, ToastType.Error));
         Loading = false;
     }
     protected bool ShowPreview = false;
