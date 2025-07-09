@@ -10,7 +10,7 @@ public class UserNotification
     public int NotificationTypeId { get; set; } 
     public string Message { get; set; } = "";
     public bool IsRead { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     
     public ApplicationUser? ForUser { get; set; }
     public ApplicationUser? FromUser { get; set; }

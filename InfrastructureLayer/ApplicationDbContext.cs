@@ -92,6 +92,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext>options)
                 .WithMany()
                 .HasForeignKey(x => x.NotificationTypeId)
                 .OnDelete(DeleteBehavior.NoAction);
+            entity.Property(un => un.CreatedAt)
+                .HasDefaultValueSql("GETUTCDATE()");
         });
 
     }
