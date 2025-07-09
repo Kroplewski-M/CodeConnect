@@ -16,7 +16,7 @@
             <i class="fa-bars text-light-secondaryColor dark:text-dark-secondaryColor fa-solid fa-2xl cursor-pointer" onclick="@((MouseEventArgs e) => _openNav = true)"></i>
         </div>
         @*Blur*@
-        <div class="fixed w-full h-full z-[50] backdrop-blur-sm md:hidden @(_openNav ? "" : "hidden")"></div>
+        <div class="fixed w-full h-full z-[50] backdrop-blur-sm md:hidden @(_openNav ? "" : "hidden")" @onclick="() => _openNav = false"></div>
         
         <aside class="sm:w-[250px] w-[80%] fixed top-0 left-0 z-[200] h-screen transition-transform @(_openNav ? "" : "-translate-x-full xl:translate-x-0")" aria-label="Sidebar">
             @*Close nav button*@
