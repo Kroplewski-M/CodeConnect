@@ -553,6 +553,9 @@
   .top-10 {
     top: calc(var(--spacing) * 10);
   }
+  .-right-5 {
+    right: calc(var(--spacing) * -5);
+  }
   .right-0 {
     right: calc(var(--spacing) * 0);
   }
@@ -564,6 +567,9 @@
   }
   .right-10 {
     right: calc(var(--spacing) * 10);
+  }
+  .right-\[-10px\] {
+    right: -10px;
   }
   .bottom-\[30px\] {
     bottom: 30px;
@@ -748,6 +754,9 @@
   .h-10 {
     height: calc(var(--spacing) * 10);
   }
+  .h-\[18px\] {
+    height: 18px;
+  }
   .h-\[25px\] {
     height: 25px;
   }
@@ -813,6 +822,9 @@
   }
   .w-10 {
     width: calc(var(--spacing) * 10);
+  }
+  .w-\[18px\] {
+    width: 18px;
   }
   .w-\[24px\] {
     width: 24px;
@@ -1271,6 +1283,10 @@
   }
   .text-\[30px\] {
     font-size: 30px;
+  }
+  .leading-none {
+    --tw-leading: 1;
+    line-height: 1;
   }
   .font-bold {
     --tw-font-weight: var(--font-weight-bold);
@@ -1931,6 +1947,10 @@
   syntax: "*";
   inherits: false;
   initial-value: solid;
+}
+@property --tw-leading {
+  syntax: "*";
+  inherits: false;
 }
 @property --tw-font-weight {
   syntax: "*";

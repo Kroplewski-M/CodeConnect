@@ -37,13 +37,13 @@
                         </button>
                     </li>
                     <li>
-                        <button onclick="@(() => NavigateAndCloseNav("/Notifications"))"  class="cursor-pointer flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100/10 group mb-5">
+                        <button onclick="@(() => NavigateAndCloseNav("/Notifications"))"  class="relative cursor-pointer flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-100/10 group mb-5">
                             <FaIcon Icon="@FaIcons.Bell" Size="@FaSize.Large" ExtraCss="text-light-primaryColor w-[24px]"/>
                             <span class="ms-3 text-light-primaryColor dark:text-dark-supportColor">
                                 Notifications
                                 @if (NotificationCount > 0)
                                 {
-                                    <span class="rounded-full font-bold bg-red-700 p-2 max-w-[10px] max-h-[10px]">@(NotificationCount <= 99 ? NotificationCount : "99+")</span>
+                                    <span class="absolute top-0 left-0 rounded-full font-bold bg-red-700 w-[18px] h-[18px] flex items-center justify-center leading-none">@(NotificationCount <= 99 ? NotificationCount : "99+")</span>
                                 }
                             </span>
                         </button>
