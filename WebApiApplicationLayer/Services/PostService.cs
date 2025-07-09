@@ -160,7 +160,7 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
                 LikedOn = DateTime.UtcNow,
             };
             post.Likes.Add(postLike);
-            await notificationsService.SendNotificationAsync(post.CreatedByUserId);
+            await notificationsService.SendNotificationAsync(post.CreatedByUserId, user.Id,Consts.NotificationTypes.PostLike, post.Id.ToString());
         }
         await context.SaveChangesAsync();
         return new ServiceResponse(true, "Like added successfully");

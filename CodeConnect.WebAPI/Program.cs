@@ -116,7 +116,7 @@ builder.Services.AddCors(options =>
     });
 });
 builder.Services.AddMemoryCache();
-builder.Services.AddSingleton<INotificationsService, NotificationService>();
+builder.Services.AddScoped<INotificationsService, NotificationService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
