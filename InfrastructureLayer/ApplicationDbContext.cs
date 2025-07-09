@@ -1,5 +1,7 @@
+using DomainLayer.Constants;
 using DomainLayer.DbEnts;
 using DomainLayer.Entities.Auth;
+using DomainLayer.Entities.General;
 using DomainLayer.Entities.Posts;
 using DomainLayer.Entities.User;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -23,11 +25,15 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext>options)
     public DbSet<RefreshUserAuth>RefreshUserAuths { get; set; }
     
     public DbSet<Followers>FollowUsers { get; set; }
+    
+    public DbSet<NotificationType> NotificationTypes { get; set; }
+    public DbSet<UserNotification> UserNotifications { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
         SeedInterests(builder);
         SeedTechInterests(builder);
+        SeedNotificationTypes(builder);
         
         //Post user
         builder.Entity<Post>().HasOne(x => x.CreatedByUser)
@@ -65,6 +71,31 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext>options)
             .WithMany()
             .HasForeignKey(f => f.FollowedUserId)
             .OnDelete(DeleteBehavior.NoAction);
+
+        builder.Entity<UserNotification>(entity =>
+        {
+            entity.HasKey(x => x.Id);
+            
+            entity.HasOne(x => x.ForUser)
+                .WithMany()
+                .HasForeignKey(x => x.ForUserId)
+                .OnDelete(DeleteBehavior.NoAction)
+                .IsRequired();
+            
+            entity.HasOne(x => x.FromUser)
+                .WithMany()
+                .HasForeignKey(x => x.FromUserId)
+                .OnDelete(DeleteBehavior.NoAction)
+                .IsRequired();
+
+            entity.HasOne(x => x.NotificationType)
+                .WithMany()
+                .HasForeignKey(x => x.NotificationTypeId)
+                .OnDelete(DeleteBehavior.NoAction);
+            entity.Property(un => un.CreatedAt)
+                .HasDefaultValueSql("GETUTCDATE()");
+        });
+
     }
     private void SeedInterests(ModelBuilder builder){
         builder.Entity<Interest>().HasData(
@@ -83,6 +114,22 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext>options)
         );
     }
 
+    private void SeedNotificationTypes(ModelBuilder builder)
+    {
+        builder.Entity<NotificationType>().HasData(
+                new NotificationType()
+                    { Id = (int)Consts.NotificationTypes.PostLike, Name = nameof(Consts.NotificationTypes.PostLike) },
+                new NotificationType()
+                    { Id = (int)Consts.NotificationTypes.PostComment, Name = nameof(Consts.NotificationTypes.PostComment) },
+                new NotificationType()
+                    { Id = (int)Consts.NotificationTypes.CommentLike, Name = nameof(Consts.NotificationTypes.CommentLike) },
+                new NotificationType()
+                    { Id = (int)Consts.NotificationTypes.CommentReply, Name = nameof(Consts.NotificationTypes.CommentReply) },
+                new NotificationType()
+                    { Id = (int)Consts.NotificationTypes.Follow, Name = nameof(Consts.NotificationTypes.Follow) }
+        );
+
+    }
     private void SeedTechInterests(ModelBuilder builder)
     {
         builder.Entity<TechInterests>().HasData(

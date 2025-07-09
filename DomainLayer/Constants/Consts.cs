@@ -76,6 +76,14 @@ public static class Consts
         Following
     }
 
+    public enum NotificationTypes
+    {
+        PostLike = 1,
+        PostComment,
+        Follow,
+        CommentLike,
+        CommentReply,
+    }
     public static class DateFormats
     {
         public const string DateFormat = "MM/dd/yyyy";
