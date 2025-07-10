@@ -2,6 +2,7 @@
 @using ApplicationLayer.Classes
 @using ApplicationLayer.Interfaces
 @using Blazored.LocalStorage
+@using ClientApplicationLayer.Interfaces
 @using DomainLayer.Constants
 @using Microsoft.AspNetCore.Components.Authorization
 @using CodeConnect.WebAssembly.Components.General
@@ -92,6 +93,7 @@
     [CascadingParameter] public required UserState UserState { get; set; }
     private HubConnection? HubConnection { get; set; }
     [Inject] public required ILocalStorageService LocalStorageService { get; set; }
+    [Inject] public required IClientNotificationsService NotificationsService { get; set; }
     private bool LoadingUserDetails { get; set; } = true;
     private bool Authenticated { get; set; }
     private int NotificationCount { get; set; } = 0;
@@ -108,6 +110,8 @@
             InvokeAsync(StateHasChanged);
         });
         await HubConnection.StartAsync();
+
+        NotificationCount = await NotificationsService.GetUsersNotificationsCount();
     }
 
     protected override async Task OnParametersSetAsync()

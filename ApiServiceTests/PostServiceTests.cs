@@ -31,7 +31,7 @@ public class PostServiceTests
         var userStoreMock = new Mock<IUserStore<ApplicationUser>>();
         _userManager = new Mock<UserManager<ApplicationUser>>(userStoreMock.Object, null!, null!, null!, null!, null!,
             null!, null!, null!);
-        var notificationServiceMock = new Mock<INotificationsService>();
+        var notificationServiceMock = new Mock<IServerNotificationsService>();
         _postService = new PostService(_context, _azureService.Object, _userManager.Object,notificationServiceMock.Object);
     }
     

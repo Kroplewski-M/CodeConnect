@@ -14,7 +14,7 @@ using WebApiApplicationLayer.Interfaces;
 
 namespace WebApiApplicationLayer.Services;
 
-public class PostService(ApplicationDbContext context,IAzureService azureService, UserManager<ApplicationUser>userManager,INotificationsService notificationsService) : IPostService
+public class PostService(ApplicationDbContext context,IAzureService azureService, UserManager<ApplicationUser>userManager,IServerNotificationsService inotificationsService) : IPostService
 {
     public async Task<ServiceResponse> CreatePost(CreatePostDto createPost,string? userId)
     {
@@ -160,7 +160,7 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
                 LikedOn = DateTime.UtcNow,
             };
             post.Likes.Add(postLike);
-            await notificationsService.SendNotificationAsync(post.CreatedByUserId, user.Id,Consts.NotificationTypes.PostLike, post.Id.ToString());
+            await inotificationsService.SendNotificationAsync(post.CreatedByUserId, user.Id,Consts.NotificationTypes.PostLike, post.Id.ToString());
         }
         await context.SaveChangesAsync();
         return new ServiceResponse(true, "Like added successfully");
