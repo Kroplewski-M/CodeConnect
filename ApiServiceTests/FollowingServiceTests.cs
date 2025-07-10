@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using WebApiApplicationLayer;
+using WebApiApplicationLayer.Interfaces;
 using WebApiApplicationLayer.Services;
 
 namespace ApiServiceTests;
@@ -24,7 +25,8 @@ public class FollowingServiceTests
         _userManager = new Mock<UserManager<ApplicationUser>>(userStoreMock.Object, null!, null!, null!, null!, null!,
             null!, null!, null!);
         _context = databaseFixture.Context;
-        _followingService = new FollowingService(_userManager.Object, _context);
+        var notificationServiceMock = new Mock<IServerNotificationsService>();
+        _followingService = new FollowingService(_userManager.Object, _context,notificationServiceMock.Object);
     }
 
     [Fact]
