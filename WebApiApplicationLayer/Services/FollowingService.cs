@@ -8,10 +8,11 @@ using DomainLayer.Helpers;
 using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using WebApiApplicationLayer.Interfaces;
 
 namespace WebApiApplicationLayer.Services;
 
-public class FollowingService(UserManager<ApplicationUser>userManager, ApplicationDbContext context): IFollowingService
+public class FollowingService(UserManager<ApplicationUser>userManager, ApplicationDbContext context, IServerNotificationsService notificationsService): IFollowingService
 {
     public async Task<FollowerCount> GetUserFollowersCount(string userId)
     {
@@ -43,6 +44,7 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
         };
         await context.AddAsync(newFollow);
         await context.SaveChangesAsync();
+        await notificationsService.SendNotificationAsync(targetUser.Id, currentUser.Id,Consts.NotificationTypes.Follow, currentUser.Id);
         return new ServiceResponse(true, "Followed Successfully");
     }
 
