@@ -13,15 +13,9 @@ namespace CodeConnect.WebAPI.Endpoints.UserEndpoint;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UserController(IUserService userService,ITokenService tokenService,
+public class UserController(IUserService userService,
     IUserImageService userImageService) : ControllerBase
 {
-    private TokenResponse GenerateNewToken(ApplicationUser user)
-    {
-        var claims = user.GetClaimsForUser();
-        var token = tokenService.GenerateJwtToken(claims.AsEnumerable(),DateTime.UtcNow.AddMinutes(Consts.Tokens.AuthTokenMins));
-        return new TokenResponse(token);
-    }
     [Authorize(nameof(Consts.TokenType.Access))]
     [HttpPost("EditUserDetails")]
     public async Task<IActionResult> EditUserDetails([FromBody] EditProfileForm editProfileForm)

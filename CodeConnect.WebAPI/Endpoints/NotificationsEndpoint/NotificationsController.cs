@@ -11,8 +11,8 @@ namespace CodeConnect.WebAPI.Endpoints.NotificationsEndpoint;
 public class NotificationsController(IServerNotificationsService notificationsService): ControllerBase
 {
     [Authorize(nameof(Consts.TokenType.Access))]
-    [HttpGet("GetNotifications")]
-    public async Task<IActionResult> GetNotifications()
+    [HttpGet("GetNotificationsCount")]
+    public async Task<IActionResult> GetNotificationsCount()
     {
         var userId = User.GetInfo(Consts.ClaimTypes.Id);
         if(string.IsNullOrWhiteSpace(userId))

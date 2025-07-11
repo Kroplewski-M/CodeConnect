@@ -4,7 +4,7 @@ public static class Consts
 {
     public static class SignalR
     {
-        public const string HubName = "notifications";
+        public const string HubName = "/notifications";
         public const string NotificationMethodWatch = "NotificationPing";
     }
     public static class AuthEndpoints

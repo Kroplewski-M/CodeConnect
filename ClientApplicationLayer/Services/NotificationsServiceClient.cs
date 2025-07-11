@@ -7,7 +7,7 @@ public class NotificationsServiceClient(HttpClient httpClient) : IClientNotifica
 {
     public async Task<int> GetUsersNotificationsCount(string? userId = null)
     {
-        var response = await httpClient.GetFromJsonAsync<int?>($"api/Notifications/GetNotifications");
+        var response = await httpClient.GetFromJsonAsync<int?>($"api/Notifications/GetNotificationsCount");
         return response ?? 0;
     }
 }
