@@ -26,7 +26,7 @@ public class NavMenuBase : ComponentBase, IAsyncDisposable
     
     protected override async Task OnInitializedAsync()
     {
-        HubConnection = new HubConnectionBuilder().WithUrl($"{Consts.Base.BaseUrl}/{Consts.SignalR.HubName}", options =>
+        HubConnection = new HubConnectionBuilder().WithUrl($"{Consts.Base.BaseUrl}{Consts.SignalR.HubName}", options =>
         {
             options.AccessTokenProvider = async () => await LocalStorageService.GetItemAsync<string?>(Consts.Tokens.AuthToken);
         }).Build();
