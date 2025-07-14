@@ -100,7 +100,7 @@ public class UserControllerTests
     {
         //Arrange
         var username = "testUsername";
-        var expectedResult = new UserDetails("","","testUsername","","","","","",null,null,"");
+        var expectedResult = new UserDetails("","","","testUsername","","","","","",null,null,"");
         _userServiceMock.Setup(x => x.GetUserDetails(username)).ReturnsAsync(expectedResult);
         
         //Act

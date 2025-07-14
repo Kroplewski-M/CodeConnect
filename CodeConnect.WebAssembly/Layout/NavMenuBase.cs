@@ -26,20 +26,9 @@ public class NavMenuBase : ComponentBase, IAsyncDisposable
     
     protected override async Task OnInitializedAsync()
     {
-        HubConnection = new HubConnectionBuilder().WithUrl($"{Consts.Base.BaseUrl}{Consts.SignalR.HubName}", options =>
-        {
-            options.AccessTokenProvider = async () => await LocalStorageService.GetItemAsync<string?>(Consts.Tokens.AuthToken);
-        }).Build();
-        HubConnection.On(Consts.SignalR.NotificationMethodWatch, () =>
-        {
-            NotificationCount++;
-            InvokeAsync(StateHasChanged);
-        });
-        await HubConnection.StartAsync();
-
-        NotificationCount = await NotificationsService.GetUsersNotificationsCount();
+        await ConnectToSignalR();
+        NotificationsService.OnNotificationCountChanged +=  SetNotificationCount;
     }
-
     protected override async Task OnParametersSetAsync()
     {
         if (UserState?.Current != null && Authenticated)
@@ -52,10 +41,31 @@ public class NavMenuBase : ComponentBase, IAsyncDisposable
             FollowerCount = userFollowersAndFollowing.FollowersCount;
             FollowingsCount = userFollowersAndFollowing.FollowingCount;
             LoadingUserDetails = false;
+            SetNotificationCount();
             StateHasChanged();
         }
     }
 
+    private async Task ConnectToSignalR()
+    {
+        HubConnection = new HubConnectionBuilder().WithUrl($"{Consts.Base.BaseUrl}{Consts.SignalR.HubName}", options =>
+        {
+            options.AccessTokenProvider = async () => await LocalStorageService.GetItemAsync<string?>(Consts.Tokens.AuthToken);
+        }).Build();
+        HubConnection.On(Consts.SignalR.NotificationMethodWatch, () =>
+        { 
+            NotificationsService.AddNotification();
+        });
+        await HubConnection.StartAsync();
+    }
+    private void SetNotificationCount()
+    {
+        _ = Task.Run(async () =>
+        {
+            NotificationCount = await NotificationsService.GetUsersNotificationsCount(UserState?.Current?.Id);
+            await InvokeAsync(StateHasChanged);
+        });
+    }
     protected void NavigateAndCloseNav(string url)
     {
         NavigationManager.NavigateTo(url);
@@ -67,5 +77,7 @@ public class NavMenuBase : ComponentBase, IAsyncDisposable
         { 
             await HubConnection.DisposeAsync();
         }
+
+        NotificationsService.OnNotificationCountChanged -= SetNotificationCount;
     }
 }

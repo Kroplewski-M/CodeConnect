@@ -64,6 +64,18 @@ public class InotificationService(IHubContext<NotificationsHub, INotificationHub
         return new GetNotificationsDto(true, notifications);
     }
 
+    public async Task<ServiceResponse> MarkNotificationAsRead(Guid notificationId, string? userId = null)
+    {
+        if(userId == null)
+            return new ServiceResponse(false, "Error occured while marking notification as read");
+        var notification = await context.UserNotifications.FirstOrDefaultAsync(x => x.Id == notificationId && x.ForUserId == userId);
+        if(notification == null)
+            return new ServiceResponse(false, "Notification not found");
+        notification.IsRead = true;
+        await context.SaveChangesAsync();
+        return new ServiceResponse(true, "Notification marked as read");
+    }
+
     private IQueryable<UserNotification> GetUserNotifications(string userId)
         => context.UserNotifications
             .Where(x => x.ForUserId == userId && !x.IsRead);
