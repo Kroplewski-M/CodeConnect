@@ -10,8 +10,8 @@ public class NotificationsServiceClient(HttpClient httpClient) : IClientNotifica
     private int? NotificationsCount { get; set; } = null;
     public void AddNotification()
     {
-        NotifyStateChanged();
         NotificationsCount++;
+        NotifyStateChanged();
     }
     private void NotifyStateChanged() => OnNotificationCountChanged?.Invoke();
     private string? CurrentUserId { get; set; }
@@ -39,6 +39,8 @@ public class NotificationsServiceClient(HttpClient httpClient) : IClientNotifica
         var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
         if (result == null)
             return new ServiceResponse(false, "An error occured while marking notification as read");
+        if (NotificationsCount is not > 0 || !result.Flag) 
+            return result;
         NotificationsCount--;
         NotifyStateChanged();
         return result;
