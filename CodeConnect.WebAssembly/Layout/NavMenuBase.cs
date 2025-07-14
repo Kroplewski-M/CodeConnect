@@ -1,3 +1,4 @@
+using ApplicationLayer;
 using ApplicationLayer.Classes;
 using ApplicationLayer.Interfaces;
 using Blazored.LocalStorage;
@@ -12,9 +13,10 @@ public class NavMenuBase : ComponentBase, IAsyncDisposable
 {
     [Inject] public required NavigationManager NavigationManager { get; set; }
     [Inject] public required IFollowingService FollowingService { get; set; }
-    [CascadingParameter] public required UserState UserState { get; set; }
     [Inject] public required ILocalStorageService LocalStorageService { get; set; }
     [Inject] public required IClientNotificationsService NotificationsService { get; set; }
+    [Inject] public required ToastService ToastService { get; set; }
+    [CascadingParameter] public required UserState UserState { get; set; }
     
     protected bool LoadingUserDetails { get; set; } = true;
     protected bool Authenticated { get; set; }
@@ -26,20 +28,9 @@ public class NavMenuBase : ComponentBase, IAsyncDisposable
     
     protected override async Task OnInitializedAsync()
     {
-        HubConnection = new HubConnectionBuilder().WithUrl($"{Consts.Base.BaseUrl}{Consts.SignalR.HubName}", options =>
-        {
-            options.AccessTokenProvider = async () => await LocalStorageService.GetItemAsync<string?>(Consts.Tokens.AuthToken);
-        }).Build();
-        HubConnection.On(Consts.SignalR.NotificationMethodWatch, () =>
-        {
-            NotificationCount++;
-            InvokeAsync(StateHasChanged);
-        });
-        await HubConnection.StartAsync();
-
-        NotificationCount = await NotificationsService.GetUsersNotificationsCount();
+        await ConnectToSignalR();
+        NotificationsService.OnNotificationCountChanged +=  SetNotificationCount;
     }
-
     protected override async Task OnParametersSetAsync()
     {
         if (UserState?.Current != null && Authenticated)
@@ -52,10 +43,35 @@ public class NavMenuBase : ComponentBase, IAsyncDisposable
             FollowerCount = userFollowersAndFollowing.FollowersCount;
             FollowingsCount = userFollowersAndFollowing.FollowingCount;
             LoadingUserDetails = false;
+            SetNotificationCount();
             StateHasChanged();
         }
     }
 
+    private async Task ConnectToSignalR()
+    {
+        HubConnection = new HubConnectionBuilder().WithUrl($"{Consts.Base.BaseUrl}{Consts.SignalR.HubName}", options =>
+        {
+            options.AccessTokenProvider = async () => await LocalStorageService.GetItemAsync<string?>(Consts.Tokens.AuthToken);
+        }).Build();
+        HubConnection.On(Consts.SignalR.NotificationMethodWatch, () =>
+        { 
+            NotificationsService.AddNotification();
+        });
+        await HubConnection.StartAsync();
+    }
+    private async void SetNotificationCount()
+    {
+        try
+        {
+            NotificationCount = await NotificationsService.GetUsersNotificationsCount(UserState?.Current?.Id);
+            await InvokeAsync(StateHasChanged);
+        }
+        catch
+        {
+            ToastService.PushToast(new Toast("An error occured when fetching notifications.", ToastType.Error));
+        }
+    }
     protected void NavigateAndCloseNav(string url)
     {
         NavigationManager.NavigateTo(url);
@@ -67,5 +83,7 @@ public class NavMenuBase : ComponentBase, IAsyncDisposable
         { 
             await HubConnection.DisposeAsync();
         }
+
+        NotificationsService.OnNotificationCountChanged -= SetNotificationCount;
     }
 }

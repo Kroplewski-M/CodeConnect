@@ -50,7 +50,7 @@ public class UserService(UserManager<ApplicationUser>userManager, ApplicationDbC
         var profileImg = Helpers.GetUserImgUrl(user.ProfileImage, Consts.ImageType.ProfileImages);
         var backgroundImg = Helpers.GetUserImgUrl(user.BackgroundImage, Consts.ImageType.BackgroundImages);
         
-        return new UserDetails(user.FirstName ?? "", user.LastName ?? "", user.UserName ?? "", user.Email ?? "", profileImg,
+        return new UserDetails(user.Id, user.FirstName ?? "", user.LastName ?? "", user.UserName ?? "", user.Email ?? "", profileImg,
             backgroundImg, user.GithubLink ?? "",
             user.WebsiteLink ?? "", user.DOB, user.CreatedAt,user.Bio ?? "");
     }
