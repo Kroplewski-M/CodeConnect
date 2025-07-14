@@ -553,9 +553,6 @@
   .top-10 {
     top: calc(var(--spacing) * 10);
   }
-  .-right-5 {
-    right: calc(var(--spacing) * -5);
-  }
   .right-0 {
     right: calc(var(--spacing) * 0);
   }
@@ -567,9 +564,6 @@
   }
   .right-10 {
     right: calc(var(--spacing) * 10);
-  }
-  .right-\[-10px\] {
-    right: -10px;
   }
   .bottom-\[30px\] {
     bottom: 30px;
@@ -583,11 +577,11 @@
   .left-\[10px\] {
     left: 10px;
   }
+  .z-3 {
+    z-index: 3;
+  }
   .z-\[10\] {
     z-index: 10;
-  }
-  .z-\[50\] {
-    z-index: 50;
   }
   .z-\[200\] {
     z-index: 200;
@@ -597,6 +591,9 @@
   }
   .z-\[500\] {
     z-index: 500;
+  }
+  .z-\[50\] {
+    z-index: 50;
   }
   .z-\[9999\] {
     z-index: 9999;
@@ -685,6 +682,12 @@
   .mt-\[15px\] {
     margin-top: 15px;
   }
+  .mt-\[20px\] {
+    margin-top: 20px;
+  }
+  .mt-\[30px\] {
+    margin-top: 30px;
+  }
   .mr-4 {
     margin-right: calc(var(--spacing) * 4);
   }
@@ -693,6 +696,9 @@
   }
   .mr-\[5px\] {
     margin-right: 5px;
+  }
+  .mr-\[10px\] {
+    margin-right: 10px;
   }
   .mb-2 {
     margin-bottom: calc(var(--spacing) * 2);
@@ -751,11 +757,11 @@
   .hidden {
     display: none;
   }
+  .inline {
+    display: inline;
+  }
   .h-10 {
     height: calc(var(--spacing) * 10);
-  }
-  .h-\[18px\] {
-    height: 18px;
   }
   .h-\[25px\] {
     height: 25px;
@@ -784,6 +790,9 @@
   .h-\[100vh\] {
     height: 100vh;
   }
+  .h-\[18px\] {
+    height: 18px;
+  }
   .h-\[200px\] {
     height: 200px;
   }
@@ -798,9 +807,6 @@
   }
   .h-screen {
     height: 100vh;
-  }
-  .max-h-\[10px\] {
-    max-height: 10px;
   }
   .max-h-\[150px\] {
     max-height: 150px;
@@ -823,32 +829,17 @@
   .w-10 {
     width: calc(var(--spacing) * 10);
   }
-  .w-\[18px\] {
-    width: 18px;
-  }
-  .w-\[24px\] {
-    width: 24px;
-  }
   .w-\[30\%\] {
     width: 30%;
+  }
+  .w-\[30px\] {
+    width: 30px;
   }
   .w-\[40px\] {
     width: 40px;
   }
   .w-\[50px\] {
     width: 50px;
-  }
-  .w-\[80\%\] {
-    width: 80%;
-  }
-  .w-\[90\%\] {
-    width: 90%;
-  }
-  .w-\[90vw\] {
-    width: 90vw;
-  }
-  .w-\[95\%\] {
-    width: 95%;
   }
   .w-\[100\%\] {
     width: 100%;
@@ -859,6 +850,15 @@
   .w-\[100vw\] {
     width: 100vw;
   }
+  .w-\[18px\] {
+    width: 18px;
+  }
+  .w-\[80\%\] {
+    width: 80%;
+  }
+  .w-\[90\%\] {
+    width: 90%;
+  }
   .w-\[150px\] {
     width: 150px;
   }
@@ -867,6 +867,15 @@
   }
   .w-\[200px\] {
     width: 200px;
+  }
+  .w-\[24px\] {
+    width: 24px;
+  }
+  .w-\[90vw\] {
+    width: 90vw;
+  }
+  .w-\[95\%\] {
+    width: 95%;
   }
   .w-\[250px\] {
     width: 250px;
@@ -880,14 +889,11 @@
   .w-full {
     width: 100%;
   }
-  .max-w-\[1000px\] {
-    max-width: 1000px;
-  }
-  .max-w-\[10px\] {
-    max-width: 10px;
-  }
   .max-w-\[95\%\] {
     max-width: 95%;
+  }
+  .max-w-\[1000px\] {
+    max-width: 1000px;
   }
   .max-w-\[1100px\] {
     max-width: 1100px;
@@ -975,11 +981,21 @@
   .gap-2 {
     gap: calc(var(--spacing) * 2);
   }
+  .gap-3 {
+    gap: calc(var(--spacing) * 3);
+  }
   .space-y-2 {
     :where(& > :not(:last-child)) {
       --tw-space-y-reverse: 0;
       margin-block-start: calc(calc(var(--spacing) * 2) * var(--tw-space-y-reverse));
       margin-block-end: calc(calc(var(--spacing) * 2) * calc(1 - var(--tw-space-y-reverse)));
+    }
+  }
+  .space-y-4 {
+    :where(& > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block-start: calc(calc(var(--spacing) * 4) * var(--tw-space-y-reverse));
+      margin-block-end: calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-y-reverse)));
     }
   }
   .space-x-2 {
@@ -1262,6 +1278,9 @@
   .text-xl {
     font-size: var(--text-xl);
     line-height: var(--tw-leading, var(--text-xl--line-height));
+  }
+  .text-\[10px\] {
+    font-size: 10px;
   }
   .text-\[13px\] {
     font-size: 13px;
@@ -1661,6 +1680,11 @@
       width: 320px;
     }
   }
+  .md\:w-\[350px\] {
+    @media (width >= 48rem) {
+      width: 350px;
+    }
+  }
   .md\:w-\[400px\] {
     @media (width >= 48rem) {
       width: 400px;
@@ -1679,6 +1703,11 @@
   .md\:w-\[700px\] {
     @media (width >= 48rem) {
       width: 700px;
+    }
+  }
+  .md\:max-w-\[400px\] {
+    @media (width >= 48rem) {
+      max-width: 400px;
     }
   }
   .md\:max-w-\[500px\] {

@@ -1,5 +1,6 @@
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
+using ApplicationLayer.ExtensionClasses;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
 using DomainLayer.Entities.Auth;
@@ -92,7 +93,7 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
             .Take(take)
             .ToList()
             .Where(x => x.Follower is { UserName: not null })
-            .Select(x=> new UserBasicDto(x.Follower!.UserName!,x.Follower.Bio!,Helpers.GetUserImgUrl(x.Follower.ProfileImage!, Consts.ImageType.ProfileImages)))
+            .Select(x=> x.Follower.ToUserBasicDto())
             .ToList();
         return users;
     }
@@ -111,7 +112,7 @@ public class FollowingService(UserManager<ApplicationUser>userManager, Applicati
             .Skip(skip)
             .Take(take)
             .ToList()
-            .Select(x=> new UserBasicDto(x.Followed!.UserName!,x.Followed.Bio!,Helpers.GetUserImgUrl(x.Followed.ProfileImage!, Consts.ImageType.ProfileImages)))
+            .Select(x=> x.Followed.ToUserBasicDto())
             .ToList();
         return users;
     }

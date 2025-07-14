@@ -38,4 +38,16 @@ public static class Helpers
     {
         return bytes / 1048576.0; // 1024 * 1024
     }
+    public static string GetMessage(this Consts.NotificationTypes type)
+    {
+        return type switch
+        {
+            Consts.NotificationTypes.CommentLike => "liked your comment",
+            Consts.NotificationTypes.CommentReply => "replied to your comment",
+            Consts.NotificationTypes.PostLike => "liked your post",
+            Consts.NotificationTypes.PostComment => "commented on your post",
+            Consts.NotificationTypes.Follow => "started following you",
+            _ => ""
+        };
+    }
 }

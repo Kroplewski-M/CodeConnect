@@ -1,3 +1,5 @@
+using ApplicationLayer.DTO_s;
+using ApplicationLayer.ExtensionClasses;
 using DomainLayer.Constants;
 using DomainLayer.Entities.General;
 using InfrastructureLayer;
@@ -37,8 +39,32 @@ public class InotificationService(IHubContext<NotificationsHub, INotificationHub
 
     public async Task<int> GetUsersNotificationsCount(string? userId = null)
     {
-        return await context.UserNotifications
-            .Where(x => x.ForUserId == userId && !x.IsRead)
+        if (string.IsNullOrWhiteSpace(userId))
+            return 0;
+        return await GetUserNotifications(userId)
             .CountAsync();
     }
+
+    public async Task<GetNotificationsDto> GetUsersNotifications(string? userId = null)
+    {
+        if (string.IsNullOrWhiteSpace(userId))
+            return new GetNotificationsDto(false, new List<NotificationsDto>());
+        var rawNotifications = await GetUserNotifications(userId)
+            .Select(x => new
+            {
+                x.FromUser,
+                NotificationType = x.NotificationTypeId,
+                x.TargetId,
+                x.CreatedAt,
+            }).ToListAsync();
+            
+         var notifications= rawNotifications
+             .Select(x=> new NotificationsDto(x.FromUser.ToUserBasicDto(), (Consts.NotificationTypes)x.NotificationType, x.CreatedAt, x.TargetId))
+            .ToList();
+        return new GetNotificationsDto(true, notifications);
+    }
+
+    private IQueryable<UserNotification> GetUserNotifications(string userId)
+        => context.UserNotifications
+            .Where(x => x.ForUserId == userId && !x.IsRead);
 }

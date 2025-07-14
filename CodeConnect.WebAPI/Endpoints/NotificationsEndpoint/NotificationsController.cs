@@ -19,4 +19,14 @@ public class NotificationsController(IServerNotificationsService notificationsSe
             return BadRequest("User not found");
         return Ok(await notificationsService.GetUsersNotificationsCount(userId));
     }
+
+    [Authorize(nameof(Consts.TokenType.Access))]
+    [HttpGet("GetNotifications")]
+    public async Task<IActionResult> GetNotifications()
+    {
+        var userId = User.GetInfo(Consts.ClaimTypes.Id);
+        if(string.IsNullOrWhiteSpace(userId))
+            return BadRequest("User not found");
+        return Ok(await notificationsService.GetUsersNotifications(userId));
+    }
 }
