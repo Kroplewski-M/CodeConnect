@@ -15,7 +15,7 @@ public class NotificationsBase : ComponentBase
     {
         var notifications = await NotificationsService.GetUsersNotifications();
         if(notifications.Flag)
-            Notifications = notifications.notifications;
+            Notifications = notifications.Notifications;
         else
             ToastService.PushToast(new Toast("An error occured while fetching notifications", ToastType.Error));
     }

@@ -52,6 +52,7 @@ public class InotificationService(IHubContext<NotificationsHub, INotificationHub
         var rawNotifications = await GetUserNotifications(userId)
             .Select(x => new
             {
+                x.Id,
                 x.FromUser,
                 NotificationType = x.NotificationTypeId,
                 x.TargetId,
@@ -59,7 +60,7 @@ public class InotificationService(IHubContext<NotificationsHub, INotificationHub
             }).ToListAsync();
             
          var notifications= rawNotifications
-             .Select(x=> new NotificationsDto(x.FromUser.ToUserBasicDto(), (Consts.NotificationTypes)x.NotificationType, x.CreatedAt, x.TargetId))
+             .Select(x=> new NotificationsDto(x.Id,x.FromUser.ToUserBasicDto(), (Consts.NotificationTypes)x.NotificationType, x.CreatedAt, x.TargetId))
             .ToList();
         return new GetNotificationsDto(true, notifications);
     }

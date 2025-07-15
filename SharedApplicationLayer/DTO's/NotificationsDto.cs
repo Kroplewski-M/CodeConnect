@@ -3,6 +3,6 @@ using DomainLayer.Constants;
 
 namespace ApplicationLayer.DTO_s;
 
-public record NotificationsDto(UserBasicDto fromUser, Consts.NotificationTypes notificationType, DateTime createdAt, string targetId);
+public record NotificationsDto(Guid Id, UserBasicDto FromUser, Consts.NotificationTypes NotificationType, DateTime CreatedAt, string TargetId);
 
-public record GetNotificationsDto(bool Flag, List<NotificationsDto> notifications);
+public record GetNotificationsDto(bool Flag, List<NotificationsDto> Notifications);

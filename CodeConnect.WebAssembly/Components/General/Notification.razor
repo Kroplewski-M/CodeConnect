@@ -1,17 +1,21 @@
 @using ApplicationLayer.DTO_s
+@using ClientApplicationLayer.Interfaces
 @using DomainLayer.Helpers
-
+@inject NavigationManager NavigationManager
+@inject IClientNotificationsService NotificationsService
 <div class="md:w-[350px] md:max-w-[400px] w-[90%] bg-dark-secondaryColor p-3 rounded-md cursor-pointer hover:scale-[1.05] transition-transform">
    <div class="flex items-center gap-3">
-      <img src="@Notif.fromUser.ProfileImgUrl" alt="" class="rounded-full w-[50px] h-[50px] object-cover" />
+      <img src="@Notif.FromUser.ProfileImgUrl" alt="" class="rounded-full w-[50px] h-[50px] object-cover" />
       <p class="text-light-primaryColor text-[16px] font-medium">
-         @($"{Notif.fromUser.Username} {Notif.notificationType.GetMessage()}")
+         @($"{Notif.FromUser.Username} {Notif.NotificationType.GetMessage()}")
       </p>
    </div>
    <p class="text-gray-400 text-[10px] mt-[10px]">
-      @Helpers.GetUsersLocalTime(Notif.createdAt)
+      @Helpers.GetUsersLocalTime(Notif.CreatedAt)
    </p>
 </div>
 
-@code { [Parameter] public required NotificationsDto Notif { get; set; }
+@code { 
+   [Parameter] public required NotificationsDto Notif { get; set; }
+   
 }
