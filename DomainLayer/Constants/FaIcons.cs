@@ -15,7 +15,7 @@ public static class FaIcons
     public const string Loading = "fa-solid fa-spinner fa-spin fa-2x";
     public const string Search = "fa-solid fa-magnifying-glass";
     public const string Lock = "fa-solid fa-lock";
-
+    public const string OpenBox = "fa-solid fa-box-open";
 }
 
 public static class FaSize

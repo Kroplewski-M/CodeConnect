@@ -19,4 +19,14 @@ public class NotificationsBase : ComponentBase
         else
             ToastService.PushToast(new Toast("An error occured while fetching notifications", ToastType.Error));
     }
+
+    protected async Task ClearAllNotifications()
+    {
+        var res = await NotificationsService.MarkAllNotificationsAsRead();
+        if(res.Flag)
+            Notifications.Clear();
+        else
+            ToastService.PushToast(new Toast("An error occured while clearing notifications", ToastType.Error));
+        StateHasChanged();
+    }
 }

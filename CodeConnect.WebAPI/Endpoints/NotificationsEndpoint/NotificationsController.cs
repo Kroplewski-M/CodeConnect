@@ -31,12 +31,24 @@ public class NotificationsController(IServerNotificationsService notificationsSe
     }
     [Authorize(nameof(Consts.TokenType.Access))]
     [HttpPost("MarkNotificationAsRead")]
-    public async Task<IActionResult> MarkNotificationAsRead(Guid notificationId)
+    public async Task<IActionResult> MarkNotificationAsRead([FromBody]Guid notificationId)
     {
         var userId = User.GetInfo(Consts.ClaimTypes.Id);
         if(string.IsNullOrWhiteSpace(userId))
             return BadRequest("User not found");
         var result = await notificationsService.MarkNotificationAsRead(notificationId, userId);
+        if(result.Flag)
+            return Ok(result);
+        return BadRequest(result);
+    }
+    [Authorize(nameof(Consts.TokenType.Access))]
+    [HttpPost("MarkAllNotificationsAsRead")]
+    public async Task<IActionResult> MarkAllNotificationsAsRead()
+    {
+        var userId = User.GetInfo(Consts.ClaimTypes.Id);
+        if(string.IsNullOrWhiteSpace(userId))
+            return BadRequest("User not found");
+        var result = await notificationsService.MarkAllNotificationsAsRead(userId);
         if(result.Flag)
             return Ok(result);
         return BadRequest(result);

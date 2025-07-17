@@ -45,4 +45,18 @@ public class NotificationsServiceClient(HttpClient httpClient) : IClientNotifica
         NotifyStateChanged();
         return result;
     }
+
+    public async Task<ServiceResponse> MarkAllNotificationsAsRead(string? userId = null)
+    {
+        var response = await httpClient.PostAsync("api/Notifications/MarkAllNotificationsAsRead", null);
+        var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
+        if (result == null)
+            return new ServiceResponse(false, "An error occured while marking notification as read");
+        if (result.Flag)
+        {
+            NotificationsCount = 0;
+            NotifyStateChanged();
+        }
+        return result;
+    }
 }

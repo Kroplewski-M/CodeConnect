@@ -1,9 +1,10 @@
 @using ApplicationLayer.DTO_s
 @using ClientApplicationLayer.Interfaces
+@using DomainLayer.Constants
 @using DomainLayer.Helpers
 @inject NavigationManager NavigationManager
 @inject IClientNotificationsService NotificationsService
-<div class="md:w-[350px] md:max-w-[400px] w-[90%] bg-dark-secondaryColor p-3 rounded-md cursor-pointer hover:scale-[1.05] transition-transform">
+<div class="md:w-[350px] md:max-w-[400px] w-[90%] bg-dark-secondaryColor p-3 rounded-md cursor-pointer hover:scale-[1.05] transition-transform" @onclick="ClearNotificationAndRedirect">
    <div class="flex items-center gap-3">
       <img src="@Notif.FromUser.ProfileImgUrl" alt="" class="rounded-full w-[50px] h-[50px] object-cover" />
       <p class="text-light-primaryColor text-[16px] font-medium">
@@ -17,5 +18,22 @@
 
 @code { 
    [Parameter] public required NotificationsDto Notif { get; set; }
-   
+
+   private async Task ClearNotificationAndRedirect()
+   {
+      await NotificationsService.MarkNotificationAsRead(Notif.Id);
+      var url = GetUrl();
+      if(!string.IsNullOrWhiteSpace(url))
+         NavigationManager.NavigateTo(url);
+   }
+
+   private string GetUrl()
+   {
+      return Notif.NotificationType switch
+      {
+         Consts.NotificationTypes.Follow => $"/Profile/{Notif.FromUser.Username}",
+         Consts.NotificationTypes.PostLike => $"/Post/{Notif.TargetId}",
+         _ => ""
+      };
+   }
 }
