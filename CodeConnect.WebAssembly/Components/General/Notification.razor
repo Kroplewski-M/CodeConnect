@@ -4,29 +4,36 @@
 @using DomainLayer.Helpers
 @inject NavigationManager NavigationManager
 @inject IClientNotificationsService NotificationsService
-<div class="md:w-[350px] md:max-w-[400px] w-[90%] bg-dark-secondaryColor p-3 rounded-md cursor-pointer hover:scale-[1.05] transition-transform" @onclick="ClearNotificationAndRedirect">
-   <div class="flex items-center gap-3">
-      <img src="@Notif.FromUser.ProfileImgUrl" alt="" class="rounded-full w-[50px] h-[50px] object-cover" />
-      <p class="text-light-primaryColor text-[16px] font-medium">
-         @($"{Notif.FromUser.Username} {Notif.NotificationType.GetMessage()}")
-      </p>
+<div class="md:w-[350px] md:max-w-[400px] w-[90%] max-h-[400px] z-[2] bg-dark-secondaryColor pl-3 rounded-md cursor-pointer hover:scale-[1.05] transition-transform relative" @onclick="ClearNotificationAndRedirect">
+   <div class="flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3 mt-2">
+         <img src="@Notif.FromUser.ProfileImgUrl" alt="" class="rounded-full w-[50px] h-[50px] object-cover" />
+         <p class="text-light-primaryColor text-[16px] font-medium">
+            @($"{Notif.FromUser.Username} {Notif.NotificationType.GetMessage()}")
+         </p>
+      </div>
+      <div class="w-[50px] z-[3]" @onclick="(async ()=>await ClearNotification.InvokeAsync((Notif.Id,true)))" @onclick:stopPropagation>
+         <div class="absolute right-0 top-0 h-full w-[50px] bg-red-600/60 flex items-center justify-center rounded-r-md hover:text-light-primaryColor">
+            <FaIcon Icon="@FaIcons.Trash"/>
+         </div>
+      </div>
    </div>
-   <p class="text-gray-400 text-[10px] mt-[10px]">
+
+   <p class="text-gray-400 text-[10px] mt-[10px] mb-[10px]">
       @Helpers.GetUsersLocalTime(Notif.CreatedAt)
    </p>
 </div>
 
 @code { 
    [Parameter] public required NotificationsDto Notif { get; set; }
-
+   [Parameter] public required EventCallback<(Guid notificationId, bool stateChanged)> ClearNotification { get; set; }
    private async Task ClearNotificationAndRedirect()
    {
-      await NotificationsService.MarkNotificationAsRead(Notif.Id);
+      await ClearNotification.InvokeAsync((Notif.Id,stateChanged: false));
       var url = GetUrl();
       if(!string.IsNullOrWhiteSpace(url))
          NavigationManager.NavigateTo(url);
    }
-
    private string GetUrl()
    {
       return Notif.NotificationType switch

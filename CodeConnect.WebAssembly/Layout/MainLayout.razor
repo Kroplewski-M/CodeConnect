@@ -12,7 +12,7 @@
         {
             if (!IsNonNavPage())
             {
-                <div class="z-[300] sm:w-[250px] w-[80%]">
+                <div class="z-[300] sm:w-[250px] sm:absolute w-[80%]">
                     <NavMenu/>
                 </div>
             }
@@ -30,7 +30,9 @@
                         <Notification Notif="notification"/>
                     }
                 </div>
-                @Body
+                <div class="w-[90vw] mx-auto">
+                    @Body
+                </div>
             </main>
             <div id="overlay" class="z-[9999]"></div>
         }

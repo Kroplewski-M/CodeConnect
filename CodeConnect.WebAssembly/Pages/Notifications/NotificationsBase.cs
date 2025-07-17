@@ -29,4 +29,13 @@ public class NotificationsBase : ComponentBase
             ToastService.PushToast(new Toast("An error occured while clearing notifications", ToastType.Error));
         StateHasChanged();
     }
+    public async Task ClearNotification((Guid notificationId, bool stateChanged) data)
+    {
+        await NotificationsService.MarkNotificationAsRead(data.notificationId);
+        if (data.stateChanged)
+        {
+            Notifications.RemoveAll(x => x.Id == data.notificationId);
+            StateHasChanged();
+        }
+    }
 }

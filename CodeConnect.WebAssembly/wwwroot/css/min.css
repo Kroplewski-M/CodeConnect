@@ -580,17 +580,23 @@
   .z-\[10\] {
     z-index: 10;
   }
-  .z-\[50\] {
-    z-index: 50;
-  }
   .z-\[200\] {
     z-index: 200;
+  }
+  .z-\[2\] {
+    z-index: 2;
   }
   .z-\[300\] {
     z-index: 300;
   }
+  .z-\[3\] {
+    z-index: 3;
+  }
   .z-\[500\] {
     z-index: 500;
+  }
+  .z-\[50\] {
+    z-index: 50;
   }
   .z-\[9999\] {
     z-index: 9999;
@@ -784,6 +790,9 @@
   .h-\[300px\] {
     height: 300px;
   }
+  .h-\[400px\] {
+    height: 400px;
+  }
   .h-auto {
     height: auto;
   }
@@ -817,14 +826,8 @@
   .w-\[24px\] {
     width: 24px;
   }
-  .w-\[30\%\] {
-    width: 30%;
-  }
-  .w-\[40px\] {
-    width: 40px;
-  }
-  .w-\[50px\] {
-    width: 50px;
+  .w-\[30px\] {
+    width: 30px;
   }
   .w-\[100\%\] {
     width: 100%;
@@ -837,6 +840,15 @@
   }
   .w-\[18px\] {
     width: 18px;
+  }
+  .w-\[30\%\] {
+    width: 30%;
+  }
+  .w-\[40px\] {
+    width: 40px;
+  }
+  .w-\[50px\] {
+    width: 50px;
   }
   .w-\[80\%\] {
     width: 80%;
@@ -852,18 +864,6 @@
   }
   .w-\[150px\] {
     width: 150px;
-  }
-  .w-\[160px\] {
-    width: 160px;
-  }
-  .w-\[170px\] {
-    width: 170px;
-  }
-  .w-\[175px\] {
-    width: 175px;
-  }
-  .w-\[180px\] {
-    width: 180px;
   }
   .w-\[190px\] {
     width: 190px;
@@ -1030,9 +1030,17 @@
   .rounded-md {
     border-radius: var(--radius-md);
   }
+  .rounded-l-md {
+    border-top-left-radius: var(--radius-md);
+    border-bottom-left-radius: var(--radius-md);
+  }
   .rounded-t-lg {
     border-top-left-radius: var(--radius-lg);
     border-top-right-radius: var(--radius-lg);
+  }
+  .rounded-r-md {
+    border-top-right-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
   }
   .border {
     border-style: var(--tw-border-style);
@@ -1137,6 +1145,12 @@
   }
   .bg-red-500 {
     background-color: var(--color-red-500);
+  }
+  .bg-red-600 {
+    background-color: var(--color-red-600);
+  }
+  .bg-red-600\/60 {
+    background-color: color-mix(in oklab, var(--color-red-600) 60%, transparent);
   }
   .bg-red-700 {
     background-color: var(--color-red-700);
@@ -1557,6 +1571,11 @@
       @media (hover: hover) {
         opacity: 100%;
       }
+    }
+  }
+  .sm\:absolute {
+    @media (width >= 40rem) {
+      position: absolute;
     }
   }
   .sm\:w-\[250px\] {

@@ -14,7 +14,7 @@
     <div class="flex flex-col items-center space-y-4 mt-5">
         @foreach (var n in Notifications)
         {
-            <Notification Notif="n" />
+            <Notification Notif="n" ClearNotification="ClearNotification" />
         }
     </div>
 }
@@ -25,3 +25,4 @@ else
         <p class="text-center">Looking a bit empty in here...</p>
     </div>
 }
+
