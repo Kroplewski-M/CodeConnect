@@ -9,10 +9,12 @@ using WebApiApplicationLayer.Interfaces;
 
 namespace WebApiApplicationLayer.Services;
 
-public class InotificationService(IHubContext<NotificationsHub, INotificationHub> hubContext,ApplicationDbContext context) : IServerNotificationsService
+public class NotificationService(IHubContext<NotificationsHub, INotificationHub> hubContext,ApplicationDbContext context) : IServerNotificationsService
 {
     public async Task SendNotificationAsync(string forUserId, string fromUserId, Consts.NotificationTypes notificationType, string targetId)
     {
+        if(forUserId == fromUserId)
+            return;
         bool notificationExists = NotificationExists(forUserId, fromUserId, notificationType, targetId);
         if (notificationExists)
             return;
@@ -80,4 +82,16 @@ public class InotificationService(IHubContext<NotificationsHub, INotificationHub
     private IQueryable<UserNotification> GetUserNotifications(string userId)
         => context.UserNotifications
             .Where(x => x.ForUserId == userId && !x.IsRead);
+
+    public async Task<ServiceResponse> MarkAllNotificationsAsRead(string? userId = null)
+    {
+        if(userId == null)
+            return new ServiceResponse(false, "Error occured while marking notification as read");
+        await context.UserNotifications
+            .Where(x => x.ForUserId  == userId && !x.IsRead)
+            .ExecuteUpdateAsync(setters => 
+                setters.SetProperty(n => n.IsRead, true));
+        await context.SaveChangesAsync();
+        return new ServiceResponse(true, "All notifications marked as read");
+    }
 }

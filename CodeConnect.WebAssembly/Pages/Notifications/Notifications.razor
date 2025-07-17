@@ -1,12 +1,27 @@
 @page "/Notifications"
 @using CodeConnect.WebAssembly.Components.General
+@using DomainLayer.Constants
 @inherits NotificationsBase
 
 <h3 class="text-light-primaryColor text-2xl text-center font-bold">Notifications</h3>
-
-<div class="flex flex-col items-center space-y-4 mt-5">
-    @foreach (var n in Notifications)
-    {
-        <Notification Notif="n" />
-    }
-</div>
+@if (Notifications.Any())
+{
+    <div class="w-[190px] mx-auto mt-5">
+        <button type="button" @onclick="ClearAllNotifications" class="cursor-pointer rounded-md border-solid bg-dark-secondaryColor px-3 py-2 text-dark-supportColor/90">
+            Clear All Notifications
+        </button>
+    </div>
+    <div class="flex flex-col items-center space-y-4 mt-5">
+        @foreach (var n in Notifications)
+        {
+            <Notification Notif="n" />
+        }
+    </div>
+}
+else
+{
+    <div class="flex flex-col items-center space-y-4 mt-16 text-light-primaryColor/60">
+        <FaIcon Icon="@FaIcons.OpenBox" Size="@FaSize.XxLarge" /> 
+        <p class="text-center">Looking a bit empty in here...</p>
+    </div>
+}
