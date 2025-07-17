@@ -91,7 +91,6 @@ public class NotificationService(IHubContext<NotificationsHub, INotificationHub>
             .Where(x => x.ForUserId  == userId && !x.IsRead)
             .ExecuteUpdateAsync(setters => 
                 setters.SetProperty(n => n.IsRead, true));
-        await context.SaveChangesAsync();
         return new ServiceResponse(true, "All notifications marked as read");
     }
 }

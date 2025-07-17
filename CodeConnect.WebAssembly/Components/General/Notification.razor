@@ -24,7 +24,7 @@
       await NotificationsService.MarkNotificationAsRead(Notif.Id);
       var url = GetUrl();
       if(!string.IsNullOrWhiteSpace(url))
-         NavigationManager.NavigateTo(GetUrl());
+         NavigationManager.NavigateTo(url);
    }
 
    private string GetUrl()
