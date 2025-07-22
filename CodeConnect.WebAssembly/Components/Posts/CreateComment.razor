@@ -1,0 +1,13 @@
+@using CodeConnect.WebAssembly.Components.General
+@using DomainLayer.Constants
+@inherits CreateCommentBase
+
+<div class="w-[90%]">
+    <MarkdownTextbox Id="CreateComment" @bind-BindContent="Comment" showPreview="@ShowPreview" Placeholder="Add a comment to this post" />
+    <div class="flex space-x-2">
+        <PreviewButton OnClick="TogglePreview" />
+        <button @onclick="CreateComment" disabled="@Loading" class="cursor-pointer rounded-md border-solid hover:bg-light-secondaryColor px-3 py-2 text-dark-supportColor/90">
+            <FaIcon Icon="@FaIcons.Send"/> Comment
+        </button>
+    </div>
+</div>

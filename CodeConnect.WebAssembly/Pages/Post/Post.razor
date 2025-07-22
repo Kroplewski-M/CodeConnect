@@ -2,6 +2,7 @@
 @using DomainLayer.Constants
 @using CodeConnect.WebAssembly.Components.General
 @using DomainLayer.Helpers
+@using CodeConnect.WebAssembly.Components.Posts
 @inject NavigationManager NavigationManager 
 @inherits PostBase
 
@@ -54,7 +55,10 @@ else
             </div>
         </div>
         <div class="w-[90vw] max-w-[1100px] bg-dark-secondaryColor rounded-md mx-auto pt-5 pb-[10px] mt-5 shadow-xl relative pl-[10px]">
-            <h1 class="text-light-primaryColor font-bold text-[20px]">Comments</h1>
+            <CascadingValue Value="@Post.Id">
+                <CreateComment/>
+            </CascadingValue>
+            <h1 class="text-light-primaryColor font-bold text-[20px] mt-5">Comments</h1>
         </div>
     }
 }

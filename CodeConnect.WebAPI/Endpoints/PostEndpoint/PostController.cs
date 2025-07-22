@@ -77,4 +77,14 @@ public class PostController(IPostService postService) : ControllerBase
     // {
     //     return null;
     // }
+    [HttpPost("UpsertPostComment")]
+    [Authorize(nameof(Consts.TokenType.Access))]
+    public async Task<ServiceResponse> UpsertPostComment(UpsertPostComment postComment)
+    {
+        var userId = User.GetInfo(Consts.ClaimTypes.Id);
+        if(string.IsNullOrWhiteSpace(userId))
+            return new ServiceResponse(false, "User not found");
+        var result = await postService.UpsertPostComment(postComment.PostId,postComment.CommentId, postComment.Content, userId);
+        return result;
+    }
 }

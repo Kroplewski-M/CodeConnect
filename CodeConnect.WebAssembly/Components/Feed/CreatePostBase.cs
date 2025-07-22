@@ -63,7 +63,7 @@ public class CreatePostBase : ComponentBase
         StateHasChanged();
     }
     protected bool Loading { get; set; } = false;
-    protected async Task HandleValidSubmit()
+    public async Task HandleValidSubmit()
     {
         if (string.IsNullOrWhiteSpace(PostContent))
             return;
@@ -90,7 +90,7 @@ public class CreatePostBase : ComponentBase
         Loading = false;
     }
     protected bool ShowPreview = false;
-    protected void ToggleShowPreview()
+    public void ToggleShowPreview()
     {
         ShowPreview = !ShowPreview;
         StateHasChanged();

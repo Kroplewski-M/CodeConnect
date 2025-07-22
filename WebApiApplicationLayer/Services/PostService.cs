@@ -14,7 +14,7 @@ using WebApiApplicationLayer.Interfaces;
 
 namespace WebApiApplicationLayer.Services;
 
-public class PostService(ApplicationDbContext context,IAzureService azureService, UserManager<ApplicationUser>userManager,IServerNotificationsService inotificationsService) : IPostService
+public class PostService(ApplicationDbContext context,IAzureService azureService, UserManager<ApplicationUser>userManager,IServerNotificationsService notificationsService) : IPostService
 {
     public async Task<ServiceResponse> CreatePost(CreatePostDto createPost,string? userId)
     {
@@ -160,7 +160,7 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
                 LikedOn = DateTime.UtcNow,
             };
             post.Likes.Add(postLike);
-            await inotificationsService.SendNotificationAsync(post.CreatedByUserId, user.Id,Consts.NotificationTypes.PostLike, post.Id.ToString());
+            await notificationsService.SendNotificationAsync(post.CreatedByUserId, user.Id,Consts.NotificationTypes.PostLike, post.Id.ToString());
         }
         await context.SaveChangesAsync();
         return new ServiceResponse(true, "Like added successfully");
@@ -174,5 +174,33 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         if(user == null)
             return false;
         return context.PostLikes.Any(x => x.LikedByUserId == user.Id && x.PostId == postId);
+    }
+
+    public async Task<ServiceResponse> UpsertPostComment(Guid postId,Guid? commentId, string comment, string? userId = null)
+    {
+        if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(comment))
+            return new ServiceResponse(false, "Error occured while adding comment");
+        var post = context.Posts.FirstOrDefault(x => x.Id == postId);
+        if(post == null)
+            return new ServiceResponse(false, "Post not found");
+        var user = await userManager.FindByIdAsync(userId);
+        if(user == null)
+            return new ServiceResponse(false, "User not found");
+        var existingComment = context.Comments.FirstOrDefault(x => x.Id == commentId && x.PostId == postId);
+        var upsertComment = existingComment ?? new Comment()
+        {
+            Content = comment,
+            CreatedByUserId = user.Id,
+            CreatedAt = DateTime.UtcNow,
+            PostId = post.Id,
+        };
+        if(commentId != null)
+            upsertComment.Content = comment;
+        else
+        {
+            context.Comments.Add(upsertComment);
+        }
+        await context.SaveChangesAsync();
+        return new ServiceResponse(true, "Comment added successfully");
     }
 }

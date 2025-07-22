@@ -13,4 +13,5 @@ public interface IPostService
     public Task<List<PostBasicDto>> GetUserPosts(string username,  int skip, int take);
     public Task<ServiceResponse> ToggleLikePost(LikePostDto likePostDto, string? userId = null);
     public Task<bool> IsUserLikingPost(Guid postId, string? userId = null);
+    public Task<ServiceResponse> UpsertPostComment(Guid postId,Guid? commentId, string comment, string? userId = null);
 }

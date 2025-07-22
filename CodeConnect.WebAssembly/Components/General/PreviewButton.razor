@@ -1,0 +1,8 @@
+@using DomainLayer.Constants
+
+<button type="button" @onclick="OnClick" class="cursor-pointer rounded-md border-solid hover:bg-light-secondaryColor px-3 py-2 text-dark-supportColor/90 ">
+    <FaIcon Icon="@FaIcons.Search"/> Preview
+</button>
+@code {
+    [Parameter] public required EventCallback OnClick { get; set; }
+}
