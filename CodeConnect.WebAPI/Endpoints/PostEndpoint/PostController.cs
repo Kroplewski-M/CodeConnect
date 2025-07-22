@@ -84,7 +84,7 @@ public class PostController(IPostService postService) : ControllerBase
         var userId = User.GetInfo(Consts.ClaimTypes.Id);
         if(string.IsNullOrWhiteSpace(userId))
             return new ServiceResponse(false, "User not found");
-        var result = await postService.AddPostComment(postComment.PostId, postComment.Content, userId);
+        var result = await postService.UpsertPostComment(postComment.PostId,postComment.CommentId, postComment.Content, userId);
         return result;
     }
 }

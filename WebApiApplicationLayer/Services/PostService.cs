@@ -176,7 +176,7 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         return context.PostLikes.Any(x => x.LikedByUserId == user.Id && x.PostId == postId);
     }
 
-    public async Task<ServiceResponse> AddPostComment(Guid postId, string comment, string? userId = null)
+    public async Task<ServiceResponse> UpsertPostComment(Guid postId,Guid? commentId, string comment, string? userId = null)
     {
         if (userId == null)
             return new ServiceResponse(false, "Error occured while adding comment");
@@ -186,16 +186,21 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         var user = await userManager.FindByIdAsync(userId);
         if(user == null)
             return new ServiceResponse(false, "User not found");
-        var newComment = new Comment()
+        var existingComment = context.Comments.FirstOrDefault(x => x.Id == commentId && x.PostId == postId);
+        var upsertComment = existingComment ?? new Comment()
         {
             Content = comment,
             CreatedByUserId = user.Id,
             CreatedAt = DateTime.UtcNow,
-            PostId = postId,
+            PostId = post.Id,
         };
-        post.Comments.Add(newComment);
+        if(commentId != null)
+            upsertComment.Content = comment;
+        else
+        {
+            context.Comments.Add(upsertComment);
+        }
         await context.SaveChangesAsync();
-        await notificationsService.SendNotificationAsync(post.CreatedByUserId, user.Id,Consts.NotificationTypes.PostComment, newComment.Id.ToString());
         return new ServiceResponse(true, "Comment added successfully");
     }
 }

@@ -26,7 +26,7 @@ public class CreateCommentBase : ComponentBase
         if (string.IsNullOrWhiteSpace(Comment)) return;
         Loading = true;
         ToastService.PushToast(new Toast("Creating Comment", ToastType.Info));
-        var result = await PostService.AddPostComment(PostId, Comment);
+        var result = await PostService.UpsertPostComment(PostId,commentId:null, Comment);
         ToastService.PushToast(new Toast(result.Message, result.Flag ? ToastType.Success : ToastType.Error));
         Loading = false;
         Comment = "";

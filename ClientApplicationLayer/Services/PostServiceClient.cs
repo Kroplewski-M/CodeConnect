@@ -49,9 +49,9 @@ public class PostServiceClient(HttpClient httpClient) : IPostService
         return response;
     }
 
-    public async Task<ServiceResponse> AddPostComment(Guid postId, string comment, string? userId = null)
+    public async Task<ServiceResponse> UpsertPostComment(Guid postId,Guid? commentId, string comment, string? userId = null)
     {
-        var postComment = new UpsertPostComment(postId, comment);
+        var postComment = new UpsertPostComment(postId,commentId, comment);
         var response = await httpClient.PostAsJsonAsync("api/Post/UpsertPostComment", postComment);
         var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
         return result ?? new ServiceResponse(false, "Failed to toggle like post");
