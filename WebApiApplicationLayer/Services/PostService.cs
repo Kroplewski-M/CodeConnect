@@ -178,7 +178,7 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
 
     public async Task<ServiceResponse> UpsertPostComment(Guid postId,Guid? commentId, string comment, string? userId = null)
     {
-        if (userId == null)
+        if (string.IsNullOrWhiteSpace(userId))
             return new ServiceResponse(false, "Error occured while adding comment");
         var post = context.Posts.FirstOrDefault(x => x.Id == postId);
         if(post == null)
