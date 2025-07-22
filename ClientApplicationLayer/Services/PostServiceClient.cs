@@ -48,4 +48,12 @@ public class PostServiceClient(HttpClient httpClient) : IPostService
         var response = await httpClient.GetFromJsonAsync<bool>($"api/Post/IsUserLikingPost?postId={postId}");
         return response;
     }
+
+    public async Task<ServiceResponse> AddPostComment(Guid postId, string comment, string? userId = null)
+    {
+        var postComment = new UpsertPostComment(postId, comment);
+        var response = await httpClient.PostAsJsonAsync("api/Post/UpsertPostComment", postComment);
+        var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
+        return result ?? new ServiceResponse(false, "Failed to toggle like post");
+    }
 }

@@ -4,7 +4,7 @@
 <div id="post-container" class="shadow-xl md:w-[550px] w-[90vw] md:min-h-[130px] min-h-[180px] mx-auto relative bg-dark-secondaryColor p-5 pb-[5px] rounded-md mt-5 md:mt-0">
     <div class="flex">
         <img class="w-10 ms-3 h-10 rounded-full mb-3 object-cover" src="@UserState?.Current?.ProfileImg" alt="Rounded avatar">
-        <div class="ml-[5px] mt-[5px]">
+        <div class="ml-[5px] mt-[5px] md:w-[400px] w-[90vw]">
             <EditForm Model="this" OnSubmit="HandleValidSubmit" FormName="Post">
                 <MarkdownTextbox Id="post" @bind-BindContent="PostContent" showPreview="@ShowPreview" />
                 <div class="mt-[5px] flex -ml-[45px]" >
@@ -15,9 +15,7 @@
                         <InputFile multiple type="file" OnChange="HandleFileSelection" accept="image/*" name="postFiles" id="@(InputId)" class="opacity-0 absolute" />
                     </div>
                     <div class="ml-5">
-                        <button type="button" @onclick="ToggleShowPreview" class="cursor-pointer rounded-md border-solid hover:bg-light-secondaryColor px-3 py-2 text-dark-supportColor/90 ">
-                            <FaIcon Icon="@FaIcons.Search"/> Preview
-                        </button>
+                        <PreviewButton OnClick="ToggleShowPreview" />
                     </div>
                     <div class="ml-5">
                         <button disabled="@Loading" class="cursor-pointer rounded-md border-solid hover:bg-light-secondaryColor px-3 py-2 text-dark-supportColor/90 ">

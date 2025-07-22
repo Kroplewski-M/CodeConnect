@@ -3,8 +3,8 @@
 @inject MarkdigServiceClient MarkdigService 
 @inject IJSRuntime Js
 
-<InputTextArea @bind-Value="_content" id="@Id" placeholder="Wrap your code in triple backticks like ```c# ... ```"
-               class="bg-transparent text-dark-supportColor border-dark-supportColor w-[90%] resize-none md:w-[400px] rounded-md font-bold mb-2 pl-[5px] outline-none"
+<InputTextArea @bind-Value="_content" id="@Id" placeholder="@(Placeholder ?? "Wrap your code in triple backticks like ```c# ... ```")"
+               class="bg-transparent text-dark-supportColor border-dark-supportColor w-full resize-none rounded-md font-bold mb-2 pl-[5px] outline-none"
                @oninput="OnInput"
                @onblur="OnBlur">
 </InputTextArea>
@@ -20,6 +20,7 @@
     [Parameter] public EventCallback<string> BindContentChanged { get; set; }
     [Parameter] public required string Id { get; set; }
     [Parameter] public required bool ShowPreview { get; set; }
+    [Parameter] public string? Placeholder { get; set; }
     private string _content = string.Empty;
     private bool _loadedContent = false;
     protected override void OnAfterRender(bool firstRender)
