@@ -79,12 +79,14 @@ public class PostController(IPostService postService) : ControllerBase
     // }
     [HttpPost("UpsertPostComment")]
     [Authorize(nameof(Consts.TokenType.Access))]
-    public async Task<ServiceResponse> UpsertPostComment(UpsertPostComment postComment)
+    public async Task<ActionResult<ServiceResponse>> UpsertPostComment(UpsertPostComment postComment)
     {
         var userId = User.GetInfo(Consts.ClaimTypes.Id);
         if(string.IsNullOrWhiteSpace(userId))
-            return new ServiceResponse(false, "User not found");
+            return BadRequest(new ServiceResponse(false, "User not found"));
         var result = await postService.UpsertPostComment(postComment.PostId,postComment.CommentId, postComment.Content, userId);
-        return result;
+        if(result.Flag)
+            return Ok(result);
+        return BadRequest(result);
     }
 }
