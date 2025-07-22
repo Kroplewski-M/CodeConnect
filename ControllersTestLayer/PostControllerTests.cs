@@ -83,8 +83,6 @@ public class PostControllerTests
         Assert.False(serviceResponse.Flag);
         Assert.Equal("Invalid request", serviceResponse.Message);
     }
-
-    // Test: Create Post with a valid request
     [Fact]
     public async Task CreatePost_ValidRequest_ShouldReturnCreatedResponse()
     {
@@ -104,5 +102,148 @@ public class PostControllerTests
 
         Assert.True(serviceResponse.Flag);
         Assert.Equal("Post created successfully", serviceResponse.Message);
+    } 
+    [Fact]
+    public async Task UpsertPostComment_ValidRequest_ShouldReturnSuccess()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        var commentId = Guid.NewGuid();
+        var comment = "Test Comment";
+        var userId = "testUserId";
+        _postServiceMock
+            .Setup(x => x.UpsertPostComment(postId, commentId, comment, userId))
+            .ReturnsAsync(new ServiceResponse(true, "Comment added successfully"));
+        var newComment = new UpsertPostComment(postId, commentId, comment);
+        // Act
+        var result = await _controller.UpsertPostComment(newComment);
+
+        // Assert
+        var response = Assert.IsType<ActionResult<ServiceResponse>>(result);
+        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        var serviceResponse = Assert.IsType<ServiceResponse>(okResult.Value);
+
+        Assert.True(serviceResponse.Flag);
     }
+
+    [Fact]
+    public async Task UpsertPostComment_MissingUserId_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        var commentId = Guid.NewGuid();
+        var comment = "Test Comment";
+        var userId = ""; // Simulating missing user ID
+        SetMockUserInContext("", "");
+        _postServiceMock
+            .Setup(x => x.UpsertPostComment(postId, commentId, comment, userId))
+            .ReturnsAsync(new ServiceResponse(false, "Error occured while adding comment"));
+        var newComment = new UpsertPostComment(postId, commentId, comment);
+        // Act
+        var result = await _controller.UpsertPostComment(newComment);
+
+        // Assert
+        var response = Assert.IsType<ActionResult<ServiceResponse>>(result);
+        var badResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var serviceResponse = Assert.IsType<ServiceResponse>(badResult.Value);
+
+        Assert.False(serviceResponse.Flag);
+    }
+
+    [Fact]
+    public async Task UpsertPostComment_MissingPost_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        var commentId = Guid.NewGuid();
+        var comment = "Test Comment";
+        var userId = "testUserId";
+        _postServiceMock
+            .Setup(x => x.UpsertPostComment(postId, commentId, comment, userId))
+            .ReturnsAsync(new ServiceResponse(false, "Post not found"));
+        var newComment = new UpsertPostComment(postId, commentId, comment);
+        // Act
+        var result = await _controller.UpsertPostComment(newComment);
+
+        // Assert
+        var response = Assert.IsType<ActionResult<ServiceResponse>>(result);
+        var badResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var serviceResponse = Assert.IsType<ServiceResponse>(badResult.Value);
+
+        Assert.False(serviceResponse.Flag);
+        Assert.Equal("Post not found", serviceResponse.Message);
+    }
+
+    [Fact]
+    public async Task UpsertPostComment_MissingComment_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        var commentId = Guid.NewGuid();
+        var comment = ""; // Simulating missing comment
+        var userId = "testUserId";
+        _postServiceMock
+            .Setup(x => x.UpsertPostComment(postId, commentId, comment, userId))
+            .ReturnsAsync(new ServiceResponse(false, "Error occured while adding comment"));
+        var newComment = new UpsertPostComment(postId, commentId, comment);
+        // Act
+        var result = await _controller.UpsertPostComment(newComment);
+
+        // Assert
+        var response = Assert.IsType<ActionResult<ServiceResponse>>(result);
+        var badResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var serviceResponse = Assert.IsType<ServiceResponse>(badResult.Value);
+
+        Assert.False(serviceResponse.Flag);
+        Assert.Equal("Error occured while adding comment", serviceResponse.Message);
+    }
+
+    [Fact]
+    public async Task UpsertPostComment_NewComment_ShouldReturnSuccess()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        Guid? commentId = null; // Simulating a new comment
+        var comment = "New Comment Content";
+        var userId = "testUserId";
+        _postServiceMock
+            .Setup(x => x.UpsertPostComment(postId, commentId, comment, userId))
+            .ReturnsAsync(new ServiceResponse(true, "Comment added successfully"));
+        var newComment = new UpsertPostComment(postId, commentId, comment);
+        // Act
+        var result = await _controller.UpsertPostComment(newComment);
+
+        // Assert
+        var response = Assert.IsType<ActionResult<ServiceResponse>>(result);
+        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        var serviceResponse = Assert.IsType<ServiceResponse>(okResult.Value);
+
+        Assert.True(serviceResponse.Flag);
+        Assert.Equal("Comment added successfully", serviceResponse.Message);
+    }
+
+    [Fact]
+    public async Task UpsertPostComment_UpdateExistingComment_ShouldReturnSuccess()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        var commentId = Guid.NewGuid(); // Simulating an existing comment
+        var comment = "Updated Comment Content";
+        var userId = "testUserId";
+        _postServiceMock
+            .Setup(x => x.UpsertPostComment(postId, commentId, comment, userId))
+            .ReturnsAsync(new ServiceResponse(true, "Comment added successfully"));
+        var newComment = new UpsertPostComment(postId, commentId, comment);
+        // Act
+        var result = await _controller.UpsertPostComment(newComment);
+
+        // Assert
+        var response = Assert.IsType<ActionResult<ServiceResponse>>(result);
+        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        var serviceResponse = Assert.IsType<ServiceResponse>(okResult.Value);
+
+        Assert.True(serviceResponse.Flag);
+        Assert.Equal("Comment added successfully", serviceResponse.Message);
+    }
+
 }

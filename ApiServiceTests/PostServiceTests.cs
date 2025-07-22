@@ -100,9 +100,8 @@ public class PostServiceTests
     {
         // Arrange
         var user = CreateUser("user");
-        var request = CreatePostDto("content", null);
         _userManager.SetupFindById(user);
-
+        var request = CreatePostDto("content", null);
         // Act
         var response = await _postService.CreatePost(request, user.Id);
 
@@ -136,7 +135,136 @@ public class PostServiceTests
         await AssertFetchUserPostsFailureScenario(null);
         await AssertFetchUserPostsFailureScenario("");
     }
+    [Fact]
+    public async Task UpsertPostComment_ValidRequest_ShouldReturnSuccess()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        var commentId = Guid.NewGuid();
+        var userId = "testUserId";
+        var comment = "Valid comment";
 
+        var post = new Post
+        {
+            Id = postId,
+            CreatedByUserId = userId,
+            CreatedAt = DateTime.UtcNow,
+            Content = "Post content",
+        };
+        var user = CreateUser("testUser");
+        
+        _context.Posts.Add(post);
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
+        _userManager.SetupFindById(user);
+        // Act
+        var response = await _postService.UpsertPostComment(postId, commentId, comment, userId);
+
+        // Assert
+        AssertSuccessResponse(response);
+    }
+
+    [Fact]
+    public async Task UpsertPostComment_InvalidUserId_ShouldReturnError()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        var commentId = Guid.NewGuid();
+        var userId = ""; 
+        var comment = "Valid comment";
+
+        // Act
+        var response = await _postService.UpsertPostComment(postId, commentId, comment, userId);
+
+        _userManager.SetupFindById(null);
+        // Assert
+        AssertBadResponse(response);
+    }
+
+    [Fact]
+    public async Task UpsertPostComment_PostNotFound_ShouldReturnError()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        var commentId = Guid.NewGuid();
+        var userId = "testUserId";
+        var comment = "Valid comment";
+        
+        // Act
+        var response = await _postService.UpsertPostComment(postId, commentId, comment, userId);
+
+        // Assert
+        AssertBadResponse(response);
+    }
+
+    [Fact]
+    public async Task UpsertPostComment_NewComment_ShouldAddAndReturnSuccess()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        Guid? commentId = null; // A new comment
+        var userId = "testUserId";
+        var comment = "New comment";
+
+        var post = new Post
+        {
+            Id = postId,
+            CreatedByUserId = userId,
+            CreatedAt = DateTime.UtcNow,
+            Content = "Post content",
+        };
+        var user = CreateUser("testUser");
+
+        _context.Posts.Add(post);
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
+
+        _userManager.SetupFindById(user);
+        // Act
+        var response = await _postService.UpsertPostComment(postId, commentId, comment, userId);
+
+        // Assert
+        AssertSuccessResponse(response);
+    }
+
+    [Fact]
+    public async Task UpsertPostComment_UpdateExistingComment_ShouldReturnSuccess()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        var commentId = Guid.NewGuid();
+        var userId = "testUserId";
+        var comment = "Updated comment content";
+
+        var post = new Post
+        {
+            Id = postId,
+            CreatedByUserId = userId,
+            CreatedAt = DateTime.UtcNow,
+            Content = "Post content",
+        };
+        var user = CreateUser("testUser");
+        _userManager.SetupFindById(user);
+        var existingComment = new Comment
+        {
+            Id = commentId,
+            PostId = postId,
+            Content = "Old comment content",
+            CreatedByUserId = user.Id,
+        };
+
+        _context.Posts.Add(post);
+        _context.Users.Add(user);
+        _context.Comments.Add(existingComment);
+        await _context.SaveChangesAsync();
+
+        // Act
+        var response = await _postService.UpsertPostComment(postId, commentId, comment, userId);
+
+        // Assert
+        AssertSuccessResponse(response);
+        Assert.Equal("Updated comment content", existingComment.Content);
+    }
     private async Task AssertFetchUserPostsFailureScenario(string? username)
     {
         // Act
