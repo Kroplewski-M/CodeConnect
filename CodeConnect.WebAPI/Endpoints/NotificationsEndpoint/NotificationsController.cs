@@ -1,3 +1,4 @@
+using ApplicationLayer.DTO_s;
 using ApplicationLayer.ExtensionClasses;
 using DomainLayer.Constants;
 using Microsoft.AspNetCore.Authorization;
@@ -35,7 +36,7 @@ public class NotificationsController(IServerNotificationsService notificationsSe
     {
         var userId = User.GetInfo(Consts.ClaimTypes.Id);
         if(string.IsNullOrWhiteSpace(userId))
-            return BadRequest("User not found");
+            return BadRequest(new ServiceResponse(false, "User not found"));
         var result = await notificationsService.MarkNotificationAsRead(notificationId, userId);
         if(result.Flag)
             return Ok(result);

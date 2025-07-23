@@ -34,21 +34,7 @@ public class FollowingControllerTests
             null!  // Logger
         );
         _followingController = new FollowingController(_followingServiceMock.Object,_userManagerMock.Object);
-        SetMockUserInContext("testUser", "testUserId");
-    }
-    private void SetMockUserInContext(string username, string userId)
-    {
-        var claims = new List<Claim>
-        {
-            new Claim(Consts.ClaimTypes.UserName, username),
-            new Claim(Consts.ClaimTypes.Id, userId)
-        };
-        var identity = new ClaimsIdentity(claims, "TestAuthType");
-        var claimsPrincipal = new ClaimsPrincipal(identity);
-        _followingController.ControllerContext = new ControllerContext
-        {
-            HttpContext = new DefaultHttpContext { User = claimsPrincipal }
-        };
+        ControllerTestHelper.SetMockUserInContext(_followingController, "default-user", "test-user-id");
     }
     [Fact]
     public async Task FollowUser_ValidRequest_ShouldReturnOkResponse()
@@ -75,7 +61,7 @@ public class FollowingControllerTests
     {
         // Arrange
         var request = new FollowRequestDto( "TargetUser");
-        SetMockUserInContext("", "");
+        ControllerTestHelper.SetMockUserInContext(_followingController, "", "");
         // Act
         var result = await _followingController.FollowUser(request);
 
@@ -219,7 +205,7 @@ public class FollowingControllerTests
     [Fact]
     public async Task IsUserFollowing_InvalidRequest_ShouldReturnBadRequest()
     {
-        SetMockUserInContext("", "");
+        ControllerTestHelper.SetMockUserInContext(_followingController, "", "");
         // Act
         var result = await _followingController.IsUserFollowing("Bob");
 
