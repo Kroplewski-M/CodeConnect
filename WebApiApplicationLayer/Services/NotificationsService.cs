@@ -51,6 +51,7 @@ public class NotificationService(IHubContext<NotificationsHub, INotificationHub>
     {
         if (string.IsNullOrWhiteSpace(userId))
             return new GetNotificationsDto(false, new List<NotificationsDto>());
+
         var rawNotifications = await GetUserNotifications(userId)
             .Select(x => new
             {

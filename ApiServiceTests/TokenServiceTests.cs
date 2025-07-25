@@ -7,7 +7,6 @@ using InfrastructureLayer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Moq;
-using WebApiApplicationLayer;
 using WebApiApplicationLayer.Services;
 
 namespace ApiServiceTests;
