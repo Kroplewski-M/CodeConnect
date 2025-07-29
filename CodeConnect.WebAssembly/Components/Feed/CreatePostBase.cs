@@ -86,7 +86,8 @@ public class CreatePostBase : ComponentBase
             Base64Images.Clear();
             PostContent = string.Empty;
             StateHasChanged();
-            NavigationManager.NavigateTo($"/Post/{postResponse.PostId}");
+            if(postResponse.PostId.HasValue)
+                NavigationManager.NavigateTo($"/Post/{postResponse.PostId}");
         }
         else
             ToastService.PushToast(new Toast(postResponse.Message, ToastType.Error));
