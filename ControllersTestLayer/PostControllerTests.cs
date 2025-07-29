@@ -90,16 +90,15 @@ public class PostControllerTests
         var createPostDto = new CreatePostDto("Sample Content", null);
         _postServiceMock
             .Setup(x => x.CreatePost(createPostDto, It.IsAny<string>()))
-            .ReturnsAsync(new ServiceResponse(true, "Post created successfully"));
+            .ReturnsAsync(new CreatePostResponseDto(true, "Post created successfully" ,Guid.NewGuid()));
 
         // Act
         var result = await _controller.CreatePost(createPostDto);
 
         // Assert
-        var response = Assert.IsType<ActionResult<ServiceResponse>>(result);
+        var response = Assert.IsType<ActionResult<CreatePostResponseDto>>(result);
         var okResult = Assert.IsType<OkObjectResult>(response.Result); 
-        var serviceResponse = Assert.IsType<ServiceResponse>(okResult.Value); 
-
+        var serviceResponse = Assert.IsType<CreatePostResponseDto>(okResult.Value); 
         Assert.True(serviceResponse.Flag);
         Assert.Equal("Post created successfully", serviceResponse.Message);
     } 
