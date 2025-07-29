@@ -62,7 +62,10 @@ public class PostServiceTests
         var response = await _postService.CreatePost(invalidRequest,"id");
 
         // Assert
-        AssertBadResponse(response);
+        Assert.NotNull(response);
+        Assert.False(response.Flag);
+        Assert.NotEmpty(response.Message);
+        Assert.Null(response.PostId);
         _azureService.VerifyNoImageUpload();
     }
     
@@ -76,7 +79,10 @@ public class PostServiceTests
         var response = await _postService.CreatePost(invalidRequest, "id");
 
         // Assert
-        AssertBadResponse(response);
+        Assert.NotNull(response);
+        Assert.False(response.Flag);
+        Assert.NotEmpty(response.Message);
+        Assert.Null(response.PostId);
         _azureService.VerifyNoImageUpload();
     }
 
@@ -91,7 +97,10 @@ public class PostServiceTests
         var response = await _postService.CreatePost(request, "non");
 
         // Assert
-        AssertBadResponse(response);
+        Assert.NotNull(response);
+        Assert.False(response.Flag);
+        Assert.NotEmpty(response.Message);
+        Assert.Null(response.PostId);
         _azureService.VerifyNoImageUpload();
     }
 
@@ -106,7 +115,10 @@ public class PostServiceTests
         var response = await _postService.CreatePost(request, user.Id);
 
         // Assert
-        AssertSuccessResponse(response);
+        Assert.NotNull(response);
+        Assert.True(response.Flag);
+        Assert.NotEmpty(response.Message);
+        Assert.NotNull(response.PostId);
         AssertDatabaseEntryExists(user.Id);
         _azureService.VerifyNoImageUpload();
     }
@@ -125,7 +137,10 @@ public class PostServiceTests
         var response = await _postService.CreatePost(request, user.Id);
 
         // Assert
-        AssertSuccessResponse(response);
+        Assert.NotNull(response);
+        Assert.True(response.Flag);
+        Assert.NotEmpty(response.Message);
+        Assert.NotNull(response.PostId);
         AssertPostWithImagesCreated(user.Id, base64Images.Count);
     }
 
