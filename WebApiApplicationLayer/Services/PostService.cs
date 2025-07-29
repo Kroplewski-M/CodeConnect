@@ -16,18 +16,18 @@ namespace WebApiApplicationLayer.Services;
 
 public class PostService(ApplicationDbContext context,IAzureService azureService, UserManager<ApplicationUser>userManager,IServerNotificationsService notificationsService) : IPostService
 {
-    public async Task<ServiceResponse> CreatePost(CreatePostDto createPost,string? userId)
+    public async Task<CreatePostResponseDto> CreatePost(CreatePostDto createPost,string? userId)
     {
         if (string.IsNullOrWhiteSpace(userId))
-            return new ServiceResponse(false, "Error creating post");
+            return new CreatePostResponseDto(false, "Error creating post", null);
         
         var validator = new CreatePostDtoValidator();
         var validationResult = await validator.ValidateAsync(createPost);
         if(!validationResult.IsValid)
-            return new ServiceResponse(false, "Error creating post");
+            return new CreatePostResponseDto(false, "Error creating post", null);
         var user = await userManager.FindByIdAsync(userId);
         if(user == null)
-            return new ServiceResponse(false, "User not found");
+            return new CreatePostResponseDto(false, "User not found", null);
         var newPost  = new Post()
         {
             Content = createPost.Content,
@@ -55,7 +55,7 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
             }
             await context.SaveChangesAsync();
         }
-        return new ServiceResponse(true,"Post created successfully");
+        return new CreatePostResponseDto(true,"Post created successfully", newPost.Id);
     }
 
     public async Task<PostBasicDto?> GetPostById(Guid id)

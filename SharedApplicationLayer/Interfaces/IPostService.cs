@@ -6,7 +6,7 @@ namespace ApplicationLayer.Interfaces;
 
 public interface IPostService
 {
-    public Task<ServiceResponse> CreatePost(CreatePostDto createPost,string? userId = null);
+    public Task<CreatePostResponseDto> CreatePost(CreatePostDto createPost,string? userId = null);
     public Task<PostBasicDto?> GetPostById(Guid id);
     public Task UpdatePost(Guid id);
     public Task DeletePost(Guid id);

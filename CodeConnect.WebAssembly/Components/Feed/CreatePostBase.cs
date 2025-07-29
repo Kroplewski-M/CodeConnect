@@ -28,6 +28,8 @@ public class CreatePostBase : ComponentBase
     [Inject] public IPostService PostService { get; set; } = null!;  
     [Inject] public required ToastService ToastService { get; set; }
     [Inject] public required MarkdigServiceClient MarkdigService { get; set; }
+    [Inject] public required NavigationManager NavigationManager { get; set; }
+    
     protected string PostContent { get; set; } = string.Empty;
     protected readonly string InputId = "uploadPostImg";
     protected bool LoadingImages = false;
@@ -84,6 +86,7 @@ public class CreatePostBase : ComponentBase
             Base64Images.Clear();
             PostContent = string.Empty;
             StateHasChanged();
+            NavigationManager.NavigateTo($"/Post/{postResponse.PostId}");
         }
         else
             ToastService.PushToast(new Toast(postResponse.Message, ToastType.Error));

@@ -13,12 +13,12 @@ public class PostController(IPostService postService) : ControllerBase
 {
     [HttpPost("CreatePost")]
     [Authorize(nameof(Consts.TokenType.Access))]
-    public async Task<ActionResult<ServiceResponse>> CreatePost([FromBody]CreatePostDto createPost)
+    public async Task<ActionResult<CreatePostResponseDto>> CreatePost([FromBody]CreatePostDto createPost)
     {
         var postValidator = new CreatePostDtoValidator();
         var validate = await postValidator.ValidateAsync(createPost);
         if(!validate.IsValid)
-            return  BadRequest(new ServiceResponse(false, "Error Creating Post"));
+            return  BadRequest(new CreatePostResponseDto(false, "Error Creating Post", null));
 
         var response = await postService.CreatePost(createPost, User.GetInfo(Consts.ClaimTypes.Id));
         if(!response.Flag)
