@@ -1,6 +1,8 @@
+using System.Xml;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.Images;
 using ApplicationLayer.DTO_s.Post;
+using ApplicationLayer.ExtensionClasses;
 using ApplicationLayer.Interfaces;
 using DomainLayer.Constants;
 using DomainLayer.Entities.Auth;
@@ -205,5 +207,23 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
             await notificationsService.SendNotificationAsync(post.CreatedByUserId, user.Id,Consts.NotificationTypes.PostComment, upsertComment.Id.ToString());
         
         return new ServiceResponse(true, "Comment added successfully");
+    }
+
+    public async Task<PostCommentsDto> GetCommentsForPost(Guid postId, int skip, int take)
+    {
+        var post = context.Posts.FirstOrDefault(x => x.Id == postId);
+        if(post == null)
+            return new PostCommentsDto(false, new List<CommentDto>());
+        var comments = await context.Comments.Where(x => x.PostId == postId)
+            .AsNoTracking()
+            .OrderByDescending(x=> x.CreatedAt)
+            .Skip(skip)
+            .Take(take)
+            .Include(x=> x.CreatedByUser)
+            .Select(x=> new {Comment= x, LikeCount = x.Likes.Count()})
+            .ToListAsync();
+        
+        var commentsDto = comments.Select(x => new CommentDto(x.Comment.Id, x.Comment.Content, x.Comment.CreatedByUser.ToUserBasicDto(),x.LikeCount, x.Comment.CreatedAt )).ToList();
+        return new PostCommentsDto(true, commentsDto);
     }
 }

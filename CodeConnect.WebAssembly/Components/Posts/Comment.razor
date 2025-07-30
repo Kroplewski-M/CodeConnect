@@ -1,0 +1,7 @@
+@using ApplicationLayer.DTO_s.Post
+
+<h3>@UserComment.Content</h3>
+
+@code {
+    [Parameter] public required CommentDto UserComment { get; set; }
+}
