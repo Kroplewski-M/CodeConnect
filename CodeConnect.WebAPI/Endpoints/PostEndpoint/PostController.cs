@@ -89,4 +89,16 @@ public class PostController(IPostService postService) : ControllerBase
             return Ok(result);
         return BadRequest(result);
     }
+
+    [HttpGet("GetPostComments")]
+    [Authorize(nameof(Consts.TokenType.Access))]
+    public async Task<ActionResult<PostCommentsDto>> GetPostComments(Guid postId, int skip, int take)
+    {
+        if(postId == Guid.Empty)
+            return BadRequest(new PostCommentsDto(false, new List<CommentDto>()));
+        var result = await postService.GetCommentsForPost(postId, skip, take);
+        if(result.Flag)
+            return Ok(result);
+        return BadRequest(result);
+    }
 }
