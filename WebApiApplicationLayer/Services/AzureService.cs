@@ -1,5 +1,6 @@
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.Images;
+using ApplicationLayer.ExtensionClasses;
 using ApplicationLayer.Interfaces;
 using Azure;
 using Azure.Storage.Blobs;
@@ -28,6 +29,7 @@ public class AzureService(BlobServiceClient blobServiceClient) : IAzureService
         
         // Convert Base64 string to byte array
         byte[] imageBytes = Convert.FromBase64String(base64Data);
+        imageBytes.RemoveMetaData();
         Response<BlobContentInfo>? response;
         using (MemoryStream stream = new MemoryStream(imageBytes))
         {
