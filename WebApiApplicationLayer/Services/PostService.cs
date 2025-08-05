@@ -209,8 +209,10 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         return new ServiceResponse(true, "Comment added successfully");
     }
 
-    public async Task<PostCommentsDto> GetCommentsForPost(Guid postId, int skip, int take)
+    public async Task<PostCommentsDto> GetCommentsForPost(Guid postId, int skip, int take, string? userId = null)
     {
+        if (userId == null)
+            return new PostCommentsDto(false, new List<CommentDto>());
         var post = context.Posts.FirstOrDefault(x => x.Id == postId);
         if(post == null)
             return new PostCommentsDto(false, new List<CommentDto>());
@@ -220,10 +222,40 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
             .Skip(skip)
             .Take(take)
             .Include(x=> x.CreatedByUser)
-            .Select(x=> new {Comment= x, LikeCount = x.Likes.Count()})
+            .Select(x=> new {Comment= x, LikeCount = x.Likes.Count(), CurrentUserLikes = x.Likes.Any(y => y.LikedByUserId == userId)})
             .ToListAsync();
         
-        var commentsDto = comments.Select(x => new CommentDto(x.Comment.Id, x.Comment.Content, x.Comment.CreatedByUser.ToUserBasicDto(),x.LikeCount, x.Comment.CreatedAt )).ToList();
+        var commentsDto = comments.Select(x => new CommentDto(x.Comment.Id, x.Comment.Content, x.Comment.CreatedByUser.ToUserBasicDto(),x.LikeCount, x.Comment.CreatedAt, x.CurrentUserLikes )).ToList();
         return new PostCommentsDto(true, commentsDto);
+    }
+
+    public async Task<ServiceResponse> ToggleLikeComment(Guid commentId, string? userId = null)
+    {
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+           return new ServiceResponse(false, "Error occured while adding comment"); 
+        } 
+        var comment = context.Comments.FirstOrDefault(x => x.Id ==  commentId);
+        if (comment == null)
+            return new ServiceResponse(false, "Comment not found");
+        var user  = await userManager.FindByIdAsync(userId);
+        if(user == null)
+            return new ServiceResponse(false, "User not found");
+        var existingCommentLike = context.CommentLikes.FirstOrDefault(x => x.CommentId == commentId && x.LikedByUserId == userId);
+        if(existingCommentLike != null)
+            context.CommentLikes.Remove(existingCommentLike);
+        else
+        {
+            var newLike = new CommentLike()
+            {
+                LikedByUserId = user.Id,
+                LikedOn = DateTime.UtcNow,
+                CommentId = commentId,
+            };
+            comment.Likes.Add(newLike);
+            await notificationsService.SendNotificationAsync(comment.CreatedByUserId, user.Id,Consts.NotificationTypes.CommentLike, comment.Id.ToString());
+        }
+        await context.SaveChangesAsync();
+        return new ServiceResponse(true, "Like added successfully");
     }
 }

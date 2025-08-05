@@ -2,7 +2,7 @@
 @using DomainLayer.Constants
 @using DomainLayer.Helpers
 @using CodeConnect.WebAssembly.Components.General
-@inject IJSRuntime Js
+@inherits CommentBase
 <div class="w-[90%] rounded-md bg-dark-primaryColor px-3 pb-2 mt-5">
     <div class="flex mt-[10px] w-full justify-between">
         <div class="flex text-light-primaryColor">
@@ -14,24 +14,10 @@
         <p class="text-light-primaryColor/80 text-[14px] ml-[5px]">@Helpers.GetUsersLocalTime(UserComment.CreatedAt, Consts.DateFormats.DateTimeFormat)</p>
     </div>
     <div id="@_id" class="text-light-primaryColor text-[16px] mb-[10px] ml-5 mt-[10px]">@((MarkupString)UserComment.Content)</div>
-    <div class="text-light-primaryColor/80">
-        <div class="cursor-pointer">
-            <FaIcon Icon="@FaIcons.Heart" />
-            <span><FormatNumber Number="UserComment.LikeCount"/></span>
+    <div class="text-light-primaryColor/80 mb-2">
+        <div class="cursor-pointer @(LikesComment ? "text-red-700" : "")" @onclick="LikeComment">
+            <FaIcon Icon="@FaIcons.Heart" Size="@FaSize.Large"/>
+            <span><FormatNumber Number="LikeCount"/></span>
         </div>
     </div>
 </div>
-
-@code {
-    [Parameter] public required CommentDto UserComment { get; set; }
-    private readonly string _id = Guid.NewGuid().ToString();
-    
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await Js.InvokeVoidAsync("highlightCodeBlocks",_id);
-            StateHasChanged();
-        }
-    }
-}

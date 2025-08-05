@@ -96,9 +96,23 @@ public class PostController(IPostService postService) : ControllerBase
     {
         if(postId == Guid.Empty)
             return BadRequest(new PostCommentsDto(false, new List<CommentDto>()));
-        var result = await postService.GetCommentsForPost(postId, skip, take);
+        var userId = User.GetInfo(Consts.ClaimTypes.Id);
+        if(string.IsNullOrWhiteSpace(userId))
+            return BadRequest(new PostCommentsDto(false, new List<CommentDto>()));
+        var result = await postService.GetCommentsForPost(postId, skip, take, userId);
         if(result.Flag)
             return Ok(result);
         return BadRequest(result);
+    }
+
+    [HttpPost("ToggleCommentLike")]
+    [Authorize(nameof(Consts.TokenType.Access))]
+    public async Task<ActionResult<ServiceResponse>> CommentLike([FromBody] Guid commentId)
+    {
+       var userId = User.GetInfo(Consts.ClaimTypes.Id);
+       if(commentId == Guid.Empty)
+           return BadRequest(new ServiceResponse(false, "Comment Id not found"));
+       var res = await postService.ToggleLikeComment(commentId, userId);
+       return Ok(res);
     }
 }

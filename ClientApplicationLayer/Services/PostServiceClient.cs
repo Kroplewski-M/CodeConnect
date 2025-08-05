@@ -57,11 +57,18 @@ public class PostServiceClient(HttpClient httpClient) : IPostService
         return result ?? new ServiceResponse(false, "Failed to toggle like post");
     }
 
-    public async Task<PostCommentsDto> GetCommentsForPost(Guid postId, int skip, int take)
+    public async Task<PostCommentsDto> GetCommentsForPost(Guid postId, int skip, int take,  string? userId = null)
     {
         var response = await httpClient.GetFromJsonAsync<PostCommentsDto>($"api/Post/GetPostComments?postId={postId}&Skip={skip}&Take={take}");
         if (response == null)
             return new PostCommentsDto(false, new List<CommentDto>());
         return response;
+    }
+
+    public async Task<ServiceResponse> ToggleLikeComment(Guid commentId, string? userId = null)
+    {
+       var response = await httpClient.PostAsJsonAsync("api/Post/ToggleCommentLike", commentId);
+       var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
+       return result ?? new ServiceResponse(false, "Failed to toggle like comment");
     }
 }
