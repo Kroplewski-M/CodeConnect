@@ -107,12 +107,14 @@ public class PostController(IPostService postService) : ControllerBase
 
     [HttpPost("ToggleCommentLike")]
     [Authorize(nameof(Consts.TokenType.Access))]
-    public async Task<ActionResult<ServiceResponse>> CommentLike([FromBody] Guid commentId)
+    public async Task<ActionResult<ServiceResponse>> ToggleCommentLike([FromBody] Guid commentId)
     {
        var userId = User.GetInfo(Consts.ClaimTypes.Id);
        if(commentId == Guid.Empty)
            return BadRequest(new ServiceResponse(false, "Comment Id not found"));
        var res = await postService.ToggleLikeComment(commentId, userId);
-       return Ok(res);
+       if(res.Flag)
+        return Ok(res);
+       return BadRequest(res);
     }
 }
