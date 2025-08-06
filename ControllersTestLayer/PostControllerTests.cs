@@ -55,8 +55,7 @@ public class PostControllerTests
         var result = await _controller.ToggleLikePost(likePostDto);
 
         // Assert
-        var response = Assert.IsType<ActionResult<ServiceResponse>>(result);
-        var okResult = Assert.IsType<OkObjectResult>(response.Result); 
+        var okResult = Assert.IsType<OkObjectResult>(result); 
         var serviceResponse = Assert.IsType<ServiceResponse>(okResult.Value); 
 
         Assert.True(serviceResponse.Flag);
@@ -78,8 +77,7 @@ public class PostControllerTests
         var result = await _controller.ToggleLikePost(likePostDto);
         
         // Assert
-        var response = Assert.IsType<ActionResult<ServiceResponse>>(result);
-        var badResult = Assert.IsType<BadRequestObjectResult>(response.Result); 
+        var badResult = Assert.IsType<BadRequestObjectResult>(result); 
         var serviceResponse = Assert.IsType<ServiceResponse>(badResult.Value); 
         Assert.False(serviceResponse.Flag);
         Assert.Equal("Invalid request", serviceResponse.Message);
@@ -97,8 +95,7 @@ public class PostControllerTests
         var result = await _controller.CreatePost(createPostDto);
 
         // Assert
-        var response = Assert.IsType<ActionResult<CreatePostResponseDto>>(result);
-        var okResult = Assert.IsType<OkObjectResult>(response.Result); 
+        var okResult = Assert.IsType<OkObjectResult>(result); 
         var serviceResponse = Assert.IsType<CreatePostResponseDto>(okResult.Value); 
         Assert.True(serviceResponse.Flag);
         Assert.Equal("Post created successfully", serviceResponse.Message);
@@ -119,8 +116,7 @@ public class PostControllerTests
         var result = await _controller.UpsertPostComment(newComment);
 
         // Assert
-        var response = Assert.IsType<ActionResult<ServiceResponse>>(result);
-        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        var okResult = Assert.IsType<OkObjectResult>(result);
         var serviceResponse = Assert.IsType<ServiceResponse>(okResult.Value);
 
         Assert.True(serviceResponse.Flag);
@@ -143,8 +139,7 @@ public class PostControllerTests
         var result = await _controller.UpsertPostComment(newComment);
 
         // Assert
-        var response = Assert.IsType<ActionResult<ServiceResponse>>(result);
-        var badResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var badResult = Assert.IsType<BadRequestObjectResult>(result);
         var serviceResponse = Assert.IsType<ServiceResponse>(badResult.Value);
 
         Assert.False(serviceResponse.Flag);
@@ -166,8 +161,7 @@ public class PostControllerTests
         var result = await _controller.UpsertPostComment(newComment);
 
         // Assert
-        var response = Assert.IsType<ActionResult<ServiceResponse>>(result);
-        var badResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var badResult = Assert.IsType<BadRequestObjectResult>(result);
         var serviceResponse = Assert.IsType<ServiceResponse>(badResult.Value);
 
         Assert.False(serviceResponse.Flag);
@@ -190,8 +184,7 @@ public class PostControllerTests
         var result = await _controller.UpsertPostComment(newComment);
 
         // Assert
-        var response = Assert.IsType<ActionResult<ServiceResponse>>(result);
-        var badResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var badResult = Assert.IsType<BadRequestObjectResult>(result);
         var serviceResponse = Assert.IsType<ServiceResponse>(badResult.Value);
 
         Assert.False(serviceResponse.Flag);
@@ -214,8 +207,7 @@ public class PostControllerTests
         var result = await _controller.UpsertPostComment(newComment);
 
         // Assert
-        var response = Assert.IsType<ActionResult<ServiceResponse>>(result);
-        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        var okResult = Assert.IsType<OkObjectResult>(result);
         var serviceResponse = Assert.IsType<ServiceResponse>(okResult.Value);
 
         Assert.True(serviceResponse.Flag);
@@ -238,8 +230,7 @@ public class PostControllerTests
         var result = await _controller.UpsertPostComment(newComment);
 
         // Assert
-        var response = Assert.IsType<ActionResult<ServiceResponse>>(result);
-        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        var okResult = Assert.IsType<OkObjectResult>(result);
         var serviceResponse = Assert.IsType<ServiceResponse>(okResult.Value);
 
         Assert.True(serviceResponse.Flag);
@@ -262,8 +253,7 @@ public class PostControllerTests
         var result = await _controller.GetPostComments(postId, 0, 10);
 
         // Assert
-        var response = Assert.IsType<ActionResult<PostCommentsDto>>(result);
-        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        var okResult = Assert.IsType<OkObjectResult>(result);
         var returnedDto = Assert.IsType<PostCommentsDto>(okResult.Value);
 
         Assert.True(returnedDto.Flag);
@@ -279,8 +269,7 @@ public class PostControllerTests
         var result = await _controller.GetPostComments(emptyPostId, 0, 10);
 
         // Assert
-        var response = Assert.IsType<ActionResult<PostCommentsDto>>(result);
-        var badResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var badResult = Assert.IsType<BadRequestObjectResult>(result);
         var returnedDto = Assert.IsType<PostCommentsDto>(badResult.Value);
 
         Assert.False(returnedDto.Flag);
@@ -297,8 +286,7 @@ public class PostControllerTests
         var result = await _controller.GetPostComments(postId, 0, 10);
 
         // Assert
-        var response = Assert.IsType<ActionResult<PostCommentsDto>>(result);
-        var badResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var badResult = Assert.IsType<BadRequestObjectResult>(result);
         var returnedDto = Assert.IsType<PostCommentsDto>(badResult.Value);
 
         Assert.False(returnedDto.Flag);
@@ -319,8 +307,7 @@ public class PostControllerTests
         var result = await _controller.GetPostComments(postId, 0, 10);
 
         // Assert
-        var response = Assert.IsType<ActionResult<PostCommentsDto>>(result);
-        var badResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var badResult = Assert.IsType<BadRequestObjectResult>(result);
         var returnedDto = Assert.IsType<PostCommentsDto>(badResult.Value);
 
         Assert.False(returnedDto.Flag);
@@ -341,8 +328,7 @@ public class PostControllerTests
         var result = await _controller.ToggleCommentLike(commentId);
 
         // Assert
-        var response = Assert.IsType<ActionResult<ServiceResponse>>(result);
-        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        var okResult = Assert.IsType<OkObjectResult>(result);
         var serviceResponse = Assert.IsType<ServiceResponse>(okResult.Value);
 
         Assert.True(serviceResponse.Flag);
@@ -358,34 +344,31 @@ public class PostControllerTests
         var result = await _controller.ToggleCommentLike(commentId);
 
         // Assert
-        var response = Assert.IsType<ActionResult<ServiceResponse>>(result);
-        var badResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var badResult = Assert.IsType<BadRequestObjectResult>(result);
         var serviceResponse = Assert.IsType<ServiceResponse>(badResult.Value);
 
         Assert.False(serviceResponse.Flag);
         Assert.Equal("Comment Id not found", serviceResponse.Message);
     }
     [Fact]
-    public async Task ToggleCommentLike_FailedToggle_ShouldReturnBadRequest()
-    {
-        // Arrange
-        var commentId = Guid.NewGuid();
-        var userId = "testUserId";
-        var expectedResponse = new ServiceResponse(false, "Failed to toggle");
+public async Task ToggleCommentLike_FailedToggle_ShouldReturnBadRequest()
+{
+    // Arrange
+    var commentId = Guid.NewGuid();
+    var userId = "testUserId";
+    var expectedResponse = new ServiceResponse(false, "Failed to toggle");
 
-        _postServiceMock
-            .Setup(x => x.ToggleLikeComment(commentId, userId))
-            .ReturnsAsync(expectedResponse);
+    _postServiceMock
+        .Setup(x => x.ToggleLikeComment(commentId, userId))
+        .ReturnsAsync(expectedResponse);
 
-        // Act
-        var result = await _controller.ToggleCommentLike(commentId);
+    // Act
+    var result = await _controller.ToggleCommentLike(commentId);
 
-        // Assert
-        var response = Assert.IsType<ActionResult<ServiceResponse>>(result);
-        var badResult = Assert.IsType<BadRequestObjectResult>(response.Result);
-        var serviceResponse = Assert.IsType<ServiceResponse>(badResult.Value);
-
-        Assert.False(serviceResponse.Flag);
-        Assert.Equal("Failed to toggle", serviceResponse.Message);
-    }
+    // Assert
+    var badResult = Assert.IsType<BadRequestObjectResult>(result);
+    var serviceResponse = Assert.IsType<ServiceResponse>(badResult.Value);
+    Assert.False(serviceResponse.Flag);
+    Assert.Equal("Failed to toggle", serviceResponse.Message);
+}
 }

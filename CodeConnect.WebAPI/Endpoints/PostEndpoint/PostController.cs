@@ -13,7 +13,7 @@ public class PostController(IPostService postService) : ControllerBase
 {
     [HttpPost("CreatePost")]
     [Authorize(nameof(Consts.TokenType.Access))]
-    public async Task<ActionResult<CreatePostResponseDto>> CreatePost([FromBody]CreatePostDto createPost)
+    public async Task<IActionResult> CreatePost([FromBody]CreatePostDto createPost)
     {
         var postValidator = new CreatePostDtoValidator();
         var validate = await postValidator.ValidateAsync(createPost);
@@ -28,7 +28,7 @@ public class PostController(IPostService postService) : ControllerBase
 
     [HttpGet("GetUserPosts")]
     [Authorize(nameof(Consts.TokenType.Access))]
-    public async Task<ActionResult<List<PostBasicDto>>> GetUserPosts(string userName, int skip, int take)
+    public async Task<IActionResult> GetUserPosts(string userName, int skip, int take)
     {
         if(string.IsNullOrEmpty(userName))
             return BadRequest(new List<PostBasicDto>());
@@ -37,7 +37,7 @@ public class PostController(IPostService postService) : ControllerBase
 
     [HttpGet("GetPost")]
     [Authorize(nameof(Consts.TokenType.Access))]
-    public async Task<ActionResult<PostBasicDto?>> GetPost(Guid id)
+    public async Task<IActionResult> GetPost(Guid id)
     {
         if(id == Guid.Empty)
             return BadRequest();
@@ -49,7 +49,7 @@ public class PostController(IPostService postService) : ControllerBase
 
     [HttpPost("ToggleLikePost")]
     [Authorize(nameof(Consts.TokenType.Access))]
-    public async Task<ActionResult<ServiceResponse>> ToggleLikePost(LikePostDto likePostDto)
+    public async Task<IActionResult> ToggleLikePost(LikePostDto likePostDto)
     {
         var result = await postService.ToggleLikePost(likePostDto, User.GetInfo(Consts.ClaimTypes.Id));
         if(result.Flag)
@@ -59,7 +59,7 @@ public class PostController(IPostService postService) : ControllerBase
 
     [HttpGet("IsUserLikingPost")]
     [Authorize(nameof(Consts.TokenType.Access))]
-    public async Task<ActionResult<bool>> IsUserLikingPost(Guid postId)
+    public async Task<IActionResult> IsUserLikingPost(Guid postId)
     {
         var result = await postService.IsUserLikingPost(postId, User.GetInfo(Consts.ClaimTypes.Id));
         return Ok(result);
@@ -79,7 +79,7 @@ public class PostController(IPostService postService) : ControllerBase
     // }
     [HttpPost("UpsertPostComment")]
     [Authorize(nameof(Consts.TokenType.Access))]
-    public async Task<ActionResult<ServiceResponse>> UpsertPostComment(UpsertPostComment postComment)
+    public async Task<IActionResult> UpsertPostComment(UpsertPostComment postComment)
     {
         var userId = User.GetInfo(Consts.ClaimTypes.Id);
         if(string.IsNullOrWhiteSpace(userId))
@@ -92,7 +92,7 @@ public class PostController(IPostService postService) : ControllerBase
 
     [HttpGet("GetPostComments")]
     [Authorize(nameof(Consts.TokenType.Access))]
-    public async Task<ActionResult<PostCommentsDto>> GetPostComments(Guid postId, int skip, int take)
+    public async Task<IActionResult> GetPostComments(Guid postId, int skip, int take)
     {
         if(postId == Guid.Empty)
             return BadRequest(new PostCommentsDto(false, new List<CommentDto>()));
@@ -107,7 +107,7 @@ public class PostController(IPostService postService) : ControllerBase
 
     [HttpPost("ToggleCommentLike")]
     [Authorize(nameof(Consts.TokenType.Access))]
-    public async Task<ActionResult<ServiceResponse>> ToggleCommentLike([FromBody] Guid commentId)
+    public async Task<IActionResult> ToggleCommentLike([FromBody] Guid commentId)
     {
        var userId = User.GetInfo(Consts.ClaimTypes.Id);
        if(commentId == Guid.Empty)
