@@ -17,6 +17,7 @@ public static class FaIcons
     public const string Lock = "fa-solid fa-lock";
     public const string OpenBox = "fa-solid fa-box-open";
     public const string Trash = "fa-solid fa-trash";
+    public const string Ellipsis = "fa-solid fa-ellipsis";
 }
 
 public static class FaSize

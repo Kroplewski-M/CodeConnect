@@ -16,6 +16,7 @@ namespace CodeConnect.WebAssembly.DelegatingHandler;
 
 public class AuthHandler(ILocalStorageService localStorageService, NavigationManager navigationManager) : System.Net.Http.DelegatingHandler
 {
+    private static readonly SemaphoreSlim RefreshLock = new(1, 1);
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         var deviceId = await localStorageService.GetItemAsync<string>(Consts.Headers.DeviceId, cancellationToken);
@@ -44,7 +45,25 @@ public class AuthHandler(ILocalStorageService localStorageService, NavigationMan
         }
         if (response?.StatusCode == HttpStatusCode.Unauthorized || response == null)
         {
-            return await RefreshTokenAndRetry(request, cancellationToken);
+            await RefreshLock.WaitAsync(cancellationToken);
+            try
+            {
+                // Check again after acquiring lock — another request may have already refreshed it
+                var newToken = await localStorageService.GetItemAsync<string>(Consts.Tokens.AuthToken, cancellationToken);
+                if (!string.IsNullOrEmpty(newToken))
+                {
+                    request.Headers.Authorization = new AuthenticationHeaderValue(Consts.Tokens.ApiAuthTokenName, newToken);
+                    var res = await base.SendAsync(request, cancellationToken);
+                    if(res.StatusCode == HttpStatusCode.Accepted)
+                        return res;
+                }
+
+                return await RefreshTokenAndRetry(request, cancellationToken);
+            }
+            finally
+            {
+                RefreshLock.Release();
+            }
         }
         return response!;
     }
