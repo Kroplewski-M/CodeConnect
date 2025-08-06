@@ -289,7 +289,183 @@ public class PostServiceTests
         Assert.Empty(result);
         _userManager.VerifyNoUserLookup();
     }
-    
+    [Fact]
+    public async Task GetCommentsForPost_ValidRequest_ShouldReturnComments()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        var userId = "userId";
+        var user = CreateUser("user");
+
+        var post = new Post { Id = postId, CreatedByUserId = userId,Content = "content", CreatedAt = DateTime.UtcNow };
+        var comment = new Comment
+        {
+            Id = Guid.NewGuid(),
+            PostId = postId,
+            Content = "Sample comment",
+            CreatedAt = DateTime.UtcNow,
+            CreatedByUserId = userId,
+            CreatedByUser = user,
+            Likes = new List<CommentLike>
+            {
+                new CommentLike { LikedByUserId = userId }
+            }
+        };
+
+        _context.Users.Add(user);
+        _context.Posts.Add(post);
+        _context.Comments.Add(comment);
+        await _context.SaveChangesAsync();
+
+        // Act
+        var result = await _postService.GetCommentsForPost(postId, 0, 10, userId);
+
+        // Assert
+        Assert.True(result.Flag);
+        Assert.Single(result.Comments);
+        Assert.Equal("Sample comment", result.Comments[0].Content);
+        Assert.True(result.Comments[0].CurrentUserLikes);
+        Assert.Equal(1, result.Comments[0].LikeCount);
+    }
+    [Fact]
+    public async Task GetCommentsForPost_MissingUserId_ShouldReturnFailure()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+
+        // Act
+        var result = await _postService.GetCommentsForPost(postId, 0, 10, null);
+
+        // Assert
+        Assert.False(result.Flag);
+        Assert.Empty(result.Comments);
+    }
+    [Fact]
+    public async Task GetCommentsForPost_PostNotFound_ShouldReturnFailure()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        var userId = "userId";
+
+        // Act
+        var result = await _postService.GetCommentsForPost(postId, 0, 10, userId);
+
+        // Assert
+        Assert.False(result.Flag);
+        Assert.Empty(result.Comments);
+    }
+    [Fact]
+    public async Task ToggleLikeComment_ValidRequest_AddLike_ShouldSucceed()
+    {
+        // Arrange
+        var userId = "userId";
+        var commentId = Guid.NewGuid();
+        var user = CreateUser("user");
+        var comment = new Comment
+        {
+            Id = commentId,
+            Content = "Comment content",
+            CreatedAt = DateTime.UtcNow,
+            CreatedByUserId = "anotherUserId"
+        };
+
+        _userManager.SetupFindById(user);
+        _context.Users.Add(user);
+        _context.Comments.Add(comment);
+        await _context.SaveChangesAsync();
+
+        // Act
+        var response = await _postService.ToggleLikeComment(commentId, userId);
+
+        // Assert
+        Assert.True(response.Flag);
+        Assert.Equal("Like added successfully", response.Message);
+    }
+    [Fact]
+    public async Task ToggleLikeComment_ExistingLike_ShouldRemoveLike()
+    {
+        // Arrange
+        var userId = "userId";
+        var user = CreateUser("user");
+        var commentId = Guid.NewGuid();
+
+        var comment = new Comment
+        {
+            Id = commentId,
+            Content = "Comment content",
+            CreatedAt = DateTime.UtcNow,
+            CreatedByUserId = "anotherUser"
+        };
+
+        var like = new CommentLike
+        {
+            CommentId = commentId,
+            LikedByUserId = userId,
+            LikedOn = DateTime.UtcNow
+        };
+
+        _userManager.SetupFindById(user);
+        _context.Users.Add(user);
+        _context.Comments.Add(comment);
+        _context.CommentLikes.Add(like);
+        await _context.SaveChangesAsync();
+
+        // Act
+        var response = await _postService.ToggleLikeComment(commentId, userId);
+
+        // Assert
+        Assert.True(response.Flag);
+        Assert.Equal("Like added successfully", response.Message); // Message is same even if like is removed
+    }
+    [Fact]
+    public async Task ToggleLikeComment_EmptyUserId_ShouldReturnError()
+    {
+        // Arrange
+        var commentId = Guid.NewGuid();
+
+        // Act
+        var response = await _postService.ToggleLikeComment(commentId, "");
+
+        // Assert
+        AssertBadResponse(response);
+    }
+    [Fact]
+    public async Task ToggleLikeComment_CommentNotFound_ShouldReturnError()
+    {
+        // Arrange
+        var userId = "userId";
+        var commentId = Guid.NewGuid();
+
+        // Act
+        var response = await _postService.ToggleLikeComment(commentId, userId);
+
+        // Assert
+        AssertBadResponse(response);
+    }
+    [Fact]
+    public async Task ToggleLikeComment_UserNotFound_ShouldReturnError()
+    {
+        // Arrange
+        var commentId = Guid.NewGuid();
+        var userId = "userId";
+
+        var comment = new Comment
+        {
+            Id = commentId,
+            Content = "Comment content",
+            CreatedByUserId = "anotherUserId"
+        };
+
+        _context.Comments.Add(comment);
+        await _context.SaveChangesAsync();
+        _userManager.SetupFindById(null);
+
+        // Act
+        var response = await _postService.ToggleLikeComment(commentId, userId);
+
+        // Assert
+        AssertBadResponse(response);
+    }
     // Add similar refactored methods for other scenarios...
 
     // Assertion helpers
