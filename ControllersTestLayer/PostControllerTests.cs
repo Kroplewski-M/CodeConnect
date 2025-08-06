@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.Post;
+using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
 using CodeConnect.WebAPI.Endpoints.PostEndpoint;
 using DomainLayer.Constants;
@@ -244,5 +245,147 @@ public class PostControllerTests
         Assert.True(serviceResponse.Flag);
         Assert.Equal("Comment added successfully", serviceResponse.Message);
     }
+    [Fact]
+    public async Task GetPostComments_ValidRequest_ShouldReturnComments()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        var userId = "testUserId";
+        var comments = new List<CommentDto> { new CommentDto(Guid.NewGuid(),"Sample comment", new UserBasicDto("username","",""),0, DateTime.UtcNow, false) };
+        var resultDto = new PostCommentsDto(true, comments);
 
+        _postServiceMock
+            .Setup(x => x.GetCommentsForPost(postId, 0, 10, userId))
+            .ReturnsAsync(resultDto);
+
+        // Act
+        var result = await _controller.GetPostComments(postId, 0, 10);
+
+        // Assert
+        var response = Assert.IsType<ActionResult<PostCommentsDto>>(result);
+        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        var returnedDto = Assert.IsType<PostCommentsDto>(okResult.Value);
+
+        Assert.True(returnedDto.Flag);
+        Assert.Single(returnedDto.Comments);
+    }
+    [Fact]
+    public async Task GetPostComments_EmptyPostId_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var emptyPostId = Guid.Empty;
+
+        // Act
+        var result = await _controller.GetPostComments(emptyPostId, 0, 10);
+
+        // Assert
+        var response = Assert.IsType<ActionResult<PostCommentsDto>>(result);
+        var badResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var returnedDto = Assert.IsType<PostCommentsDto>(badResult.Value);
+
+        Assert.False(returnedDto.Flag);
+        Assert.Empty(returnedDto.Comments);
+    }
+    [Fact]
+    public async Task GetPostComments_MissingUserId_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        SetMockUserInContext("", "");
+
+        // Act
+        var result = await _controller.GetPostComments(postId, 0, 10);
+
+        // Assert
+        var response = Assert.IsType<ActionResult<PostCommentsDto>>(result);
+        var badResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var returnedDto = Assert.IsType<PostCommentsDto>(badResult.Value);
+
+        Assert.False(returnedDto.Flag);
+        Assert.Empty(returnedDto.Comments);
+    }
+    [Fact]
+    public async Task GetPostComments_FailedResult_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        var userId = "testUserId";
+
+        _postServiceMock
+            .Setup(x => x.GetCommentsForPost(postId, 0, 10, userId))
+            .ReturnsAsync(new PostCommentsDto(false, new List<CommentDto>()));
+
+        // Act
+        var result = await _controller.GetPostComments(postId, 0, 10);
+
+        // Assert
+        var response = Assert.IsType<ActionResult<PostCommentsDto>>(result);
+        var badResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var returnedDto = Assert.IsType<PostCommentsDto>(badResult.Value);
+
+        Assert.False(returnedDto.Flag);
+    }
+    [Fact]
+    public async Task ToggleCommentLike_ValidRequest_ShouldReturnSuccess()
+    {
+        // Arrange
+        var commentId = Guid.NewGuid();
+        var userId = "testUserId";
+        var expectedResponse = new ServiceResponse(true, "Like toggled");
+
+        _postServiceMock
+            .Setup(x => x.ToggleLikeComment(commentId, userId))
+            .ReturnsAsync(expectedResponse);
+
+        // Act
+        var result = await _controller.ToggleCommentLike(commentId);
+
+        // Assert
+        var response = Assert.IsType<ActionResult<ServiceResponse>>(result);
+        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        var serviceResponse = Assert.IsType<ServiceResponse>(okResult.Value);
+
+        Assert.True(serviceResponse.Flag);
+        Assert.Equal("Like toggled", serviceResponse.Message);
+    }
+    [Fact]
+    public async Task ToggleCommentLike_EmptyCommentId_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var commentId = Guid.Empty;
+
+        // Act
+        var result = await _controller.ToggleCommentLike(commentId);
+
+        // Assert
+        var response = Assert.IsType<ActionResult<ServiceResponse>>(result);
+        var badResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var serviceResponse = Assert.IsType<ServiceResponse>(badResult.Value);
+
+        Assert.False(serviceResponse.Flag);
+        Assert.Equal("Comment Id not found", serviceResponse.Message);
+    }
+    [Fact]
+    public async Task ToggleCommentLike_FailedToggle_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var commentId = Guid.NewGuid();
+        var userId = "testUserId";
+        var expectedResponse = new ServiceResponse(false, "Failed to toggle");
+
+        _postServiceMock
+            .Setup(x => x.ToggleLikeComment(commentId, userId))
+            .ReturnsAsync(expectedResponse);
+
+        // Act
+        var result = await _controller.ToggleCommentLike(commentId);
+
+        // Assert
+        var response = Assert.IsType<ActionResult<ServiceResponse>>(result);
+        var badResult = Assert.IsType<BadRequestObjectResult>(response.Result);
+        var serviceResponse = Assert.IsType<ServiceResponse>(badResult.Value);
+
+        Assert.False(serviceResponse.Flag);
+        Assert.Equal("Failed to toggle", serviceResponse.Message);
+    }
 }
