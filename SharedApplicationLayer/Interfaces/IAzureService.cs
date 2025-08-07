@@ -10,5 +10,4 @@ public interface IAzureService
     public Task<AzureImageDto> UploadImage(Consts.ImageType imageType, string base64Image, string imageName,
         string imageExt);
     public Task<ServiceResponse> RemoveImage(string imageName, Consts.ImageType imageType);
-    public BlobContainerClient? GetBlobContainerClient(Consts.ImageType imageType);
 }

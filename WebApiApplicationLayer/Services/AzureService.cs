@@ -19,7 +19,9 @@ public class AzureService(BlobServiceClient blobServiceClient) : IAzureService
 
         if(!Helpers.IsBase64(base64Data) || string.IsNullOrWhiteSpace(imageName) || string.IsNullOrWhiteSpace(imageExt))
             return new AzureImageDto(false, "","Upload Failed");
-        var blobContainerClient = GetBlobContainerClient(imageType);
+        var blobContainerClient = blobServiceClient.GetBlobContainerClient(imageType
+                .ToString()
+                .ToLower());
         if(blobContainerClient == null)
             return new AzureImageDto(false, "","Upload Failed");
         
@@ -49,20 +51,4 @@ public class AzureService(BlobServiceClient blobServiceClient) : IAzureService
                                  : new ServiceResponse(false, "Image could not be deleted");
     }
 
-    public BlobContainerClient? GetBlobContainerClient(Consts.ImageType imageType)
-    {
-        return imageType switch
-        {
-            Consts.ImageType.ProfileImages => blobServiceClient.GetBlobContainerClient(Consts.ImageType.ProfileImages
-                .ToString()
-                .ToLower()),
-            Consts.ImageType.BackgroundImages => blobServiceClient.GetBlobContainerClient(Consts.ImageType
-                .BackgroundImages.ToString()
-                .ToLower()),
-            Consts.ImageType.PostImages => blobServiceClient.GetBlobContainerClient(Consts.ImageType.PostImages
-                .ToString()
-                .ToLower()),
-            _ => null
-        };
-    }
 }
