@@ -93,9 +93,21 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         throw new NotImplementedException();
     }
 
-    public Task DeletePost(Guid id)
+    public async Task<ServiceResponse> DeletePost(Guid id, string? userId = null)
     {
-        throw new NotImplementedException();
+        if(string.IsNullOrWhiteSpace(userId))
+            return new ServiceResponse(false, "user not found");
+        var post = await context.Posts.FirstOrDefaultAsync(x => x.Id == id);
+        if(post == null)
+            return new ServiceResponse(false, "Post not found");
+        if(post.CreatedByUserId != userId)
+            return new ServiceResponse(false, "User did not create the post");
+        //remove images
+        //remove likes
+        //remove comments
+        context.Posts.Remove(post);
+        await context.SaveChangesAsync();
+        return new ServiceResponse(true, "Post deleted");
     }
 
     public async Task<List<PostBasicDto>> GetUserPosts(string username, int skip, int take)

@@ -58,7 +58,7 @@
     &lt;TestId&gt;xUnit::7A14E943-041F-4EF7-A9EF-5E81637AFE5B::net9.0::TestLayer.PostControllerTests.GetPostById_ValidId_ShouldReturnPost&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=624f19da_002D1bca_002D4be3_002Db686_002D30e5a77ab024/@EntryIndexedValue">JetBrains.ReSharper.UnitTestFramework.Session.Serialization.SessionState</s:String>
+	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=68482629_002Df674_002D400a_002Db82e_002D0deb99701fb4/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="MarkNotificationAsRead_ShouldReturnBadRequest_WhenNoUser" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;xUnit::7A14E943-041F-4EF7-A9EF-5E81637AFE5B::net9.0::TestLayer.NotificationsControllerTests.MarkNotificationAsRead_ShouldReturnBadRequest_WhenNoUser&lt;/TestId&gt;
