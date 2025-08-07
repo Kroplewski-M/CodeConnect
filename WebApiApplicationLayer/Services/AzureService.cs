@@ -42,9 +42,7 @@ public class AzureService(BlobServiceClient blobServiceClient) : IAzureService
 
     public async Task<ServiceResponse> RemoveImage(string imageName, Consts.ImageType imageType)
     {
-        var blobContainerClient = imageType == Consts.ImageType.ProfileImages
-            ? blobServiceClient.GetBlobContainerClient(Consts.ImageType.ProfileImages.ToString().ToLower())
-            : blobServiceClient.GetBlobContainerClient(Consts.ImageType.BackgroundImages.ToString().ToLower());
+        var blobContainerClient = blobServiceClient.GetBlobContainerClient(imageType.ToString().ToLower());
         var existingBlobClient = blobContainerClient.GetBlobClient(imageName);
         var result = await existingBlobClient.DeleteIfExistsAsync();
         return result == true ? new ServiceResponse(true, "Image deleted successfully") 
