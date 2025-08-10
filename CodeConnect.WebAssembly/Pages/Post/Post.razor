@@ -3,7 +3,6 @@
 @using CodeConnect.WebAssembly.Components.General
 @using DomainLayer.Helpers
 @using CodeConnect.WebAssembly.Components.Posts
-@inject NavigationManager NavigationManager 
 @inherits PostBase
 
 @if (Post == null && Loading)
@@ -17,19 +16,23 @@ else
     if (Post != null)
     {
         <div class="w-[90vw] max-w-[1100px] bg-dark-secondaryColor rounded-md mx-auto pt-5 pb-[10px] mt-5 shadow-xl relative">
-            <el-dropdown :trap-focus="false" class="inline-block absolute right-5 top-2">
-                <button class="inline-flex w-[50px] text-light-primaryColor p-2 bg-dark-primaryColor justify-center gap-x-1.5 rounded-md text-sm font-semibold cursor-pointer">
-                    <FaIcon Icon="@FaIcons.Ellipsis" Size="@FaSize.Large" />
-                </button>
-                <el-menu anchor="bottom end" class="w-56 origin-top-right rounded-md bg-dark-primaryColor shadow-lg ring-1 ring-black/5">
-                    <div class="py-1">
-                        <a href="#" class="block px-4 py-2 text-sm text-light-primaryColor hover:bg-red-700">
-                            <FaIcon Icon="@FaIcons.Trash" />
-                            Delete Post
-                        </a>
-                    </div>
-                </el-menu>
-            </el-dropdown> 
+            @if (IsPostCreator)
+            {
+                <el-dropdown :trap-focus="false" class="inline-block absolute right-5 top-2">
+                    <button class="inline-flex w-[50px] text-light-primaryColor p-2 bg-dark-primaryColor justify-center gap-x-1.5 rounded-md text-sm font-semibold cursor-pointer">
+                        <FaIcon Icon="@FaIcons.Ellipsis" Size="@FaSize.Large"/>
+                    </button>
+
+                    <el-menu anchor="bottom end" class="w-56 origin-top-right rounded-md bg-dark-primaryColor shadow-lg ring-1 ring-black/5">
+                        <div class="py-1">
+                            <button @onclick="DeletePost" class="block px-4 py-2 text-sm text-light-primaryColor hover:bg-red-700 w-full cursor-pointer">
+                                <FaIcon Icon="@FaIcons.Trash"/>
+                                Delete Post
+                            </button>
+                        </div>
+                    </el-menu>
+                </el-dropdown>        
+            }
             <div class="flex mt-[15px] w-[95%] justify-between text-[18px]">
                 <div class="flex text-light-primaryColor ml-5 cursor-pointer" onclick="@(() => NavigationManager.NavigateTo($"/Profile/{Post.CreatedByUsername}"))">
                     <img src="@Post.UserImg" alt="@Post.CreatedByUsername" class="w-[50px] h-[50px] mr-5 rounded-full object-cover">

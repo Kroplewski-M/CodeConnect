@@ -13,11 +13,13 @@ public class PostBase : ComponentBase
     [Inject] public required IPostService PostService { get; set; }
     [Inject] public required IJSRuntime Js { get; set; }
     [Inject] public required ToastService ToastService { get; set; }
+    [Inject] public required NavigationManager NavigationManager { get; set; }
     [CascadingParameter] public required UserState UserState { get; set; }
     protected bool Loading { get; set; } = true;
     protected PostBasicDto? Post { get; set; }
     protected bool IsUserLiking { get; set; }
     protected int LikeCount { get; set; }
+    protected bool IsPostCreator {get;set;}
     protected override async Task OnParametersSetAsync()
     {
         SetLoading(true);
@@ -25,6 +27,7 @@ public class PostBase : ComponentBase
         LikeCount = Post?.LikeCount ?? 0;
         IsUserLiking = await PostService.IsUserLikingPost(Id, UserState.Current?.UserName ?? "");
         SetLoading(false);
+        IsPostCreator = UserState.Current?.UserName == Post?.CreatedByUsername;
         await Js.InvokeVoidAsync("highlightCodeBlocks",Id.ToString());
     }
     private void SetLoading(bool isLoading)
@@ -53,5 +56,13 @@ public class PostBase : ComponentBase
         }
         LoadingLike = false;
         StateHasChanged();
+    }
+
+    protected async Task DeletePost()
+    {
+        //TODO Add confirm button and wait for confirmation
+        var result = await PostService.DeletePost(Id);
+        if(result.Flag)
+            NavigationManager.NavigateTo("/");
     }
 }
