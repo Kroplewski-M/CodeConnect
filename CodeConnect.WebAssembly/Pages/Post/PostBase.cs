@@ -57,12 +57,22 @@ public class PostBase : ComponentBase
         LoadingLike = false;
         StateHasChanged();
     }
-
+    protected bool ConfirmDeletePost { get; set; }
+    protected void ToggleDeletPost()
+    {
+        ConfirmDeletePost = !ConfirmDeletePost;
+    }
     protected async Task DeletePost()
     {
-        //TODO Add confirm button and wait for confirmation
         var result = await PostService.DeletePost(Id);
-        if(result.Flag)
-            NavigationManager.NavigateTo("/");
+        if (result.Flag)
+        {
+           ToastService.PushToast(new Toast(result.Message, ToastType.Success)); 
+            NavigationManager.NavigateTo("/MyFeed");
+        }
+        else
+        {
+            ToastService.PushToast(new Toast(result.Message, ToastType.Error));
+        }
     }
 }

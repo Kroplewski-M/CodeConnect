@@ -25,7 +25,7 @@ else
 
                     <el-menu anchor="bottom end" class="w-56 origin-top-right rounded-md bg-dark-primaryColor shadow-lg ring-1 ring-black/5">
                         <div class="py-1">
-                            <button @onclick="DeletePost" class="block px-4 py-2 text-sm text-light-primaryColor hover:bg-red-700 w-full cursor-pointer">
+                            <button @onclick="ToggleDeletPost" class="block px-4 py-2 text-sm text-light-primaryColor hover:bg-red-700 w-full cursor-pointer">
                                 <FaIcon Icon="@FaIcons.Trash"/>
                                 Delete Post
                             </button>
@@ -78,4 +78,7 @@ else
         </div>
     }
 }
-
+@if (ConfirmDeletePost)
+{
+    <Confirm Description="Are you sure you want to delete this post?" ConfirmText="Delete"  ConfirmMethod="DeletePost" CancelMethod="ToggleDeletPost"/>   
+}
