@@ -25,11 +25,12 @@ public class PostServiceClient(HttpClient httpClient) : IPostService
         throw new NotImplementedException();
     }
 
-    public Task DeletePost(Guid id)
+    public async Task<ServiceResponse> DeletePost(Guid id, string? userId = null)
     {
-        throw new NotImplementedException();
+        var response = await  httpClient.DeleteAsync($"api/Post/DeletePost?postId={id}");
+        var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
+        return result ?? new ServiceResponse(false, "Error deleting post");
     }
-
     public async Task<List<PostBasicDto>> GetUserPosts(string username, int skip, int take)
     {
         var response = await httpClient.GetFromJsonAsync<List<PostBasicDto>>($"api/Post/GetUserPosts?username={username}&Skip={skip}&Take={take}");

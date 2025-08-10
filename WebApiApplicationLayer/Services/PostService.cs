@@ -93,9 +93,37 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         throw new NotImplementedException();
     }
 
-    public Task DeletePost(Guid id)
+    public async Task<ServiceResponse> DeletePost(Guid id, string? userId = null)
     {
-        throw new NotImplementedException();
+        if(string.IsNullOrWhiteSpace(userId))
+            return new ServiceResponse(false, "user not found");
+        var post = await context.Posts
+            .Include(x=> x.Files)
+            .FirstOrDefaultAsync(x => x.Id == id);
+        if(post == null)
+            return new ServiceResponse(false, "Post not found");
+        if(post.CreatedByUserId != userId)
+            return new ServiceResponse(false, "User did not create the post");
+
+        var imageNames = post.Files.Select(x => x.FileName).ToList();
+        try
+        {
+            context.CommentLikes.RemoveRange(context.CommentLikes.Where(x => x.Comment!.PostId == id));
+            context.Comments.RemoveRange(context.Comments.Where(x => x.PostId == id));
+            context.PostLikes.RemoveRange(context.PostLikes.Where(x => x.PostId == id));
+            context.PostFiles.RemoveRange(context.PostFiles.Where(x => x.PostId == id));
+            context.Posts.Remove(post);
+            await context.SaveChangesAsync();
+        }
+        catch
+        {
+            return new ServiceResponse(false, "Post failed to delete");
+        }
+        foreach (var imageName in imageNames)
+        {
+            await azureService.RemoveImage(imageName, Consts.ImageType.BackgroundImages);
+        }
+        return new ServiceResponse(true, "Post deleted");
     }
 
     public async Task<List<PostBasicDto>> GetUserPosts(string username, int skip, int take)

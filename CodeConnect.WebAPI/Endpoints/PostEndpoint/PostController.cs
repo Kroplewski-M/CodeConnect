@@ -71,12 +71,18 @@ public class PostController(IPostService postService) : ControllerBase
     //     return null;
     // }
     //
-    // [HttpDelete("DeletePost")]
-    // [Authorize]
-    // public async Task<IActionResult> DeletePost()
-    // {
-    //     return null;
-    // }
+     [HttpDelete("DeletePost")]
+     [Authorize(nameof(Consts.TokenType.Access))]
+     public async Task<IActionResult> DeletePost(Guid postId)
+     {
+         var userId =  User.GetInfo(Consts.ClaimTypes.Id);
+         if(string.IsNullOrWhiteSpace(userId))
+             return BadRequest(new ServiceResponse(false, "User not found"));
+         var result = await postService.DeletePost(postId, userId);
+         if(result.Flag)
+             return Ok(result);
+         return BadRequest(result);
+     }
     [HttpPost("UpsertPostComment")]
     [Authorize(nameof(Consts.TokenType.Access))]
     public async Task<IActionResult> UpsertPostComment(UpsertPostComment postComment)
