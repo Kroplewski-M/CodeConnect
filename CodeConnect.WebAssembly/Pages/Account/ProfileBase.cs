@@ -24,11 +24,14 @@ public class ProfileBase : ComponentBase
     protected List<TechInterestsDto>? UserInterests { get; set; }
     [CascadingParameter] public required UserState UserState { get; set; }
     private string PrevUsername { get; set; } = "";
+    private bool LoadingDetails = false;
     protected override async Task OnParametersSetAsync()
     { 
-        if(PrevUsername == Username)
+        if(PrevUsername == Username || LoadingDetails || UserState.Current == null || string.IsNullOrWhiteSpace(Username))
             return;
         FoundUser = false;
+        PrevUsername = Username ?? "";
+        LoadingDetails = true;
         if (UserState?.Current?.UserName == Username)
         {
             IsCurrentUser = true;
@@ -47,9 +50,7 @@ public class ProfileBase : ComponentBase
             FollowerCount = await FollowingService.GetUserFollowersCount(UserDetails.UserName);
             FoundUser = true;
         }
-
-        PrevUsername = UserDetails?.UserName ?? "";
-        StateHasChanged();
+        LoadingDetails = false;
     }
     protected void ToggleShowConfirmLogout()
     {

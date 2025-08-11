@@ -12,6 +12,7 @@ public class VerifyDobBase : ComponentBase
 {
     [CascadingParameter] public required UserState UserState { get; set; }
     [Inject] public required IAuthenticateServiceClient AuthenticateServiceClient { get; set; }
+    [Inject] public required NavigationManager NavigationManager { get; set; }
     [Inject] public required IUserService UserService { get; set; }
     [Inject] public required ToastService ToastService { get; set; }
     protected bool Loading { get; set; } = false;
@@ -42,16 +43,17 @@ public class VerifyDobBase : ComponentBase
             else
             {
                 await UserService.UpdateUserDetails(editProfileForm);
-                ToastService.PushToast(new ApplicationLayer.Toast("Dob verified", ToastType.Success));
+                ToastService.PushToast(new Toast("Dob verified", ToastType.Success));
             }
         }
         catch
         {
-            ToastService.PushToast(new ApplicationLayer.Toast("An error occured please try again later.", ToastType.Error));
+            ToastService.PushToast(new Toast("An error occured please try again later.", ToastType.Error));
         }
         finally
         {
             Loading = false;
+            NavigationManager.Refresh();
             StateHasChanged();
         }
 

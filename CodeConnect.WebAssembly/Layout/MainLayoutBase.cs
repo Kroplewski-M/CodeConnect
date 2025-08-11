@@ -81,10 +81,8 @@ public class MainLayoutBase : LayoutComponentBase, IDisposable
             if (AuthenticationState == null) return;
             var authState = await AuthenticationState;
             var user = authState?.User;
-            Console.WriteLine(user);
             if (user?.Identity is not null && user.Identity.IsAuthenticated)
             {
-                Console.WriteLine("her2");
                 var currentUser = await AuthenticateServiceClient.GetUserFromFromAuthState(authState);
                 UserState.Current = currentUser;
                 HasDob = currentUser?.Dob != null;
@@ -92,7 +90,6 @@ public class MainLayoutBase : LayoutComponentBase, IDisposable
             }
             else
             {
-                Console.WriteLine("here");
                 UserState.Current = null;
                 NavManager.NavigateTo("/Account/Login");
                 await InvokeAsync(StateHasChanged);
