@@ -27,7 +27,7 @@ public class ProfileBase : ComponentBase
     private bool LoadingDetails = false;
     protected override async Task OnParametersSetAsync()
     { 
-        if(PrevUsername == Username || LoadingDetails || UserState.Current == null)
+        if(PrevUsername == Username || LoadingDetails || UserState.Current == null || string.IsNullOrWhiteSpace(Username))
             return;
         FoundUser = false;
         PrevUsername = Username ?? "";

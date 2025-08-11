@@ -61,7 +61,8 @@ public class AuthenticateServiceClient(
         {
             if (!string.IsNullOrWhiteSpace(LastFetchedUser?.UserName) && username == LastFetchedUser.UserName)
                 return LastFetchedUser;
-
+            if(string.IsNullOrWhiteSpace(username))
+                return null;
             var user = await userService.GetUserDetails(username);
             LastFetchedUser = user;
             return user;
