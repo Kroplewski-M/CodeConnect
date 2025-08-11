@@ -50,10 +50,26 @@ public class AuthenticateServiceClient(
         return new AuthResponse(false, "","", authResponse?.Message ?? "Error occured during login please try again later");
     }
 
+    private UserDetails? LastFetchedUser { get; set; }
+    private readonly SemaphoreSlim _fetchLock = new(1, 1); 
     public async Task<UserDetails?> GetUserFromFromAuthState(AuthenticationState? authState)
     {
         var username = authState.GetUserInfo(Consts.ClaimTypes.UserName);
-        return await userService.GetUserDetails(username);
+
+        await _fetchLock.WaitAsync();
+        try
+        {
+            if (!string.IsNullOrWhiteSpace(LastFetchedUser?.UserName) && username == LastFetchedUser.UserName)
+                return LastFetchedUser;
+
+            var user = await userService.GetUserDetails(username);
+            LastFetchedUser = user;
+            return user;
+        }
+        finally
+        {
+            _fetchLock.Release();
+        }
     }
     public async Task<AuthResponse> LogoutUser()
     {

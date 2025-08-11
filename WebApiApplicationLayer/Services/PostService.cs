@@ -121,7 +121,7 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         }
         foreach (var imageName in imageNames)
         {
-            await azureService.RemoveImage(imageName, Consts.ImageType.BackgroundImages);
+            await azureService.RemoveImage(imageName, Consts.ImageType.PostImages);
         }
         return new ServiceResponse(true, "Post deleted");
     }

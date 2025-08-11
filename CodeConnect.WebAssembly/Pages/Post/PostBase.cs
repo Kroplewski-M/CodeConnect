@@ -20,7 +20,7 @@ public class PostBase : ComponentBase
     protected bool IsUserLiking { get; set; }
     protected int LikeCount { get; set; }
     protected bool IsPostCreator {get;set;}
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnInitializedAsync()
     {
         SetLoading(true);
         Post = await PostService.GetPostById(Id);
