@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Json;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.Post;
@@ -16,8 +17,13 @@ public class PostServiceClient(HttpClient httpClient) : IPostService
 
     public async Task<PostBasicDto?> GetPostById(Guid id)
     {
-        var response = await httpClient.GetFromJsonAsync<PostBasicDto?>($"api/Post/GetPost?id={id}");
-        return response;
+        var response = await httpClient.GetAsync($"api/Post/GetPost?id={id}");
+
+        if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            return null;
+        }
+        return await response.Content.ReadFromJsonAsync<PostBasicDto>();
     }
 
     public Task UpdatePost(Guid id)

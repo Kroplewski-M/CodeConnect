@@ -24,6 +24,8 @@ public class PostBase : ComponentBase
     {
         SetLoading(true);
         Post = await PostService.GetPostById(Id);
+        if(Post == null)
+            NavigationManager.NavigateTo("/404");
         LikeCount = Post?.LikeCount ?? 0;
         IsUserLiking = await PostService.IsUserLikingPost(Id, UserState.Current?.UserName ?? "");
         SetLoading(false);
