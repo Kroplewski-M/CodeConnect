@@ -6,7 +6,7 @@ namespace ClientApplicationLayer.Services;
 
 public class CachedAuthClient( AuthenticationStateProvider authenticationStateProvider) : ICachedAuth
 {
-    private static UserDetails? _cachedUser;   
+    private UserDetails? _cachedUser;   
     public UserDetails? GetCachedUser()
     {
         return _cachedUser;

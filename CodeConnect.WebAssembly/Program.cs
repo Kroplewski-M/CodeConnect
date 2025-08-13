@@ -37,7 +37,7 @@ builder.Services.AddScoped<IUserService, UserServiceClient>();
 builder.Services.AddTransient<IUserImageService, UserImageServiceClient>();
 builder.Services.AddSingleton<ToastService>();
 builder.Services.AddSingleton<ImageConvertorServiceClient>();
-builder.Services.AddTransient<ICachedAuth,CachedAuthClient>();
+builder.Services.AddScoped<ICachedAuth,CachedAuthClient>();
 builder.Services.AddScoped<IFollowingService, FollowingServiceClient>();
 builder.Services.AddScoped<IPostService, PostServiceClient>();
 builder.Services.AddScoped<MarkdigServiceClient>();

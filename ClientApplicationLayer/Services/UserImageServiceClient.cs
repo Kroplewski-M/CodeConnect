@@ -16,9 +16,11 @@ public class UserImageServiceClient(HttpClient httpClient,ILocalStorageService l
         var response = await httpClient.PostAsJsonAsync("/api/User/UpdateUserImage", updateUserImageRequest);
         response.EnsureSuccessStatusCode();
         var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
-        cachedAuth.ClearCacheAndNotify(); 
-        if(result?.Flag == true)
+        if (result?.Flag == true)
+        {
+            cachedAuth.ClearCacheAndNotify(); 
             return result;
+        }
         return new ServiceResponse(false, "An error occured while updating the image");
     }
 }

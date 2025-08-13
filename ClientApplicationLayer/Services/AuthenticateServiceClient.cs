@@ -32,7 +32,7 @@ public class AuthenticateServiceClient(
         await localStorageService.SetItemAsync(Consts.Tokens.AuthToken, authResponse.Token);
         await localStorageService.SetItemAsync(Consts.Tokens.RefreshToken, authResponse.Token);
 
-        ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
+        cachedAuth.ClearCacheAndNotify();
         return authResponse;
     }
 
@@ -46,7 +46,7 @@ public class AuthenticateServiceClient(
             {
                 await localStorageService.SetItemAsync(Consts.Tokens.AuthToken, authResponse.Token);
                 await localStorageService.SetItemAsync(Consts.Tokens.RefreshToken, authResponse.RefreshToken);
-                ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
+                cachedAuth.ClearCacheAndNotify();
                 return authResponse;
             }
         }
@@ -79,7 +79,7 @@ public class AuthenticateServiceClient(
     {
         await localStorageService.RemoveItemAsync(Consts.Tokens.AuthToken);
         await localStorageService.RemoveItemAsync(Consts.Tokens.RefreshToken);
-        ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
+        cachedAuth.ClearCacheAndNotify();
         navigationManager.NavigateTo("/");
         toastService.PushToast(new Toast("Logged out successfully",ToastType.Success));
         return new AuthResponse(true, "","", "Logged out successfully");
