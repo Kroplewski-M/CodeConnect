@@ -1,4 +1,5 @@
 using ApplicationLayer;
+using ApplicationLayer.Classes;
 using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
@@ -12,7 +13,7 @@ public class EditUserInterestsBase : ComponentBase
     [Inject] public required IUserService UserService { get; set; }
     [Parameter] public EventCallback Cancel { get; set; } 
     [Parameter] public List<TechInterestsDto>? CurrentUserInterests { get; set; }
-    [CascadingParameter] public required string Username { get; set; }
+     [CascadingParameter] public required UserState UserState { get; set; }
     [Inject] public required ToastService ToastService { get; set; }
 
     protected List<TechInterestsDto> AllTechInterests { get; set; } = new List<TechInterestsDto>();
@@ -81,7 +82,7 @@ public class EditUserInterestsBase : ComponentBase
                 new ApplicationLayer.Toast("Updating interests", ToastType.Info));
             if (CurrentUserInterests != null)
             {
-                var result = await UserService.UpdateUserInterests(new UpdateTechInterestsDto(Username, CurrentUserInterests));
+                var result = await UserService.UpdateUserInterests(new UpdateTechInterestsDto(UserState?.Current?.UserName ?? "", CurrentUserInterests));
                 if (result.Flag)
                 {
                     ToastService.PushToast(

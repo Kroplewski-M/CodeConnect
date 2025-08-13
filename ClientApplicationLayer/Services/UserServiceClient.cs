@@ -42,7 +42,6 @@ public class UserServiceClient(HttpClient httpClient,ILocalStorageService localS
             var result = await response.Content.ReadFromJsonAsync<UserInterestsDto>();
             if(result != null)
                 return result;
-            return new UserInterestsDto(false, "failed to fetch interests", null);
         }
         return new UserInterestsDto(false, "failed to fetch interests", null);
     }
@@ -51,8 +50,11 @@ public class UserServiceClient(HttpClient httpClient,ILocalStorageService localS
     {
         var response = await httpClient.PutAsJsonAsync("api/User/UpdateUserInterests",interests);
         var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
-        if (result != null)
+        if (result is { Flag: true })
+        {
+            cachedAuth.ClearCacheAndNotify(); 
             return result;
+        }
         return new ServiceResponse(false, "An error occured while updating the interests");
     }
 
