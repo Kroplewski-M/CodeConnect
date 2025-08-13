@@ -4,6 +4,7 @@ using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.ExtensionClasses;
 using ApplicationLayer.Interfaces;
 using Blazored.LocalStorage;
+using ClientApplicationLayer.Interfaces;
 using DomainLayer.Constants;
 using DomainLayer.Entities.Auth;
 using Microsoft.AspNetCore.Components;
@@ -16,7 +17,9 @@ public class AuthenticateServiceClient(
     ILocalStorageService localStorageService,
     AuthenticationStateProvider authenticationStateProvider,
     IUserService userService,
-    NavigationManager navigationManager,ToastService toastService)
+    NavigationManager navigationManager,
+    ToastService toastService,
+    ICachedAuth cachedAuth)
     : IAuthenticateServiceClient
 {
 
@@ -29,7 +32,7 @@ public class AuthenticateServiceClient(
         await localStorageService.SetItemAsync(Consts.Tokens.AuthToken, authResponse.Token);
         await localStorageService.SetItemAsync(Consts.Tokens.RefreshToken, authResponse.Token);
 
-        ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
+        cachedAuth.ClearCacheAndNotify();
         return authResponse;
     }
 
@@ -43,14 +46,13 @@ public class AuthenticateServiceClient(
             {
                 await localStorageService.SetItemAsync(Consts.Tokens.AuthToken, authResponse.Token);
                 await localStorageService.SetItemAsync(Consts.Tokens.RefreshToken, authResponse.RefreshToken);
-                ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
+                cachedAuth.ClearCacheAndNotify();
                 return authResponse;
             }
         }
         return new AuthResponse(false, "","", authResponse?.Message ?? "Error occured during login please try again later");
     }
 
-    private UserDetails? LastFetchedUser { get; set; }
     private readonly SemaphoreSlim _fetchLock = new(1, 1); 
     public async Task<UserDetails?> GetUserFromFromAuthState(AuthenticationState? authState)
     {
@@ -59,12 +61,13 @@ public class AuthenticateServiceClient(
         await _fetchLock.WaitAsync();
         try
         {
-            if (!string.IsNullOrWhiteSpace(LastFetchedUser?.UserName) && username == LastFetchedUser.UserName)
-                return LastFetchedUser;
+            var cachedUser = cachedAuth.GetCachedUser();
+            if (!string.IsNullOrWhiteSpace(cachedUser?.UserName) && username == cachedUser.UserName)
+                return cachedUser;
             if(string.IsNullOrWhiteSpace(username))
                 return null;
             var user = await userService.GetUserDetails(username);
-            LastFetchedUser = user;
+            cachedAuth.SetCachedUserAndNotify(user);
             return user;
         }
         finally
@@ -76,7 +79,7 @@ public class AuthenticateServiceClient(
     {
         await localStorageService.RemoveItemAsync(Consts.Tokens.AuthToken);
         await localStorageService.RemoveItemAsync(Consts.Tokens.RefreshToken);
-        ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
+        cachedAuth.ClearCacheAndNotify();
         navigationManager.NavigateTo("/");
         toastService.PushToast(new Toast("Logged out successfully",ToastType.Success));
         return new AuthResponse(true, "","", "Logged out successfully");

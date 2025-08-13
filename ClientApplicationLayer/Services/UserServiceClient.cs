@@ -3,6 +3,7 @@ using ApplicationLayer.DTO_s;
 using ApplicationLayer.DTO_s.User;
 using ApplicationLayer.Interfaces;
 using Blazored.LocalStorage;
+using ClientApplicationLayer.Interfaces;
 using DomainLayer.Entities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -10,7 +11,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 namespace ClientApplicationLayer.Services;
 
 public class UserServiceClient(HttpClient httpClient,ILocalStorageService localStorageService, 
-    AuthenticationStateProvider authenticationStateProvider, NavigationManager navigationManager) : IUserService
+   ICachedAuth cachedAuth, NavigationManager navigationManager) : IUserService
 {
     public async Task<ServiceResponse> UpdateUserDetails(EditProfileForm editProfileForm, string? userId = null)
     {
@@ -18,7 +19,7 @@ public class UserServiceClient(HttpClient httpClient,ILocalStorageService localS
         var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
         if (result?.Flag == true)
         {
-            ((ClientAuthStateProvider)authenticationStateProvider).NotifyStateChanged();
+            cachedAuth.ClearCacheAndNotify(); 
             return new ServiceResponse(true, "Updated Details Successfully");
         }
         return new ServiceResponse(false, "invalid response when updating details");
