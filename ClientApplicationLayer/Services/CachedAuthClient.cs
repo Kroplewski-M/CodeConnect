@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace ClientApplicationLayer.Services;
 
-public class CachedAuthClient( AuthenticationStateProvider authenticationStateProvider) : ICachedAuth
+public class CachedAuthClient(AuthenticationStateProvider authenticationStateProvider) : ICachedAuth
 {
     private UserDetails? _cachedUser;   
     public UserDetails? GetCachedUser()

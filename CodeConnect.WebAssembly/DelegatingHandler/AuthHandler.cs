@@ -32,11 +32,11 @@ public class AuthHandler(ILocalStorageService localStorageService, NavigationMan
         HttpResponseMessage? response = null;
         if (request.RequestUri == null)
             return new HttpResponseMessage(HttpStatusCode.BadRequest);
-        if (hasToken || Consts.AuthEndpoints.AuthUrls.Contains(request.RequestUri.AbsolutePath))
-        {
-            request.Headers.Authorization = new AuthenticationHeaderValue(Consts.Tokens.ApiAuthTokenName, token);
-            response = await base.SendAsync(request, cancellationToken);
-        }
+        if(Consts.AuthEndpoints.AuthUrls.Contains(request.RequestUri.AbsolutePath))
+            return await base.SendAsync(request, cancellationToken);
+  
+        request.Headers.Authorization = new AuthenticationHeaderValue(Consts.Tokens.ApiAuthTokenName, token);
+        response = await base.SendAsync(request, cancellationToken);
 
         if (response?.StatusCode == HttpStatusCode.Forbidden)
         {
@@ -54,7 +54,7 @@ public class AuthHandler(ILocalStorageService localStorageService, NavigationMan
                 {
                     request.Headers.Authorization = new AuthenticationHeaderValue(Consts.Tokens.ApiAuthTokenName, newToken);
                     var res = await base.SendAsync(request, cancellationToken);
-                    if(res.StatusCode == HttpStatusCode.Accepted)
+                    if(res.IsSuccessStatusCode)
                         return res;
                 }
 
@@ -77,6 +77,10 @@ public class AuthHandler(ILocalStorageService localStorageService, NavigationMan
         if(!string.IsNullOrWhiteSpace(deviceId))
             refreshRequest.Headers.TryAddWithoutValidation(Consts.Headers.DeviceId, deviceId);
         var tokenResponse = await base.SendAsync(refreshRequest, cancellationToken);
+        if (!tokenResponse.IsSuccessStatusCode)
+        {
+            await Logout(cancellationToken);
+        }
         var newToken = await tokenResponse.Content.ReadFromJsonAsync<AuthResponse>(cancellationToken: cancellationToken);
         if (newToken?.Flag == true)
         {
@@ -86,9 +90,14 @@ public class AuthHandler(ILocalStorageService localStorageService, NavigationMan
             var retry = await base.SendAsync(request, cancellationToken);
             return retry;
         }
-        await localStorageService.RemoveItemAsync(Consts.Tokens.RefreshToken, cancellationToken);
-        await localStorageService.RemoveItemAsync(Consts.Tokens.TokenType, cancellationToken);
+        await Logout(cancellationToken);
         return new HttpResponseMessage(HttpStatusCode.Unauthorized);
     }
 
+    private async Task Logout(CancellationToken cancellationToken)
+    {
+        await localStorageService.RemoveItemAsync(Consts.Tokens.RefreshToken, cancellationToken);
+        await localStorageService.RemoveItemAsync(Consts.Tokens.AuthToken, cancellationToken);
+        navigationManager.NavigateTo(Consts.AuthEndpoints.LoginPage,forceLoad:true);
+    }
 }

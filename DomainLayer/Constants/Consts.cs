@@ -9,9 +9,11 @@ public static class Consts
     }
     public static class AuthEndpoints
     {
-        public static readonly List<string> AuthUrls = [RegisterEndpoint,LoginEndpoint];
+        public static readonly List<string> AuthUrls = [RegisterEndpoint,LoginEndpoint,LoginPage,RegisterPage];
         private const string RegisterEndpoint = "/api/Authentication/RegisterUser";
         private const string LoginEndpoint = "/api/Authentication/LoginUser";
+        public const string LoginPage = "/Account/Login";
+        private const string RegisterPage = "/Account/Register";
     }
     
     public static class Base
@@ -28,8 +30,8 @@ public static class Consts
         public const string RefreshToken = "RefreshToken";
         public const string AuthType = "Jwt";
         public const string ApiAuthTokenName = "Bearer";
-        public const int AuthTokenMins = 10;
-        public const int RefreshTokenMins = 10080;
+        public const int AuthTokenMins = 1;
+        public const int RefreshTokenMins = 1;
         public const string TokenType = "Token";
     }
 
