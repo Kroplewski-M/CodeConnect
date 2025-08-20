@@ -7,46 +7,46 @@
         <button @onclick="Cancel" class="cursor-pointer rounded-md px-3 py-2 text-light-supportColor bg-light-primaryColor hover:bg-light-primaryColor/70">
             <FaIcon Icon="@FaIcons.Back" /> Back
         </button>
-        <h3 class="font-bold dark:text-dark-supportColor text-light-primaryColor text-4xl mt-4">Edit Profile</h3>
+        <h3 class="font-bold text-dark-supportColor  text-4xl mt-4">Edit Profile</h3>
         <EditForm Model="EditProfileForm" FormName="editProfile" OnSubmit="ConfirmEditProfile" class="mt-5">
             <div class="flex md:flex-row flex-col">
                 <div>
-                    <label class="block font-bold dark:text-dark-supportColor/80 " for="firstName">First Name</label>
+                    <label class="block font-bold text-dark-supportColor/80 " for="firstName">First Name</label>
                     <InputText @bind-Value="EditProfileForm.FirstName" id="firstName" placeholder="FirstName"
-                               class="w-[200px] text-xl bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 pl-[5px] outline-none">
+                               class="w-[200px] text-xl bg-transparent border-b-4 text-dark-supportColor border-dark-supportColor rounded-md font-bold mb-2 pl-[5px] outline-none">
                     </InputText>
                 </div>
                 <div class="mt-2 md:mt-0 md:ml-[30px]">
-                    <label class="block font-bold dark:text-dark-supportColor/80 " for="lastName">Last Name</label>
+                    <label class="block font-bold text-dark-supportColor/80 " for="lastName">Last Name</label>
                     <InputText @bind-Value="EditProfileForm.LastName" id="lastName" placeholder="LastName"
-                               class="w-[200px] text-xl bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 pl-[5px] outline-none">
+                               class="w-[200px] text-xl bg-transparent border-b-4 text-dark-supportColor border-dark-supportColor rounded-md font-bold mb-2 pl-[5px] outline-none">
                     </InputText>
                 </div>
             </div>
             <div class="mt-2">
-                <label class="block font-bold dark:text-dark-supportColor/80 " for="DOB">DOB</label>
+                <label class="block font-bold text-dark-supportColor/80 " for="DOB">DOB</label>
                 <InputDate @bind-Value="EditProfileForm.Dob" id="DOB"
-                           class="w-[200px] text-xl bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 pl-[5px] outline-none">
+                           class="w-[200px] text-xl bg-transparent border-b-4 text-dark-supportColor border-dark-supportColor rounded-md font-bold mb-2 pl-[5px] outline-none">
                 </InputDate>
             </div>
             <div class="flex md:flex-row flex-col">
                 <div class="mt-2">
-                    <label class="block font-bold dark:text-dark-supportColor/80 " for="githubLink">Github URL</label>
+                    <label class="block font-bold text-dark-supportColor/80 " for="githubLink">Github URL</label>
                     <InputText @bind-Value="EditProfileForm.GithubLink" id="githubLink" placeholder="https://github.com/Kroplewski-M"
-                               class="w-[200px] text-xl bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 pl-[5px] outline-none">
+                               class="w-[200px] text-xl bg-transparent border-b-4 text-dark-supportColor border-dark-supportColor rounded-md font-bold mb-2 pl-[5px] outline-none">
                     </InputText>
                 </div>
                 <div class="mt-2 md:ml-[30px]">
-                    <label class="block font-bold dark:text-dark-supportColor/80 " for="webLink">Website URL</label>
+                    <label class="block font-bold text-dark-supportColor/80 " for="webLink">Website URL</label>
                     <InputText @bind-Value="EditProfileForm.WebsiteLink" id="webLink" placeholder="https://www.mateusz-k.dev/"
-                               class="w-[200px] text-xl bg-transparent border-b-4 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 pl-[5px] outline-none">
+                               class="w-[200px] text-xl bg-transparent border-b-4 text-dark-supportColor border-dark-supportColor rounded-md font-bold mb-2 pl-[5px] outline-none">
                     </InputText>
                 </div>
             </div>
             <div class="mt-2">
-                <label class="block font-bold dark:text-dark-supportColor/80" for="DOB">Bio</label>
+                <label class="block font-bold text-dark-supportColor/80" for="DOB">Bio</label>
                 <InputTextArea @bind-Value="EditProfileForm.Bio" id="Bio" placeholder="Describe yourself....."
-                               class="w-[90%] h-[300px] text-xl bg-transparent border-2 text-light-supportColor dark:text-dark-supportColor border-light-supportColor dark:border-dark-supportColor rounded-md font-bold mb-2 p-2 outline-none">
+                               class="w-[90%] h-[300px] text-xl bg-transparent border-2 text-dark-supportColor border-dark-supportColor rounded-md font-bold mb-2 p-2 outline-none">
                 </InputTextArea>
             </div>
             @if (EditProfileErrors.Any())

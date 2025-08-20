@@ -19,13 +19,13 @@ else
             @if (IsPostCreator)
             {
                 <el-dropdown :trap-focus="false" class="inline-block absolute right-5 top-2">
-                    <button class="inline-flex w-[50px] text-light-primaryColor p-2 bg-dark-primaryColor justify-center gap-x-1.5 rounded-md text-sm font-semibold cursor-pointer">
-                        <FaIcon Icon="@FaIcons.Ellipsis" Size="@FaSize.Large"/>
+                    <button class="inline-flex w-[50px] text-light-primaryColor p-2 dark:bg-dark-primaryColor bg-light-primaryColor justify-center gap-x-1.5 rounded-md text-sm font-semibold cursor-pointer">
+                        <FaIcon Icon="@FaIcons.Ellipsis" Size="@FaSize.XLarge" ExtraCss="dark:text-light-primaryColor text-dark-primaryColor"/>
                     </button>
 
-                    <el-menu anchor="bottom end" class="w-56 origin-top-right rounded-md bg-dark-primaryColor shadow-lg ring-1 ring-black/5">
+                    <el-menu anchor="bottom end" class="w-56 origin-top-right rounded-md dark:bg-dark-primaryColor bg-light-primaryColor shadow-lg ring-1 ring-black/5">
                         <div class="py-1">
-                            <button @onclick="ToggleDeletPost" class="block px-4 py-2 text-sm text-light-primaryColor hover:bg-red-700 w-full cursor-pointer">
+                            <button @onclick="ToggleDeletPost" class="block px-4 py-2 text-sm bg-light-primaryColor dark:bg-dark-primaryColor text-black dark:text-white hover:bg-red-700 w-full cursor-pointer">
                                 <FaIcon Icon="@FaIcons.Trash"/>
                                 Delete Post
                             </button>
