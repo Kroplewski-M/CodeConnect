@@ -82,10 +82,10 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy(nameof(Consts.TokenType.Access), policy =>
-        policy.RequireClaim(Consts.Tokens.TokenType, nameof(Consts.TokenType.Access)));
+        policy.RequireClaim(Consts.Tokens.Type, nameof(Consts.TokenType.Access)));
 
     options.AddPolicy(nameof(Consts.TokenType.Refresh), policy =>
-        policy.RequireClaim(Consts.Tokens.TokenType, nameof(Consts.TokenType.Refresh)));
+        policy.RequireClaim(Consts.Tokens.Type, nameof(Consts.TokenType.Refresh)));
 });
 builder.Services.AddSignalR();
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));

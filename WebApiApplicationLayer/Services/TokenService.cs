@@ -21,7 +21,7 @@ public class TokenService(IOptions<JwtSettings> jwtSettings,ApplicationDbContext
         var allClaims = claims.ToList();
         if(!allClaims.Any())
             return string.Empty;
-        allClaims.Add(new Claim(Consts.Tokens.TokenType, tokenType.ToString()));
+        allClaims.Add(new Claim(Consts.Tokens.Type, tokenType.ToString()));
         var enumerable = allClaims;
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Value.Key));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -70,7 +70,7 @@ public class TokenService(IOptions<JwtSettings> jwtSettings,ApplicationDbContext
             return new AuthResponse(false,"","","Invalid token");
             
         //make sure token is a refresh token
-        var tokenType = res?.ClaimsPrincipal?.Claims?.FirstOrDefault(x => x.Type == Consts.Tokens.TokenType)?.Value?.ToString();
+        var tokenType = res?.ClaimsPrincipal?.Claims?.FirstOrDefault(x => x.Type == Consts.Tokens.Type)?.Value?.ToString();
         if(tokenType != nameof(Consts.TokenType.Refresh))
             return new AuthResponse(false,"","","Token is not a refresh token");
             

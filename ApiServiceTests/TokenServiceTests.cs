@@ -186,7 +186,7 @@ public class TokenServiceTests
         var token = _tokenService.GenerateJwtToken(new List<Claim>
         {
             new (Consts.ClaimTypes.UserName, "testuser"),
-            new (Consts.Tokens.TokenType, nameof(Consts.TokenType.Refresh))
+            new (Consts.Tokens.Type, nameof(Consts.TokenType.Refresh))
         }, DateTime.UtcNow.AddMinutes(30));
         var deviceId = Guid.NewGuid();
         var refreshAuth = new RefreshUserAuth { UserId = "user123", RefreshToken = token, DeviceId = deviceId, Expires = DateTime.UtcNow.AddMinutes(30)};

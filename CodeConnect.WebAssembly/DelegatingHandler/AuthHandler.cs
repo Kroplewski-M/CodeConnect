@@ -28,7 +28,6 @@ public class AuthHandler(ILocalStorageService localStorageService, NavigationMan
         request.Headers.Add(Consts.Headers.DeviceId, deviceId);
         
         var token = await localStorageService.GetItemAsync<string>(Consts.Tokens.AuthToken, cancellationToken);
-        var hasToken = !string.IsNullOrEmpty(token);
         HttpResponseMessage? response = null;
         if (request.RequestUri == null)
             return new HttpResponseMessage(HttpStatusCode.BadRequest);
@@ -57,7 +56,6 @@ public class AuthHandler(ILocalStorageService localStorageService, NavigationMan
                     if(res.IsSuccessStatusCode)
                         return res;
                 }
-
                 return await RefreshTokenAndRetry(request, cancellationToken);
             }
             finally
