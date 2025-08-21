@@ -5,32 +5,32 @@
 @using DomainLayer.Helpers
 @inject NavigationManager NavigationManager
 @inject IJSRuntime Js
-<div onclick="@(()=>NavigationManager.NavigateTo($"/Post/{Post.Id}"))" class="w-[90%] md:break-inside-avoid min-h-[50px] bg-dark-primaryColor rounded-lg shadow-lg p-[10px] box-border cursor-pointer hover:scale-[1.05]">
+<div onclick="@(()=>NavigationManager.NavigateTo($"/Post/{Post.Id}"))" class="w-[90%] md:break-inside-avoid min-h-[50px] dark:text-light-primaryColor text-dark-primaryColor dark:bg-dark-primaryColor bg-light-primaryColor rounded-lg shadow-lg p-[10px] box-border cursor-pointer hover:scale-[1.05]">
     
     <div class="flex mt-[10px] w-full justify-between">
-        <div class="flex text-light-primaryColor">
+        <div class="flex">
             <img src="@Post.UserImg" alt="@Post.CreatedByUsername" class="w-[40px] h-[40px] rounded-full object-cover">
             <div class="ml-[10px]">
-                <p class="text-[16px] font-bold hover:text-light-primaryColor"><span class="text-gray-400">&#64;</span>@Post.CreatedByUsername</p>
+                <p class="text-[16px] font-bold"><span class="text-gray-400">&#64;</span>@Post.CreatedByUsername</p>
             </div>
         </div>
-        <p class="text-light-primaryColor/80 text-[14px] ml-[5px]">@Helpers.GetUsersLocalTime(Post.CreatedAtUtc, Consts.DateFormats.DateTimeFormat)</p>
+        <p class="dark:text-light-primaryColor/80 text-dark-primaryColor/80 text-[14px] ml-[5px]">@Helpers.GetUsersLocalTime(Post.CreatedAtUtc, Consts.DateFormats.DateTimeFormat)</p>
     </div>
     
-    <div id="@Id" class="text-light-primaryColor text-[16px] mb-[10px] ml-5 mt-[10px]">@((MarkupString)Post.Content)</div>
+    <div id="@Id" class="text-[16px] mb-[10px] ml-5 mt-[10px]">@((MarkupString)Post.Content)</div>
     @if (FirstImageUrl != null)
     {
         <div class="relative w-full max-w-[95%] ml-5 overflow-hidden rounded-md">
             <img src="@FirstImageUrl" alt="@Post.CreatedByUsername" class="w-full h-auto max-h-[150px] object-cover object-center" />
             @if (RemainingImages > 0)
             {
-                <div class="absolute top-2 right-2 bg-black dark:bg-dark-secondaryColor text-white text-sm px-2 py-1 rounded-full">
+                <div class="absolute top-2 right-2 bg-dark-secondaryColor text-white text-sm px-2 py-1 rounded-full">
                     +@RemainingImages image@(RemainingImages > 1 ? "s" : "")
                 </div>
             }
         </div>
     }
-    <div class="flex text-light-primaryColor/80">
+    <div class="flex dark:text-light-primaryColor/80 text-dark-primaryColor/80">
         <div>
             <FaIcon Icon="@FaIcons.Heart" />
             <span><FormatNumber Number="Post.LikeCount"/></span>

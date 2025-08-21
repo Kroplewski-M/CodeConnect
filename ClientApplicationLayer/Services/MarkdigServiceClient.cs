@@ -53,7 +53,7 @@ public class MarkdigServiceClient
                 var paragraphText = content.ToString().Trim();
                 if (!string.IsNullOrWhiteSpace(paragraphText))
                 {
-                    html.AppendLine($"<p class='text-light-primaryColor'>{WebUtility.HtmlEncode(paragraphText)}</p>");
+                    html.AppendLine($"<p>{WebUtility.HtmlEncode(paragraphText)}</p>");
                 }
             }
         }

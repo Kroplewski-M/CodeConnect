@@ -44,8 +44,6 @@
     --font-weight-bold: 700;
     --radius-md: 0.375rem;
     --radius-lg: 0.5rem;
-    --ease-in: cubic-bezier(0.4, 0, 1, 1);
-    --ease-out: cubic-bezier(0, 0, 0.2, 1);
     --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     --blur-sm: 8px;
     --blur-md: 12px;
@@ -765,9 +763,6 @@
   .bg-amber-400 {
     background-color: var(--color-amber-400);
   }
-  .bg-black {
-    background-color: var(--color-black);
-  }
   .bg-black\/70 {
     background-color: color-mix(in srgb, #000 70%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
@@ -790,12 +785,6 @@
     background-color: color-mix(in srgb, #333333 70%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
       background-color: color-mix(in oklab, var(--color-dark-primaryColor) 70%, transparent);
-    }
-  }
-  .bg-dark-primaryColor\/90 {
-    background-color: color-mix(in srgb, #333333 90%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-dark-primaryColor) 90%, transparent);
     }
   }
   .bg-dark-secondaryColor {
@@ -1047,6 +1036,18 @@
   }
   .text-dark-primaryColor {
     color: var(--color-dark-primaryColor);
+  }
+  .text-dark-primaryColor\/80 {
+    color: color-mix(in srgb, #333333 80%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--color-dark-primaryColor) 80%, transparent);
+    }
+  }
+  .text-dark-primaryColor\/90 {
+    color: color-mix(in srgb, #333333 90%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      color: color-mix(in oklab, var(--color-dark-primaryColor) 90%, transparent);
+    }
   }
   .text-dark-secondaryColor {
     color: var(--color-dark-secondaryColor);
@@ -1619,11 +1620,6 @@
       background-color: var(--color-dark-secondaryColor);
     }
   }
-  .dark\:bg-light-primaryColor {
-    &:where(.dark, .dark *) {
-      background-color: var(--color-light-primaryColor);
-    }
-  }
   .dark\:text-dark-secondaryColor {
     &:where(.dark, .dark *) {
       color: var(--color-dark-secondaryColor);
@@ -1655,17 +1651,17 @@
       color: var(--color-light-primaryColor);
     }
   }
+  .dark\:text-light-primaryColor\/80 {
+    &:where(.dark, .dark *) {
+      color: color-mix(in srgb, #F8F9FA 80%, transparent);
+      @supports (color: color-mix(in lab, red, red)) {
+        color: color-mix(in oklab, var(--color-light-primaryColor) 80%, transparent);
+      }
+    }
+  }
   .dark\:text-white {
     &:where(.dark, .dark *) {
       color: var(--color-white);
-    }
-  }
-  .dark\:text-shadow-white {
-    &:where(.dark, .dark *) {
-      --tw-text-shadow-color: #fff;
-      @supports (color: color-mix(in lab, red, red)) {
-        --tw-text-shadow-color: color-mix(in oklab, var(--color-white) var(--tw-text-shadow-alpha), transparent);
-      }
     }
   }
 }
@@ -1844,15 +1840,6 @@
   syntax: "*";
   inherits: false;
 }
-@property --tw-text-shadow-color {
-  syntax: "*";
-  inherits: false;
-}
-@property --tw-text-shadow-alpha {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 100%;
-}
 @keyframes pulse {
   50% {
     opacity: 0.5;
@@ -1915,8 +1902,6 @@
       --tw-backdrop-opacity: initial;
       --tw-backdrop-saturate: initial;
       --tw-backdrop-sepia: initial;
-      --tw-text-shadow-color: initial;
-      --tw-text-shadow-alpha: 100%;
     }
   }
 }
