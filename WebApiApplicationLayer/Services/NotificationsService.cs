@@ -11,11 +11,11 @@ namespace WebApiApplicationLayer.Services;
 
 public class NotificationService(IHubContext<NotificationsHub, INotificationHub> hubContext,ApplicationDbContext context) : IServerNotificationsService
 {
-    public async Task SendNotificationAsync(string forUserId, string fromUserId, Consts.NotificationTypes notificationType, string targetId)
+    public async Task SendNotificationAsync(string forUserId, string fromUserId, Consts.NotificationTypes notificationType, string targetId, string? parentId = null)
     {
         if(forUserId == fromUserId)
             return;
-        bool notificationExists = NotificationExists(forUserId, fromUserId, notificationType, targetId);
+        bool notificationExists = NotificationExists(forUserId, fromUserId, notificationType, targetId, parentId);
         if (notificationExists)
             return;
         UserNotification userNotification = new UserNotification()
@@ -24,6 +24,7 @@ public class NotificationService(IHubContext<NotificationsHub, INotificationHub>
             FromUserId = fromUserId,
             NotificationTypeId = (int)notificationType,
             TargetId = targetId,
+            ParentId = parentId,
             CreatedAt = DateTime.UtcNow,
         };
         context.UserNotifications.Add(userNotification);
@@ -31,11 +32,12 @@ public class NotificationService(IHubContext<NotificationsHub, INotificationHub>
         await hubContext.Clients.User(forUserId).NotificationPing();
     }
     
-    public bool NotificationExists(string forUserId, string fromUserId, Consts.NotificationTypes notificationType, string targetId)
+    public bool NotificationExists(string forUserId, string fromUserId, Consts.NotificationTypes notificationType, string targetId, string? parentId = null)
     {
         return context.UserNotifications.Any(x => x.FromUserId == fromUserId
                                                   && x.ForUserId == forUserId
                                                   && x.TargetId == targetId
+                                                  && x.ParentId == parentId
                                                   && x.NotificationTypeId == (int)notificationType);
     }
 
@@ -59,11 +61,12 @@ public class NotificationService(IHubContext<NotificationsHub, INotificationHub>
                 x.FromUser,
                 NotificationType = x.NotificationTypeId,
                 x.TargetId,
+                x.ParentId,
                 x.CreatedAt,
             }).ToListAsync();
             
          var notifications= rawNotifications
-             .Select(x=> new NotificationsDto(x.Id,x.FromUser.ToUserBasicDto(), (Consts.NotificationTypes)x.NotificationType, x.CreatedAt, x.TargetId))
+             .Select(x=> new NotificationsDto(x.Id,x.FromUser.ToUserBasicDto(), (Consts.NotificationTypes)x.NotificationType, x.CreatedAt, x.TargetId, x.ParentId))
             .ToList();
         return new GetNotificationsDto(true, notifications);
     }
