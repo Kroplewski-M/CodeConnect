@@ -232,7 +232,7 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         }
         await context.SaveChangesAsync();
         if(commentId == null)
-            await notificationsService.SendNotificationAsync(post.CreatedByUserId, user.Id,Consts.NotificationTypes.PostComment, upsertComment.Id.ToString());
+            await notificationsService.SendNotificationAsync(post.CreatedByUserId, user.Id,Consts.NotificationTypes.PostComment, upsertComment.Id.ToString(), parentId: post.Id.ToString());
         
         return new ServiceResponse(true, "Comment added successfully");
     }

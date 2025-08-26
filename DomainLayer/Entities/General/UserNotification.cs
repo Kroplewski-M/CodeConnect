@@ -11,6 +11,7 @@ public class UserNotification
     public bool IsRead { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public required string TargetId { get; set; }
+    public string? ParentId { get; set; }
     public ApplicationUser? ForUser { get; set; }
     public ApplicationUser? FromUser { get; set; }
     public NotificationType? NotificationType { get; set; }
