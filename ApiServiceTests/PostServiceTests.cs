@@ -466,8 +466,127 @@ public class PostServiceTests
         // Assert
         AssertBadResponse(response);
     }
-    // Add similar refactored methods for other scenarios...
+    [Fact]
+    public async Task GetPostById_ExistingPost_ShouldReturnDto()
+    {
+        var user = CreateUser("user");
+        var post = new Post { Id = Guid.NewGuid(), Content = "content", CreatedByUserId = user.Id, CreatedAt = DateTime.UtcNow };
+        _context.Users.Add(user);
+        _context.Posts.Add(post);
+        await _context.SaveChangesAsync();
 
+        var result = await _postService.GetPostById(post.Id);
+
+        Assert.NotNull(result);
+        Assert.Equal(post.Content, result!.Content);
+    }
+
+    [Fact]
+    public async Task GetPostById_NonExistingPost_ShouldReturnNull()
+    {
+        var result = await _postService.GetPostById(Guid.NewGuid());
+        Assert.Null(result);
+    }
+    [Fact]
+    public async Task DeletePost_UserNotCreator_ShouldReturnFailure()
+    {
+        var user = CreateUser("user");
+        var post = new Post { Id = Guid.NewGuid(),Content = "", CreatedByUserId = "anotherUser", CreatedAt = DateTime.UtcNow};
+        _context.Users.Add(user);
+        _context.Posts.Add(post);
+        await _context.SaveChangesAsync();
+
+        var response = await _postService.DeletePost(post.Id, user.Id);
+
+        Assert.False(response.Flag);
+        Assert.Equal("User did not create the post", response.Message);
+    } 
+   [Fact]
+    public async Task DeletePost_PostNotFound_ShouldReturnFailure()
+    {
+        // Arrange
+        var user = CreateUser("user");
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
+
+        // Act
+        var response = await _postService.DeletePost(Guid.NewGuid(), user.Id);
+
+        // Assert
+        Assert.False(response.Flag);
+        Assert.Equal("Post not found", response.Message);
+    }
+
+    [Fact]
+    public async Task DeletePost_UserIdMissing_ShouldReturnFailure()
+    {
+        // Act
+        var response = await _postService.DeletePost(Guid.NewGuid(), null);
+
+        // Assert
+        Assert.False(response.Flag);
+        Assert.Equal("user not found", response.Message);
+    }
+
+    [Fact]
+    public async Task DeletePost_PostExists_UserIsCreator_ShouldDeletePostAndImages()
+    {
+        // Arrange
+        var user = CreateUser("user");
+        var post = new Post
+        {
+            Id = Guid.NewGuid(),
+            Content = "Sample",
+            CreatedByUserId = user.Id,
+            CreatedAt = DateTime.UtcNow,
+            Files = new List<PostFile> { new PostFile { FileName = "image1.png" } }
+        };
+        _context.Users.Add(user);
+        _context.Posts.Add(post);
+        await _context.SaveChangesAsync();
+        var serviceResponseRet = new ServiceResponse(false, "error");;
+        _azureService.Setup(x => x.RemoveImage(It.IsAny<string>(), Consts.ImageType.PostImages))
+                     .ReturnsAsync(serviceResponseRet);
+
+        // Act
+        var response = await _postService.DeletePost(post.Id, user.Id);
+
+        // Assert
+        Assert.True(response.Flag);
+        Assert.Equal("Post deleted", response.Message);
+        Assert.Null(_context.Posts.FirstOrDefault(p => p.Id == post.Id));
+        _azureService.Verify(x => x.RemoveImage("image1.png", Consts.ImageType.PostImages), Times.Once);
+    }
+    [Fact]
+    public async Task UpsertPostComment_NewComment_ShouldSendNotification()
+    {
+        var postId = Guid.NewGuid();
+        var user = CreateUser("user");
+        var post = new Post { Id = postId,Content = "",CreatedByUserId = "anotherUser", CreatedAt = DateTime.UtcNow };
+        _context.Users.Add(user);
+        _context.Posts.Add(post);
+        await _context.SaveChangesAsync();
+
+        _userManager.SetupFindById(user);
+        var spy = new Mock<IServerNotificationsService>();
+        var postService = new PostService(_context, _azureService.Object, _userManager.Object, spy.Object);
+
+        var response = await postService.UpsertPostComment(postId, null, "new comment", user.Id);
+
+        spy.Verify(x => x.SendNotificationAsync(post.CreatedByUserId, user.Id, Consts.NotificationTypes.PostComment, It.IsAny<string>(), It.IsAny<string?>()), Times.Once);
+        Assert.True(response.Flag);
+    }
+    [Fact]
+    public async Task GetUserPosts_UserHasNoPosts_ShouldReturnEmpty()
+    {
+        var user = CreateUser("user");
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
+
+        var posts = await _postService.GetUserPosts(user?.UserName ?? "", 0, 10);
+        Assert.Empty(posts);
+    }
+    
     // Assertion helpers
     private void AssertBadResponse(ServiceResponse response)
     {

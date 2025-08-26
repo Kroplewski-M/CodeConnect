@@ -349,26 +349,127 @@ public class PostControllerTests
 
         Assert.False(serviceResponse.Flag);
         Assert.Equal("Comment Id not found", serviceResponse.Message);
+    } 
+    [Fact]
+    public async Task ToggleCommentLike_FailedToggle_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var commentId = Guid.NewGuid();
+        var userId = "testUserId";
+        var expectedResponse = new ServiceResponse(false, "Failed to toggle");
+
+        _postServiceMock
+            .Setup(x => x.ToggleLikeComment(commentId, userId))
+            .ReturnsAsync(expectedResponse);
+
+        // Act
+        var result = await _controller.ToggleCommentLike(commentId);
+
+        // Assert
+        var badResult = Assert.IsType<BadRequestObjectResult>(result);
+        var serviceResponse = Assert.IsType<ServiceResponse>(badResult.Value);
+        Assert.False(serviceResponse.Flag);
+        Assert.Equal("Failed to toggle", serviceResponse.Message);
     }
     [Fact]
-public async Task ToggleCommentLike_FailedToggle_ShouldReturnBadRequest()
-{
-    // Arrange
-    var commentId = Guid.NewGuid();
-    var userId = "testUserId";
-    var expectedResponse = new ServiceResponse(false, "Failed to toggle");
+    public async Task GetUserPosts_ValidRequest_ShouldReturnOk()
+    {
+        // Arrange
+        var userName = "testUser";
+        int skip = 0, take = 10;
+        var posts = new List<PostBasicDto> { new PostBasicDto(Guid.NewGuid(), "Content","test","",0,0,[], DateTime.UtcNow) };
+        _postServiceMock
+            .Setup(x => x.GetUserPosts(userName, skip, take))
+            .ReturnsAsync(posts);
 
-    _postServiceMock
-        .Setup(x => x.ToggleLikeComment(commentId, userId))
-        .ReturnsAsync(expectedResponse);
+        // Act
+        var result = await _controller.GetUserPosts(userName, skip, take);
 
-    // Act
-    var result = await _controller.ToggleCommentLike(commentId);
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var returnedPosts = Assert.IsType<List<PostBasicDto>>(okResult.Value);
+        Assert.Single(returnedPosts);
+        Assert.Equal("Content", returnedPosts[0].Content);
+    }
+    [Fact]
+    public async Task GetUserPosts_EmptyUsername_ShouldReturnBadRequest()
+    {
+        // Act
+        var result = await _controller.GetUserPosts("", 0, 10);
 
-    // Assert
-    var badResult = Assert.IsType<BadRequestObjectResult>(result);
-    var serviceResponse = Assert.IsType<ServiceResponse>(badResult.Value);
-    Assert.False(serviceResponse.Flag);
-    Assert.Equal("Failed to toggle", serviceResponse.Message);
-}
+        // Assert
+        var badResult = Assert.IsType<BadRequestObjectResult>(result);
+        var returnedPosts = Assert.IsType<List<PostBasicDto>>(badResult.Value);
+        Assert.Empty(returnedPosts);
+    }
+    [Fact]
+    public async Task GetPost_ValidId_ShouldReturnOk()
+    {
+        var postId = Guid.NewGuid();
+        var postDto = new PostBasicDto(postId, "Content", "test", "", 0, 0, [], DateTime.UtcNow);
+        _postServiceMock.Setup(x => x.GetPostById(postId)).ReturnsAsync(postDto);
+
+        var result = await _controller.GetPost(postId);
+
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var returnedPost = Assert.IsType<PostBasicDto>(okResult.Value);
+        Assert.Equal(postId, returnedPost.Id);
+    }
+
+    [Fact]
+    public async Task GetPost_EmptyId_ShouldReturnBadRequest()
+    {
+        var result = await _controller.GetPost(Guid.Empty);
+        Assert.IsType<BadRequestResult>(result);
+    }
+
+    [Fact]
+    public async Task GetPost_NotFound_ShouldReturnNotFound()
+    {
+        var postId = Guid.NewGuid();
+        _postServiceMock.Setup(x => x.GetPostById(postId)).ReturnsAsync((PostBasicDto?)null);
+        var result = await _controller.GetPost(postId);
+        Assert.IsType<NotFoundResult>(result);
+    }
+    [Fact]
+    public async Task DeletePost_ValidRequest_ShouldReturnOk()
+    {
+        var postId = Guid.NewGuid();
+        _postServiceMock.Setup(x => x.DeletePost(postId, "testUserId"))
+            .ReturnsAsync(new ServiceResponse(true, "Deleted successfully"));
+
+        var result = await _controller.DeletePost(postId);
+
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var serviceResponse = Assert.IsType<ServiceResponse>(okResult.Value);
+        Assert.True(serviceResponse.Flag);
+    }
+
+    [Fact]
+    public async Task DeletePost_MissingUserId_ShouldReturnBadRequest()
+    {
+        var postId = Guid.NewGuid();
+        SetMockUserInContext("", "");
+
+        var result = await _controller.DeletePost(postId);
+
+        var badResult = Assert.IsType<BadRequestObjectResult>(result);
+        var response = Assert.IsType<ServiceResponse>(badResult.Value);
+        Assert.False(response.Flag);
+    }
+
+    [Fact]
+    public async Task DeletePost_FailedDeletion_ShouldReturnBadRequest()
+    {
+        var postId = Guid.NewGuid();
+        _postServiceMock.Setup(x => x.DeletePost(postId, "testUserId"))
+            .ReturnsAsync(new ServiceResponse(false, "Failed to delete"));
+
+        var result = await _controller.DeletePost(postId);
+
+        var badResult = Assert.IsType<BadRequestObjectResult>(result);
+        var response = Assert.IsType<ServiceResponse>(badResult.Value);
+        Assert.False(response.Flag);
+        Assert.Equal("Failed to delete", response.Message);
+    }
 }
