@@ -3,18 +3,18 @@
 @using DomainLayer.Helpers
 @using CodeConnect.WebAssembly.Components.General
 @inherits CommentBase
-<div class="w-[90%] rounded-md bg-dark-primaryColor px-3 pb-2 mt-5">
+<div class="w-[90%] rounded-md dark:text-light-primaryColor text-dark-primaryColor dark:bg-dark-primaryColor bg-light-primaryColor px-3 pb-2 mt-5">
     <div class="flex mt-[10px] w-full justify-between">
         <div class="flex text-light-primaryColor">
             <img src="@UserComment.CreatedBy.ProfileImgUrl" alt="@UserComment.CreatedBy.Username" class="w-[40px] h-[40px] rounded-full object-cover">
             <div class="ml-[10px]">
-                <p class="text-[16px] font-bold hover:text-light-primaryColor"><span class="text-gray-400">&#64;</span>@UserComment.CreatedBy.Username</p>
+                <p class="text-[16px] font-bold dark:text-light-primaryColor/80 text-dark-primaryColor/80"><span class="text-gray-400">&#64;</span>@UserComment.CreatedBy.Username</p>
             </div>
         </div>
-        <p class="text-light-primaryColor/80 text-[14px] ml-[5px]">@Helpers.GetUsersLocalTime(UserComment.CreatedAt, Consts.DateFormats.DateTimeFormat)</p>
+        <p class="dark:text-light-primaryColor/80 text-dark-primaryColor/80 text-[14px] ml-[5px]">@Helpers.GetUsersLocalTime(UserComment.CreatedAt, Consts.DateFormats.DateTimeFormat)</p>
     </div>
-    <div id="@_id" class="text-light-primaryColor text-[16px] mb-[10px] ml-5 mt-[10px]">@((MarkupString)UserComment.Content)</div>
-    <div class="text-light-primaryColor/80 mb-2">
+    <div id="@_id" class="text-[16px] mb-[10px] ml-5 mt-[10px]">@((MarkupString)UserComment.Content)</div>
+    <div class="dark:text-light-primaryColor/80 text-dark-primaryColor/80 mb-2">
         <div class="cursor-pointer @(LikesComment ? "text-red-700" : "")" @onclick="LikeComment">
             <FaIcon Icon="@FaIcons.Heart" Size="@FaSize.Large"/>
             <span><FormatNumber Number="LikeCount"/></span>

@@ -42,7 +42,7 @@ else
                 </div>
                 <p class="text-light-primaryColor/80 text-[14px] mt-[5px]">@Helpers.GetUsersLocalTime(Post.CreatedAtUtc, Consts.DateFormats.DateTimeFormat)</p>
             </div>
-            <div class="w-[100%] text-[20px] font-bold mt-5 pl-5 relative rounded-md pr-5" id="@Id">
+            <div class="w-[100%] text-[20px] text-light-primaryColor font-bold mt-5 pl-5 relative rounded-md pr-5" id="@Id">
                 @((MarkupString)Post.Content)
             </div>
             @if (Post.Images.Any())
