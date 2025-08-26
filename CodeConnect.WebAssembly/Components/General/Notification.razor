@@ -40,9 +40,9 @@
       {
          Consts.NotificationTypes.Follow => $"/Profile/{Notif.FromUser.Username}",
          Consts.NotificationTypes.PostLike => $"/Post/{Notif.TargetId}",
-         Consts.NotificationTypes.CommentLike => $"/Post/{Notif.ParentId}?comment={Notif.TargetId}",
-         Consts.NotificationTypes.CommentReply => $"/Post/{Notif.ParentId}?comment={Notif.TargetId}",
-         Consts.NotificationTypes.PostComment => $"/Post/{Notif.ParentId}?comment={Notif.TargetId}",
+         Consts.NotificationTypes.CommentLike when !string.IsNullOrWhiteSpace(Notif.ParentId) => $"/Post/{Notif.ParentId}?comment={Notif.TargetId}",
+         Consts.NotificationTypes.CommentReply when !string.IsNullOrWhiteSpace(Notif.ParentId) => $"/Post/{Notif.ParentId}?comment={Notif.TargetId}",
+         Consts.NotificationTypes.PostComment when !string.IsNullOrWhiteSpace(Notif.ParentId) => $"/Post/{Notif.ParentId}?comment={Notif.TargetId}",
          _ => ""
       };
    }

@@ -15,7 +15,7 @@ public class NotificationService(IHubContext<NotificationsHub, INotificationHub>
     {
         if(forUserId == fromUserId)
             return;
-        bool notificationExists = NotificationExists(forUserId, fromUserId, notificationType, targetId);
+        bool notificationExists = NotificationExists(forUserId, fromUserId, notificationType, targetId, parentId);
         if (notificationExists)
             return;
         UserNotification userNotification = new UserNotification()
