@@ -13,10 +13,10 @@ namespace CodeConnect.WebAPI.Endpoints.UserEndpoint;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(nameof(Consts.TokenType.Access))]
 public class UserController(IUserService userService,
     IUserImageService userImageService) : ControllerBase
 {
-    [Authorize(nameof(Consts.TokenType.Access))]
     [HttpPost("EditUserDetails")]
     public async Task<IActionResult> EditUserDetails([FromBody] EditProfileForm editProfileForm)
     {
@@ -32,7 +32,6 @@ public class UserController(IUserService userService,
         return Unauthorized("Cannot find user");
     }
 
-    [Authorize(nameof(Consts.TokenType.Access))]
     [HttpPost("GetUserDetails")]
     public async Task<IActionResult> GetUserDetails([FromBody] string username)
     {
@@ -44,7 +43,6 @@ public class UserController(IUserService userService,
         return Ok(userDetails);
     }
 
-    [Authorize(nameof(Consts.TokenType.Access))]
     [HttpPost("UpdateUserImage")]
     public async Task<IActionResult> UpdateUserImage(UpdateUserImageRequest updateUserImageRequest)
     {
@@ -72,7 +70,6 @@ public class UserController(IUserService userService,
         return BadRequest(response);
     }
 
-    [Authorize(nameof(Consts.TokenType.Access))]
     [HttpPut("UpdateUserInterests")]
     public async Task<IActionResult> UpdateUserInterests([FromBody]UpdateTechInterestsDto interests)
     {

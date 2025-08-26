@@ -9,9 +9,9 @@ namespace CodeConnect.WebAPI.Endpoints.NotificationsEndpoint;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(nameof(Consts.TokenType.Access))]
 public class NotificationsController(IServerNotificationsService notificationsService): ControllerBase
 {
-    [Authorize(nameof(Consts.TokenType.Access))]
     [HttpGet("GetNotificationsCount")]
     public async Task<IActionResult> GetNotificationsCount()
     {
@@ -20,8 +20,6 @@ public class NotificationsController(IServerNotificationsService notificationsSe
             return BadRequest("User not found");
         return Ok(await notificationsService.GetUsersNotificationsCount(userId));
     }
-
-    [Authorize(nameof(Consts.TokenType.Access))]
     [HttpGet("GetNotifications")]
     public async Task<IActionResult> GetNotifications()
     {
@@ -30,7 +28,6 @@ public class NotificationsController(IServerNotificationsService notificationsSe
             return BadRequest("User not found");
         return Ok(await notificationsService.GetUsersNotifications(userId));
     }
-    [Authorize(nameof(Consts.TokenType.Access))]
     [HttpPost("MarkNotificationAsRead")]
     public async Task<IActionResult> MarkNotificationAsRead([FromBody]Guid notificationId)
     {
@@ -42,7 +39,6 @@ public class NotificationsController(IServerNotificationsService notificationsSe
             return Ok(result);
         return BadRequest(result);
     }
-    [Authorize(nameof(Consts.TokenType.Access))]
     [HttpPost("MarkAllNotificationsAsRead")]
     public async Task<IActionResult> MarkAllNotificationsAsRead()
     {

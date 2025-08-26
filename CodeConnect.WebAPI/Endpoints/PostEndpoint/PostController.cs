@@ -9,10 +9,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace CodeConnect.WebAPI.Endpoints.PostEndpoint;
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(nameof(Consts.TokenType.Access))]
 public class PostController(IPostService postService) : ControllerBase
 {
     [HttpPost("CreatePost")]
-    [Authorize(nameof(Consts.TokenType.Access))]
     public async Task<IActionResult> CreatePost([FromBody]CreatePostDto createPost)
     {
         var postValidator = new CreatePostDtoValidator();
@@ -25,9 +25,7 @@ public class PostController(IPostService postService) : ControllerBase
             return BadRequest(response);
         return Ok(response);
     }
-
     [HttpGet("GetUserPosts")]
-    [Authorize(nameof(Consts.TokenType.Access))]
     public async Task<IActionResult> GetUserPosts(string userName, int skip, int take)
     {
         if(string.IsNullOrEmpty(userName))
@@ -36,7 +34,6 @@ public class PostController(IPostService postService) : ControllerBase
     }
 
     [HttpGet("GetPost")]
-    [Authorize(nameof(Consts.TokenType.Access))]
     public async Task<IActionResult> GetPost(Guid id)
     {
         if(id == Guid.Empty)
@@ -48,7 +45,6 @@ public class PostController(IPostService postService) : ControllerBase
     }
 
     [HttpPost("ToggleLikePost")]
-    [Authorize(nameof(Consts.TokenType.Access))]
     public async Task<IActionResult> ToggleLikePost(LikePostDto likePostDto)
     {
         var result = await postService.ToggleLikePost(likePostDto, User.GetInfo(Consts.ClaimTypes.Id));
@@ -58,7 +54,6 @@ public class PostController(IPostService postService) : ControllerBase
     }
 
     [HttpGet("IsUserLikingPost")]
-    [Authorize(nameof(Consts.TokenType.Access))]
     public async Task<IActionResult> IsUserLikingPost(Guid postId)
     {
         var result = await postService.IsUserLikingPost(postId, User.GetInfo(Consts.ClaimTypes.Id));
@@ -72,7 +67,6 @@ public class PostController(IPostService postService) : ControllerBase
     // }
     //
      [HttpDelete("DeletePost")]
-     [Authorize(nameof(Consts.TokenType.Access))]
      public async Task<IActionResult> DeletePost(Guid postId)
      {
          var userId =  User.GetInfo(Consts.ClaimTypes.Id);
@@ -84,7 +78,6 @@ public class PostController(IPostService postService) : ControllerBase
          return BadRequest(result);
      }
     [HttpPost("UpsertPostComment")]
-    [Authorize(nameof(Consts.TokenType.Access))]
     public async Task<IActionResult> UpsertPostComment(UpsertPostComment postComment)
     {
         var userId = User.GetInfo(Consts.ClaimTypes.Id);
@@ -97,7 +90,6 @@ public class PostController(IPostService postService) : ControllerBase
     }
 
     [HttpGet("GetPostComments")]
-    [Authorize(nameof(Consts.TokenType.Access))]
     public async Task<IActionResult> GetPostComments(Guid postId, int skip, int take)
     {
         if(postId == Guid.Empty)
@@ -112,7 +104,6 @@ public class PostController(IPostService postService) : ControllerBase
     }
 
     [HttpPost("ToggleCommentLike")]
-    [Authorize(nameof(Consts.TokenType.Access))]
     public async Task<IActionResult> ToggleCommentLike([FromBody] Guid commentId)
     {
        var userId = User.GetInfo(Consts.ClaimTypes.Id);
