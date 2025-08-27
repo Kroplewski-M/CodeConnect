@@ -1,7 +1,7 @@
 @using CodeConnect.WebAssembly.Components.General
 @inherits PostCommentsBase
 
-<CreateComment/>
+<CreateComment OnCommentCreated="AddCommentToTop"/>
 
 <LazyList Items="Comments" OnBottomReached="LoadMoreComments" StartIndex="0" Take="100" ParentClasses="flex flex-wrap">
     <ListTemplate Context="comment">

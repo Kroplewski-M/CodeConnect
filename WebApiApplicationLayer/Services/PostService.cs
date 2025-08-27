@@ -206,16 +206,16 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         return context.PostLikes.Any(x => x.LikedByUserId == user.Id && x.PostId == postId);
     }
 
-    public async Task<ServiceResponse> UpsertPostComment(Guid postId,Guid? commentId, string comment, string? userId = null)
+    public async Task<UpsertCommentDto> UpsertPostComment(Guid postId,Guid? commentId, string comment, string? userId = null)
     {
         if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(comment))
-            return new ServiceResponse(false, "Error occured while adding comment");
+            return new UpsertCommentDto(false, "Error occured while adding comment", null);
         var post = context.Posts.FirstOrDefault(x => x.Id == postId);
         if(post == null)
-            return new ServiceResponse(false, "Post not found");
+            return new UpsertCommentDto(false, "Post not found", null);
         var user = await userManager.FindByIdAsync(userId);
         if(user == null)
-            return new ServiceResponse(false, "User not found");
+            return new UpsertCommentDto(false, "User not found",null);
         var existingComment = context.Comments.FirstOrDefault(x => x.Id == commentId && x.PostId == postId);
         var upsertComment = existingComment ?? new Comment()
         {
@@ -234,7 +234,7 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         if(commentId == null)
             await notificationsService.SendNotificationAsync(post.CreatedByUserId, user.Id,Consts.NotificationTypes.PostComment, upsertComment.Id.ToString(), parentId: post.Id.ToString());
         
-        return new ServiceResponse(true, "Comment added successfully");
+        return new UpsertCommentDto(true, "Comment added successfully", new CommentDto(upsertComment.Id,upsertComment.Content,user.ToUserBasicDto(),0,upsertComment.CreatedAt,false));
     }
 
     public async Task<PostCommentsDto> GetCommentsForPost(Guid postId, int skip, int take, string? userId = null)
