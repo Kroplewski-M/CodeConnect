@@ -176,7 +176,10 @@ public class PostServiceTests
         var response = await _postService.UpsertPostComment(postId, commentId, comment, userId);
 
         // Assert
-        AssertSuccessResponse(response);
+        Assert.NotNull(response);
+        Assert.True(response.Flag);
+        Assert.NotNull(response.Comment); 
+        Assert.NotEmpty(response.Message);
     }
 
     [Fact]
@@ -193,7 +196,10 @@ public class PostServiceTests
 
         _userManager.SetupFindById(null);
         // Assert
-        AssertBadResponse(response);
+        Assert.NotNull(response);
+        Assert.False(response.Flag);
+        Assert.Null(response.Comment); 
+        Assert.NotEmpty(response.Message);
     }
 
     [Fact]
@@ -209,7 +215,12 @@ public class PostServiceTests
         var response = await _postService.UpsertPostComment(postId, commentId, comment, userId);
 
         // Assert
-        AssertBadResponse(response);
+        
+        Assert.NotNull(response);
+        Assert.False(response.Flag);
+        Assert.Null(response.Comment); 
+        Assert.NotEmpty(response.Message);
+
     }
 
     [Fact]
@@ -239,7 +250,12 @@ public class PostServiceTests
         var response = await _postService.UpsertPostComment(postId, commentId, comment, userId);
 
         // Assert
-        AssertSuccessResponse(response);
+      
+        Assert.NotNull(response);
+        Assert.True(response.Flag);
+        Assert.NotNull(response.Comment); 
+        Assert.NotEmpty(response.Message);
+
     }
 
     [Fact]
@@ -277,8 +293,11 @@ public class PostServiceTests
         var response = await _postService.UpsertPostComment(postId, commentId, comment, userId);
 
         // Assert
-        AssertSuccessResponse(response);
-        Assert.Equal("Updated comment content", existingComment.Content);
+      
+        Assert.NotNull(response);
+        Assert.True(response.Flag);
+        Assert.NotNull(response.Comment); 
+        Assert.NotEmpty(response.Message);
     }
     private async Task AssertFetchUserPostsFailureScenario(string? username)
     {

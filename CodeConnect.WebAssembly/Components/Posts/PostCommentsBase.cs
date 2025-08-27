@@ -10,7 +10,12 @@ public class PostCommentsBase : ComponentBase
     [Inject] public required IPostService PostService { get; set; } 
     
     protected List<CommentDto> Comments = new List<CommentDto>();
-    
+    protected void AddCommentToTop(CommentDto newComment)
+    {
+        Comments.Insert(0, newComment); // insert at the top
+        StateHasChanged();
+    }
+ 
     protected async Task LoadMoreComments((int,int)range)
     {
         var (startIndex, take) = range;

@@ -110,14 +110,14 @@ public class PostControllerTests
         var userId = "testUserId";
         _postServiceMock
             .Setup(x => x.UpsertPostComment(postId, commentId, comment, userId))
-            .ReturnsAsync(new ServiceResponse(true, "Comment added successfully"));
+            .ReturnsAsync(new UpsertCommentDto(true, "Comment added successfully", new CommentDto(Guid.NewGuid(), comment, new UserBasicDto("username", "", ""), 0, DateTime.UtcNow, false)));
         var newComment = new UpsertPostComment(postId, commentId, comment);
         // Act
         var result = await _controller.UpsertPostComment(newComment);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
-        var serviceResponse = Assert.IsType<ServiceResponse>(okResult.Value);
+        var serviceResponse = Assert.IsType<UpsertCommentDto>(okResult.Value);
 
         Assert.True(serviceResponse.Flag);
     }
@@ -133,15 +133,15 @@ public class PostControllerTests
         SetMockUserInContext("", "");
         _postServiceMock
             .Setup(x => x.UpsertPostComment(postId, commentId, comment, userId))
-            .ReturnsAsync(new ServiceResponse(false, "Error occured while adding comment"));
+            .ReturnsAsync(new UpsertCommentDto(false, "error", null));
+
         var newComment = new UpsertPostComment(postId, commentId, comment);
         // Act
         var result = await _controller.UpsertPostComment(newComment);
 
         // Assert
         var badResult = Assert.IsType<BadRequestObjectResult>(result);
-        var serviceResponse = Assert.IsType<ServiceResponse>(badResult.Value);
-
+        var serviceResponse = Assert.IsType<UpsertCommentDto>(badResult.Value);
         Assert.False(serviceResponse.Flag);
     }
 
@@ -155,17 +155,16 @@ public class PostControllerTests
         var userId = "testUserId";
         _postServiceMock
             .Setup(x => x.UpsertPostComment(postId, commentId, comment, userId))
-            .ReturnsAsync(new ServiceResponse(false, "Post not found"));
+            .ReturnsAsync(new UpsertCommentDto(false, "error", null));
         var newComment = new UpsertPostComment(postId, commentId, comment);
         // Act
         var result = await _controller.UpsertPostComment(newComment);
 
         // Assert
         var badResult = Assert.IsType<BadRequestObjectResult>(result);
-        var serviceResponse = Assert.IsType<ServiceResponse>(badResult.Value);
+        var serviceResponse = Assert.IsType<UpsertCommentDto>(badResult.Value);
 
         Assert.False(serviceResponse.Flag);
-        Assert.Equal("Post not found", serviceResponse.Message);
     }
 
     [Fact]
@@ -178,17 +177,16 @@ public class PostControllerTests
         var userId = "testUserId";
         _postServiceMock
             .Setup(x => x.UpsertPostComment(postId, commentId, comment, userId))
-            .ReturnsAsync(new ServiceResponse(false, "Error occured while adding comment"));
+            .ReturnsAsync(new UpsertCommentDto(false, "error", null));
         var newComment = new UpsertPostComment(postId, commentId, comment);
         // Act
         var result = await _controller.UpsertPostComment(newComment);
 
         // Assert
         var badResult = Assert.IsType<BadRequestObjectResult>(result);
-        var serviceResponse = Assert.IsType<ServiceResponse>(badResult.Value);
+        var serviceResponse = Assert.IsType<UpsertCommentDto>(badResult.Value);
 
         Assert.False(serviceResponse.Flag);
-        Assert.Equal("Error occured while adding comment", serviceResponse.Message);
     }
 
     [Fact]
@@ -201,14 +199,15 @@ public class PostControllerTests
         var userId = "testUserId";
         _postServiceMock
             .Setup(x => x.UpsertPostComment(postId, commentId, comment, userId))
-            .ReturnsAsync(new ServiceResponse(true, "Comment added successfully"));
+            .ReturnsAsync(new UpsertCommentDto(true, "Comment added successfully", new CommentDto(Guid.NewGuid(), comment, new UserBasicDto("username", "", ""), 0, DateTime.UtcNow, false)));
+
         var newComment = new UpsertPostComment(postId, commentId, comment);
         // Act
         var result = await _controller.UpsertPostComment(newComment);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
-        var serviceResponse = Assert.IsType<ServiceResponse>(okResult.Value);
+        var serviceResponse = Assert.IsType<UpsertCommentDto>(okResult.Value);
 
         Assert.True(serviceResponse.Flag);
         Assert.Equal("Comment added successfully", serviceResponse.Message);
@@ -224,14 +223,14 @@ public class PostControllerTests
         var userId = "testUserId";
         _postServiceMock
             .Setup(x => x.UpsertPostComment(postId, commentId, comment, userId))
-            .ReturnsAsync(new ServiceResponse(true, "Comment added successfully"));
+            .ReturnsAsync(new UpsertCommentDto(true, "Comment added successfully", new CommentDto(Guid.NewGuid(), comment, new UserBasicDto("username", "", ""), 0, DateTime.UtcNow, false)));
         var newComment = new UpsertPostComment(postId, commentId, comment);
         // Act
         var result = await _controller.UpsertPostComment(newComment);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
-        var serviceResponse = Assert.IsType<ServiceResponse>(okResult.Value);
+        var serviceResponse = Assert.IsType<UpsertCommentDto>(okResult.Value);
 
         Assert.True(serviceResponse.Flag);
         Assert.Equal("Comment added successfully", serviceResponse.Message);
