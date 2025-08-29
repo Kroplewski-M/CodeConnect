@@ -14,10 +14,32 @@
         <p class="dark:text-light-primaryColor/80 text-dark-primaryColor/80 text-[14px] ml-[5px]">@Helpers.GetUsersLocalTime(UserComment.CreatedAt, Consts.DateFormats.DateTimeFormat)</p>
     </div>
     <div id="@_id" class="text-[16px] mb-[10px] ml-5 mt-[10px]">@((MarkupString)UserComment.Content)</div>
-    <div class="dark:text-light-primaryColor/80 text-dark-primaryColor/80 mb-2">
-        <div class="cursor-pointer @(LikesComment ? "text-red-700" : "")" @onclick="LikeComment">
-            <FaIcon Icon="@FaIcons.Heart" Size="@FaSize.Large"/>
-            <span><FormatNumber Number="LikeCount"/></span>
+    <div class="flex justify-between w-full">
+        <div class="dark:text-light-primaryColor/80 text-dark-primaryColor/80 mb-2">
+            <div class="cursor-pointer @(LikesComment ? "text-red-700" : "")" @onclick="LikeComment">
+                <FaIcon Icon="@FaIcons.Heart" Size="@FaSize.Large"/>
+                <span><FormatNumber Number="LikeCount"/></span>
+            </div>
+        </div>
+        <div>
+            @if (UserComment.CreatedBy.UserId == UserState.Current?.Id)
+            {
+                <el-dropdown :trap-focus="false" class="inline-block ">
+                    <button class="inline-flex w-[50px] text-light-primaryColor p-2 dark:bg-dark-secondaryColor bg-light-secondaryColor justify-center gap-x-1.5 rounded-md text-sm font-semibold cursor-pointer">
+                        <FaIcon Icon="@FaIcons.Ellipsis" Size="@FaSize.XLarge" ExtraCss="dark:text-light-primaryColor text-dark-primaryColor"/>
+                    </button>
+
+                    <el-menu anchor="bottom end" class="w-56 origin-top-right rounded-md dark:bg-dark-secondaryColor bg-light-secondaryColor shadow-lg ring-1 ring-black/5">
+                        <div class="py-1">
+                            <button class="block px-4 py-2 text-sm text-black dark:text-white hover:bg-red-700 w-full cursor-pointer">
+                                <FaIcon Icon="@FaIcons.Trash"/>
+                                Delete Comment
+                            </button>
+                        </div>
+                    </el-menu>
+                </el-dropdown>   
+            }
         </div>
     </div>
+
 </div>

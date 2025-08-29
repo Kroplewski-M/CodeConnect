@@ -119,8 +119,8 @@ public class FollowingControllerTests
         var username = "SomeUsername";
         var followersList = new List<UserBasicDto>
         {
-            new UserBasicDto("User1","",""),
-            new UserBasicDto("User2", "","")
+            new UserBasicDto("","User1","",""),
+            new UserBasicDto("","User2", "","")
         };
 
         _followingServiceMock
@@ -155,7 +155,7 @@ public class FollowingControllerTests
     {
         // Arrange
         var username = "SomeUsername";
-        var followingList = new List<UserBasicDto> { new UserBasicDto("User1", "",""), new UserBasicDto("User2", "","") };
+        var followingList = new List<UserBasicDto> { new UserBasicDto("","User1", "",""), new UserBasicDto("","User2", "","") };
 
         _followingServiceMock
             .Setup(service => service.GetUserFollowing(username, 0, 10))

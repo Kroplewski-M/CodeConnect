@@ -110,7 +110,7 @@ public class PostControllerTests
         var userId = "testUserId";
         _postServiceMock
             .Setup(x => x.UpsertPostComment(postId, commentId, comment, userId))
-            .ReturnsAsync(new UpsertCommentDto(true, "Comment added successfully", new CommentDto(Guid.NewGuid(), comment, new UserBasicDto("username", "", ""), 0, DateTime.UtcNow, false)));
+            .ReturnsAsync(new UpsertCommentDto(true, "Comment added successfully", new CommentDto(Guid.NewGuid(), comment, new UserBasicDto("","username", "", ""), 0, DateTime.UtcNow, false)));
         var newComment = new UpsertPostComment(postId, commentId, comment);
         // Act
         var result = await _controller.UpsertPostComment(newComment);
@@ -199,7 +199,7 @@ public class PostControllerTests
         var userId = "testUserId";
         _postServiceMock
             .Setup(x => x.UpsertPostComment(postId, commentId, comment, userId))
-            .ReturnsAsync(new UpsertCommentDto(true, "Comment added successfully", new CommentDto(Guid.NewGuid(), comment, new UserBasicDto("username", "", ""), 0, DateTime.UtcNow, false)));
+            .ReturnsAsync(new UpsertCommentDto(true, "Comment added successfully", new CommentDto(Guid.NewGuid(), comment, new UserBasicDto("","username", "", ""), 0, DateTime.UtcNow, false)));
 
         var newComment = new UpsertPostComment(postId, commentId, comment);
         // Act
@@ -223,7 +223,7 @@ public class PostControllerTests
         var userId = "testUserId";
         _postServiceMock
             .Setup(x => x.UpsertPostComment(postId, commentId, comment, userId))
-            .ReturnsAsync(new UpsertCommentDto(true, "Comment added successfully", new CommentDto(Guid.NewGuid(), comment, new UserBasicDto("username", "", ""), 0, DateTime.UtcNow, false)));
+            .ReturnsAsync(new UpsertCommentDto(true, "Comment added successfully", new CommentDto(Guid.NewGuid(), comment, new UserBasicDto("","username", "", ""), 0, DateTime.UtcNow, false)));
         var newComment = new UpsertPostComment(postId, commentId, comment);
         // Act
         var result = await _controller.UpsertPostComment(newComment);
@@ -241,7 +241,7 @@ public class PostControllerTests
         // Arrange
         var postId = Guid.NewGuid();
         var userId = "testUserId";
-        var comments = new List<CommentDto> { new CommentDto(Guid.NewGuid(),"Sample comment", new UserBasicDto("username","",""),0, DateTime.UtcNow, false) };
+        var comments = new List<CommentDto> { new CommentDto(Guid.NewGuid(),"Sample comment", new UserBasicDto("","username","",""),0, DateTime.UtcNow, false) };
         var resultDto = new PostCommentsDto(true, comments);
 
         _postServiceMock

@@ -24,7 +24,7 @@ public static class ApplicationUserExtensions
     public static UserBasicDto ToUserBasicDto(this ApplicationUser? user)
     {
         if (user == null)
-            return new UserBasicDto("", "", "");
-        return new UserBasicDto(user.UserName ?? "", user.Bio ?? "", Helpers.GetUserImgUrl(user.ProfileImage!, Consts.ImageType.ProfileImages));
+            return new UserBasicDto("","", "", "");
+        return new UserBasicDto(user.Id,user.UserName ?? "", user.Bio ?? "", Helpers.GetUserImgUrl(user.ProfileImage!, Consts.ImageType.ProfileImages));
     }
 }

@@ -1,3 +1,4 @@
+using ApplicationLayer.Classes;
 using ApplicationLayer.DTO_s.Post;
 using ApplicationLayer.Interfaces;
 using Microsoft.AspNetCore.Components;
@@ -8,7 +9,8 @@ namespace CodeConnect.WebAssembly.Components.Posts;
 public class CommentBase : ComponentBase
 {
     
-    [Parameter] public required CommentDto UserComment { get; set; } 
+    [Parameter] public required CommentDto UserComment { get; set; }
+    [CascadingParameter] public required UserState UserState { get; set; }
     [Inject] public required IJSRuntime Js  { get; set; }
     [Inject] public required IPostService PostService { get; set; }
     protected readonly string _id = Guid.NewGuid().ToString();
