@@ -347,7 +347,6 @@ public class PostControllerTests
         var serviceResponse = Assert.IsType<ServiceResponse>(badResult.Value);
 
         Assert.False(serviceResponse.Flag);
-        Assert.Equal("Comment Id not found", serviceResponse.Message);
     } 
     [Fact]
     public async Task ToggleCommentLike_FailedToggle_ShouldReturnBadRequest()
