@@ -78,4 +78,11 @@ public class PostServiceClient(HttpClient httpClient) : IPostService
        var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
        return result ?? new ServiceResponse(false, "Failed to toggle like comment");
     }
+
+    public async Task<ServiceResponse> DeleteComment(Guid commentId, string? userId = null)
+    {
+        var response = await httpClient.DeleteAsync($"api/Post/DeleteComment?commentId={commentId}");
+        var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
+        return result ?? new ServiceResponse(false, "Failed to delete comment");;
+    }
 }

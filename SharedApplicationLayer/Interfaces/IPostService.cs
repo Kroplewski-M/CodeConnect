@@ -17,4 +17,5 @@ public interface IPostService
     public Task<PostCommentsDto> GetCommentsForPost(Guid postId, int skip, int take, string? userId = null);
     
     public Task<ServiceResponse> ToggleLikeComment(Guid commentId, string? userId = null);
+    public Task<ServiceResponse> DeleteComment(Guid commentId, string? userId = null);
 }

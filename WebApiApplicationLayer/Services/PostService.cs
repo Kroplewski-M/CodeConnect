@@ -286,4 +286,25 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         await context.SaveChangesAsync();
         return new ServiceResponse(true, "Like added successfully");
     }
+
+    public async Task<ServiceResponse> DeleteComment(Guid commentId, string? userId = null)
+    {
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            return new ServiceResponse(false, "Error occured while deleting comment");
+        }
+        var user = await userManager.FindByIdAsync(userId);
+        if(user == null)
+            return new ServiceResponse(false, "User not found");
+        var comment = context.Comments.FirstOrDefault(x => x.Id == commentId);
+        if(comment == null)
+            return new ServiceResponse(false, "Comment not found");
+        if(comment.CreatedByUserId != userId)
+            return new ServiceResponse(false, "User did not create the comment");
+        var commentLikes = context.CommentLikes.Where(x => x.CommentId == commentId);
+        context.Comments.Remove(comment);
+        context.CommentLikes.RemoveRange(commentLikes);
+        await context.SaveChangesAsync();
+        return new ServiceResponse(true, "Comment deleted successfully");
+    }
 }

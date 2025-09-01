@@ -31,7 +31,7 @@
 
                     <el-menu anchor="bottom end" class="w-56 origin-top-right rounded-md dark:bg-dark-secondaryColor bg-light-secondaryColor shadow-lg ring-1 ring-black/5">
                         <div class="py-1">
-                            <button class="block px-4 py-2 text-sm text-black dark:text-white hover:bg-red-700 w-full cursor-pointer">
+                            <button @onclick="ToggleShowDeleteComment" class="block px-4 py-2 text-sm text-black dark:text-white hover:bg-red-700 w-full cursor-pointer">
                                 <FaIcon Icon="@FaIcons.Trash"/>
                                 Delete Comment
                             </button>
@@ -41,5 +41,8 @@
             }
         </div>
     </div>
-
 </div>
+@if (ShowDeleteComment)
+{
+    <Confirm Description="Are you sure you want to delete this comment?" ConfirmText="Delete"  ConfirmMethod="DeleteComment" CancelMethod="ToggleShowDeleteComment"/>
+}
