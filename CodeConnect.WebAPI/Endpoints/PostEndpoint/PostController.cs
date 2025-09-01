@@ -108,10 +108,21 @@ public class PostController(IPostService postService) : ControllerBase
     {
        var userId = User.GetInfo(Consts.ClaimTypes.Id);
        if(commentId == Guid.Empty)
-           return BadRequest(new ServiceResponse(false, "Comment Id not found"));
+           return BadRequest(new ServiceResponse(false, "error occured while adding comment"));
        var res = await postService.ToggleLikeComment(commentId, userId);
        if(res.Flag)
         return Ok(res);
        return BadRequest(res);
+    }
+    [HttpDelete("DeleteComment")]
+    public async Task<IActionResult> DeleteComment(Guid commentId)
+    {
+        var userId = User.GetInfo(Consts.ClaimTypes.Id);
+        if(commentId == Guid.Empty)
+            return BadRequest(new ServiceResponse(false, "error occured while deleting comment"));
+        var res = await postService.DeleteComment(commentId, userId);
+        if(res.Flag)
+            return Ok(res);
+        return BadRequest(res);
     }
 }
