@@ -470,4 +470,79 @@ public class PostControllerTests
         Assert.False(response.Flag);
         Assert.Equal("Failed to delete", response.Message);
     }
+    [Fact]
+    public async Task DeleteComment_ValidRequest_ShouldReturnOk()
+    {
+        // Arrange
+        var commentId = Guid.NewGuid();
+        _postServiceMock
+            .Setup(x => x.DeleteComment(commentId, "testUserId"))
+            .ReturnsAsync(new ServiceResponse(true, "Comment deleted successfully"));
+
+        // Act
+        var result = await _controller.DeleteComment(commentId);
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var response = Assert.IsType<ServiceResponse>(okResult.Value);
+
+        Assert.True(response.Flag);
+    }
+    [Fact]
+    public async Task DeleteComment_EmptyCommentId_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var emptyId = Guid.Empty;
+
+        // Act
+        var result = await _controller.DeleteComment(emptyId);
+
+        // Assert
+        var badResult = Assert.IsType<BadRequestObjectResult>(result);
+        var response = Assert.IsType<ServiceResponse>(badResult.Value);
+
+        Assert.False(response.Flag);
+        Assert.Equal("error occured while deleting comment", response.Message);
+    }
+    [Fact]
+    public async Task DeleteComment_MissingUserId_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var commentId = Guid.NewGuid();
+        SetMockUserInContext("", ""); // simulate no userId
+
+        _postServiceMock
+            .Setup(x => x.DeleteComment(commentId, ""))
+            .ReturnsAsync(new ServiceResponse(false, "User not authorized"));
+
+        // Act
+        var result = await _controller.DeleteComment(commentId);
+
+        // Assert
+        var badResult = Assert.IsType<BadRequestObjectResult>(result);
+        var response = Assert.IsType<ServiceResponse>(badResult.Value);
+
+        Assert.False(response.Flag);
+        Assert.Equal("User not authorized", response.Message);
+    }
+
+    [Fact]
+    public async Task DeleteComment_FailedDeletion_ShouldReturnBadRequest()
+    {
+        // Arrange
+        var commentId = Guid.NewGuid();
+        _postServiceMock
+            .Setup(x => x.DeleteComment(commentId, "testUserId"))
+            .ReturnsAsync(new ServiceResponse(false, "Failed to delete comment"));
+
+        // Act
+        var result = await _controller.DeleteComment(commentId);
+
+        // Assert
+        var badResult = Assert.IsType<BadRequestObjectResult>(result);
+        var response = Assert.IsType<ServiceResponse>(badResult.Value);
+
+        Assert.False(response.Flag);
+        Assert.Equal("Failed to delete comment", response.Message);
+    } 
 }

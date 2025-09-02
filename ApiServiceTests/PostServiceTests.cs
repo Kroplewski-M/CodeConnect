@@ -605,7 +605,111 @@ public class PostServiceTests
         var posts = await _postService.GetUserPosts(user?.UserName ?? "", 0, 10);
         Assert.Empty(posts);
     }
-    
+    [Fact]
+    public async Task DeleteComment_UserIdMissing_ShouldReturnFailure()
+    {
+        // Arrange
+        var commentId = Guid.NewGuid();
+
+        // Act
+        var response = await _postService.DeleteComment(commentId, null);
+
+        // Assert
+        Assert.False(response.Flag);
+        Assert.Equal("Error occured while deleting comment", response.Message);
+    }
+    [Fact]
+    public async Task DeleteComment_UserNotFound_ShouldReturnFailure()
+    {
+        // Arrange
+        var userId = "missingUser";
+        var commentId = Guid.NewGuid();
+        _userManager.SetupFindById(null);
+
+        // Act
+        var response = await _postService.DeleteComment(commentId, userId);
+
+        // Assert
+        Assert.False(response.Flag);
+        Assert.Equal("User not found", response.Message);
+    } 
+    [Fact]
+    public async Task DeleteComment_CommentNotFound_ShouldReturnFailure()
+    {
+        // Arrange
+        var user = CreateUser("user");
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
+        _userManager.SetupFindById(user);
+
+        // Act
+        var response = await _postService.DeleteComment(Guid.NewGuid(), user.Id);
+
+        // Assert
+        Assert.False(response.Flag);
+        Assert.Equal("Comment not found", response.Message);
+    }
+    [Fact]
+    public async Task DeleteComment_UserNotCreator_ShouldReturnFailure()
+    {
+        // Arrange
+        var user = CreateUser("user");
+        var anotherUser = CreateUser("anotherUser");
+
+        var comment = new Comment
+        {
+            Id = Guid.NewGuid(),
+            Content = "Comment content",
+            CreatedByUserId = anotherUser.Id,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        _context.Users.Add(user);
+        _context.Users.Add(anotherUser);
+        _context.Comments.Add(comment);
+        await _context.SaveChangesAsync();
+        _userManager.SetupFindById(user);
+
+        // Act
+        var response = await _postService.DeleteComment(comment.Id, user.Id);
+
+        // Assert
+        Assert.False(response.Flag);
+        Assert.Equal("User did not create the comment", response.Message);
+    }
+    [Fact]
+    public async Task DeleteComment_ValidRequest_ShouldDeleteCommentAndLikes()
+    {
+        // Arrange
+        var user = CreateUser("user");
+        var comment = new Comment
+        {
+            Id = Guid.NewGuid(),
+            Content = "Comment content",
+            CreatedByUserId = user.Id,
+            CreatedAt = DateTime.UtcNow
+        };
+        var like = new CommentLike
+        {
+            CommentId = comment.Id,
+            LikedByUserId = "liker",
+            LikedOn = DateTime.UtcNow
+        };
+
+        _context.Users.Add(user);
+        _context.Comments.Add(comment);
+        _context.CommentLikes.Add(like);
+        await _context.SaveChangesAsync();
+        _userManager.SetupFindById(user);
+
+        // Act
+        var response = await _postService.DeleteComment(comment.Id, user.Id);
+
+        // Assert
+        Assert.True(response.Flag);
+        Assert.Null(_context.Comments.FirstOrDefault(c => c.Id == comment.Id));
+        Assert.Empty(_context.CommentLikes.Where(l => l.CommentId == comment.Id));
+    }
     // Assertion helpers
     private void AssertBadResponse(ServiceResponse response)
     {

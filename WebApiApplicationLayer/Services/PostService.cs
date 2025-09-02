@@ -299,11 +299,12 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         var comment = context.Comments.FirstOrDefault(x => x.Id == commentId);
         if(comment == null)
             return new ServiceResponse(false, "Comment not found");
-        if(comment.CreatedByUserId != userId)
+        if (comment.CreatedByUserId != userId)
             return new ServiceResponse(false, "User did not create the comment");
         var commentLikes = context.CommentLikes.Where(x => x.CommentId == commentId);
-        context.Comments.Remove(comment);
+        
         context.CommentLikes.RemoveRange(commentLikes);
+        context.Comments.Remove(comment);
         await context.SaveChangesAsync();
         return new ServiceResponse(true, "Comment deleted successfully");
     }
