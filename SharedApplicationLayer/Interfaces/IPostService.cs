@@ -7,10 +7,11 @@ namespace ApplicationLayer.Interfaces;
 public interface IPostService
 {
     public Task<CreatePostResponseDto> CreatePost(CreatePostDto createPost,string? userId = null);
-    public Task<PostBasicDto?> GetPostById(Guid id);
+    public Task<PostDto?> GetPostById(Guid id);
     public Task UpdatePost(Guid id);
     public Task<ServiceResponse> DeletePost(Guid id,  string? userId = null);
-    public Task<List<PostBasicDto>> GetUserPosts(string username,  int skip, int take);
+    public Task<List<PostDto>> GetUserPosts(string username,  int skip, int take);
+    public Task<List<PostDto>> GetPostsForFeed(int skip, int take, string? userId = null);
     public Task<ServiceResponse> ToggleLikePost(LikePostDto likePostDto, string? userId = null);
     public Task<bool> IsUserLikingPost(Guid postId, string? userId = null);
     public Task<UpsertCommentDto> UpsertPostComment(Guid postId,Guid? commentId, string comment, string? userId = null);

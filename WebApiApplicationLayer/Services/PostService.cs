@@ -60,7 +60,7 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         return new CreatePostResponseDto(true,"Post created successfully", newPost.Id);
     }
 
-    public async Task<PostBasicDto?> GetPostById(Guid id)
+    public async Task<PostDto?> GetPostById(Guid id)
     {
         var post = await context.Posts.Where(x => x.Id == id)
             .Select(x=> new
@@ -75,7 +75,7 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
             })
             .FirstOrDefaultAsync();
         if (post != null)
-            return new PostBasicDto(
+            return new PostDto(
                 post.Id,
                 post.Content,
                 post.CreatedBy?.UserName ?? "",
@@ -126,19 +126,23 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         return new ServiceResponse(true, "Post deleted");
     }
 
-    public async Task<List<PostBasicDto>> GetUserPosts(string username, int skip, int take)
+    public async Task<List<PostDto>> GetUserPosts(string username, int skip, int take)
     {
         if (string.IsNullOrWhiteSpace(username))
-            return new List<PostBasicDto>();
+            return new List<PostDto>();
         var user = await userManager.FindByNameAsync(username);
         if(user == null)
-            return new List<PostBasicDto>();
-        var posts = context.Posts
+            return new List<PostDto>();
+        var postQuery = context.Posts
             .AsNoTracking()
-            .Where(x => x.CreatedByUserId == user.Id)
-            .Include(x => x.CreatedByUser)
-            .Include(x => x.Files)
-            .OrderByDescending(x => x.CreatedAt)
+            .Where(x => x.CreatedByUserId == user.Id);
+        var posts = GetPostsDto(postQuery, skip, take);
+        return posts;
+    }
+    private List<PostDto> GetPostsDto(IQueryable<Post> posts, int skip, int take)
+    {
+        return posts.OrderByDescending(x => x.CreatedAt)
+            .ThenByDescending(x => x.Id)
             .Skip(skip)
             .Take(take)
             .Select(x => new
@@ -150,10 +154,10 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
                 LikeCount = x.Likes.Count,
                 FileNames = x.Files.Select(f => f.FileName).ToList(),
                 CreatedAt = x.CreatedAt,
-            })
+            }) 
             .ToList()
             .Select(x =>
-                new PostBasicDto(
+                new PostDto(
                     x.Id,
                     x.Content,
                     x.User?.UserName ?? "",
@@ -165,7 +169,19 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
                 )
             )
             .ToList();
-        return posts;
+    }
+    public async Task<List<PostDto>> GetPostsForFeed(int skip, int take, string? userId = null)
+    {
+       if(string.IsNullOrWhiteSpace(userId))
+           return new List<PostDto>();
+       var user = await userManager.FindByIdAsync(userId);
+       if(user == null)
+           return new List<PostDto>();
+       var followingUsers = context.FollowUsers.Where(x=> x.FollowerUserId == user.Id).Select(x=>x.FollowedUserId);
+       var postQuery = context.Posts.AsNoTracking()
+           .Where(x => followingUsers.Contains(x.CreatedByUserId));
+       var posts = GetPostsDto(postQuery, skip, take);
+       return posts;
     }
 
     public async Task<ServiceResponse> ToggleLikePost(LikePostDto likePostDto, string? userId = null)

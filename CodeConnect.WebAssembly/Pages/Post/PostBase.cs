@@ -16,7 +16,7 @@ public class PostBase : ComponentBase
     [Inject] public required NavigationManager NavigationManager { get; set; }
     [CascadingParameter] public required UserState UserState { get; set; }
     protected bool Loading { get; set; } = true;
-    protected PostBasicDto? Post { get; set; }
+    protected PostDto? Post { get; set; }
     protected bool IsUserLiking { get; set; }
     protected int LikeCount { get; set; }
     protected bool IsPostCreator {get;set;}
