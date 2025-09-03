@@ -29,10 +29,15 @@ public class PostController(IPostService postService) : ControllerBase
     public async Task<IActionResult> GetUserPosts(string userName, int skip, int take)
     {
         if(string.IsNullOrEmpty(userName))
-            return BadRequest(new List<PostBasicDto>());
+            return BadRequest(new List<PostDto>());
         return Ok(await postService.GetUserPosts(userName, skip, take));
     }
 
+    [HttpGet("GetPostsForFeed")]
+    public async Task<IActionResult> GetPostsForFeed(int skip, int take)
+    {
+        return Ok(await postService.GetPostsForFeed(skip, take, User.GetInfo(Consts.ClaimTypes.Id)));
+    }
     [HttpGet("GetPost")]
     public async Task<IActionResult> GetPost(Guid id)
     {

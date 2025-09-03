@@ -375,7 +375,7 @@ public class PostControllerTests
         // Arrange
         var userName = "testUser";
         int skip = 0, take = 10;
-        var posts = new List<PostBasicDto> { new PostBasicDto(Guid.NewGuid(), "Content","test","",0,0,[], DateTime.UtcNow) };
+        var posts = new List<PostDto> { new PostDto(Guid.NewGuid(), "Content","test","",0,0,[], DateTime.UtcNow) };
         _postServiceMock
             .Setup(x => x.GetUserPosts(userName, skip, take))
             .ReturnsAsync(posts);
@@ -385,7 +385,7 @@ public class PostControllerTests
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
-        var returnedPosts = Assert.IsType<List<PostBasicDto>>(okResult.Value);
+        var returnedPosts = Assert.IsType<List<PostDto>>(okResult.Value);
         Assert.Single(returnedPosts);
         Assert.Equal("Content", returnedPosts[0].Content);
     }
@@ -397,20 +397,20 @@ public class PostControllerTests
 
         // Assert
         var badResult = Assert.IsType<BadRequestObjectResult>(result);
-        var returnedPosts = Assert.IsType<List<PostBasicDto>>(badResult.Value);
+        var returnedPosts = Assert.IsType<List<PostDto>>(badResult.Value);
         Assert.Empty(returnedPosts);
     }
     [Fact]
     public async Task GetPost_ValidId_ShouldReturnOk()
     {
         var postId = Guid.NewGuid();
-        var postDto = new PostBasicDto(postId, "Content", "test", "", 0, 0, [], DateTime.UtcNow);
+        var postDto = new PostDto(postId, "Content", "test", "", 0, 0, [], DateTime.UtcNow);
         _postServiceMock.Setup(x => x.GetPostById(postId)).ReturnsAsync(postDto);
 
         var result = await _controller.GetPost(postId);
 
         var okResult = Assert.IsType<OkObjectResult>(result);
-        var returnedPost = Assert.IsType<PostBasicDto>(okResult.Value);
+        var returnedPost = Assert.IsType<PostDto>(okResult.Value);
         Assert.Equal(postId, returnedPost.Id);
     }
 
@@ -425,7 +425,7 @@ public class PostControllerTests
     public async Task GetPost_NotFound_ShouldReturnNotFound()
     {
         var postId = Guid.NewGuid();
-        _postServiceMock.Setup(x => x.GetPostById(postId)).ReturnsAsync((PostBasicDto?)null);
+        _postServiceMock.Setup(x => x.GetPostById(postId)).ReturnsAsync((PostDto?)null);
         var result = await _controller.GetPost(postId);
         Assert.IsType<NotFoundResult>(result);
     }

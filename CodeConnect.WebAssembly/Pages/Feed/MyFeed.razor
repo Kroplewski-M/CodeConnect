@@ -1,5 +1,18 @@
 @page "/MyFeed"
 @using CodeConnect.WebAssembly.Components.Feed
-@using Microsoft.AspNetCore.Authorization
-@attribute [Authorize]
+@using CodeConnect.WebAssembly.Components.General
+@using CodeConnect.WebAssembly.Components.Posts
+@inherits MyFeedBase
 <CreatePost/>
+<div class="mt-10">
+    <LazyList Items="Posts" OnBottomReached="LoadMorePosts" StartIndex="0" Take="20" ParentClasses="flex flex-col items-center">
+        <ListTemplate Context="post">
+            <div class="mt-5 w-full">
+                <PostBasic Post="post"/>
+            </div>
+        </ListTemplate>
+        <EmptyTemplate>
+            <p class="text-light-primaryColor font-bold mt-5">Your feed is empty, start following users and see their most recent posts</p>       
+        </EmptyTemplate>
+    </LazyList>
+</div>

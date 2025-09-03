@@ -15,7 +15,7 @@ public class PostServiceClient(HttpClient httpClient) : IPostService
         return result ?? new CreatePostResponseDto(false, "Failed to create post", null);
     }
 
-    public async Task<PostBasicDto?> GetPostById(Guid id)
+    public async Task<PostDto?> GetPostById(Guid id)
     {
         var response = await httpClient.GetAsync($"api/Post/GetPost?id={id}");
 
@@ -23,7 +23,7 @@ public class PostServiceClient(HttpClient httpClient) : IPostService
         {
             return null;
         }
-        return await response.Content.ReadFromJsonAsync<PostBasicDto>();
+        return await response.Content.ReadFromJsonAsync<PostDto>();
     }
 
     public Task UpdatePost(Guid id)
@@ -37,10 +37,16 @@ public class PostServiceClient(HttpClient httpClient) : IPostService
         var result = await response.Content.ReadFromJsonAsync<ServiceResponse>();
         return result ?? new ServiceResponse(false, "Error deleting post");
     }
-    public async Task<List<PostBasicDto>> GetUserPosts(string username, int skip, int take)
+    public async Task<List<PostDto>> GetUserPosts(string username, int skip, int take)
     {
-        var response = await httpClient.GetFromJsonAsync<List<PostBasicDto>>($"api/Post/GetUserPosts?username={username}&Skip={skip}&Take={take}");
-        return response ?? new List<PostBasicDto>();
+        var response = await httpClient.GetFromJsonAsync<List<PostDto>>($"api/Post/GetUserPosts?username={username}&Skip={skip}&Take={take}");
+        return response ?? new List<PostDto>();
+    }
+
+    public async Task<List<PostDto>> GetPostsForFeed(int skip, int take, string? userId = null)
+    {
+       var response = await httpClient.GetFromJsonAsync<List<PostDto>>($"api/Post/GetPostsForFeed?Skip={skip}&Take={take}");
+       return response ?? new List<PostDto>();
     }
 
     public async Task<ServiceResponse> ToggleLikePost(LikePostDto likePostDto, string? userId = null)
