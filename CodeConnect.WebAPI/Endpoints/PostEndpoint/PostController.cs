@@ -36,6 +36,8 @@ public class PostController(IPostService postService) : ControllerBase
     [HttpGet("GetPostsForFeed")]
     public async Task<IActionResult> GetPostsForFeed(int skip, int take)
     {
+        if (skip < 0 || take <= 0 || take > 100)
+          return BadRequest(new ServiceResponse(false, "Invalid pagination parameters")); 
         return Ok(await postService.GetPostsForFeed(skip, take, User.GetInfo(Consts.ClaimTypes.Id)));
     }
     [HttpGet("GetPost")]
