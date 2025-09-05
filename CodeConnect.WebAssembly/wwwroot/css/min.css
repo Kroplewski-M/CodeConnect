@@ -1492,6 +1492,11 @@
       width: 700px;
     }
   }
+  .md\:max-w-\[40vw\] {
+    @media (width >= 48rem) {
+      max-width: 40vw;
+    }
+  }
   .md\:max-w-\[400px\] {
     @media (width >= 48rem) {
       max-width: 400px;
