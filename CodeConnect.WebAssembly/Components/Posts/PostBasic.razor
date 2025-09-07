@@ -22,7 +22,7 @@
     @if (FirstImageUrl != null)
     {
         <div class="relative w-full max-w-[95%] ml-5 overflow-hidden rounded-md">
-            <img src="@FirstImageUrl" alt="@Post.CreatedByUsername" class="w-full h-auto max-h-[150px] object-cover object-center" />
+            <img src="@FirstImageUrl" alt="@Post.CreatedByUsername" class="@(feedPage ? "w-[100%] md:h-[400px] md:max-h-[400px]" : "w-full h-auto max-h-[150px]")  object-cover object-center" />
             @if (RemainingImages > 0)
             {
                 <div class="absolute top-2 right-2 bg-dark-secondaryColor text-white text-sm px-2 py-1 rounded-full">
