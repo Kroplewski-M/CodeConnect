@@ -3,7 +3,7 @@
 @using DomainLayer.Helpers
 @using CodeConnect.WebAssembly.Components.General
 @inherits CommentBase
-<div class="w-[90%] rounded-md dark:text-light-primaryColor text-dark-primaryColor dark:bg-dark-primaryColor bg-light-primaryColor px-3 pb-2 mt-5">
+<div class="w-[90%] rounded-md dark:text-light-primaryColor text-dark-primaryColor dark:bg-dark-primaryColor bg-light-primaryColor px-3 pb-2 mt-5 @(UserComment.Id == HighlightCommentId ? "border border-red-500": "")">
     <div class="flex mt-[10px] w-full justify-between">
         <div class="flex text-light-primaryColor">
             <img src="@UserComment.CreatedBy.ProfileImgUrl" alt="@UserComment.CreatedBy.Username" class="w-[40px] h-[40px] rounded-full object-cover">

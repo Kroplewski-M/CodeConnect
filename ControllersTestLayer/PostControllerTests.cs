@@ -245,7 +245,7 @@ public class PostControllerTests
         var resultDto = new PostCommentsDto(true, comments);
 
         _postServiceMock
-            .Setup(x => x.GetCommentsForPost(postId, 0, 10, userId))
+            .Setup(x => x.GetCommentsForPost(postId, 0, 10, userId, null))
             .ReturnsAsync(resultDto);
 
         // Act
@@ -299,7 +299,7 @@ public class PostControllerTests
         var userId = "testUserId";
 
         _postServiceMock
-            .Setup(x => x.GetCommentsForPost(postId, 0, 10, userId))
+            .Setup(x => x.GetCommentsForPost(postId, 0, 10, userId,null))
             .ReturnsAsync(new PostCommentsDto(false, new List<CommentDto>()));
 
         // Act

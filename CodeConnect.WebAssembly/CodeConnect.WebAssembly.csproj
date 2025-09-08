@@ -26,4 +26,10 @@
       <_ContentIncludedByDefault Remove="Pages\Errors\NotFound.razor" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore.WebUtilities">
+        <HintPath>..\..\..\..\.nuget\packages\microsoft.aspnetcore.webutilities\2.3.0\lib\netstandard2.0\Microsoft.AspNetCore.WebUtilities.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>

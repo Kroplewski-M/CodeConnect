@@ -97,19 +97,18 @@ public class PostController(IPostService postService) : ControllerBase
     }
 
     [HttpGet("GetPostComments")]
-    public async Task<IActionResult> GetPostComments(Guid postId, int skip, int take)
+    public async Task<IActionResult> GetPostComments(Guid postId, int skip, int take, Guid? highlightCommentId = null)
     {
         if(postId == Guid.Empty)
             return BadRequest(new PostCommentsDto(false, new List<CommentDto>()));
         var userId = User.GetInfo(Consts.ClaimTypes.Id);
         if(string.IsNullOrWhiteSpace(userId))
             return BadRequest(new PostCommentsDto(false, new List<CommentDto>()));
-        var result = await postService.GetCommentsForPost(postId, skip, take, userId);
+        var result = await postService.GetCommentsForPost(postId, skip, take, userId, highlightCommentId );
         if(result.Flag)
             return Ok(result);
         return BadRequest(result);
     }
-
     [HttpPost("ToggleCommentLike")]
     public async Task<IActionResult> ToggleCommentLike([FromBody] Guid commentId)
     {

@@ -70,9 +70,9 @@ public class PostServiceClient(HttpClient httpClient) : IPostService
         return result ?? new UpsertCommentDto(false, $"Failed to {(commentId.HasValue? "update": "create")} comment", null);
     }
 
-    public async Task<PostCommentsDto> GetCommentsForPost(Guid postId, int skip, int take,  string? userId = null)
+    public async Task<PostCommentsDto> GetCommentsForPost(Guid postId, int skip, int take,  string? userId = null, Guid? highlightCommentId = null )
     {
-        var response = await httpClient.GetFromJsonAsync<PostCommentsDto>($"api/Post/GetPostComments?postId={postId}&Skip={skip}&Take={take}");
+        var response = await httpClient.GetFromJsonAsync<PostCommentsDto>($"api/Post/GetPostComments?postId={postId}&Skip={skip}&Take={take}{(highlightCommentId != null ? $"&highlightCommentId={highlightCommentId}" : "")}");
         if (response == null)
             return new PostCommentsDto(false, new List<CommentDto>());
         return response;

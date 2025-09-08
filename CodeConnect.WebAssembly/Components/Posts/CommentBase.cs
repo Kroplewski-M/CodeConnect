@@ -13,6 +13,7 @@ public class CommentBase : ComponentBase
     [Parameter] public EventCallback<Guid> OnCommentDeletion { get; set; }
     [Parameter] public required CommentDto UserComment { get; set; }
     [CascadingParameter] public required UserState UserState { get; set; }
+    [CascadingParameter] public Guid? HighlightCommentId { get; set; }
     [Inject] public required IJSRuntime Js  { get; set; }
     [Inject] public required IPostService PostService { get; set; }
     [Inject] public required ToastService ToastService { get; set; }
