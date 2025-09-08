@@ -253,18 +253,25 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
         return new UpsertCommentDto(true, "Comment added successfully", new CommentDto(upsertComment.Id,upsertComment.Content,user.ToUserBasicDto(),0,upsertComment.CreatedAt,false));
     }
 
-    public async Task<PostCommentsDto> GetCommentsForPost(Guid postId, int skip, int take, string? userId = null)
+    public async Task<PostCommentsDto> GetCommentsForPost(Guid postId, int skip, int take, string? userId = null, Guid? highlightCommentId = null)
     {
         if (userId == null)
             return new PostCommentsDto(false, new List<CommentDto>());
         var post = context.Posts.FirstOrDefault(x => x.Id == postId);
         if(post == null)
             return new PostCommentsDto(false, new List<CommentDto>());
-        var comments = await context.Comments.Where(x => x.PostId == postId)
-            .AsNoTracking()
+        var query = context.Comments.AsNoTracking().Where(x => x.PostId == postId);
+        if (highlightCommentId != null)
+        {
+            query = query.Where(x=> x.Id == highlightCommentId);
+        }
+        else
+        {
+            query = query.Skip(skip)
+                .Take(take);
+        }
+        var comments = await query 
             .OrderByDescending(x=> x.CreatedAt)
-            .Skip(skip)
-            .Take(take)
             .Include(x=> x.CreatedByUser)
             .Select(x=> new {Comment= x, LikeCount = x.Likes.Count(), CurrentUserLikes = x.Likes.Any(y => y.LikedByUserId == userId)})
             .ToListAsync();
