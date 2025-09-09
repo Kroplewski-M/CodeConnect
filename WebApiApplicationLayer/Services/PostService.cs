@@ -255,7 +255,7 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
 
     public async Task<PostCommentsDto> GetCommentsForPost(Guid postId, int skip, int take, string? userId = null, Guid? highlightCommentId = null)
     {
-        if (userId == null)
+        if (userId == null || (skip <= 0 && take <= 0 && highlightCommentId == null))
             return new PostCommentsDto(false, new List<CommentDto>());
         var post = context.Posts.FirstOrDefault(x => x.Id == postId);
         if(post == null)

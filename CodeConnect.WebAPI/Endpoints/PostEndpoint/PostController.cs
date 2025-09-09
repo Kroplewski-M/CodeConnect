@@ -99,7 +99,7 @@ public class PostController(IPostService postService) : ControllerBase
     [HttpGet("GetPostComments")]
     public async Task<IActionResult> GetPostComments(Guid postId, int skip, int take, Guid? highlightCommentId = null)
     {
-        if(postId == Guid.Empty)
+        if(postId == Guid.Empty || (skip <= 0 && take <= 0 && highlightCommentId == null))
             return BadRequest(new PostCommentsDto(false, new List<CommentDto>()));
         var userId = User.GetInfo(Consts.ClaimTypes.Id);
         if(string.IsNullOrWhiteSpace(userId))

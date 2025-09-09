@@ -373,6 +373,54 @@ public class PostServiceTests
         Assert.False(result.Flag);
         Assert.Empty(result.Comments);
     }
+
+    [Fact]
+    public async Task GetCommentsForPost_UserNotFound_ShouldReturnFailure()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        var userId = "userId";
+        var result = await _postService.GetCommentsForPost(postId, 0, 10, userId);
+        // Assert
+        Assert.False(result.Flag);
+        Assert.Empty(result.Comments);
+    }
+
+    [Fact]
+    public async Task GetCommentsForPost_SkipAndTake0WithNoHighlight_ShouldFailure()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        var userId = "userId";
+        var user = CreateUser("user");
+        var post = new Post { Id = postId, Content = "content", CreatedByUserId = user.Id, CreatedAt = DateTime.UtcNow };
+        _context.Users.Add(user);
+        _context.Posts.Add(post);
+        await _context.SaveChangesAsync();
+        var result = await _postService.GetCommentsForPost(postId, 0, 0, userId);
+        // Assert
+        Assert.False(result.Flag);
+        Assert.Empty(result.Comments);
+    }
+    [Fact]
+    public async Task GetCommentsForPost_SkipAndTake0WithNoHighlight_ShouldSucceed()
+    {
+        // Arrange
+        var postId = Guid.NewGuid();
+        var user = CreateUser("username");
+        var commentId = Guid.NewGuid();
+        var comment = new Comment { Id = commentId, PostId = postId, CreatedByUserId = user.Id, CreatedAt = DateTime.Now, Content = ""};
+        var post = new Post { Id = postId, Content = "content", CreatedByUserId = user.Id, CreatedAt = DateTime.UtcNow };
+        post.Comments.Add(comment);
+        _context.Users.Add(user);
+        _context.Posts.Add(post);
+        await _context.SaveChangesAsync();
+        var result = await _postService.GetCommentsForPost(postId, 0, 0, user.Id, commentId);
+        // Assert
+        Assert.True(result.Flag);
+        Assert.Single(result.Comments);
+        Assert.Equal(commentId, result.Comments[0].Id);
+    }
     [Fact]
     public async Task ToggleLikeComment_ValidRequest_AddLike_ShouldSucceed()
     {

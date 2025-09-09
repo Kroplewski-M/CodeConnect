@@ -311,6 +311,37 @@ public class PostControllerTests
 
         Assert.False(returnedDto.Flag);
     }
+
+    [Fact]
+    public async Task GetPostComments_SkipAndTake0WithNoHighlightComment_ShouldReturnBadRequest()
+    {
+        var postId = Guid.NewGuid();
+        var userId = "testUserId";
+        var highlightCommentId = Guid.NewGuid();
+        _postServiceMock
+            .Setup(x => x.GetCommentsForPost(postId, 0, 0, userId,highlightCommentId))
+            .ReturnsAsync(new PostCommentsDto(true, new List<CommentDto>()));
+        var result = await _controller.GetPostComments(postId, 0, 0,highlightCommentId);
+        
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var returnedDto = Assert.IsType<PostCommentsDto>(okResult.Value);
+
+        Assert.True(returnedDto.Flag);
+    }
+    [Fact]
+    public async Task GetPostComments_SkipAndTake0WithHighlightComment_ShouldReturnOkResult()
+    {
+        var postId = Guid.NewGuid();
+        
+        var result = await _controller.GetPostComments(postId, 0, 0);
+        
+        // Assert
+        var badResult = Assert.IsType<BadRequestObjectResult>(result);
+        var returnedDto = Assert.IsType<PostCommentsDto>(badResult.Value);
+
+        Assert.False(returnedDto.Flag);
+    }
     [Fact]
     public async Task ToggleCommentLike_ValidRequest_ShouldReturnSuccess()
     {
