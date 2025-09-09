@@ -177,7 +177,8 @@ public class PostService(ApplicationDbContext context,IAzureService azureService
        var user = await userManager.FindByIdAsync(userId);
        if(user == null)
            return new List<PostDto>();
-       var followingUsers = context.FollowUsers.Where(x=> x.FollowerUserId == user.Id).Select(x=>x.FollowedUserId);
+       var followingUsers = context.FollowUsers.Where(x=> x.FollowerUserId == user.Id).Select(x=>x.FollowedUserId).Union(
+           [user.Id]);
        var postQuery = context.Posts.AsNoTracking()
            .Where(x => followingUsers.Contains(x.CreatedByUserId));
        var posts = GetPostsDto(postQuery, skip, take);
