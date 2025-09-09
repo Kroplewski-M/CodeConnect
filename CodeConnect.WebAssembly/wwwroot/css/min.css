@@ -757,6 +757,9 @@
   .border-light-secondaryColor {
     border-color: var(--color-light-secondaryColor);
   }
+  .border-red-500 {
+    border-color: var(--color-red-500);
+  }
   .border-red-800 {
     border-color: var(--color-red-800);
   }
@@ -1492,11 +1495,6 @@
       width: 700px;
     }
   }
-  .md\:max-w-\[40vw\] {
-    @media (width >= 48rem) {
-      max-width: 40vw;
-    }
-  }
   .md\:max-w-\[400px\] {
     @media (width >= 48rem) {
       max-width: 400px;
@@ -1570,6 +1568,11 @@
   .lg\:mt-0 {
     @media (width >= 64rem) {
       margin-top: calc(var(--spacing) * 0);
+    }
+  }
+  .lg\:max-w-\[40vw\] {
+    @media (width >= 64rem) {
+      max-width: 40vw;
     }
   }
   .lg\:max-w-\[400px\] {

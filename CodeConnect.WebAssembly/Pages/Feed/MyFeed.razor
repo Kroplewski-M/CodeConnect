@@ -7,7 +7,7 @@
 <div class="mt-10">
     <LazyList Items="Posts" OnBottomReached="LoadMorePosts" StartIndex="0" Take="20" ParentClasses="flex flex-col items-center">
         <ListTemplate Context="post">
-            <div class="mt-5 w-full md:max-w-[40vw]">
+            <div class="mt-5 w-full lg:max-w-[40vw]">
                 <PostBasic Post="post"/>
             </div>
         </ListTemplate>

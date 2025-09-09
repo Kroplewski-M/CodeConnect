@@ -6,7 +6,7 @@
 @inject NavigationManager NavigationManager
 @inject IJSRuntime Js
 <div onclick="@(()=>NavigationManager.NavigateTo($"/Post/{Post.Id}"))" 
-     class="w-[90%] md:break-inside-avoid min-h-[50px] @(feedPage? "bg-dark-secondaryColor text-light-primaryColor" : "dark:text-light-primaryColor text-dark-primaryColor dark:bg-dark-primaryColor bg-light-primaryColor") rounded-lg shadow-lg p-[10px] box-border cursor-pointer hover:scale-[1.05]">
+     class="md:break-inside-avoid min-h-[50px] @(feedPage? "bg-dark-secondaryColor text-light-primaryColor w-full" : "w-[90%] dark:text-light-primaryColor text-dark-primaryColor dark:bg-dark-primaryColor bg-light-primaryColor") rounded-lg shadow-lg p-[10px] box-border cursor-pointer hover:scale-[1.05]">
     
     <div class="flex mt-[10px] w-full justify-between">
         <div class="flex">

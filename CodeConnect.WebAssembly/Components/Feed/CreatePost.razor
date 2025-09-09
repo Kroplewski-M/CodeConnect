@@ -6,7 +6,7 @@
         <img class="w-10 ms-3 h-10 rounded-full mb-3 object-cover" src="@UserState?.Current?.ProfileImg" alt="Rounded avatar">
         <div class="ml-[5px] mt-[5px] md:w-[400px] w-[90vw]">
             <EditForm Model="this" OnSubmit="HandleValidSubmit" FormName="Post">
-                <MarkdownTextbox Id="post" @bind-BindContent="PostContent" showPreview="@ShowPreview" />
+                <MarkdownTextbox Id="post" @bind-BindContent="PostContent" RunMethodOnSubmit="@HandleValidSubmit" showPreview="@ShowPreview" />
                 <div class="mt-[5px] flex -ml-[45px]" >
                     <div class="mt-[9px]">
                         <label for="@InputId" class="block hover:cursor-pointer">
