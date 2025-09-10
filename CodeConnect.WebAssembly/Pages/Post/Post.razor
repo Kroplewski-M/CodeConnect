@@ -20,12 +20,12 @@ else
             {
                 <el-dropdown :trap-focus="false" class="inline-block ">
                     <button class="inline-flex w-[50px] text-light-primaryColor p-2 dark:bg-dark-secondaryColor bg-light-secondaryColor justify-center gap-x-1.5 rounded-md text-sm font-semibold cursor-pointer">
-                        <FaIcon Icon="@FaIcons.Ellipsis" Size="@FaSize.XLarge" ExtraCss="dark:text-light-primaryColor text-dark-primaryColor"/>
+                        <FaIcon Icon="@FaIcons.Ellipsis" Size="@FaSize.XLarge" ExtraCss="text-light-primaryColor"/>
                     </button>
 
                     <el-menu anchor="bottom end" class="w-56 origin-top-right rounded-md dark:bg-dark-secondaryColor bg-light-secondaryColor shadow-lg ring-1 ring-black/5">
                         <div class="py-1">
-                            <button @onclick="ToggleDeletPost" class="block px-4 py-2 text-sm text-black dark:text-white hover:bg-red-700 w-full cursor-pointer">
+                            <button @onclick="ToggleDeletPost" class="block px-4 py-2 text-sm text-white hover:bg-red-700 w-full cursor-pointer">
                                 <FaIcon Icon="@FaIcons.Trash"/>
                                 Delete Post
                             </button>

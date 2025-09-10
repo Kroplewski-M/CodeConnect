@@ -63,3 +63,7 @@ window.highlightCodeBlocks = (containerId) => {
 window.getValueById = function (id) {
     return document.getElementById(id).value;
 };
+
+window.viewportHelper = {
+    isMobile: () => window.innerWidth < 768 // Tailwind's md breakpoint
+};

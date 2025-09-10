@@ -6,6 +6,7 @@ using ClientApplicationLayer.Interfaces;
 using DomainLayer.Constants;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.JSInterop;
 
 namespace CodeConnect.WebAssembly.Layout;
 
@@ -15,14 +16,16 @@ public class NavMenuBase : ComponentBase, IAsyncDisposable
     [Inject] public required IFollowingService FollowingService { get; set; }
     [Inject] public required ILocalStorageService LocalStorageService { get; set; }
     [Inject] public required IClientNotificationsService NotificationsService { get; set; }
+    [Inject] public required IJSRuntime Js { get; set; }
     [Inject] public required ToastService ToastService { get; set; }
+    [Parameter] public bool OpenNav { get; set; }
+    [Parameter] public EventCallback<bool> OpenNavChanged { get; set; }
     [CascadingParameter] public required UserState UserState { get; set; }
     
     protected bool LoadingUserDetails { get; set; } = true;
     protected bool Authenticated { get; set; }
     protected int NotificationCount { get; set; } = 0;
     protected HubConnection? HubConnection { get; set; }
-    protected bool _openNav = false;
     protected int FollowerCount { get; set; } = 0;
     protected int FollowingsCount { get; set; } = 0;
     
@@ -30,6 +33,12 @@ public class NavMenuBase : ComponentBase, IAsyncDisposable
     {
         await ConnectToSignalR();
         NotificationsService.OnNotificationCountChanged +=  SetNotificationCount;
+        var isMobile = await Js.InvokeAsync<bool>("viewportHelper.isMobile");
+        if (!isMobile)
+        {
+            OpenNav = true;
+            await OpenNavChanged.InvokeAsync(OpenNav);
+        }
     }
     protected override async Task OnParametersSetAsync()
     {
@@ -72,10 +81,15 @@ public class NavMenuBase : ComponentBase, IAsyncDisposable
             ToastService.PushToast(new Toast("An error occured when fetching notifications.", ToastType.Error));
         }
     }
-    protected void NavigateAndCloseNav(string url)
+    protected async Task NavigateAndCloseNav(string url)
     {
         NavigationManager.NavigateTo(url);
-        _openNav = false;
+        var isMobile = await Js.InvokeAsync<bool>("viewportHelper.isMobile");
+        if (isMobile)
+        {
+            OpenNav = false;
+            await OpenNavChanged.InvokeAsync(OpenNav);
+        }
     }
     public async ValueTask DisposeAsync()
     { 

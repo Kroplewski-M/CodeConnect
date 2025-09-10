@@ -18,6 +18,8 @@ public static class FaIcons
     public const string OpenBox = "fa-solid fa-box-open";
     public const string Trash = "fa-solid fa-trash";
     public const string Ellipsis = "fa-solid fa-ellipsis";
+    public const string NewsPaper = "fa-solid fa-newspaper";
+    public const string Right = "fa-solid fa-right-to-bracket";
 }
 
 public static class FaSize

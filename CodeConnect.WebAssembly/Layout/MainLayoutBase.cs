@@ -31,12 +31,17 @@ public class MainLayoutBase : LayoutComponentBase, IDisposable
         ToastService.OnChange += UpdateToast;
         Notifications = ToastService.GetToasts();
         AuthenticationStateProvider.AuthenticationStateChanged += OnAuthenticationStateChanged;
-        var darkTheme = await LocalStorageService.GetItemAsync<bool>("DarkTheme");
-        if (darkTheme)
+        var hasDarkTheme = await LocalStorageService.ContainKeyAsync("DarkTheme");
+        if (hasDarkTheme)
         {
-            await ToggleDarkMode();
+            var darkTheme = await LocalStorageService.GetItemAsync<bool>("DarkTheme");
+            if(darkTheme)
+                await ToggleDarkMode();
         }
-
+        else
+        {
+                await ToggleDarkMode();
+        }
         var authStateTask = AuthenticationStateProvider.GetAuthenticationStateAsync();
         OnAuthenticationStateChanged(authStateTask);
     }
@@ -96,4 +101,12 @@ public class MainLayoutBase : LayoutComponentBase, IDisposable
             }
         });
     }
+    public bool OpenNav { get; set; }
+
+    public void ToggleNav()
+    {
+        OpenNav = !OpenNav;
+        StateHasChanged();
+    }
+    
 }

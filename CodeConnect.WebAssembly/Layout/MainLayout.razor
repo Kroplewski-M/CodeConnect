@@ -1,5 +1,7 @@
 ﻿@using ApplicationLayer.Classes
+@using CodeConnect.WebAssembly.Components.General
 @using CodeConnect.WebAssembly.Components.Profile
+@using DomainLayer.Constants
 @inherits MainLayoutBase
 
 <CascadingValue Value="UserState">
@@ -12,8 +14,19 @@
         {
             if (!IsNonNavPage())
             {
+                <div class="z-[500] w-full h-[80px] bg-dark-secondaryColor fixed top-0 left-0">
+                    <button  class="cursor-pointer rounded-lg group mb-5">
+                        <p class="ms-3 text-light-primaryColor dark:bg-text-supportColor font-bold text-[30px]">&lt;Code Connect/&gt;</p>
+                        <div class="text-light-primaryColor z-[600] cursor-pointer fa-xl">
+                            <i @onclick="ToggleNav" class="fixed top-5 mt-10 left-5">
+                                <FaIcon Icon="@FaIcons.Right" Size="@FaSize.Small"/>
+                            </i>
+                        </div>
+                    </button>
+                    <span @onclick="() => SetDarkTheme(!DarkTheme)" class="fa-solid text-light-primaryColor @(DarkTheme ? "fa-sun" : "fa-moon") z-[300] fixed top-5 mt-5 right-5 cursor-pointer fa-xl"></span>
+                </div>
                 <div class="z-[300] sm:w-[250px] sm:absolute w-[80%]">
-                    <NavMenu/>
+                    <NavMenu @bind-OpenNav="OpenNav"/>
                 </div>
             }
             else
@@ -22,15 +35,14 @@
                     &lt;Code Connect/&gt;
                 </a>
             }
+            <div class="fixed top-20 right-10 flex flex-col space-y-2 z-[700]">
+                @foreach (var notification in Notifications)
+                {
+                    <ToastNotification Notif="notification"/>
+                }
+            </div>
             <main class="relative px-4 z-[200] flex-grow pt-6 mt-5">
-                <span @onclick="() => SetDarkTheme(!DarkTheme)" class="fa-solid @(DarkTheme ? "fa-sun text-light-primaryColor" : "fa-moon text-dark-primaryColor") z-[300] fixed top-5 mt-5 right-5 cursor-pointer fa-xl"></span>
-                <div class="fixed top-10 right-10 flex flex-col space-y-2 z-[500]">
-                    @foreach (var notification in Notifications)
-                    {
-                        <Notification Notif="notification"/>
-                    }
-                </div>
-                <div class="w-[90vw] mx-auto">
+                <div class="w-[90vw] mx-auto mt-16">
                     @Body
                 </div>
             </main>
