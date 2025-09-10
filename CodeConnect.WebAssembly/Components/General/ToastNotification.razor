@@ -3,7 +3,7 @@
 
 @if (Notif != null)
 {
-    <div class="flex items-center p-4 text-sm rounded-lg rounded-md border-4 @GetNotificationBorderAndBg(Notif.ToastType)" role="alert">
+    <div class="flex items-center p-4 text-sm rounded-md border-4 @GetNotificationBorderAndBg(Notif.ToastType)" role="alert">
         <span class="@(GetNotificationIcon(Notif.ToastType))"></span>
         <div>
             <p class="font-bold pl-3">@Notif.Message</p> 
