@@ -26,12 +26,6 @@
                     </span>
                 </button>
             </li>
-            <li>
-                <button onclick="@(() => NavigateAndCloseNav("/Messages"))" class="cursor-pointer flex items-center p-2 dark:text-white hover:bg-gray-100/10 rounded-lg group">
-                    <FaIcon Icon="@FaIcons.Message" Size="@FaSize.Large" ExtraCss="text-light-primaryColor w-[24px]"/>
-                    <span class="ms-3 text-light-primaryColor dark:text-dark-supportColor">Messages</span>
-                </button>
-            </li>
         </ul>
         @if (UserState?.Current != null)
         {
