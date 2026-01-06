@@ -18,8 +18,8 @@
                     <button class="cursor-pointer rounded-lg group mb-5">
                         <p class="ms-3 text-light-primaryColor dark:bg-text-supportColor font-bold text-[30px]">&lt;Code Connect/&gt;</p>
                         <div class="text-light-primaryColor z-[600] cursor-pointer fa-xl">
-                            <i @onclick="ToggleNav" class="fixed top-5 mt-10 left-5">
-                                <FaIcon Icon="@FaIcons.Right" Size="@FaSize.Small"/>
+                            <i @onclick="ToggleNav" class="fixed top-15 mt-10 @(OpenNav ? "sm:left-[220px] left-[72%] rotate-180" : "left-[10px]")">
+                                <FaIcon Icon="@FaIcons.Right" Size="@FaSize.Small" />
                             </i>
                         </div>
                     </button>
