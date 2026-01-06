@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -9,10 +9,10 @@
 
     <ItemGroup>
         <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="9.0.8" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.8" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.8" PrivateAssets="all" />
-        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.8" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="10.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.1" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.1" />
     </ItemGroup>
 
     <ItemGroup>

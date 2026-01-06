@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 using WebApiApplicationLayer;
 using WebApiApplicationLayer.Interfaces;
@@ -111,6 +110,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("CodeConnect", policy =>
     {
         policy.WithOrigins("https://localhost:7202")
+            .WithOrigins("localhost:5281")
             .AllowAnyMethod()
             .AllowAnyHeader();
     });
