@@ -83,7 +83,10 @@
                                 }
                                 else
                                 {
-                                    <FollowUser FollowUsername="@UserDetails?.UserName" />
+                                    if (UserDetails is not null)
+                                    {
+                                        <FollowUser FollowUsername="@UserDetails.UserName" />
+                                    }
                                 }
                             </div>
                         </div>

@@ -66,8 +66,15 @@ public class AuthenticateService(UserManager<ApplicationUser>userManager,
         }
         if (user != null)
         {
-            var correctPassword = await userManager.CheckPasswordAsync(user, loginForm.Password);
-            
+            bool correctPassword;
+            try
+            {
+                correctPassword = await userManager.CheckPasswordAsync(user, loginForm.Password);
+            }
+            catch (FormatException)
+            {
+                return new AuthResponse(false, "", "", "Incorrect Email or Password");
+            }
             if (correctPassword)
             {
                 var userClaims = user.GetClaimsForUser();

@@ -30,7 +30,7 @@ public class AuthenticateServiceClient(
         if (!response.IsSuccessStatusCode || authResponse == null || !authResponse.Flag)
             return new AuthResponse(false, "", "", authResponse?.Message ?? "An error occured please try again later");
         await localStorageService.SetItemAsync(Consts.Tokens.AuthToken, authResponse.Token);
-        await localStorageService.SetItemAsync(Consts.Tokens.RefreshToken, authResponse.Token);
+        await localStorageService.SetItemAsync(Consts.Tokens.RefreshToken, authResponse.RefreshToken);
 
         cachedAuth.ClearCacheAndNotify();
         return authResponse;

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 namespace CodeConnect.WebAssembly.Components.General;
 
-public class LazyListBase<TItem> : ComponentBase
+public class LazyListBase<TItem> : ComponentBase, IAsyncDisposable
 {
     [Inject] public required IJSRuntime Js { get; set; }
     
@@ -50,6 +50,7 @@ public class LazyListBase<TItem> : ComponentBase
         Loading = isLoading;
         StateHasChanged();
     }
+
     public async ValueTask DisposeAsync()
     {
         await Js.InvokeVoidAsync("unobserveSentinel", SentinelId);
